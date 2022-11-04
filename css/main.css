@@ -1,0 +1,174 @@
+/* ----- Reset and Common Styles ----- */
+*{
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style-type: none;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 400;
+}
+
+html {
+  font-size: 50%; /* setting default font size to 8px */
+  scroll-behavior: smooth;
+}
+
+.hide {
+  display: none;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: row wrap;
+}
+
+section {
+  padding: 10rem 0;
+  background-color: #f0f4f4;
+}
+
+/* ----- End of Reset and Common Styles ----- */
+
+/* ==========================================================================
+  Mobile Styles
+  ========================================================================== */
+
+/* ----- Header ----- */
+header {
+  background-color: #f0f4f4;
+  padding: 2rem 0;
+}
+
+header .container {
+  margin: 0;
+  padding: 0;
+}
+
+header img {
+  width: 80%;
+  max-width: 50rem;
+}
+
+/* .header-divider {
+  width: 100%;
+} */
+
+header nav {
+  width: 80%;
+  justify-content: space-around;
+}
+
+header nav ul {
+  display: flex;
+  justify-content: space-between;
+  width: 35rem;
+  padding: 0;
+  margin: 1rem; 
+}
+
+header nav ul li {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: .8rem;
+  width: 14rem;
+  height: 5rem;
+  padding-left: .5rem;
+  margin: .5rem;
+  background-color: #454c5a;
+  border-radius: 1rem;
+  /* border: none; */
+  display: flex;
+  align-items:center;
+  justify-content:center;
+}
+
+header #filter {
+  background-color: #7bba51;
+}
+
+header #next {
+  background-color: #f5995c;
+}
+/* ----- End of Header ----- */
+
+
+/* ----- Photos Section ----- */ 
+
+
+/* ----- End of Photos Section ----- */
+
+
+/* ----- Footer ----- */
+footer {
+  background-color: #32a0da;
+  padding: 20px 0;
+}
+
+footer p{
+  font-size: 1.5em;
+  color: #ffffff;
+}
+/* ----- End of Footer ----- */
+
+/* ==========================================================================
+  Media Queries for Responsive Design
+  ========================================================================== */
+  
+  /**** TABLET STYLES ****/
+@media screen and (min-width: 768px) {
+
+  header .container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  header figure,
+  header nav {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  header img {
+    width: 50%;
+    max-width: 100rem;
+  }
+
+  header nav {
+    width: 50%;
+    justify-content: space-around;
+    flex-direction: column;
+
+  }
+
+  header nav ul {
+    justify-content: space-around;
+    width: 50rem;
+  }
+
+  header nav ul li {
+    font-size: 2rem;
+    width: 18rem;
+    height: 6rem;
+  }
+}
+
+  /**** DESKTOP STYLES ****/
+@media screen and (min-width: 1200px) {
+
+  header nav ul {
+    justify-content: space-around;
+    width: 35rem;
+    padding: 0;
+    margin: 0; 
+  }
+
+  header nav ul li {
+    font-size: 2rem;
+  }
+}
