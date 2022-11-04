@@ -49,21 +49,21 @@ header .container {
 }
 
 header img {
-  width: 80%;
+  width: 60%;
   max-width: 50rem;
+  margin-bottom: 2rem;
 }
 
 header nav {
   width: 80%;
-  justify-content: space-around;
 }
 
 header nav ul {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 35rem;
   padding: 0;
-  margin: 1rem; 
+  /* margin: 1rem;  */
 }
 
 header nav ul li {
@@ -125,6 +125,7 @@ footer p {
 
   header img {
     width: 50%;
+    padding: 0;
   }
 
   header nav {
@@ -132,7 +133,6 @@ footer p {
   }
 
   header nav ul {
-    justify-content: space-around;
     width: 40rem;
   }
 
@@ -140,6 +140,7 @@ footer p {
     font-size: 1.8rem;
     width: 16rem;
     height: 6rem;
+    margin: 0 2rem;
   }
 
   footer {
