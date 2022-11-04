@@ -53,10 +53,6 @@ header img {
   max-width: 50rem;
 }
 
-/* .header-divider {
-  width: 100%;
-} */
-
 header nav {
   width: 80%;
   justify-content: space-around;
@@ -107,11 +103,11 @@ header #next {
 /* ----- Footer ----- */
 footer {
   background-color: #32a0da;
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
-footer p{
-  font-size: 1.5em;
+footer p {
+  font-size: 1.2em;
   color: #ffffff;
 }
 /* ----- End of Footer ----- */
@@ -124,51 +120,41 @@ footer p{
 @media screen and (min-width: 768px) {
 
   header .container {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  header figure,
-  header nav {
-    flex-direction: row;
     justify-content: space-between;
   }
 
   header img {
     width: 50%;
-    max-width: 100rem;
   }
 
   header nav {
-    width: 50%;
-    justify-content: space-around;
-    flex-direction: column;
-
+    width: 45%;
   }
 
   header nav ul {
     justify-content: space-around;
-    width: 50rem;
+    width: 40rem;
   }
 
   header nav ul li {
-    font-size: 2rem;
-    width: 18rem;
+    font-size: 1.8rem;
+    width: 16rem;
     height: 6rem;
+  }
+
+  footer {
+    background-color: #32a0da;
+    padding: 20px 0;
+  }
+
+  footer p{
+    font-size: 1.5em;
+    color: #ffffff;
   }
 }
 
   /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
 
-  header nav ul {
-    justify-content: space-around;
-    width: 35rem;
-    padding: 0;
-    margin: 0; 
-  }
-
-  header nav ul li {
-    font-size: 2rem;
-  }
+  
 }
