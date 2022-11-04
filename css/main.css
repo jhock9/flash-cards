@@ -54,11 +54,11 @@ header img {
   margin-bottom: 2rem;
 }
 
-header nav {
+nav {
   width: 80%;
 }
 
-header nav ul {
+nav ul {
   display: flex;
   justify-content: space-around;
   width: 35rem;
@@ -66,7 +66,7 @@ header nav ul {
   /* margin: 1rem;  */
 }
 
-header nav ul li {
+nav ul li {
   font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
@@ -80,24 +80,44 @@ header nav ul li {
   border-radius: 1rem;
   /* border: none; */
   display: flex;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
 }
 
-header #filter {
+#filter {
   background-color: #7bba51;
 }
 
-header #next {
+#next {
   background-color: #f5995c;
 }
 /* ----- End of Header ----- */
 
 
-/* ----- Photos Section ----- */ 
+/* ----- Images Section ----- */ 
+.images-container {
+  width: 100%;
+}
 
+/* .images-list {
 
-/* ----- End of Photos Section ----- */
+} */
+
+.image {
+  width: 40%;
+  height: 20rem;
+  border: 1px solid #dd4559;
+  border-radius: 1rem;
+  margin: 1rem;
+  object-fit: contain;
+}
+
+h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+/* ----- End of Images Section ----- */
 
 
 /* ----- Footer ----- */
@@ -111,6 +131,8 @@ footer p {
   color: #ffffff;
 }
 /* ----- End of Footer ----- */
+
+/* ----- End of Mobile Styles ----- */
 
 /* ==========================================================================
   Media Queries for Responsive Design
@@ -128,15 +150,15 @@ footer p {
     padding: 0;
   }
 
-  header nav {
+  nav {
     width: 45%;
   }
 
-  header nav ul {
+  nav ul {
     width: 40rem;
   }
 
-  header nav ul li {
+  nav ul li {
     font-size: 1.8rem;
     width: 16rem;
     height: 6rem;
