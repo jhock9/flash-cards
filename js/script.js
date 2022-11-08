@@ -1,26 +1,27 @@
-const allImagesContainer = document.querySelector(".images-container");
-const imagesList = document.querySelector(".images-list");
-
-const gitUserInfo = async function () {
-  const userInfo = await fetch(`https://api.github.com/users/${username}`);
-  const userData = await userInfo.json();
-  displayUserInfo(userData);
-};
+require('dotenv').config()
+const API_URL = process.env.API_URL;
+const API_KEY = process.env.API_KEY;
 
 
-// parameter "could" be passed based on filters
+const allImages = document.querySelector(".images-container");
+const newImagesButton = document.querySelector("#next");
+
+// ? parameter "could" be passed based on filters
 const getImages = async function () {
-  const fetchImages = await fetch(__________);
-  const imageData = await fetchImages.json();
-  //console.log(imageApiData);
+  const fetchAirplanes = await fetch('${API_URL}?key=${API_KEY}&q=airplane');
+  const airplanes = await fetchAirplanes.json();
+  console.log(airplanes);
   
-  const imageArray = [];
-  imageArray.length = 8;
-  for (const img in imageData) {
-    imageArray.push(img);
-  };
+
+
+// ? adding the fetched images to an array
+  // const imageArray = [];
+  // imageArray.length = 8;
+  // for (const img in imageData) {
+  //   imageArray.push(img);
+  // };
   
-  displayImages(imageData);
+  // displayImages(airplanes);
 
   // pull images from api -- based on filter parameters
   // put into an array of 8 -- randomized
@@ -28,16 +29,19 @@ const getImages = async function () {
   // 
 };
 
-const displayImages = function (image) {
-  for (const image of images) {
-    const imageItem = imagesList.createElement("li");
-    imageItem.classList.add("image");
-    imageItem.innerHTML = `<h3>"IMAGE PLACEHOLDER"}</h3>`;
-    repoList.append(imageItem);      
-  };
-};
+// const displayImages = function (image) {
+//   for (const image of images) {
+//     const div = document.createElement("div");
+//     div.classList.add("image");
+//     div.innerHTML = 
+//       <img src=${_____} alt=${_____}/>;
+//     allImages.append(div);      
+//   };
+// };   
 
-get newImages = function () {
-  // when click "NEXT"
-  // run getImages function
-};
+
+// newImagesButton.addEventListener("click", function () {
+//   getImages();
+// });
+
+// TODO add filtering functions
