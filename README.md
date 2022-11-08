@@ -39,7 +39,7 @@ Then create a .env file in the root directory and add the variables to it.
 
 ```js
 //contents of .env
-API_KEY = "your-API-key-here
+API_KEY = your-API-key-here
 API_URL = https://yourAPIurl.com/api/
 ```
 
