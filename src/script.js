@@ -10,10 +10,11 @@ const getAirplanes = async function () {
   // fetch 10 image datasets based on API search parameter
   const fetchAirplanes = await fetch('${API_URL_KEY}&q=airplane&category=transportation&per_page=10&page=1');
   const airplanesData = await fetchAirplanes.json();
-  // fetch the images from the datasets
-  airplanesData.hits.forEach(function(image) {
-    airplanes.push(image.webformatURL);
-  });
+  // add images to array 
+  for (let i = 0, l = airplanesData.hits.length; i < l; i++) {
+    const airplaneImg = airplanesData.hits[i].webformatURL;
+    airplanes.push(airplaneImg);
+  }
   displayImages(airplanes);
 };
 
