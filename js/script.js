@@ -1,40 +1,71 @@
-require('dotenv').config()
-const API_URL = process.env.API_URL;
-const API_KEY = process.env.API_KEY;
+// require('dotenv').config()
+// const API_URL_KEY = process.env.API_URL_KEY;
+// const API_URL = process.env.API_URL;
+// const API_KEY = process.env.API_KEY;
+const airplanes = [];
 
-const allImages = document.querySelector(".images-container");
-const newImagesButton = document.querySelector("#next");
+// const allImages = document.querySelector(".images-container");
+// const newImagesButton = document.querySelector("#next");
+
+// TODO create a test.js file and work out of there, and it to the .env file so it doesnt get uploaded to Github
+
+// ! Hidden API script
+  // const fetchAirplanes = await fetch('${API_URL}?key=${API_KEY}&q=airplane&category=transportation&per_page=10&page=1');
+  // const fetchAirplanes = await fetch('${API_URL_KEY}&q=airplane&category=transportation&per_page=10&page=1');
 
 // AIRPLANES
 const getAirplanes = async function () {
-  const fetchAirplanes = await fetch('${API_URL}?key=${API_KEY}&q=airplane&category=transportation&per_page=8&page=1');
-  const airplanesData = await fetchAirplaneData.json();
+  // fetch 10 image datasets based on API search parameter
+  // ! Insert API script here before uploading to Github
 
-  const fetchAirplaneImages = await fetch (airplanesData.webformatURL);
-  const airplaneImages = await fetchAirplaneImages.json();
-
-  const airplanes = [];
-  for (const airplane in airplaneImages) {
-    airplanes.push(airplane);
-  };
-  // TODO randomize array
-
-  displayImages(airplanes);
-
+  // ! 
+  const airplanesData = await fetchAirplanes.json();
+  // fetch the images from the datasets
+  airplanesData.hits.forEach(function(image) {
+    // console.log(image.webformatURL);
+    airplanes.push(image.webformatURL);
+  });
+  // console.log(airplanes);
+  // displayImages(airplanes); // ? is this needed ?
   // TODO random merge with another array, total of 8 (3 % 5)
-
-  // 
 };
 
-const displayImages = function (airplanes) {
-  const div = document.createElement("div");
-  div.classList.add("image");
-  div.innerHTML = 
-    <img src=${_____} alt=${_____}/>;
-  allImages.append(div);      
-};   
+// console.log(getAirplanes());
+
+// getAirplanes();
+// console.log(airplanes);
+
+//   // randomize image indexes ex 1
+// const shuffle1 = function (array) {
+//   for (let i = array.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     const temp = array[i];
+//     array[i] = array[j];
+//     array[j] = temp;
+//   };
+//   return array;
+// };
+// console.log (shuffle1(airplanes));
+
+//   // randomize image indexes wx 2
+// const shuffle2 = function (array) {
+//   return array.sort( function (){
+//     0.5 = Math.random();
+//   });
+// };
+// console.log (shuffle2(airplanes));
 
 
+//  // ? what is this for?
+// const displayImages = function (airplanes) {
+//   const div = document.createElement("div");
+//   div.classList.add("image");
+//   div.innerHTML = 
+//     <img src=${_____} alt=${_____}/>;
+//   allImages.append(div);      
+// };   
+
+//  // get new images
 // newImagesButton.addEventListener("click", function () {
 //   getImages();
 // });
