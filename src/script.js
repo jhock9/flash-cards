@@ -2,7 +2,7 @@ require('dotenv').config()
 const API_URL_KEY = process.env.API_URL_KEY;
 const airplanes = [];
 
-// const allImages = document.querySelector(".images-container");
+const allImages = document.querySelector(".images-container");
 // const newImagesButton = document.querySelector("#next");
 
 // AIRPLANES
@@ -12,8 +12,22 @@ const getAirplanes = async function () {
   const airplanesData = await fetchAirplanes.json();
   // fetch the images from the datasets
   airplanesData.hits.forEach(function(image) {
-  airplanes.push(image.webformatURL);
+    airplanes.push(image.webformatURL);
   });
+  displayImages(airplanes);
 };
 
 getAirplanes();
+
+
+const displayImages = function (array) {
+  array.forEach(function (value) {
+    for (let i = 0; i < array.length; i++) {
+      const div = document.createElement("div");
+      div.classList.add("image");
+      div.innerHTML =`
+        <img src=${value} alt="airplane"/>`;  // airplanesData.hits.tags
+      allImages.append(div);
+    };
+  });
+};   
