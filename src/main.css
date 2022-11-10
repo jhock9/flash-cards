@@ -84,11 +84,11 @@ nav ul {
 }
 
 #filter {
-  background-color: #7bba51;
+  background-color: #32a0da;
 }
 
 #next {
-  background-color: #f5995c;
+  background-color: #7bba51;
 }
 /* ----- End of Header ----- */
 
@@ -98,24 +98,17 @@ nav ul {
   width: 100%;
 }
 
-/* .image-holder {
-  width: 40rem;
-  height: 20rem;
-  margin: 0;
-  padding: 0;
-  border: 2px dotted #0000FF;
-} */
-
 .image {
   justify-content: space-between;
   width: 20rem;
   height: 20rem;
-  border: 4px solid #dd4559;
+  border: 4px solid #f5995c;
   border-radius: 1rem;
   margin: 1.5rem;
   padding: 1rem;
   object-fit: cover;
 }
+
 h3 {
   font-size: 2rem;
   font-weight: 700;
@@ -126,7 +119,7 @@ h3 {
 
 /* ----- Footer ----- */
 footer {
-  background-color: #32a0da;
+  background-color: #dd4559;
   padding: 15px 0;
 }
 
@@ -169,14 +162,22 @@ footer p {
     margin: 0 2rem;
   }
 
+  .image {
+    width: 30rem;
+    height: 30rem;
+    border: 6px solid #f5995c;
+    border-radius: 2rem;
+    margin: 2rem;
+    padding: 2rem;
+    object-fit: cover;
+  }
+
   footer {
-    background-color: #32a0da;
     padding: 20px 0;
   }
 
   footer p{
     font-size: 1.5em;
-    color: #ffffff;
   }
 }
 
