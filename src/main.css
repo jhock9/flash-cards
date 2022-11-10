@@ -145,9 +145,9 @@ footer p {
 
   header img {
     width: 50%;
-    padding: 0;
+    margin: 0;
   }
-
+ 
   nav {
     width: 45%;
   }
@@ -164,7 +164,7 @@ footer p {
   }
 
   .images-container {
-    padding-bottom: 6rem;
+    padding: 6rem 3rem;
   }
   
   .image {
