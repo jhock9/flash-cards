@@ -1,4 +1,6 @@
-require('dotenv').config()
+// require('dotenv').config()
+// import "./main.css"
+
 const API_URL_KEY = process.env.API_URL_KEY;
 const airplanes = [];
 
