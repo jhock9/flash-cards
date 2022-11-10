@@ -1,11 +1,10 @@
 // require('dotenv').config()
 // import "./main.css"
-
 const API_URL_KEY = process.env.API_URL_KEY;
-const airplanes = [];
 
 const allImages = document.querySelector(".images-container");
 // const newImagesButton = document.querySelector("#next");
+const airplanes = [];
 
 // AIRPLANES
 const getAirplanes = async function () {
@@ -17,9 +16,21 @@ const getAirplanes = async function () {
     const airplaneImg = airplanesData.hits[i].webformatURL;
     airplanes.push(airplaneImg);
   }
+  shuffleImages(airplanes);
   displayImages(airplanes);
 };
 getAirplanes();
+
+// Randomizes images displayed
+const shuffleImages = function (array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  };
+  array.length = 8;
+};
 
 // Displays images on page
 const displayImages = function (array) {
