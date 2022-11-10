@@ -40,7 +40,7 @@ section {
 /* ----- Header ----- */
 header {
   background-color: #f0f4f4;
-  padding: 2rem 0;
+  padding-top: 2rem;
 }
 
 header .container {
@@ -51,7 +51,7 @@ header .container {
 header img {
   width: 60%;
   max-width: 50rem;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 nav {
@@ -96,6 +96,7 @@ nav ul {
 /* ----- Images Section ----- */ 
 .images-container {
   width: 100%;
+  padding: 3rem 0;
 }
 
 .image {
@@ -162,6 +163,10 @@ footer p {
     margin: 0 2rem;
   }
 
+  .images-container {
+    padding-bottom: 6rem;
+  }
+  
   .image {
     width: 30rem;
     height: 30rem;
