@@ -19,12 +19,12 @@ const getAirplanes = async function () {
 };
 getAirplanes();
 
+// Displays images on page
 const displayImages = function (array) {
   for (let image of array) {
-    const div = document.createElement("div");
-    div.classList.add("image");
-    div.innerHTML =`
-      <img src=${image} alt=""/>`;  // airplanesData.hits.tags
-    allImages.append(div);
+    const img = document.createElement("img");
+    img.classList.add("image", "center");
+    img.src = image;
+    allImages.append(img);
   }
-};    
+};   
