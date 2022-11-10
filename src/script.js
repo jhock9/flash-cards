@@ -17,18 +17,14 @@ const getAirplanes = async function () {
   }
   displayImages(airplanes);
 };
-
 getAirplanes();
 
-
 const displayImages = function (array) {
-  array.forEach(function (value) {
-    for (let i = 0; i < array.length; i++) {
-      const div = document.createElement("div");
-      div.classList.add("image");
-      div.innerHTML =`
-        <img src=${value} alt="airplane"/>`;  // airplanesData.hits.tags
-      allImages.append(div);
-    };
-  });
-};   
+  for (let image of array) {
+    const div = document.createElement("div");
+    div.classList.add("image");
+    div.innerHTML =`
+      <img src=${image} alt=""/>`;  // airplanesData.hits.tags
+    allImages.append(div);
+  }
+};    
