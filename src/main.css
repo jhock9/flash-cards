@@ -1,4 +1,4 @@
-/* ----- Reset and Common Styles ----- */
+/**** Reset and Common Styles ****/
 html {
   font-size: 50%; /* setting default font size to 8px */
   scroll-behavior: smooth;
@@ -20,13 +20,13 @@ section {
   background-color: #f0f4f4;
 }
 
-/* ----- End of Reset and Common Styles ----- */
+/**** End of Reset and Common Styles ****/
 
 /* ==========================================================================
   Mobile Styles
   ========================================================================== */
 
-/* ----- Header ----- */
+/**** Header ****/
 header {
   background-color: #f0f4f4;
   padding-top: 2rem;
@@ -79,10 +79,10 @@ nav ul {
 #next {
   background-color: #7bba51;
 }
-/* ----- End of Header ----- */
+/**** End of Header ****/
 
 
-/* ----- Images Section ----- */ 
+/**** Images Section ****/ 
 .images-container {
   width: 100%;
   padding: 3rem 0;
@@ -104,10 +104,10 @@ h3 {
   font-weight: 700;
   text-transform: uppercase;
 }
-/* ----- End of Images Section ----- */
+/**** End of Images Section ****/
 
 
-/* ----- Footer ----- */
+/**** Footer ****/
 footer {
   background-color: #dd4559;
   padding: 15px 0;
@@ -117,15 +117,15 @@ footer p {
   font-size: 1.2em;
   color: #ffffff;
 }
-/* ----- End of Footer ----- */
+/**** End of Footer ****/
 
-/* ----- End of Mobile Styles ----- */
+/**** End of Mobile Styles ****/
 
-/* ==========================================================================
-  Media Queries for Responsive Design
-  ========================================================================== */
-  
-  /**** TABLET STYLES ****/
+/*=====================================================================================
+  Media Queries for Responsive Design     
+=====================================================================================*/
+
+/**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
 
   header .container {
@@ -136,7 +136,7 @@ footer p {
     width: 50%;
     margin: 0;
   }
- 
+
   nav {
     width: 45%;
   }
@@ -175,7 +175,7 @@ footer p {
   }
 }
 
-  /**** DESKTOP STYLES ****/
+/**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
 
   

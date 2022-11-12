@@ -24,7 +24,7 @@ module.exports = {
   devServer: {
     static: path.resolve('src'),
     open: true,
-    port: 8000, //? 5500
+    port: 8000,
   },
 
   plugins: [
