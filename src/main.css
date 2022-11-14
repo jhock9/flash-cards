@@ -4,8 +4,24 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  font-family: "Mulish", sans-serif;
+  color: #000000;
+  font-size: 2rem;
+}
+
+body,
+main,
+aside, 
+section,
+div {
+  padding: 0;
+  margin: 0;
+  background-color: #f0f4f4;
+}
+
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .center {
@@ -14,107 +30,112 @@ html {
   align-items: center;
   flex-flow: row wrap;
 }
-
-section {
-  padding: 10rem 0;
-  background-color: #f0f4f4;
-}
-
 /**** End of Reset and Common Styles ****/
 
 /* ==========================================================================
   Mobile Styles
   ========================================================================== */
 
-/**** Header ****/
-header {
+/**** Aside ****/
+.menu-container {
   background-color: #f0f4f4;
-  padding-top: 2rem;
-}
-
-header .container {
   margin: 0;
   padding: 0;
 }
 
-header img {
-  width: 60%;
-  max-width: 50rem;
-  margin-bottom: 3rem;
-}
-
-nav {
-  width: 80%;
-}
-
-nav ul {
-  display: flex;
-  justify-content: space-around;
-  width: 35rem;
+.menu-container figure {
+  width: 100%;
   padding: 0;
+  margin: 3rem 0 2rem 0;
 }
 
-.nav-list {
+.menu-container figure img {
+  width: 50%;
+  max-width: 30rem;
+}
+
+.menu-container div {
+  width: 100%;
+  margin: 0;
+  justify-content: space-around;
+}
+
+.btn {
   font-size: 1.5rem;
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: .8rem;
-  width: 14rem;
+  width: 16rem;
   height: 5rem;
-  padding-left: .5rem;
-  margin: .5rem;
+  margin: 1rem;
+  padding-left: 1rem;
   background-color: #454c5a;
   border-radius: 1rem;
   border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-#filter {
-  background-color: #32a0da;
+.btn i {
+  margin: 0;
+  padding-left: .5rem;
 }
 
-#next {
+#next-btn {
   background-color: #7bba51;
 }
-/**** End of Header ****/
 
+#filter-btn {
+  background-color: #f5995c;
+}
+
+.filter-list {
+  width: 100%;
+  padding: 2rem 0;
+  margin: 0;
+  height: 60rem;
+  background-color: red;
+}
+
+.filter-list label,
+.filter-list input {
+  margin: 0.5rem 0;
+  padding: 0;
+}
+
+.filter-list input {
+  border: 0.5rem solid #f5995c;
+}
+
+/**** End of Aside ****/
 
 /**** Images Section ****/ 
 .images-container {
   width: 100%;
   padding: 3rem 0;
+  margin: 2rem 0;
+  background-color: cyan;
 }
 
 .image {
   justify-content: space-between;
-  width: 20rem;
-  height: 20rem;
-  border: 4px solid #f5995c;
+  width: 15rem;
+  height: 15rem;
+  border: 0.25rem solid #32a0da;
   border-radius: 1rem;
-  margin: 1.5rem;
+  margin: 1rem;
   padding: 1rem;
   object-fit: cover;
 }
-
-h3 {
-  font-size: 2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
 /**** End of Images Section ****/
-
 
 /**** Footer ****/
 footer {
   background-color: #dd4559;
-  padding: 15px 0;
+  padding: 1rem 0;
 }
 
 footer p {
-  font-size: 1.2em;
+  font-size: 1.5rem;
   color: #ffffff;
 }
 /**** End of Footer ****/
@@ -128,50 +149,52 @@ footer p {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
 
-  header .container {
-    justify-content: space-between;
+  .content-wrapper {
+    flex-wrap: nowrap;
   }
 
-  header img {
-    width: 50%;
-    margin: 0;
-  }
-
-  nav {
-    width: 45%;
-  }
-
-  nav ul {
-    width: 40rem;
-  }
-
-  .nav-list {
-    font-size: 1.8rem;
-    width: 16rem;
-    height: 6rem;
+  .menu-container {
+    width: 20%;
     margin: 0 2rem;
-  }
+  }  
 
-  .images-container {
-    padding: 6rem 3rem;
+  .menu-container figure,
+  .menu-container figure img {
+    width: 100%;
+    margin: 2rem;
+    padding: 0;
+  } 
+
+  /* .filter-list {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    height: 60rem;
+    background-color: red;
   }
   
+  .filter-list label,
+  .filter-list input {
+    margin: 0.5rem 0;
+    padding: 0;
+  }
+  
+  .filter-list input {
+    border: 0.5rem solid #f5995c;
+  } */
+
   .image {
-    width: 30rem;
-    height: 30rem;
-    border: 6px solid #f5995c;
+    width: 25rem;
+    height: 25rem;
+    border: 0.75rem solid #f5995c;
     border-radius: 2rem;
     margin: 2rem;
     padding: 2rem;
     object-fit: cover;
   }
 
-  footer {
-    padding: 20px 0;
-  }
-
   footer p{
-    font-size: 1.5em;
+    font-size: 2rem;
   }
 }
 

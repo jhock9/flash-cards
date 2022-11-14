@@ -17,31 +17,42 @@
 </head>
 
 <body>
-  <header>
-    <section class="container center">
-      <figure class="center">
-        <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
-      </figure>
-      <nav class="center">
-        <ul>
-          <button class="nav-list" id="filter">Filter</button>
-          <button class="nav-list" id="next">Next >></button>
-        </ul>
-      </nav>
-    </section>
-  </header>
+  <main class="content-wrapper center">
+    <aside class="menu-container center">
+        <figure class="center">
+          <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
+        </figure>
+        
+        <div class="center">
+          <button class="btn center " id="next-btn">Submit <i class="fas fa-angle-double-right"></i></button>
+        </div>
 
-  <main>
+        <div class="center" id="filter">
+          <button class="btn center" id="filter-btn">Filter <i class="fa fa-filter"></i></button>
+          <table class="filter-list center"> <!-- use JS to create table based on objects created (name and num)
+              <tr>
+                <td>        
+                  <label for ="name">
+                      Object Name
+                  </label>
+                </td>
+                <td>
+                  <input type="text" id="qty"/>
+                </td>
+              </tr> -->
+          </table>
+        </div>
+    </aside>
+
     <section class="images-container center">
     </section>
   </main>
- 
+  
   <footer>
     <p class="copyright center">&copy; <script>document.write(new Date().getFullYear())</script> ABA Co-Op. All Rights Reserved.</p>
   </footer>
 
   <!-- <script src="script.js"></script> -->
-  <script src="../fetch.js"></script>
   <script src="../test.js"></script>
 
 </body> 
