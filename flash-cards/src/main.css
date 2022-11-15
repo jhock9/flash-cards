@@ -1,3 +1,5 @@
+/* TODO change to CSS Grid in v2.0 */
+
 /**** Base and Common Styles ****/
 .hide {
   display: none !important;
@@ -165,6 +167,7 @@ footer p {
   .main-wrapper {
     flex-wrap: nowrap;
     align-items: flex-start;
+    justify-content: space-between;
   }
 
   .menu-wrapper {
@@ -225,17 +228,15 @@ footer p {
   
   .images-container {
     width: 100%;
-    padding: 2rem;
     justify-content: space-around;
   }
 
   .image {
-    width: 40%;
-    max-width: 20rem;
+    max-width: 23rem;
     border-width: 0.5rem;
     border-radius: 1.5rem;
-    /* margin: 1rem 1.5rem; */
-    padding: 1rem;
+    margin: 2rem 1rem;
+    padding: 1rem ;
   }
 
 
