@@ -1,7 +1,9 @@
 /**** Reset and Common Styles ****/
+
 html {
   font-size: 50%; /* setting default font size to 8px */
   scroll-behavior: smooth;
+  height: 100vh;
 }
 
 body {
@@ -9,6 +11,25 @@ body {
   color: #000000;
   font-size: 2rem;
 }
+
+body {
+height: 100%;
+}
+
+.content-wrapper {
+  min-width: 375px;
+  min-height: 660px;
+  height: 100%;
+}
+
+.main-wrapper {
+  height: 94%;
+  max-height: 94%;
+}
+
+/* #test {
+  height: 40rem;
+} */
 
 body,
 main,
@@ -37,6 +58,7 @@ div {
   ========================================================================== */
 
 /**** Aside ****/
+
 .menu-container {
   background-color: #f0f4f4;
   margin: 0;
@@ -92,8 +114,6 @@ div {
   width: 100%;
   padding: 2rem 0;
   margin: 0;
-  height: 60rem;
-  background-color: red;
 }
 
 .filter-list label,
@@ -113,7 +133,7 @@ div {
   width: 100%;
   padding: 3rem 0;
   margin: 2rem 0;
-  background-color: cyan;
+  align-self: center;
 }
 
 .image {
@@ -132,11 +152,15 @@ div {
 footer {
   background-color: #dd4559;
   padding: 1rem 0;
+  margin: 0;
+  max-height: 2.5rem;
 }
 
 footer p {
   font-size: 1.5rem;
   color: #ffffff;
+  margin: 0;
+  padding: 0;
 }
 /**** End of Footer ****/
 
@@ -149,8 +173,10 @@ footer p {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
 
-  .content-wrapper {
+  .main-wrapper {
     flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 
   .menu-container {
@@ -193,6 +219,10 @@ footer p {
     object-fit: cover;
   }
 
+  footer {
+    padding: 1.5rem 0;
+  }
+
   footer p{
     font-size: 2rem;
   }
@@ -201,5 +231,6 @@ footer p {
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
 
-  
+/* no style changes */
+
 }
