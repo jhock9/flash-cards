@@ -1,46 +1,4 @@
-/**** Reset and Common Styles ****/
-
-html {
-  font-size: 50%; /* setting default font size to 8px */
-  scroll-behavior: smooth;
-  height: 100vh;
-}
-
-body {
-  font-family: "Mulish", sans-serif;
-  color: #000000;
-  font-size: 2rem;
-}
-
-body {
-height: 100%;
-}
-
-.content-wrapper {
-  min-width: 375px;
-  min-height: 660px;
-  height: 100%;
-}
-
-.main-wrapper {
-  height: 94%;
-  max-height: 94%;
-}
-
-/* #test {
-  height: 40rem;
-} */
-
-body,
-main,
-aside, 
-section,
-div {
-  padding: 0;
-  margin: 0;
-  background-color: #f0f4f4;
-}
-
+/**** Base and Common Styles ****/
 .hide {
   display: none !important;
 }
@@ -51,48 +9,75 @@ div {
   align-items: center;
   flex-flow: row wrap;
 }
-/**** End of Reset and Common Styles ****/
+
+/* ! have got to figure out what is going on with the height here...cannot seem to get it to stay "full screen" */
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+html {
+  font-size: 50%; /* setting default font size to 8px */
+  scroll-behavior: smooth;
+  /* min-height: 100vh; */
+}
+
+body {
+  font-family: "Mulish", sans-serif;
+  color: #000000;
+  font-size: 2rem;
+  background-color: #f0f4f4;
+  padding: 0;
+  margin: 0;
+}
+
+.content-wrapper {
+  flex-direction: column;
+  /* height: 100%; */
+}
+
+.main-wrapper {
+  /* height: 100%; */
+  justify-content: space-around;
+}
+
+/**** End of Base and Common Styles ****/
 
 /* ==========================================================================
   Mobile Styles
   ========================================================================== */
 
+
 /**** Aside ****/
-
-.menu-container {
+.menu-wrapper {
   background-color: #f0f4f4;
-  margin: 0;
-  padding: 0;
-}
-
-.menu-container figure {
   width: 100%;
+  margin-top: 2rem;
   padding: 0;
-  margin: 3rem 0 2rem 0;
-}
-
-.menu-container figure img {
-  width: 50%;
-  max-width: 30rem;
-}
-
-.menu-container div {
-  width: 100%;
-  margin: 0;
   justify-content: space-around;
 }
 
+.menu-wrapper figure {
+  width: 30%;
+  margin: 0 4.5rem;
+}
+
+.menu-wrapper figure img {
+  width: 100%;
+  max-width: 15rem;
+}
+
 .btn {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: .8rem;
-  width: 16rem;
-  height: 5rem;
-  margin: 1rem;
+  letter-spacing: .4rem;
+  width: 12rem;
+  height: 4rem;
   padding-left: 1rem;
-  background-color: #454c5a;
   border-radius: 1rem;
   border: none;
 }
@@ -102,12 +87,12 @@ div {
   padding-left: .5rem;
 }
 
-#next-btn {
-  background-color: #7bba51;
-}
-
 #filter-btn {
   background-color: #f5995c;
+}
+
+#next-btn {
+  background-color: #32a0da;
 }
 
 .filter-list {
@@ -125,25 +110,29 @@ div {
 .filter-list input {
   border: 0.5rem solid #f5995c;
 }
-
 /**** End of Aside ****/
 
 /**** Images Section ****/ 
+
+.images-wrapper {
+  padding: 2rem;
+}
+
 .images-container {
   width: 100%;
-  padding: 3rem 0;
-  margin: 2rem 0;
-  align-self: center;
+  padding: 0;
+  margin: 0;
+  /* align-self: center; */
 }
 
 .image {
-  justify-content: space-between;
-  width: 15rem;
-  height: 15rem;
-  border: 0.25rem solid #32a0da;
+  width: 30%;
+  max-width: 20rem;
+  aspect-ratio: 1/1;
+  border: 0.25rem solid #7bba51;
   border-radius: 1rem;
   margin: 1rem;
-  padding: 1rem;
+  padding: .5rem;
   object-fit: cover;
 }
 /**** End of Images Section ****/
@@ -152,7 +141,7 @@ div {
 footer {
   background-color: #dd4559;
   padding: 1rem 0;
-  margin: 0;
+  margin-top: auto;
   max-height: 2.5rem;
 }
 
@@ -175,22 +164,43 @@ footer p {
 
   .main-wrapper {
     flex-wrap: nowrap;
-    justify-content: flex-start;
     align-items: flex-start;
   }
 
-  .menu-container {
+  .menu-wrapper {
     width: 20%;
-    margin: 0 2rem;
+    margin: 2rem;
+    flex-direction: column;
+    /* justify-content: flex-start; */ /* ? is this needed? */
+    /* align-self: flex-start; */
   }  
 
-  .menu-container figure,
-  .menu-container figure img {
+  .menu-wrapper figure,
+  .menu-wrapper figure img {
     width: 100%;
-    margin: 2rem;
+    margin: 2rem 0;
     padding: 0;
   } 
 
+  .btn {
+    font-size: 1.5rem;
+    letter-spacing: .8rem;
+    width: 16rem;
+    height: 5rem;
+    margin: 1rem;
+  }
+  
+  .btn i {
+    margin: 0;
+    padding-left: .5rem;
+  }
+  
+  .btn i {
+    margin: 0;
+    padding-left: .5rem;
+  }
+
+/* TODO once these have been added adjust the styles for tablet/desktop */
   /* .filter-list {
     width: 100%;
     padding: 0;
@@ -209,15 +219,25 @@ footer p {
     border: 0.5rem solid #f5995c;
   } */
 
-  .image {
-    width: 25rem;
-    height: 25rem;
-    border: 0.75rem solid #f5995c;
-    border-radius: 2rem;
-    margin: 2rem;
-    padding: 2rem;
-    object-fit: cover;
+  .images-wrapper {
+    /* padding: 0; */
   }
+  
+  .images-container {
+    width: 100%;
+    padding: 2rem;
+    justify-content: space-around;
+  }
+
+  .image {
+    width: 40%;
+    max-width: 20rem;
+    border-width: 0.5rem;
+    border-radius: 1.5rem;
+    /* margin: 1rem 1.5rem; */
+    padding: 1rem;
+  }
+
 
   footer {
     padding: 1.5rem 0;

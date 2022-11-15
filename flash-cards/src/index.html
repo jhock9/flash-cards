@@ -19,18 +19,14 @@
 <body>
   <div class="content-wrapper">
     <main class="main-wrapper center">
-      <aside class="menu-container center">
+      <aside class="menu-wrapper center">
         <figure class="center">
           <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
         </figure>
         
-        <div class="center">
-          <button class="btn center " id="next-btn">Submit <i class="fas fa-angle-double-right"></i></button>
-        </div>
-
-        <div class="center" id="filter">
+        <section class="filter-container center" id="filter">
           <button class="btn center" id="filter-btn">Filter <i class="fa fa-filter"></i></button>
-          <table class="filter-list center"> <!-- use JS to create table based on objects created (name and num)
+          <table class="filter-list center hide"> <!-- use JS to create table based on objects created (name and num)
               <tr>
                 <td>        
                   <label for ="name">
@@ -42,11 +38,19 @@
                 </td>
               </tr> -->
           </table>
+        </section>
+
+        <!--! what to do with this button?-->
+        <div class="center">
+          <button class="btn center hide" id="next-btn">Submit <i class="fas fa-angle-double-right"></i></button>
         </div>
       </aside>
 
-      <section class="images-container center">
-        <div id="test"></div>
+      <div style ="margin:0; padding:0; border-right: .25rem solid #32a0da; height:100%;"></div>
+      
+      <section class="images-wrapper center">
+        <div class="images-container center">
+        </div>
       </section>
     </main>
     
