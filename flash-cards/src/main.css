@@ -3,6 +3,7 @@
 /**** Base and Common Styles ****/
 .hide {
   display: none !important;
+  overflow: hidden !important;
 }
 
 .center {
@@ -11,6 +12,12 @@
   align-items: center;
   flex-flow: row wrap;
 }
+
+/* .test {
+  background-color: red;
+  height: 40rem;
+  width: 30rem;
+} */
 
 /* ! have got to figure out what is going on with the height here...cannot seem to get it to stay "full screen" */
 html,
@@ -44,31 +51,31 @@ body {
   /* height: 100%; */
   justify-content: space-around;
 }
-
 /**** End of Base and Common Styles ****/
 
 /* ==========================================================================
   Mobile Styles
   ========================================================================== */
 
-
-/**** Aside ****/
-.menu-wrapper {
+/**** Header ****/
+header {
   background-color: #f0f4f4;
   width: 100%;
   margin-top: 2rem;
   padding: 0;
+}
+
+header .logo {
+  width: 80%;
+  max-width: 50rem;
   justify-content: space-around;
+  margin-bottom: 1rem;
 }
 
-.menu-wrapper figure {
-  width: 30%;
-  margin: 0 4.5rem;
-}
-
-.menu-wrapper figure img {
+header .logo img {
   width: 100%;
   max-width: 15rem;
+  margin: 0 2rem;
 }
 
 .btn {
@@ -86,36 +93,77 @@ body {
 
 .btn i {
   margin: 0;
-  padding-left: .5rem;
+  padding-left: 1rem;
 }
 
 #filter-btn {
-  background-color: #f5995c;
+  background-color: #ffffff;
+  border: .25rem solid #f5995c;
+  color: #f5995c;
+  margin: 2rem 2rem;
 }
+
+#filter-btn:hover,
+#filter-btn:active, 
+#filter-btn:focus {
+  cursor: pointer;
+  background-color: #f5995c;
+  color: #ffffff;
+  outline: 4rem auto #f5995c;
+  transition: all 0.25s ease-in-out;
+}
+
+/* #filter-btn:visited {
+  background-color: #f5995c;
+  border-color: #ffffff;
+} */
 
 #next-btn {
   background-color: #32a0da;
+  margin-bottom: 1rem;
+}
+
+.filter-container {
+  background-color: #ffffff;
+  border: 0.25rem solid #f5995c;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 2rem;
+  padding: 2rem 1rem;
+  flex-direction: column;
 }
 
 .filter-list {
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  justify-content: flex-start;
+}
+
+.filter-list .col1 {
+  width: 80%;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.filter-list label {
   width: 100%;
-  padding: 2rem 0;
-  margin: 0;
-}
-
-.filter-list label,
-.filter-list input {
-  margin: 0.5rem 0;
-  padding: 0;
+  font-weight: 700;
+  width: 80%;
 }
 
 .filter-list input {
-  border: 0.5rem solid #f5995c;
+  width: 80%;
+  border: 0.1rem solid #e2e7e7;
+  background-color: #f0f4f4;
+  height: 100%;
+  font-size: 2rem;
+  padding: 0.25rem;
+  font-style: italic;
+  text-align: center;
 }
-/**** End of Aside ****/
+/**** End of Header ****/
 
 /**** Images Section ****/ 
-
 .images-wrapper {
   padding: 2rem;
 }
@@ -124,7 +172,6 @@ body {
   width: 100%;
   padding: 0;
   margin: 0;
-  /* align-self: center; */
 }
 
 .image {
@@ -144,7 +191,6 @@ footer {
   background-color: #dd4559;
   padding: 1rem 0;
   margin-top: auto;
-  max-height: 2.5rem;
 }
 
 footer p {
@@ -170,18 +216,14 @@ footer p {
     justify-content: space-between;
   }
 
-  .menu-wrapper {
-    width: 20%;
+  header {
+    width: 28rem;
     margin: 2rem;
-    flex-direction: column;
-    /* justify-content: flex-start; */ /* ? is this needed? */
-    /* align-self: flex-start; */
   }  
 
-  .menu-wrapper figure,
-  .menu-wrapper figure img {
-    width: 100%;
-    margin: 2rem 0;
+  header .logo,
+  header .logo img {
+    margin: 0;
     padding: 0;
   } 
 
@@ -203,27 +245,13 @@ footer p {
     padding-left: .5rem;
   }
 
-/* TODO once these have been added adjust the styles for tablet/desktop */
-  /* .filter-list {
-    width: 100%;
-    padding: 0;
+  .filter-container {
     margin: 0;
-    height: 60rem;
-    background-color: red;
   }
-  
-  .filter-list label,
-  .filter-list input {
-    margin: 0.5rem 0;
-    padding: 0;
-  }
-  
-  .filter-list input {
-    border: 0.5rem solid #f5995c;
-  } */
 
+  /* TODO need to center in the section! */
   .images-wrapper {
-    /* padding: 0; */
+    align-self: center; 
   }
   
   .images-container {
@@ -238,7 +266,6 @@ footer p {
     margin: 2rem 1rem;
     padding: 1rem ;
   }
-
 
   footer {
     padding: 1.5rem 0;
