@@ -137,18 +137,14 @@ header .logo img {
   overflow: hidden;
   transition: max-height 0.2s ease-out;
   justify-content: flex-start;
+  margin: 0;
+  padding: 0;
 }
 
-.filter-list .col1 {
+.filter-list .name {
   width: 80%;
   align-items: center;
   padding: 0.5rem 0;
-}
-
-.filter-list label {
-  width: 100%;
-  font-weight: 700;
-  width: 80%;
 }
 
 .filter-list input {
