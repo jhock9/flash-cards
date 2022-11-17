@@ -66,16 +66,15 @@ header {
 }
 
 header .logo {
-  width: 80%;
-  max-width: 50rem;
-  justify-content: space-around;
+  width: 100%;
+  justify-content: center;
   margin-bottom: 1rem;
 }
 
 header .logo img {
   width: 100%;
   max-width: 15rem;
-  margin: 0 2rem;
+  margin: 0 3rem;
 }
 
 .btn {
@@ -100,7 +99,7 @@ header .logo img {
   background-color: #ffffff;
   border: .25rem solid #f5995c;
   color: #f5995c;
-  margin: 2rem 2rem;
+  margin: 2rem 3rem;
 }
 
 #filter-btn:hover,
@@ -127,28 +126,38 @@ header .logo img {
   background-color: #ffffff;
   border: 0.25rem solid #f5995c;
   width: 100%;
-  max-width: 40rem;
+  max-width: 30rem;
   margin: 0 2rem;
-  padding: 2rem 1rem;
+  padding: 2rem 2rem;
   flex-direction: column;
 }
 
 .filter-list {
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-  justify-content: flex-start;
+  width: 100%;
   margin: 0;
   padding: 0;
+  /* justify-content: flex-start; */
+  transition: max-height 0.2s ease-out;
+  overflow: hidden;
 }
 
-.filter-list .name {
+.filter-item {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  justify-content: space-between;
+}
+
+.name {
   width: 80%;
-  align-items: center;
   padding: 0.5rem 0;
+  /* font-weight: 700; */
+  justify-content: flex-start;
+  /* align-items: center; */
 }
 
-.filter-list input {
-  width: 80%;
+#qty {
+  width: 3rem;
   border: 0.1rem solid #e2e7e7;
   background-color: #f0f4f4;
   height: 100%;
