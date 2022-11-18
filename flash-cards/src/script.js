@@ -93,18 +93,18 @@ const createList = () => {
       label.htmlFor = index.keyword;
       label.innerText = index.keyword;
     let input = document.createElement('input');
-      input.className = 'center';
-      input.id = 'qty';
+      input.classList.add('qty', 'center');
+      input.id = index.keyword;
       input.type = 'text';
-      input.placeholder = 0;
+      input.placeholder = index.qty;
     div.appendChild(label);
     div.appendChild(input);
     filterList.appendChild(div);
   };
-};
+}
 createList();
 
-// Array sorter function -- used to sort masterObjectArray in createList()
+// Array sorter function -- used to sort masterObjectArray in by each keyword
 function compare(a, b) {
   let keyA = a.keyword;
   let keyB = b.keyword;

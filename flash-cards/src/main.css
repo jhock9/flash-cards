@@ -154,7 +154,7 @@ header .logo img {
   justify-content: flex-start;
 }
 
-#qty {
+.qty {
   width: 3rem;
   border: 0.1rem solid #e2e7e7;
   background-color: #f0f4f4;
