@@ -15,6 +15,5 @@ Thumbs.db
 # Ignore SASS config files
 .sass-cache
 
-# Ignore Test files
-test.js
-fetch.js
+# Ignore Test folder
+/test
