@@ -13,6 +13,7 @@ const createObject = (keyword, category) => {
     images: [],
     keyword: keyword,
     category: category,
+    qty: 0,
   };
   return imagesName;
 };
@@ -40,7 +41,7 @@ everyday items, signs, food, buildings, music, vehicles, animals (land, sea, air
 Accepted values: backgrounds, fashion, nature, science, education, feelings, health, people, religion, places, 
 animals, industry, computer, food, sports, transportation, travel, buildings, business, music */
 
-// Fetch image data sets
+// Fetch image data set based on search criteria
 const getImages = async (object) => { 
   // !! double check API KEY before syncing with GitHub
   const fetchImages = await fetch(`${API_URL_KEY}&q=${object.keyword}&category=${object.category}`);
@@ -59,6 +60,15 @@ const runProgram = function () {
   getImages(constructionWorker);
   };
 runProgram();
+
+//adds API data images to object from search criteria
+const createImagesArray = (object, imagesData) => {
+  for (let i = 0, l = imagesData.hits.length; i < l; i++) {
+    const imageURL = imagesData.hits[i].webformatURL;
+    object.images.push(imageURL);
+  };
+  shuffleImages(object.images);
+};
 
 // Randomizes images displayed and shortens array length
 const shuffleImages = (array) => {
@@ -79,7 +89,7 @@ const displayImages = (array) => {
     img.classList.add('image', 'center');
     img.src = image;
     allImages.append(img);
-  }
+  };
 };
 
 // Creates list of items to filter 
