@@ -88,6 +88,8 @@ header .logo img {
   padding-left: 1rem;
   border-radius: 1rem;
   border: none;
+  box-shadow: 0 .5rem #cccccc;
+  cursor: pointer;
 }
 
 .btn i {
@@ -102,24 +104,34 @@ header .logo img {
   margin: 2rem 3rem;
 }
 
+#submit-btn {
+  background-color: #ffffff;
+  border: .25rem solid #32a0da;
+  color: #32a0da;
+  margin-bottom: 1rem;
+}
+
 #filter-btn:hover,
-#filter-btn:active, 
-#filter-btn:focus {
-  cursor: pointer;
+#filter-btn:focus {  
   background-color: #f5995c;
   color: #ffffff;
   outline: 4rem auto #f5995c;
   transition: all 0.25s ease-in-out;
 }
 
-/* #filter-btn:visited {
-  background-color: #f5995c;
-  border-color: #ffffff;
-} */
-
-#next-btn {
+#submit-btn:hover,
+#submit-btn:focus {
   background-color: #32a0da;
-  margin-bottom: 1rem;
+  color: #ffffff;
+  outline: 4rem auto #32a0da;
+  transition: all 0.25s ease-in-out;
+}
+
+#filter-btn:active,
+#submit-btn:active {
+  box-shadow: 0 0.25rem #888888;
+  transform: translateY(0.25rem);
+  transition: all 0.1s linear;
 }
 
 .filter-container {
