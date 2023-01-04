@@ -1,6 +1,6 @@
-// require('dotenv').config()
-// import "./main.css"
-const API_URL_KEY = process.env.API_URL_KEY;
+// // require('dotenv').config()
+// // import "./main.css"
+// const API_URL_KEY = process.env.API_URL_KEY;
 
 const filterBtn = document.querySelector('#filter-btn');
 // const filterInput = document.querySelector('#qty');
