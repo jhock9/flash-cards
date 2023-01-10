@@ -1,5 +1,5 @@
 {
-  "name": "vb-mapp",
+  "name": "flash-cards",
   "version": "1.0.0",
   "description": "<h1 align=\"center\">Welcome to VB-MAPP 👋</h1>",
   "main": "./src/script.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jhock9/vb-mapp.git"
+    "url": "git+https://github.com/jhock9/aba-ok.git"
   },
   "author": "Jon Hocker",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jhock9/vb-mapp/issues"
+    "url": "https://github.com/jhock9/aba-ok/issues"
   },
-  "homepage": "https://github.com/jhock9/vb-mapp#readme",
+  "homepage": "https://github.com/jhock9/aba-ok#readme",
   "dependencies": {
     "@babel/core": "^7.20.2",
     "babel-loader": "^9.1.0",
