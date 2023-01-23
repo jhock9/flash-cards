@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VB-MAPP Flashcards</title>
+  <title>VB-MAPP Flash Cards</title>
   <link rel="shortcut icon" href="../favicon-32x32.png" type="image/x-icon">
 
   <link rel="stylesheet" href="main.css">
@@ -18,44 +18,53 @@
 </head>
 
 <body>
-  <div class="content-wrapper">
+  <section class="landing-page">
+    <div>
+      <header class="logo center">
+        <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
+      </header>
+
+      <div class="welcome-text center">
+        <h1 class="center">
+          Welcome to the <br> 
+          VB-MAPP Flashcard App</h1>
+        <p class="center">
+          Please sign in with your <br>
+          iCloud account to continue</p>
+      </div>
+
+    <div class="login-form">
+      <button class="btn center" id="icloud-login-button">Sign in with iCloud</button>
+    </div>
+  </section>
+  
+  <div class="flash-card-page hide">
     <main class="main-wrapper center">
       <header class="menu-wrapper center">
         <section class="logo center">
           <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
-          <button class="btn center" id="filter-btn">Filter <i class="fa fa-filter"></i></button>
+          <!-- <button class="btn center" id="filter-btn">Filter <i class="fa fa-filter"></i></button> -->
         </section>
         
-        <section class="filter-container center" id="filter">
+        <form class="filter-container center" id="filter">
           <button class="btn center " id="submit-btn">Submit <i class="fas fa-angle-double-right"></i></button>
           <div class="filter-list center"> 
-            <!-- example of list created
-              <div class="filter-item center">
-                <label class="name center" for="airplane">airplane</label>  
-                <input class="qty center" id="airplane" type="text" placeholder="0">
-              </div>
-              <div class="filter-item center">
-                <label class="name center" for="boat">boat</label>  
-                <input class="qty center" id="boat" type="text" placeholder="0">
-              </div> -->
           </div>
-        </section>
+        </form>
       </header>
-
-      <!-- <div style ="margin:0; padding:0; border-right: .25rem solid #32a0da; height:100%;"></div> -->
       
       <section class="images-wrapper center">
         <div class="images-container center">
-          <div class="test center"></div>
         </div>
       </section>
     </main>
-    
+  </div>
+
+
     <footer>
       <p class="copyright center">&copy; <script>document.write(new Date().getFullYear())</script> ABA Co-Op. All Rights Reserved.</p>
     </footer>
-  <!-- <script src="script.js"></script> -->
-  <script src="../test/test.js"></script>
-  </div>
+    
+  <script src="app.js"></script>
 </body> 
 </html>

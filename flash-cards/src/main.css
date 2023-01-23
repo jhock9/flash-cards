@@ -42,7 +42,7 @@ body {
   margin: 0;
 }
 
-.content-wrapper {
+.flash-card-page {
   flex-direction: column;
   /* height: 100%; */
 }
@@ -77,6 +77,16 @@ header .logo img {
   margin: 0 3rem;
 }
 
+.filter-container {
+  background-color: #ffffff;
+  border: 0.25rem solid #f5995c;
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 2rem;
+  padding: 2rem 2rem;
+  flex-direction: column;
+}
+
 .btn {
   font-size: 1rem;
   font-weight: 700;
@@ -88,7 +98,7 @@ header .logo img {
   padding-left: 1rem;
   border-radius: 1rem;
   border: none;
-  box-shadow: 0 .5rem #cccccc;
+  box-shadow: 0 .25rem #cccccc;
   cursor: pointer;
 }
 
@@ -96,19 +106,12 @@ header .logo img {
   margin: 0;
   padding-left: 1rem;
 }
-
+/* 
 #filter-btn {
   background-color: #ffffff;
   border: .25rem solid #f5995c;
   color: #f5995c;
   margin: 2rem 3rem;
-}
-
-#submit-btn {
-  background-color: #ffffff;
-  border: .25rem solid #32a0da;
-  color: #32a0da;
-  margin-bottom: 1rem;
 }
 
 #filter-btn:hover,
@@ -117,6 +120,13 @@ header .logo img {
   color: #ffffff;
   outline: 4rem auto #f5995c;
   transition: all 0.25s ease-in-out;
+} */
+
+#submit-btn {
+  background-color: #ffffff;
+  border: .25rem solid #32a0da;
+  color: #32a0da;
+  margin-bottom: 1rem;
 }
 
 #submit-btn:hover,
@@ -127,21 +137,11 @@ header .logo img {
   transition: all 0.25s ease-in-out;
 }
 
-#filter-btn:active,
+/* #filter-btn:active, */
 #submit-btn:active {
   box-shadow: 0 0.25rem #888888;
   transform: translateY(0.25rem);
   transition: all 0.1s linear;
-}
-
-.filter-container {
-  background-color: #ffffff;
-  border: 0.25rem solid #f5995c;
-  width: 100%;
-  max-width: 30rem;
-  margin: 0 2rem;
-  padding: 2rem 2rem;
-  flex-direction: column;
 }
 
 .filter-list {
@@ -235,12 +235,6 @@ footer p {
     width: 30rem;
     margin: 2rem;
   }  
-
-  header .logo,
-  header .logo img {
-    margin: 0;
-    padding: 0;
-  } 
 
   .btn {
     font-size: 1.5rem;
