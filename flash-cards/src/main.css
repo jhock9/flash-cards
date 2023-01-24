@@ -1,6 +1,11 @@
-/* TODO change to CSS Grid in v2.0 */
 
-/**** Base and Common Styles ****/
+/* //TODO
+  - 1. make it so that all pages take up the full screen height
+  - 2. center the images in the section
+  - 3. figure out how to separate the styles of these header
+*/
+
+/**** BASE & COMMON STYLES ****/
 .hide {
   display: none !important;
   overflow: hidden !important;
@@ -13,13 +18,6 @@
   flex-flow: row wrap;
 }
 
-/* .test {
-  background-color: red;
-  height: 40rem;
-  width: 30rem;
-} */
-
-/* ! have got to figure out what is going on with the height here...cannot seem to get it to stay "full screen" */
 html,
 body {
   width: 100%;
@@ -30,53 +28,117 @@ body {
 html {
   font-size: 50%; /* setting default font size to 8px */
   scroll-behavior: smooth;
-  /* min-height: 100vh; */
 }
 
 body {
   font-family: "Mulish", sans-serif;
   color: #000000;
   font-size: 2rem;
-  background-color: #f0f4f4;
+  background-color: #f4f4f4;
   padding: 0;
   margin: 0;
 }
 
-.flash-card-page {
-  flex-direction: column;
-  /* height: 100%; */
-}
-
-.main-wrapper {
-  /* height: 100%; */
+.content-wrapper {
   justify-content: space-around;
 }
-/**** End of Base and Common Styles ****/
+/**** END OF BASE & COMMON STYLES ****/
 
 /* ==========================================================================
   Mobile Styles
   ========================================================================== */
 
-/**** Header ****/
 header {
-  background-color: #f0f4f4;
+  background-color: #f4f4f4;
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 5rem;
   padding: 0;
 }
 
 header .logo {
   width: 100%;
   justify-content: center;
-  margin-bottom: 1rem;
 }
 
 header .logo img {
   width: 100%;
-  max-width: 15rem;
+  max-width: 25rem; //*  .15rem  *//
   margin: 0 3rem;
 }
 
+footer {
+  background-color: #dd4559;
+  padding: 1rem 0;
+  margin-top: 3rem;
+}
+
+footer p {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+/**** LANDING-PAGE ****/
+#landing-page .content-wrapper {
+  flex-direction: column;
+}
+
+.welcome-text {
+  max-width: 45rem;
+}
+
+.welcome-text h1 {
+  width: 100%;
+  font-size: 3.5rem;
+  text-align: center;
+  margin: 5rem;
+  padding: 0;
+}
+
+.welcome-text p {
+  width: 100%;
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 0 5rem;
+  padding: 0;
+}
+
+#apple-signin-btn {  
+  background-color: #ffffff;
+  color: #000000;
+  border: .25rem solid #000000;
+  border-radius: .5rem;
+  box-shadow: 0 .25rem #cccccc;
+  margin: 10rem 0;
+  padding: 0;
+  width: 30rem;
+  height: 5rem;
+  font-size: 2rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+#apple-signin-btn i {
+  font-size: 2.5rem;
+  margin: 0;
+  padding: 0 1rem .3rem 0;
+}
+
+#apple-signin-btn:hover {
+  background-color: #000000;
+  color: #ffffff;
+  outline: 4rem auto #000000;
+  transition: all 0.3s ease-in-out;
+}
+
+#apple-signin-btn:active {
+  box-shadow: 0 0.25rem #888888;
+  transform: translateY(0.25rem);
+  transition: all 0.05s linear;
+}
+
+/**** FLASH-CARD-PAGE ****/
 .filter-container {
   background-color: #ffffff;
   border: 0.25rem solid #f5995c;
@@ -87,22 +149,40 @@ header .logo img {
   flex-direction: column;
 }
 
-.btn {
+/* #apple-signin-btn {  
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 2rem;
+  font-weight: 400;
+  width: 30rem;
+  height: 5rem;
+  margin: 10rem 0;
+  padding: 0;
+  border: .25rem solid #000000;
+  border-radius: .5rem;
+  box-shadow: 0 .25rem #cccccc;
+  cursor: pointer;
+} */
+
+#submit-btn {
+  background-color: #ffffff;
+  color: #32a0da;
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: .4rem;
   width: 12rem;
   height: 4rem;
+  margin-bottom: 1rem;
   padding-left: 1rem;
-  border-radius: 1rem;
+  border: .25rem solid #32a0da;
+  border-radius: .5rem;
   border: none;
   box-shadow: 0 .25rem #cccccc;
   cursor: pointer;
 }
 
-.btn i {
+#submit-btn i {
   margin: 0;
   padding-left: 1rem;
 }
@@ -122,13 +202,6 @@ header .logo img {
   transition: all 0.25s ease-in-out;
 } */
 
-#submit-btn {
-  background-color: #ffffff;
-  border: .25rem solid #32a0da;
-  color: #32a0da;
-  margin-bottom: 1rem;
-}
-
 #submit-btn:hover,
 #submit-btn:focus {
   background-color: #32a0da;
@@ -140,7 +213,7 @@ header .logo img {
 /* #filter-btn:active, */
 #submit-btn:active {
   box-shadow: 0 0.25rem #888888;
-  transform: translateY(0.25rem);
+  transform: translateY(0.2rem);
   transition: all 0.1s linear;
 }
 
@@ -169,16 +242,14 @@ header .logo img {
 .qty {
   width: 3rem;
   border: 0.1rem solid #e2e7e7;
-  background-color: #f0f4f4;
+  background-color: #f4f4f4;
   height: 100%;
   font-size: 2rem;
   padding: 0.25rem;
   font-style: italic;
   text-align: center;
 }
-/**** End of Header ****/
 
-/**** Images Section ****/ 
 .images-wrapper {
   padding: 2rem;
 }
@@ -199,24 +270,6 @@ header .logo img {
   padding: .5rem;
   object-fit: cover;
 }
-/**** End of Images Section ****/
-
-/**** Footer ****/
-footer {
-  background-color: #dd4559;
-  padding: 1rem 0;
-  margin-top: auto;
-}
-
-footer p {
-  font-size: 1.5rem;
-  color: #ffffff;
-  margin: 0;
-  padding: 0;
-}
-/**** End of Footer ****/
-
-/**** End of Mobile Styles ****/
 
 /*=====================================================================================
   Media Queries for Responsive Design     
@@ -224,8 +277,25 @@ footer p {
 
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
+  
+  header .logo img {
+    max-width: 40rem;
+  }
+  
+  .welcome-text {
+  max-width: 100rem;
+  }
 
-  .main-wrapper {
+  .welcome-text h1,
+  .welcome-text p {
+    text-align: center;
+  }
+
+  .welcome-text br {
+    display: none;
+  }
+
+  #flash-card-page .content-wrapper {
     flex-wrap: nowrap;
     align-items: flex-start;
     justify-content: space-between;
@@ -236,7 +306,7 @@ footer p {
     margin: 2rem;
   }  
 
-  .btn {
+  #submit-btn {
     font-size: 1.5rem;
     letter-spacing: .8rem;
     width: 16rem;
@@ -244,12 +314,12 @@ footer p {
     margin: 1rem;
   }
   
-  .btn i {
+  #submit-btn i {
     margin: 0;
     padding-left: .5rem;
   }
   
-  .btn i {
+  #submit-btn i {
     margin: 0;
     padding-left: .5rem;
   }
@@ -258,7 +328,6 @@ footer p {
     margin: 0;
   }
 
-  /* TODO need to center in the section! */
   .images-wrapper {
     align-self: center; 
   }

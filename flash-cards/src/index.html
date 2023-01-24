@@ -18,48 +18,47 @@
 </head>
 
 <body>
-  <section class="landing-page">
-    <div>
-      <header class="logo center">
-        <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
-      </header>
-
-      <div class="welcome-text center">
-        <h1 class="center">
-          Welcome to the <br> 
-          VB-MAPP Flashcard App</h1>
-        <p class="center">
-          Please sign in with your <br>
-          iCloud account to continue</p>
-      </div>
-
-    <div class="login-form">
-      <button class="btn center" id="icloud-login-button">Sign in with iCloud</button>
-    </div>
-  </section>
-  
-  <div class="flash-card-page hide">
-    <main class="main-wrapper center">
-      <header class="menu-wrapper center">
-        <section class="logo center">
+  <div id="landing-page">
+    <div class="content-wrapper center">
+      <header class="center">
+        <div class="logo center">
           <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
-          <!-- <button class="btn center" id="filter-btn">Filter <i class="fa fa-filter"></i></button> -->
-        </section>
-        
-        <form class="filter-container center" id="filter">
-          <button class="btn center " id="submit-btn">Submit <i class="fas fa-angle-double-right"></i></button>
-          <div class="filter-list center"> 
-          </div>
-        </form>
+        </div>  
       </header>
       
-      <section class="images-wrapper center">
-        <div class="images-container center">
+      <section class="welcome-text center">
+        <h1 class="center"> Welcome to the <br>
+          VB-MAPP <br>
+          Flashcard App</h1>
+        <p class ="center"> Please sign in with your Apple <br> 
+          iCloud account to continue.</p>
+      </section>
+
+      <button class="btn center" id="apple-signin-btn" ><i class="fa-brands fa-apple"></i>&nbsp;Sign in with Apple</button>
+    </div>
+  </div>
+  
+  <div id="flash-card-page" class="hide">
+    <div class="content-wrapper center">
+      <header class="center">
+        <div class="logo center">
+          <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"/>
+          <!-- <button class="btn center" id="filter-btn">Filter <i class="fa fa-filter"></i></button> -->
+        </div>
+      </header>
+
+      <section class="filter-container center" id="filter">
+        <button class="btn center " id="submit-btn">Submit <i class="fas fa-angle-double-right"></i></button>
+        <div class="filter-list center"> 
         </div>
       </section>
-    </main>
+      
+      <main class="images-wrapper center">
+        <div class="images-container center">
+        </div>
+      </main>
+    </div>
   </div>
-
 
     <footer>
       <p class="copyright center">&copy; <script>document.write(new Date().getFullYear())</script> ABA Co-Op. All Rights Reserved.</p>
