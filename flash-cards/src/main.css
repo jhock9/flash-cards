@@ -1,11 +1,15 @@
-
-/* //TODO
-  - 1. make it so that all pages take up the full screen height
-  - 2. center the images in the section
-  - 3. figure out how to separate the styles of these header
-*/
+/* //TODO - how to make the view height fill exactly the screen height */
 
 /**** BASE & COMMON STYLES ****/
+:root {
+  --primary-color: #32a0da;
+  --second-color: #7bba51;
+  --third-color: #f5995c;
+  --fourth-color: #dd4559;
+  --background-color: #f4f4f4;
+  --text-color: #000000;
+}
+
 .hide {
   display: none !important;
   overflow: hidden !important;
@@ -21,8 +25,9 @@
 html,
 body {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   margin: 0;
+  padding: 0;
 }
 
 html {
@@ -34,42 +39,34 @@ body {
   font-family: "Mulish", sans-serif;
   color: #000000;
   font-size: 2rem;
-  background-color: #f4f4f4;
+  background-color: var(--background-color);
   padding: 0;
   margin: 0;
 }
 
+#landing-page,
+#flash-card-page,
 .content-wrapper {
-  justify-content: space-around;
+  min-height: 100vh;
+  width: 100%;
 }
-/**** END OF BASE & COMMON STYLES ****/
 
-/* ==========================================================================
-  Mobile Styles
-  ========================================================================== */
-
-header {
-  background-color: #f4f4f4;
+figure {
   width: 100%;
   margin-top: 5rem;
   padding: 0;
+  background-color: var(--background-color);
 }
 
-header .logo {
+figure .logo {
   width: 100%;
   justify-content: center;
 }
 
-header .logo img {
-  width: 100%;
-  max-width: 25rem; //*  .15rem  *//
-  margin: 0 3rem;
-}
-
 footer {
-  background-color: #dd4559;
+  width: 100%;
+  background-color: var(--third-color);
   padding: 1rem 0;
-  margin-top: 3rem;
 }
 
 footer p {
@@ -79,20 +76,33 @@ footer p {
   padding: 0;
 }
 
+/**** END OF BASE & COMMON STYLES ****/
+
+/* ==========================================================================
+  Mobile Styles
+  ========================================================================== */
+
 /**** LANDING-PAGE ****/
 #landing-page .content-wrapper {
   flex-direction: column;
+  justify-content: space-between;
+}
+
+#landing-page figure .logo img {
+  width: 100%;
+  max-width: 25rem;
+  margin: 0 3rem;
 }
 
 .welcome-text {
-  max-width: 45rem;
+  width: 100%;
 }
 
 .welcome-text h1 {
   width: 100%;
   font-size: 3.5rem;
   text-align: center;
-  margin: 5rem;
+  margin: 5rem 0;
   padding: 0;
 }
 
@@ -100,22 +110,22 @@ footer p {
   width: 100%;
   font-size: 2.5rem;
   text-align: center;
-  margin: 0 5rem;
+  margin: 0;
   padding: 0;
 }
 
 #apple-signin-btn {  
+  width: 30rem;
+  height: 5rem;
+  margin: 10rem 0;
+  padding: 0;
   background-color: #ffffff;
   color: #000000;
+  font-size: 2rem;
+  font-weight: 400;
   border: .25rem solid #000000;
   border-radius: .5rem;
   box-shadow: 0 .25rem #cccccc;
-  margin: 10rem 0;
-  padding: 0;
-  width: 30rem;
-  height: 5rem;
-  font-size: 2rem;
-  font-weight: 400;
   cursor: pointer;
 }
 
@@ -129,88 +139,78 @@ footer p {
   background-color: #000000;
   color: #ffffff;
   outline: 4rem auto #000000;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 #apple-signin-btn:active {
   box-shadow: 0 0.25rem #888888;
   transform: translateY(0.25rem);
   transition: all 0.05s linear;
-}
+} 
 
 /**** FLASH-CARD-PAGE ****/
-.filter-container {
-  background-color: #ffffff;
-  border: 0.25rem solid #f5995c;
-  width: 100%;
-  max-width: 30rem;
-  margin: 0 2rem;
-  padding: 2rem 2rem;
+#flash-card-page .content-wrapper {
+  justify-content: space-between;
   flex-direction: column;
 }
 
-/* #apple-signin-btn {  
-  background-color: #ffffff;
-  color: #000000;
-  font-size: 2rem;
-  font-weight: 400;
-  width: 30rem;
-  height: 5rem;
-  margin: 10rem 0;
+#flash-card-page figure {
+  margin: 3rem 0;
+}
+
+#flash-card-page figure .logo img {
+  width: 100%;
+  max-width: 20rem;
+  margin: 0 3rem;
+}
+
+main {  
+  width: 100%;
+  margin: 0;
   padding: 0;
-  border: .25rem solid #000000;
-  border-radius: .5rem;
-  box-shadow: 0 .25rem #cccccc;
-  cursor: pointer;
-} */
+  flex-direction: column !important;
+}
+
+.filter-container {
+  width: 100%;
+  max-width: 30rem;
+  flex-direction: column;
+  margin: 0 2rem;
+  padding: 2rem;
+  background-color: #ffffff;
+  border: 0.25rem solid var(--primary-color);
+}
 
 #submit-btn {
+  width: 20rem;
+  height: 5rem;
+  margin: 1rem;
+  padding-left: 1rem;
   background-color: #ffffff;
-  color: #32a0da;
-  font-size: 1rem;
+  color: var(--primary-color);
+  font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .4rem;
-  width: 12rem;
-  height: 4rem;
-  margin-bottom: 1rem;
-  padding-left: 1rem;
-  border: .25rem solid #32a0da;
+  letter-spacing: .8rem;
+  border: .25rem solid var(--primary-color);
   border-radius: .5rem;
-  border: none;
   box-shadow: 0 .25rem #cccccc;
   cursor: pointer;
 }
 
 #submit-btn i {
   margin: 0;
-  padding-left: 1rem;
+  padding: .1rem 0 0 .5rem;
 }
-/* 
-#filter-btn {
-  background-color: #ffffff;
-  border: .25rem solid #f5995c;
-  color: #f5995c;
-  margin: 2rem 3rem;
-}
-
-#filter-btn:hover,
-#filter-btn:focus {  
-  background-color: #f5995c;
-  color: #ffffff;
-  outline: 4rem auto #f5995c;
-  transition: all 0.25s ease-in-out;
-} */
 
 #submit-btn:hover,
 #submit-btn:focus {
-  background-color: #32a0da;
+  background-color: var(--primary-color);
   color: #ffffff;
-  outline: 4rem auto #32a0da;
+  outline: 4rem auto var(--primary-color);
   transition: all 0.25s ease-in-out;
 }
 
-/* #filter-btn:active, */
 #submit-btn:active {
   box-shadow: 0 0.25rem #888888;
   transform: translateY(0.2rem);
@@ -235,14 +235,14 @@ footer p {
 .name {
   width: 80%;
   padding: 0.5rem 0;
-  font-weight: 700;
   justify-content: flex-start;
+  font-weight: 700;
 }
 
 .qty {
   width: 3rem;
   border: 0.1rem solid #e2e7e7;
-  background-color: #f4f4f4;
+  background-color: var(--background-color);
   height: 100%;
   font-size: 2rem;
   padding: 0.25rem;
@@ -261,11 +261,10 @@ footer p {
 }
 
 .image {
-  width: 30%;
-  max-width: 20rem;
+  width: 17rem;
   aspect-ratio: 1/1;
-  border: 0.25rem solid #7bba51;
-  border-radius: 1rem;
+  border: 0.25rem solid var(--second-color);
+  border-radius: .5rem;
   margin: 1rem;
   padding: .5rem;
   object-fit: cover;
@@ -277,13 +276,19 @@ footer p {
 
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
-  
-  header .logo img {
-    max-width: 40rem;
+
+  footer {
+    padding: 1.5rem 0;
   }
-  
-  .welcome-text {
-  max-width: 100rem;
+
+  footer p{
+    font-size: 2rem;
+  }
+
+  /**** Landing-Page ****/
+
+  #landing-page figure .logo img {
+    max-width: 40rem;
   }
 
   .welcome-text h1,
@@ -295,68 +300,55 @@ footer p {
     display: none;
   }
 
-  #flash-card-page .content-wrapper {
-    flex-wrap: nowrap;
-    align-items: flex-start;
-    justify-content: space-between;
+  /**** Flash-Card-Page ****/
+  main {  
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    flex-flow: row nowrap !important;
+  }
+  
+  aside {
+    max-width: 30rem;
+    margin-left: 3rem;
   }
 
-  header {
+  #flash-card-page figure {
     width: 30rem;
-    margin: 2rem;
+    margin: 3rem;
   }  
 
-  #submit-btn {
-    font-size: 1.5rem;
-    letter-spacing: .8rem;
-    width: 16rem;
-    height: 5rem;
-    margin: 1rem;
-  }
-  
-  #submit-btn i {
-    margin: 0;
-    padding-left: .5rem;
-  }
-  
-  #submit-btn i {
-    margin: 0;
-    padding-left: .5rem;
+  #flash-card-page figure .logo img {
+    max-width: 25rem;
   }
 
   .filter-container {
     margin: 0;
+    min-width: 25rem;
   }
 
   .images-wrapper {
-    align-self: center; 
-  }
-  
-  .images-container {
-    width: 100%;
-    justify-content: space-around;
+    min-width: 65%;
   }
 
   .image {
-    max-width: 23rem;
-    border-width: 0.5rem;
-    border-radius: 1.5rem;
-    margin: 2rem 1rem;
-    padding: 1rem ;
-  }
-
-  footer {
-    padding: 1.5rem 0;
-  }
-
-  footer p{
-    font-size: 2rem;
+    min-width: 20rem;
+    border-width: 0.35rem;
+    border-radius: .75rem;
+    margin: 2rem;
+    padding: 1rem;
   }
 }
 
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
 
-/* no style changes */
+    /**** Flash-Card-Page ****/
+  aside {
+    margin-left: 0;
+    max-width: 25%;
+  }
 
+  .image {
+    min-width: 25rem;
+  }
 }
