@@ -17,3 +17,6 @@ Thumbs.db
 
 # Ignore Test folder
 /test
+
+# Ignore Public folder
+/server/public
