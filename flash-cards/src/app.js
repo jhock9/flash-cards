@@ -1,8 +1,10 @@
-
 "use strict";
 require('dotenv').config();
 import "./main.css";
 
+const flashCardPage = document.querySelector("#flash-card-page");
+const landingPage = document.querySelector("#landing-page");
+const signInBtn = document.querySelector("#apple-signin-btn");
 const submit = document.querySelector('#submit-btn');
 const filterList = document.querySelector('.filter-list');
 const filterInputs = Array.from(document.getElementsByClassName('qty'));
@@ -30,20 +32,26 @@ CloudKit.on('error', (error) => {
 CloudKit.getAuthStatus().then(function(response) {
   if(response.status === 'AUTHORIZED') {
     console.log('User is already signed in');
+    landingPage.classList.add("hide");
+    flashCardPage.classList.remove("hide");
     fetchAlbums();
   } else {
     console.log('User is not signed in');
-    CloudKit.signIn({
-      scope: 'email',
-      redirectURI: process.env.ICLOUD_REDIRECT_URI
-    }).then((response) => {
-      console.log(response);
-      if(response.isSuccess) {
-        userIdentity = response.userIdentity;
-        fetchAlbums();
-      } else {
-        console.error('Error signing in:', response.error);
-      };
+    signInBtn.addEventListener("click", () => {
+      CloudKit.signIn({
+        scope: 'email',
+        redirectURI: process.env.ICLOUD_REDIRECT_URI
+      }).then((response) => {
+        console.log(response);
+        if(response.isSuccess) {
+          landingPage.classList.add("hide");
+          flashCardPage.classList.remove("hide");
+          userIdentity = response.userIdentity;
+          fetchAlbums();
+        } else {
+          console.error('Error signing in:', response.error);
+        };
+      });
     });
   };
 });
@@ -92,6 +100,7 @@ const createList = (currentAlbums) => {
     let input = document.createElement('input');
     input.classList.add('qty', 'center');
     input.type = 'text';
+    input.id = fileName;
     input.placeholder = 0;
     div.appendChild(label);
     div.appendChild(input);
