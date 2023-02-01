@@ -20,6 +20,3 @@ Thumbs.db
 
 # Ignore Public folder
 /server/public
-
-# Ignore readme.md until updated
-readme.md
