@@ -2,23 +2,24 @@
   "name": "flash-cards",
   "version": "1.0.0",
   "description": "<h1 align=\"center\">Welcome to VB-MAPP 👋</h1>",
-  "main": "./src/script.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "serve": "webpack-dev-server --mode=development",
-    "deploy": "npm run build"
+    "deploy": "npm run build",
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jhock9/aba-ok.git"
+    "url": "git+https://github.com/jhock9/flash-cards.git"
   },
   "author": "Jon Hocker",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jhock9/aba-ok/issues"
+    "url": "https://github.com/jhock9/flash-cards/issues"
   },
-  "homepage": "https://github.com/jhock9/aba-ok#readme",
+  "homepage": "https://github.com/jhock9/flash-cards#readme",
   "dependencies": {
     "@babel/core": "^7.20.2",
     "apple-icloud": "^1.1.0",
