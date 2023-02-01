@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 const path = require('node:path/win32');
 
 module.exports = {
-  entry: './src/script.js',
+  entry: 'app.js',
   output: {
     filename: 'bundle.js'
   },
@@ -24,7 +24,7 @@ module.exports = {
   devServer: {
     static: path.resolve('src'),
     open: true,
-    port: 8000,
+    port: 3003,
   },
 
   plugins: [

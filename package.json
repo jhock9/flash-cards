@@ -1,6 +1,9 @@
 {
   "name": "flash-cards",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=18.x"
+  },
   "description": "<h1 align=\"center\">Welcome to VB-MAPP 👋</h1>",
   "main": "app.js",
   "scripts": {
