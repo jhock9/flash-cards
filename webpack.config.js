@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 const path = require('node:path/win32');
 
 module.exports = {
-  entry: 'app.js',
+  entry: './app.js',
   output: {
     filename: 'bundle.js'
   },
@@ -22,7 +22,7 @@ module.exports = {
   mode: 'development',
 
   devServer: {
-    static: path.resolve('src'),
+    static: path.resolve('./'),
     open: true,
     port: 3003,
   },
@@ -30,7 +30,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: './index.html',
       filename: 'index.html',
       inject: 'body'
     }),
