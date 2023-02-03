@@ -1,27 +1,23 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
-
-// app.get('/', (req, res) => {
-//   const indexPath = path.resolve(__dirname, '..', 'index.html');
-//   console.log(`Serving index file at path: ${indexPath}`);
-//   res.sendFile(indexPath);
-// });
+const path = require('path');
 
 app.get('/', (req, res) => {
   const indexPath = path.resolve(__dirname, '..', 'index.html');
   console.log(`Serving index file at path: ${indexPath}`);
-  res.send(`Serving index file at path: ${indexPath}`);
+  res.sendFile(indexPath);
 });
 
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '../index.html');
-// });
+app.use(express.static(path.join(__dirname, '..')));
 
-app.use(express.static(__dirname + '../'));
+app.use((req, res, next) => {
+  console.log(`Serving file at path: ${req.path}`);
+  next();
+});
 
 app.listen(port, () => {
-  console.log(`Server running at http://test.jonhocker.com:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
 
 app.use((err, req, res, next) => {
