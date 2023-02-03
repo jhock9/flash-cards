@@ -34,6 +34,7 @@
     "html-webpack-plugin": "^5.5.0",
     "memfs": "^3.4.13",
     "node-sass": "^8.0.0",
+    "path-browserify": "^1.0.1",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
     "url-loader": "^4.1.1",

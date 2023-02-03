@@ -35,5 +35,11 @@ module.exports = {
       inject: 'body'
     }),
     // new Dotenv()
-  ]
+  ],
+
+  resolve: {
+    fallback: {
+      "path": require.resolve("path-browserify")
+    }
+  }
 }
