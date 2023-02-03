@@ -34,6 +34,11 @@ module.exports = {
       filename: 'index.html',
       inject: 'body'
     }),
+    new webpack.IgnorePlugin({
+      checkResource: (resource) => {
+        return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
+      },
+    }),
     // new Dotenv({
     //   path: '.env',
     // })
