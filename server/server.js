@@ -2,10 +2,16 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
+// app.get('/', (req, res) => {
+//   const indexPath = path.resolve(__dirname, '..', 'index.html');
+//   console.log(`Serving index file at path: ${indexPath}`);
+//   res.sendFile(indexPath);
+// });
+
 app.get('/', (req, res) => {
   const indexPath = path.resolve(__dirname, '..', 'index.html');
   console.log(`Serving index file at path: ${indexPath}`);
-  res.sendFile(indexPath);
+  res.send(`Serving index file at path: ${indexPath}`);
 });
 
 // app.get('/', (req, res) => {
