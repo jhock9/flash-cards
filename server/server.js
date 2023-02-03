@@ -3,8 +3,14 @@ const app = express();
 const port = process.env.PORT || 3003;
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '../index.html');
+  const indexPath = path.resolve(__dirname, '..', 'index.html');
+  console.log(`Serving index file at path: ${indexPath}`);
+  res.sendFile(indexPath);
 });
+
+// app.get('/', (req, res) => {
+//   res.sendFile(__dirname + '../index.html');
+// });
 
 app.use(express.static(__dirname + '../'));
 
