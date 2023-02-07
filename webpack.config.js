@@ -39,10 +39,10 @@ module.exports = {
         return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
       },
     }),
-    new Dotenv({
-      path: '.env',
-      safe: true
-    })
+    // new Dotenv({
+    //   path: '.env',
+    //   safe: true
+    // })
   ],
 
   resolve: {
