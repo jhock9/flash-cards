@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const path = require('node:path/win32');
+const path = require('path');
 
 module.exports = {
   entry: './app.js',
@@ -11,7 +11,7 @@ module.exports = {
   devtool: 'source-map',
   module: {
     rules: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/},
+      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, options: { presets: ['@babel/preset-env']}},
       { test: /\.css$/, use: ['style-loader', 'css-loader']},
       { test: /\.s(a|c)ss$/, use: ['style-loader', 'css-loader', 'sass-loader']},
       { test: /\.(png|svg|jpg|jpeg|gif)$/, type: 'asset/resource'},
@@ -39,9 +39,10 @@ module.exports = {
         return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
       },
     }),
-    // new Dotenv({
-    //   path: '.env',
-    // })
+    new Dotenv({
+      path: '.env',
+      safe: true
+    })
   ],
 
   resolve: {
