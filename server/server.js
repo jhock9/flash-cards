@@ -6,6 +6,7 @@ const path = require('path');
 app.get('/', (req, res) => {
   const indexPath = path.resolve(__dirname, '..', 'index.html');
   console.log(`Serving index file at path: ${indexPath}`);
+  res.setHeader('Content-Type', 'text/html');
   res.sendFile(indexPath);
 });
 

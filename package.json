@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/jhock9/flash-cards/issues"
   },
-  "homepage": "https://github.com/jhock9/flash-cards#readme",
+  "homepage": "https://vb-mapp-flash-cards.herokuapp.com/",
   "dependencies": {
     "@babel/core": "^7.20.2",
     "apple-icloud": "^1.1.0",
