@@ -17,8 +17,20 @@ app.get('/', (req, res) => {
   res.sendFile(indexPath);
 });
 
+// Serve main.css
+app.get('/main.css', (req, res) => {
+  res.set('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, 'dist', 'main.css'));
+});
+
+// Serve app.js
+app.get('/app.js', (req, res) => {
+  res.set('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'dist', 'app.js'));
+});
+
 // Serve bundle.js
-app.get('/bundle.js', function(req, res) {
+app.get('/bundle.js', (req, res) => {
   res.set('Content-Type', 'application/javascript');
   res.sendFile(path.join(__dirname, 'dist', 'bundle.js'));
 });
