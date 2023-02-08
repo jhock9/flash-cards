@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
   res.sendFile(indexPath);
 });
 
-app.use(express.static(path.join(__dirname, '../dist')));
+app.use(express.static(path.join(__dirname, '../src')));
 
 app.use((req, res, next) => {
   console.log(`Serving file at path: ${req.path}`);
