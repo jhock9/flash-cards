@@ -41,10 +41,16 @@ module.exports = {
   mode: 'development',
 
   devServer: {
-    contentBase: path.resolve(__dirname, 'src'),
+    static: path.resolve('./'),
     open: true,
     port: 3003,
   },
+
+  // devServer: {
+  //   contentBase: path.resolve(__dirname, 'src'),
+  //   open: true,
+  //   port: 3003,
+  // },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
