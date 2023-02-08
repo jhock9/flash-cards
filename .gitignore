@@ -15,5 +15,5 @@ Thumbs.db
 # Ignore SASS config files
 .sass-cache
 
-# Ignore Dist folder
-/dist
+# # Ignore Dist folder
+# /dist
