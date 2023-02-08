@@ -6,7 +6,7 @@ const path = require('path');
 // Serve favicon
 app.get('/favicon.ico', (req, res) => {
   res.setHeader('Content-Type', 'image/x-icon');
-  res.sendFile(path.resolve(__dirname, '../', 'favicon.ico'));
+  res.sendFile(path.resolve(__dirname, '..', 'favicon.ico'));
 });
 
 // Serve index.html
@@ -26,14 +26,14 @@ app.get('/', (req, res) => {
 // Serve app.js
 app.get('/app.js', (req, res) => {
   res.set('Content-Type', 'application/javascript');
-  res.sendFile(path.join(__dirname, 'dist', 'app.js'));
+  res.sendFile(path.join(__dirname, 'dist', 'bundle.js'));
 });
 
-// // Serve bundle.js
-// app.get('/bundle.js', (req, res) => {
-//   res.set('Content-Type', 'application/javascript');
-//   res.sendFile(path.join(__dirname, 'dist', 'bundle.js'));
-// });
+// Serve bundle.js
+app.get('/bundle.js', (req, res) => {
+  res.set('Content-Type', 'application/javascript');
+  res.sendFile(path.join(__dirname, 'dist', 'bundle.js'));
+});
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src')));
