@@ -31,8 +31,6 @@ var currentAlbums = [];
 var userIdentity = null;
 
 //* CONFIGURING CLOUDKIT & ICLOUD USER AUTHENTICATION
-
-// var cloudKit = require('cloudkit');
 CloudKit.configure({
   containers: [{
     containerId: process.env.ICLOUD_CONTAINER,
@@ -890,7 +888,7 @@ module.exports = styleTagTransform;
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("c7f9476111df891bce73")
+/******/ 		__webpack_require__.h = () => ("57fa3a7e9881d4044889")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
