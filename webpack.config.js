@@ -4,9 +4,10 @@ const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
 module.exports = {
-  entry: './app.js',
+  entry: './src/app.js',
   output: {
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
   },
   devtool: 'source-map',
   module: {
@@ -14,15 +15,29 @@ module.exports = {
       { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, options: { presets: ['@babel/preset-env']}},
       { test: /\.css$/, use: ['style-loader', 'css-loader']},
       { test: /\.s(a|c)ss$/, use: ['style-loader', 'css-loader', 'sass-loader']},
-      { test: /\.(png|svg|jpg|jpeg|gif)$/, type: 'asset/resource'},
-      { test: /\.(woff|woff2|eot|ttf|otf)$/, type: 'asset/resource'},
+      { test: /\.(png|svg|jpg|jpeg|gif)$/, type: 'asset/resource', use: [{
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'assets/',
+          publicPath: 'assets/'
+        }
+      }]},
+      { test: /\.(woff|woff2|eot|ttf|otf)$/, type: 'asset/resource', use: [{
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'assets/',
+          publicPath: 'assets/'
+        }
+      }]},
     ]
   },
   
   mode: 'development',
 
   devServer: {
-    static: path.resolve('./'),
+    contentBase: path.resolve(__dirname, 'src'),
     open: true,
     port: 3003,
   },
@@ -30,7 +45,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: './index.html',
+      template: './src/index.html',
       filename: 'index.html',
       inject: 'body'
     }),
