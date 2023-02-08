@@ -4,13 +4,13 @@ const port = process.env.PORT || 3003;
 const path = require('path');
 
 app.get('/', (req, res) => {
-  const indexPath = path.resolve(__dirname, '..', 'index.html');
+  const indexPath = path.resolve(__dirname, 'dist', 'index.html');
   console.log(`Serving index file at path: ${indexPath}`);
   res.setHeader('Content-Type', 'text/html');
   res.sendFile(indexPath);
 });
 
-app.use(express.static(path.join(__dirname, '..')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use((req, res, next) => {
   console.log(`Serving file at path: ${req.path}`);
