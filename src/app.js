@@ -15,8 +15,7 @@ let currentAlbums = [];
 let userIdentity = null;
 
 //* CONFIGURING CLOUDKIT & ICLOUD USER AUTHENTICATION
-
-// var cloudKit = require('cloudkit');
+import CloudKit from 'cloudkit';
 CloudKit.configure ({
   containers: [{
     containerId: process.env.ICLOUD_CONTAINER,

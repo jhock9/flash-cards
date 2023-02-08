@@ -6,8 +6,10 @@ Thumbs.db
 # Ignore node_modules folder
 /node_modules
 
-# Ignore all text files
+# Ignore all text and doc files
 *.txt
+*.doc
+*.docx
 
 # Ignore files related to API keys
 .env

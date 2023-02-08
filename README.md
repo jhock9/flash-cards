@@ -53,3 +53,43 @@ Finally, add the **.env** file to your .**gitignore** file so Git ignores it and
 * Website: www.jonhocker.com
 * Github: [@jhock9](https://github.com/jhock9)
 * LinkedIn: [@jonhocker](https://linkedin.com/in/jonhocker)
+
+## File Structure
+flash-cards
+├─ .gitignore
+├─ README.md
+├─ dist
+│  ├─ bundle.js
+│  ├─ bundle.js.map
+│  ├─ dist
+│  │  └─ assets
+│  │     ├─ ABA-Box.png
+│  │     ├─ ABA-Logo-Tag.png
+│  │     └─ ABA-Logo.png
+│  └─ index.html
+├─ favicon-32x32.png
+├─ favicon.ico
+├─ node_modules
+├─ package-lock.json
+├─ package.json
+├─ procfile
+├─ server
+│  └─ server.js
+├─ src
+│  ├─ app.js
+│  ├─ assets
+│  │  ├─ ABA-Box.png
+│  │  ├─ ABA-Logo-Tag.png
+│  │  └─ ABA-Logo.png
+│  ├─ index.html
+│  └─ main.css
+├─ test
+│  ├─ assets
+│  │  ├─ ABA-Box.png
+│  │  ├─ ABA-Logo-Tag.png
+│  │  └─ ABA-Logo.png
+│  ├─ test.css
+│  ├─ test.html
+│  └─ test.js
+├─ webpack.config.js
+└─ webpack.config.json
