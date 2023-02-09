@@ -27,6 +27,14 @@ CloudKit.configure ({
   }]
 });
 
+// Logging process.env values
+function main() {
+  console.log(process.env.ICLOUD_CONTAINER);
+  console.log(process.env.ICLOUD_API_KEY);
+  console.log(process.env.ICLOUD_REDIRECT_URI);
+  }
+  document.addEventListener("DOMContentLoaded", main); 
+  
 CloudKit.on('error', (error) => {
   console.error(error);
 });
