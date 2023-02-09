@@ -16,7 +16,13 @@ app.get('/favicon-32x32.png', (req, res) => {
   res.sendFile(faviconPath);
   });
 
+  
 // Serve index.html
+// app.get('/', (req, res) => {
+//   res.setHeader('Content-Type', 'text/html');
+//   res.sendFile(path.join(__dirname, '../src', 'index.html'));
+// });
+
 app.get('/', (req, res) => {
   const indexPath = path.resolve(__dirname, '../dist', 'index.html');
   console.log(`Serving index file at path: ${indexPath}`);
@@ -27,11 +33,11 @@ app.get('/', (req, res) => {
 // Serve main.css
 // app.get('/main.css', (req, res) => {
 //   res.setHeader('Content-Type', 'text/css');
-//   res.sendFile(path.join(__dirname, 'src', 'main.css'));
+//   res.sendFile(path.join(__dirname, '../src', 'main.css'));
 // });
 
 app.get('/main.css', (req, res) => {
-  const cssPath = path.join(__dirname, 'src', 'main.css');
+  const cssPath = path.join(__dirname, '../src', 'main.css');
   console.log(`Serving index file at path: ${cssPath}`);
   res.setHeader('Content-Type', 'text/css');
   res.sendFile(cssPath);
@@ -44,7 +50,7 @@ app.get('/main.css', (req, res) => {
 // });
 
 app.get('/app.js', (req, res) => {
-  const appPath = path.join(__dirname, 'src', 'app.js');
+  const appPath = path.join(__dirname, '../src', 'app.js');
   console.log(`Serving index file at path: ${appPath}`);
   res.setHeader('Content-Type', 'application/javascript');
   res.sendFile(appPath);
@@ -64,7 +70,7 @@ app.get('/bundle.js', (req, res) => {
 });
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '../src')));
+app.use(express.static(path.join(__dirname, '../dist')));
 // app.use(express.static(path.join(__dirname, 'dist')));
 
 // Log serving file
