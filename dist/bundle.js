@@ -37,7 +37,7 @@ CloudKit.configure({
       // keeps user signed in after closing/reopening browser
       useAuth: true
     },
-    environment: 'development' // or 'production'
+    environment: 'production' //'development'
   }]
 });
 
@@ -305,7 +305,7 @@ function displayPhotos(photos) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("25f0e5d586b12694c827")
+/******/ 		__webpack_require__.h = () => ("f7481dece33f824acb03")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

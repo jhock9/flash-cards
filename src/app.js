@@ -23,7 +23,7 @@ CloudKit.configure ({
         persist: true, // keeps user signed in after closing/reopening browser
         useAuth: true
     },
-    environment: 'development' // or 'production'
+    environment: 'production' //'development'
   }]
 });
 
