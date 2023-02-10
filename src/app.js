@@ -23,17 +23,9 @@ CloudKit.configure ({
         persist: true, // keeps user signed in after closing/reopening browser
         useAuth: true
     },
-    environment: 'production' //'development'
+    environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
   }]
 });
-
-// Logging process.env values
-function main() {
-  console.log(process.env.ICLOUD_CONTAINER);
-  console.log(process.env.ICLOUD_API_KEY);
-  console.log(process.env.ICLOUD_REDIRECT_URI);
-  }
-  document.addEventListener("DOMContentLoaded", main); 
   
 CloudKit.on('error', (error) => {
   console.error(error);
