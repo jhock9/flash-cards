@@ -37,17 +37,9 @@ CloudKit.configure({
       // keeps user signed in after closing/reopening browser
       useAuth: true
     },
-    environment: 'production' //'development'
+    environment:  false ? 0 : 'development'
   }]
 });
-
-// Logging process.env values
-function main() {
-  console.log(process.env.ICLOUD_CONTAINER);
-  console.log(process.env.ICLOUD_API_KEY);
-  console.log(process.env.ICLOUD_REDIRECT_URI);
-}
-document.addEventListener("DOMContentLoaded", main);
 CloudKit.on('error', function (error) {
   console.error(error);
 });
@@ -305,7 +297,7 @@ function displayPhotos(photos) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("f7481dece33f824acb03")
+/******/ 		__webpack_require__.h = () => ("258d8da6742e78233191")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
