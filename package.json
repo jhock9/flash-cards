@@ -11,7 +11,8 @@
     "build": "webpack",
     "serve": "webpack-dev-server --mode=production",
     "deploy": "npm run build",
-    "start": "node ./server/server.js"
+    "start": "NODE_ENV=production node ./server/server.js",
+    "dev": "NODE_ENV=development node ./server/server.js"
   },
   "repository": {
     "type": "git",
