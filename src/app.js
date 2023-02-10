@@ -15,6 +15,7 @@ let currentAlbums = [];
 let userIdentity = null;
 
 //* CONFIGURING CLOUDKIT & ICLOUD USER AUTHENTICATION
+console.log(process.env.NODE_ENV);
 CloudKit.configure ({
   containers: [{
     containerId: process.env.ICLOUD_CONTAINER,
@@ -26,6 +27,7 @@ CloudKit.configure ({
     environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
   }]
 });
+console.log(process.env.NODE_ENV);
   
 CloudKit.on('error', (error) => {
   console.error(error);
