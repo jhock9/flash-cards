@@ -72,11 +72,11 @@ module.exports = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    new webpack.IgnorePlugin({
-      checkResource: (resource) => {
-        return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
-      },
-    }),
+    // new webpack.IgnorePlugin({
+    //   checkResource: (resource) => {
+    //     return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
+    //   },
+    // }),
     // new Dotenv({
     //   path: '.env',
     //   safe: true
