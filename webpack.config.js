@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const Dotenv = require('dotenv-webpack');
+const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -67,20 +67,21 @@ module.exports = {
         { from: './favicon.ico', to: './' },
       ],
     }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
-    }),
-    // new webpack.IgnorePlugin({
-    //   checkResource: (resource) => {
-    //     return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
-    //   },
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production')
+    //   }
     // }),
-    // new Dotenv({
-    //   path: '.env',
-    //   safe: true
-    // })
+    new webpack.IgnorePlugin({
+      checkResource: (resource) => {
+        return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
+      },
+    }),
+    new Dotenv({
+      path: '.env',
+      safe: true,
+      systemvars: true
+    })
   ],
 
   resolve: {

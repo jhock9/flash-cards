@@ -1,8 +1,16 @@
 "use strict";
 // require('./main.css');
-// if (process.env.NODE_ENV !== 'production') {
-//   require('dotenv').config();
-// }
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+if (typeof process === 'undefined') {
+  console.log('process is undefined');
+} else {
+  console.log(process.env.NODE_ENV);
+  // rest of the code that accesses process.env
+}
+
 
 const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
