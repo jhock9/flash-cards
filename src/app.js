@@ -15,50 +15,55 @@ let currentAlbums = [];
 let userIdentity = null;
 
 //* CONFIGURING CLOUDKIT & ICLOUD USER AUTHENTICATION
-console.log(process.env.NODE_ENV);
-CloudKit.configure ({
-  containers: [{
-    containerId: process.env.ICLOUD_CONTAINER,
-    apiTokenAuth: {
-        apiToken: process.env.ICLOUD_API_KEY,
-        persist: true, // keeps user signed in after closing/reopening browser
-        useAuth: true
-    },
-    environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
-  }]
-});
-console.log(process.env.NODE_ENV);
-  
-CloudKit.on('error', (error) => {
-  console.error(error);
-});
+try {
+  console.log(process.env.NODE_ENV);
+  CloudKit.configure ({
+    containers: [{
+      containerId: process.env.ICLOUD_CONTAINER,
+      apiTokenAuth: {
+          apiToken: process.env.ICLOUD_API_KEY,
+          persist: true, // keeps user signed in after closing/reopening browser
+          useAuth: true
+      },
+      environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+    }]
+  });
+  console.log(process.env.NODE_ENV);
+    
+  CloudKit.on('error', (error) => {
+    console.error(error);
+  });
 
-CloudKit.getAuthStatus().then(function(response) {
-  if(response.status === 'AUTHORIZED') {
-    console.log('User is already signed in');
-    landingPage.classList.add("hide");
-    flashCardPage.classList.remove("hide");
-    fetchAlbums();
-  } else {
-    console.log('User is not signed in');
-    signInBtn.addEventListener("click", () => {
-      CloudKit.signIn({
-        scope: 'email',
-        redirectURI: process.env.ICLOUD_REDIRECT_URI
-      }).then((response) => {
-        console.log(response);
-        if(response.isSuccess) {
-          landingPage.classList.add("hide");
-          flashCardPage.classList.remove("hide");
-          userIdentity = response.userIdentity;
-          fetchAlbums();
-        } else {
-          console.error('Error signing in:', response.error);
-        };
+  CloudKit.getAuthStatus().then(function(response) {
+    if(response.status === 'AUTHORIZED') {
+      console.log('User is already signed in');
+      landingPage.classList.add("hide");
+      flashCardPage.classList.remove("hide");
+      fetchAlbums();
+    } else {
+      console.log('User is not signed in');
+      signInBtn.addEventListener("click", () => {
+        CloudKit.signIn({
+          scope: 'email',
+          redirectURI: process.env.ICLOUD_REDIRECT_URI
+        }).then((response) => {
+          console.log(response);
+          if(response.isSuccess) {
+            landingPage.classList.add("hide");
+            flashCardPage.classList.remove("hide");
+            userIdentity = response.userIdentity;
+            fetchAlbums();
+          } else {
+            console.error('Error signing in:', response.error);
+          };
+        });
       });
-    });
-  };
-});
+    };
+  });
+  console.log(process.env.NODE_ENV);
+} catch (e) {
+  console.error('Error accessing process.env', e);
+}
 
 //* CREATING KEYWORD LIST FOR USER TO CHOOSE FROM 
 // Using album names as keywords 
