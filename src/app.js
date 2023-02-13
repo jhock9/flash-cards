@@ -1,4 +1,8 @@
 "use strict";
+
+if (typeof process === 'object') {
+  console.log(process.env.NODE_ENV);
+
 // require('./main.css');
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -11,7 +15,6 @@ if (typeof process === 'undefined') {
   // rest of the code that accesses process.env
 }
 
-
 const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
 const signInBtn = document.querySelector("#apple-signin-btn");
@@ -23,7 +26,7 @@ let currentAlbums = [];
 let userIdentity = null;
 
 //* CONFIGURING CLOUDKIT & ICLOUD USER AUTHENTICATION
-try {
+// try {
   console.log(process.env.NODE_ENV);
   CloudKit.configure ({
     containers: [{
@@ -36,7 +39,6 @@ try {
       environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
     }]
   });
-  console.log(process.env.NODE_ENV);
     
   CloudKit.on('error', (error) => {
     console.error(error);
@@ -69,9 +71,9 @@ try {
     };
   });
   console.log(process.env.NODE_ENV);
-} catch (e) {
+// } catch (e) {
   console.error('Error accessing process.env', e);
-}
+// }
 
 //* CREATING KEYWORD LIST FOR USER TO CHOOSE FROM 
 // Using album names as keywords 
@@ -194,3 +196,7 @@ function displayPhotos(photos) {
   allImages.appendChild(img);
   };
 };
+
+} else {
+  console.log('process is not defined');
+}
