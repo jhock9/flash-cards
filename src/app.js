@@ -1,19 +1,10 @@
 "use strict";
-
-if (typeof process === 'object') {
-  console.log(process.env.NODE_ENV);
-
 // require('./main.css');
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
-
-if (typeof process === 'undefined') {
-  console.log('process is undefined');
-} else {
-  console.log(process.env.NODE_ENV);
-  // rest of the code that accesses process.env
-}
+// if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({
+    path: `${__dirname}/../.env`
+  });
+  // }
 
 const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
@@ -26,54 +17,53 @@ let currentAlbums = [];
 let userIdentity = null;
 
 //* CONFIGURING CLOUDKIT & ICLOUD USER AUTHENTICATION
-// try {
-  console.log(process.env.NODE_ENV);
-  CloudKit.configure ({
-    containers: [{
-      containerId: process.env.ICLOUD_CONTAINER,
-      apiTokenAuth: {
-          apiToken: process.env.ICLOUD_API_KEY,
-          persist: true, // keeps user signed in after closing/reopening browser
-          useAuth: true
-      },
-      environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
-    }]
-  });
-    
-  CloudKit.on('error', (error) => {
-    console.error(error);
-  });
+console.log(process.env.NODE_ENV);
+CloudKit.configure ({
+  containers: [{
+    containerId: process.env.ICLOUD_CONTAINER,
+    apiTokenAuth: {
+        apiToken: process.env.ICLOUD_API_KEY,
+        persist: true, // keeps user signed in after closing/reopening browser
+        useAuth: true
+    },
+    environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+  }]
+});
+  
+CloudKit.on('error', (error) => {
+  console.error(error);
+});
 
-  CloudKit.getAuthStatus().then(function(response) {
-    if(response.status === 'AUTHORIZED') {
-      console.log('User is already signed in');
-      landingPage.classList.add("hide");
-      flashCardPage.classList.remove("hide");
-      fetchAlbums();
-    } else {
-      console.log('User is not signed in');
-      signInBtn.addEventListener("click", () => {
-        CloudKit.signIn({
-          scope: 'email',
-          redirectURI: process.env.ICLOUD_REDIRECT_URI
-        }).then((response) => {
-          console.log(response);
-          if(response.isSuccess) {
-            landingPage.classList.add("hide");
-            flashCardPage.classList.remove("hide");
-            userIdentity = response.userIdentity;
-            fetchAlbums();
-          } else {
-            console.error('Error signing in:', response.error);
-          };
-        });
+CloudKit.getAuthStatus().then(function(response) {
+  if(response.status === 'AUTHORIZED') {
+    console.log('User is already signed in');
+    landingPage.classList.add("hide");
+    flashCardPage.classList.remove("hide");
+    fetchAlbums();
+  } else {
+    console.log('User is not signed in');
+    signInBtn.addEventListener("click", () => {
+      CloudKit.signIn({
+        scope: 'email',
+        redirectURI: process.env.ICLOUD_REDIRECT_URI
+      }).then((response) => {
+        console.log(response);
+        if(response.isSuccess) {
+          landingPage.classList.add("hide");
+          flashCardPage.classList.remove("hide");
+          userIdentity = response.userIdentity;
+          fetchAlbums();
+        } else {
+          console.error('Error signing in:', response.error);
+        };
       });
-    };
-  });
-  console.log(process.env.NODE_ENV);
-// } catch (e) {
-  console.error('Error accessing process.env', e);
-// }
+    });
+  };
+});
+console.log(process.env.NODE_ENV);
+console.log(process.env.ICLOUD_CONTAINER);
+console.log(process.env.ICLOUD_API_KEY);
+console.log(process.env.ICLOUD_REDIRECT_URI);
 
 //* CREATING KEYWORD LIST FOR USER TO CHOOSE FROM 
 // Using album names as keywords 
@@ -196,7 +186,3 @@ function displayPhotos(photos) {
   allImages.appendChild(img);
   };
 };
-
-} else {
-  console.log('process is not defined');
-}
