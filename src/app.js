@@ -1,9 +1,11 @@
 "use strict";
 // require('./main.css');
 // if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({
-    path: `${__dirname}/../../.env`
-  });
+import dotenv from 'dotenv';
+dotenv.config({
+  path: `${__dirname}/../../.env`
+});
+
   // }
 
 const flashCardPage = document.querySelector("#flash-card-page");
