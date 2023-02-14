@@ -1,10 +1,7 @@
 "use strict";
 // require('./main.css');
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({
-    path: `${__dirname}/../.env`
-  });
-}
+if (typeof window !== 'undefined' && window.process && window.process.env && window.process.env.NODE_ENV === 'production') {
+
 
 const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
@@ -186,3 +183,10 @@ function displayPhotos(photos) {
   allImages.appendChild(img);
   };
 };
+} else {
+  // if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config({
+      path: `${__dirname}/../.env`
+    });
+  // }
+}
