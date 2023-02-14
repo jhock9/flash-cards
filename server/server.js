@@ -4,74 +4,37 @@ const port = process.env.PORT || 3003;
 const path = require('path');
 
 // Serve favicon
-// app.get('/favicon-32x32.png', (req, res) => {
-//   res.setHeader('Content-Type', 'image/x-icon');
-//   res.sendFile(path.resolve(__dirname, '..', 'favicon.ico'));
-// });
-
 app.get('/favicon-32x32.png', (req, res) => {
-  const faviconPath = path.resolve(__dirname, '..', 'favicon-32x32.png');
-  console.log(`Serving favicon file at path: ${faviconPath}`);
   res.setHeader('Content-Type', 'image/x-icon');
-  res.sendFile(faviconPath);
-  });
-
+  res.sendFile(path.resolve(__dirname, '..', 'favicon.ico'));
+});
   
 // Serve index.html
-// app.get('/', (req, res) => {
-//   res.setHeader('Content-Type', 'text/html');
-//   res.sendFile(path.join(__dirname, '../src', 'index.html'));
-// });
-
 app.get('/', (req, res) => {
-  const indexPath = path.resolve(__dirname, '../dist', 'index.html');
-  console.log(`Serving index file at path: ${indexPath}`);
   res.setHeader('Content-Type', 'text/html');
-  res.sendFile(indexPath);
+  res.sendFile(path.join(__dirname, '../src', 'index.html'));
 });
 
 // Serve main.css
-// app.get('/main.css', (req, res) => {
-//   res.setHeader('Content-Type', 'text/css');
-//   res.sendFile(path.join(__dirname, '../src', 'main.css'));
-// });
-
 app.get('/main.css', (req, res) => {
-  const cssPath = path.join(__dirname, '../src', 'main.css');
-  console.log(`Serving index file at path: ${cssPath}`);
   res.setHeader('Content-Type', 'text/css');
-  res.sendFile(cssPath);
-  });
+  res.sendFile(path.join(__dirname, '../src', 'main.css'));
+});
 
 // Serve app.js
-// app.get('/app.js', (req, res) => {
-//   res.setHeader('Content-Type', 'application/javascript');
-//   res.sendFile(path.join(__dirname, 'src', 'app.js'));
-// });
-
 app.get('/app.js', (req, res) => {
-  const appPath = path.join(__dirname, '../src', 'app.js');
-  console.log(`Serving index file at path: ${appPath}`);
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(appPath);
+  res.sendFile(path.join(__dirname, '../src', 'app.js'));
 });
 
 // Serve bundle.js
-// app.get('/bundle.js', (req, res) => {
-//   res.setHeader('Content-Type', 'application/javascript');
-//   res.sendFile(path.join(__dirname, 'dist', 'bundle.js'));
-// });
-
 app.get('/bundle.js', (req, res) => {
-  const bundlePath = path.resolve(__dirname, '../dist', 'bundle.js');
-  console.log(`Serving index file at path: ${bundlePath}`);
   res.setHeader('Content-Type', 'application/javascript');
-  res.sendFile(bundlePath);
+  res.sendFile(path.join(__dirname, '../dist', 'bundle.js'));
 });
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../dist')));
-// app.use(express.static(path.join(__dirname, '../src')));
 
 // Log serving file
 app.use((req, res, next) => {
