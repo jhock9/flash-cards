@@ -2,7 +2,7 @@
 // require('./main.css');
 // if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config({
-    path: `${__dirname}/../.env`
+    path: `${__dirname}/../../.env`
   });
   // }
 
