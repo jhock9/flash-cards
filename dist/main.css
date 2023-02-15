@@ -112,7 +112,7 @@ footer p {
   padding: 0;
 }
 
-#apple-signin-btn {  
+/* #apple-sign-in-button {  
   width: 30rem;
   height: 5rem;
   margin: 10rem 0;
@@ -127,24 +127,24 @@ footer p {
   cursor: pointer;
 }
 
-#apple-signin-btn i {
+#apple-sign-in-button i {
   font-size: 2.5rem;
   margin: 0;
   padding: 0 1rem .3rem 0;
 }
 
-#apple-signin-btn:hover {
+#apple-sign-in-button:hover {
   background-color: #000000;
   color: #ffffff;
   outline: 4rem auto #000000;
   transition: all 0.1s ease-in-out;
 }
 
-#apple-signin-btn:active {
+#apple-sign-in-button:active {
   box-shadow: 0 0.25rem #888888;
   transform: translateY(0.25rem);
   transition: all 0.05s linear;
-} 
+}  */
 
 /**** FLASH-CARD-PAGE ****/
 #flash-card-page .content-wrapper {
