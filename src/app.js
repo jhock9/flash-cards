@@ -1,6 +1,6 @@
 "use strict";
 // require('./main.css');
-if (typeof window !== 'undefined' && window.process && window.process.env && window.process.env.NODE_ENV === 'production') {
+// if (typeof window !== 'undefined' && window.process && window.process.env && window.process.env.NODE_ENV === 'production') {
 
 
 const flashCardPage = document.querySelector("#flash-card-page");
@@ -14,7 +14,6 @@ let currentAlbums = [];
 let userIdentity = null;
 
 //* CONFIGURING CLOUDKIT & ICLOUD USER AUTHENTICATION
-console.log(process.env.NODE_ENV);
 CloudKit.configure ({
   containers: [{
     containerId: process.env.ICLOUD_CONTAINER,
@@ -26,7 +25,7 @@ CloudKit.configure ({
     environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
   }]
 });
-  
+
 CloudKit.on('error', (error) => {
   console.error(error);
 });
@@ -183,10 +182,10 @@ function displayPhotos(photos) {
   allImages.appendChild(img);
   };
 };
-} else {
-  // if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config({
-      path: `${__dirname}/../.env`
-    });
+// } else {
+//   // if (process.env.NODE_ENV !== 'production') {
+//     require('dotenv').config({
+//       path: `${__dirname}/../.env`
+//     });
+//   // }
   // }
-}
