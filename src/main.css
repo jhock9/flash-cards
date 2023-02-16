@@ -112,7 +112,15 @@ footer p {
   padding: 0;
 }
 
-/* #apple-sign-in-button {  
+#appleid-signin {
+  width: 30rem;
+  height: 5rem;
+  margin: 10rem 0;
+  padding: 0;
+  cursor: pointer;
+}
+/* 
+#apple-sign-in-button {  
   width: 30rem;
   height: 5rem;
   margin: 10rem 0;
@@ -121,7 +129,7 @@ footer p {
   color: #000000;
   font-size: 2rem;
   font-weight: 400;
-  border: .25rem solid #000000;
+  border: .15rem solid #000000;
   border-radius: .5rem;
   box-shadow: 0 .25rem #cccccc;
   cursor: pointer;
@@ -139,7 +147,6 @@ footer p {
   outline: 4rem auto #000000;
   transition: all 0.1s ease-in-out;
 }
-
 #apple-sign-in-button:active {
   box-shadow: 0 0.25rem #888888;
   transform: translateY(0.25rem);
