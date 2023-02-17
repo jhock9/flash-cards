@@ -26,7 +26,9 @@
   "homepage": "https://vb-mapp-flash-cards.herokuapp.com/",
   "dependencies": {
     "@babel/core": "^7.20.2",
+    "apple-auth": "^1.0.7",
     "apple-icloud": "^1.1.0",
+    "apple-signin-auth": "^1.7.5",
     "babel-loader": "^9.1.0",
     "copy-webpack-plugin": "^11.0.0",
     "dotenv": "^16.0.3",
