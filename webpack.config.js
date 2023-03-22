@@ -38,7 +38,7 @@ module.exports = {
     ]
   },
   
-  mode: 'production',
+  mode: 'process.env.NODE_ENV === "production" ? "production" : "development"',
 
   devServer: {
     static: path.resolve('./'),
