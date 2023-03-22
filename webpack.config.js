@@ -1,93 +1,72 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './src/app.js',
+  mode: 'development',
   output: {
+    clean: true,
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
-    sourceMapFilename: 'bundle.js.map',
-    clean: true
+    // publicPath: 'dist/',
+    // sourceMapFilename: 'bundle.js.map'
   },
-  devtool: 'source-map',
+  // devtool: 'source-map',
   module: {
     rules: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, options: { presets: ['@babel/preset-env']}},
+      { test: /\.js$/, exclude: /node_modules/, use: {loader: 'babel-loader', options: { presets: ['@babel/preset-env']}}},
       { test: /\.css$/, use: ['style-loader', 'css-loader']},
       { test: /\.s(a|c)ss$/, use: ['style-loader', 'css-loader', 'sass-loader']},
-      { test: /\.(png|svg|jpg|jpeg|gif)$/, type: 'asset/resource', use: [{
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]',
-          outputPath: 'assets/',
-          publicPath: 'assets/'
-        }
-      }]},
-      { test: /\.(woff|woff2|eot|ttf|otf)$/, type: 'asset/resource', use: [{
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]',
-          outputPath: 'assets/',
-          publicPath: 'assets/'
-        }
-      }]},
+      { test: /\.(png|svg|jpg|jpeg|gif)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' }},
+      { test: /\.(woff|woff2|eot|ttf|otf)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' }},
+      // { mimetype: 'application/javascript', type: 'js',}, 
     ]
   },
-  
-  mode: 'production',
-
-  devServer: {
-    static: path.resolve('./'),
-    open: true,
-    port: 3003,
+  resolve: {
+    fallback: {
+      "os": false 
+    }
   },
-
-  // devServer: {
-  //   contentBase: path.resolve(__dirname, 'src'),
-  //   open: true,
-  //   port: 3003,
-  // },
-
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
+      hash: true,
       template: './src/index.html',
       filename: 'index.html',
-      inject: 'body'
+      inject: 'body',
+      favicon: './favicon-32x32.png'
     }),
-    new CopyWebpackPlugin({
+    new CopyPlugin({
       patterns: [
         { from: 'src/assets', to: 'assets' },
-        { from: 'src/main.css', to: './' },
-        { from: './favicon-32x32.png', to: './' },
-        { from: './favicon.ico', to: './' },
+        { from: 'src/main.css', to: './' }
       ],
     }),
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify('production')
-    //   }
-    // }),
     new webpack.IgnorePlugin({
       checkResource: (resource) => {
         return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
       },
     }),
     new Dotenv({
-      path: '.env',
-      safe: true,
+      path: path.resolve(__dirname, '.env'),
       systemvars: true
-    })
+    }),
   ],
-
-  resolve: {
-    fallback: {
-      "os": false,
-      "path": require.resolve("path-browserify")
-    }
-  }
+  devServer: {
+    static: path.resolve('./'),
+    open: true,
+    port: 3003,
+    // historyApiFallback: true,
+    // devMiddleware: {
+    //   mimeTypes: { 
+    //     "js": "application/javascript",
+    //     "html": "text/html",
+    //     "css": "text/css",
+    //     "png": "image/png"
+    //   },
+    // },
+  },
 }

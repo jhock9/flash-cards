@@ -10,8 +10,9 @@
   <link rel="stylesheet" href="main.css">
 
   <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>  
+  <script type="text/javascript" src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script>  
   <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+  <!-- <script type="module" src="app.js"></script> -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +37,7 @@
             Apple iCloud account<br>
             to continue.</p>
         </div>
-        <div id="appleid-signin" data-color="white" data-border="true" data-type="sign in"></div>
+        <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in"></div>
         <!-- <button class="btn center" id="apple-sign-in-button"><i class="fa-brands fa-apple"></i>&nbsp;Sign in with Apple</button> -->
       </section>
       
@@ -53,9 +54,7 @@
           <figure class="center">
             <div class="logo center">
               <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo">
-              <div id="appleid-signin" data-color="black" data-border="true" data-type="sign in"></div>
-              <!-- <button class="btn center" id="filter-btn">Filter <i class="fa fa-filter"></i></button> -->
-            </div>
+\            </div>
           </figure>
           
           <div class="filter-container center" id="filter">
@@ -76,17 +75,7 @@
       </footer>
     </div>
   </div>
-  
-  <script type="text/javascript">
-      AppleID.auth.init({
-          clientId : 'com.vbmapp.signin',
-          scope : 'name email',
-          redirectURI : 'https://vb-mapp-flash-cards.herokuapp.com/',
-          // state : '[STATE]',
-          // nonce : '[NONCE]',
-          usePopup : true
-      });
-  </script>
+
   <script src="app.js"></script>
 </body> 
 </html>
