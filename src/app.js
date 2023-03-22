@@ -14,8 +14,8 @@ const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
 // const signInBtn = document.querySelector("#apple-sign-in-button");
 const submit = document.querySelector('#submit-btn');
-const filterList = document.querySelector('.filter-list');
-const filterInputs = Array.from(document.getElementsByClassName('qty'));
+const objectList = document.querySelector('.object-list');
+const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
 let currentAlbums = [];
 let userIdentity = null;
@@ -158,7 +158,7 @@ const createList = (currentAlbums) => {
   currentAlbums.sort();
   for (let albumName of currentAlbums) {
     let div = document.createElement('div');
-    div.classList.add('filter-item', 'center');
+    div.classList.add('object-item', 'center');
     let label = document.createElement('label');
     label.classList.add('name', 'center');
     label.htmlFor = albumName;
@@ -170,7 +170,7 @@ const createList = (currentAlbums) => {
     input.placeholder = 0;
     div.appendChild(label);
     div.appendChild(input);
-    filterList.appendChild(div);
+    objectList.appendChild(div);
   }
 };
 createList(currentAlbums);
@@ -179,7 +179,7 @@ createList(currentAlbums);
 submit.addEventListener('click', () => {
   let selectedAlbums = [];
   let selectedQtys = [];
-  filterInputs.forEach(input => {
+  objectInputs.forEach(input => {
     if (input.value) {
       selectedAlbums.push(input.id);
       selectedQtys.push(input.value);

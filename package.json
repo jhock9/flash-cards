@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
-    "serve": "webpack-dev-server",
+    "dev": "nodemon server/server.js",
     "build": "NODE_ENV=production webpack --mode=production"
   },
   "//comment-alt-scripts": [
@@ -46,8 +46,6 @@
     "style-loader": "^3.3.1",
     "sync-dotenv": "^1.0.0",
     "webpack": "^5.75.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-middleware": "^6.0.1",
-    "webpack-dev-server": "^4.11.1"
+    "webpack-cli": "^4.10.0"
   }
 }

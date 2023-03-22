@@ -176,7 +176,7 @@ main {
   flex-direction: column !important;
 }
 
-.filter-container {
+#object-selection-form {
   width: 100%;
   max-width: 30rem;
   flex-direction: column;
@@ -222,7 +222,7 @@ main {
   transition: all 0.1s linear;
 }
 
-.filter-list {
+.object-list {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -230,7 +230,7 @@ main {
   overflow: hidden;
 }
 
-.filter-item {
+.object-item {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -326,7 +326,7 @@ main {
     max-width: 25rem;
   }
 
-  .filter-container {
+  #object-selection-form {
     margin: 0;
     min-width: 25rem;
   }
