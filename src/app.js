@@ -17,20 +17,19 @@ const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-let currentAlbums = [];
+let validAlbums = [];
 let userIdentity = null;
 
 console.log(process.env.NODE_ENV + " AND ALL other env variables logging out");
 
 //* SIGN IN WITH APPLE
 
-// Listen for sign in success or failure
 document.addEventListener('AppleIDSignInOnSuccess', (event) => {
   console.log("Apple ID sign in successful: ", event.detail.data);
   landingPage.classList.add("hide");
   flashCardPage.classList.remove("hide");
 
-  await fetchAlbumList();
+  fetchAlbumList();
 });
 document.addEventListener('AppleIDSignInOnFailure', (event) => {
   console.log("Apple ID sign in failed: ", event.detail.error);
@@ -41,7 +40,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const isCallback = urlParams.get('callback') === 'true';
 
 if (isCallback) {
-  // Handle the authentication callback
   AppleID.auth.init({
     clientId: process.env.APPLE_CLIENT_ID,
     redirectURI: process.env.ICLOUD_REDIRECT_URI,
@@ -64,7 +62,6 @@ if (isCallback) {
   AppleID.auth.parseResponse(window.location.search)
     .then(response => {
       console.log(response);
-      // Redirect the user to the flash card page without the callback query parameter
       window.location.replace('/src/index.html');
     })
     .catch(error => {
@@ -75,7 +72,7 @@ if (isCallback) {
   signInBtn.addEventListener("click", signInWithApple);
 }
 
-//* Configure CloudKit JS
+//* CONFIGURE CLOUDKIT JS
 
 const configureCloudKit = () => {
   CloudKit.configure ({
@@ -93,30 +90,11 @@ const configureCloudKit = () => {
     }]
   });
 
+configureCloudKit();
+  
 const container = CloudKit.getDefaultContainer();
 const publicDB = container.publicCloudDatabase;
 const privateDB = container.privateCloudDatabase;
-
-async function fetchAlbumList() {
-  try {
-    const response = await publicDB.performQuery({ recordType: 'Album' });
-    if (response.hasErrors) {
-      console.error('Error fetching album list:', response.errors[0]);
-      return;
-    }
-
-    const albums = response.records.map(record => ({
-      id: record.recordName,
-      name: record.fields.name.value,
-    }));
-
-    console.log('Album list:', albums);
-  } catch (error) {
-    console.error('Error fetching album list:', error);
-  }
-}
-
-configureCloudKit();
 
 container.setUpAuth().then((userInfo) => {
   if(userInfo) {
@@ -161,14 +139,10 @@ CloudKit.getAuthStatus().then((response) => {
   };
 });
 
-//!! This is where I left off
-//* CREATING KEYWORD LIST FOR USER TO CHOOSE FROM 
-// Using album names as keywords 
-const fetchAlbums = () => {
-  let container = CloudKit.getDefaultContainer();
-  let database = container.publicCloudDatabase;
-  let albumQuery = {
-    recordType: 'Albums',
+//* CREATING OBJECT LIST FROM ALBUM NAMES
+const fetchAlbumList = async () => {
+  const albumQuery = {
+    recordType: 'Album',
     filterBy: [{
       fieldName: 'parent',
       comparator: 'EQUALS',
@@ -177,26 +151,35 @@ const fetchAlbums = () => {
       }
     }],
   };
-  database.performQuery(albumQuery).then((response) => {
+  try {
+    const response = await publicDB.performQuery(albumQuery);
+
     if (response.hasErrors) {
       console.error(response.errors[0]);
-    } else {
-      let records = response.records;
-      for (let i = 0; i < records.length; i++) {
-        let record = records[i];
-        let albumName = record.fields.name.value;
-        currentAlbums.push(albumName);
-      };
-      createList(currentAlbums);
-    };
-  });
-};
-// setInterval(fetchAlbums, 86400000);
+      return;
+    }
 
-// Adds albums/keywords to list
-const createList = (currentAlbums) => {
-  currentAlbums.sort();
-  for (let albumName of currentAlbums) {
+    validAlbums = [];
+    for (const record of response.records) {
+      const albumName = record.fields.name.value;
+      const photoCount = record.fields.photoCount.value;
+
+      if (photoCount >= 10) {
+        validAlbums.push(albumName);
+      }
+    }
+
+    validAlbums.sort();
+    createList(validAlbums);
+  } catch (error) {
+    console.error('Error fetching albums:', error);
+  }
+};
+
+// Adds album names to list
+const createList = (validAlbums) => {
+  const objectList = document.querySelector('.object-list');
+  for (let albumName of validAlbums) {
     let div = document.createElement('div');
     div.classList.add('object-item', 'center');
     let label = document.createElement('label');
@@ -206,63 +189,70 @@ const createList = (currentAlbums) => {
     let input = document.createElement('input');
     input.classList.add('qty', 'center');
     input.type = 'text';
-    input.id = fileName;
+    input.id = albumName;
     input.placeholder = 0;
     div.appendChild(label);
     div.appendChild(input);
     objectList.appendChild(div);
   }
 };
-createList(currentAlbums);
 
-//* EXECUTE PROGRAM
-submit.addEventListener('click', () => {
+//* DISPLAY PHOTOS
+submit.addEventListener('click', async (e) => {
+  e.preventDefault(); // Prevent form submission
   let selectedAlbums = [];
   let selectedQtys = [];
   objectInputs.forEach(input => {
     if (input.value) {
       selectedAlbums.push(input.id);
       selectedQtys.push(input.value);
+      input.value = 0; // Reset the quantity value
     }
   });
-  fetchAlbums();
-  fetchPhotos(selectedAlbums, selectedQtys);
+  await fetchPhotos(selectedAlbums, selectedQtys);
 });
 
-//* FETCHING, SHUFFLING & DISPLAYING PHOTOS BASED ON USER INPUT
-const fetchPhotos = (albumNames, qtys) => {
-  let container = CloudKit.getDefaultContainer();
-  let database = container.publicCloudDatabase;
+const fetchPhotos = async (albumNames, qtys) => {
   let promises = [];
   for (let i = 0; i < albumNames.length; i++) {
     let query = {
-      recordType: 'Photos',
+      recordType: 'Photo',
       filterBy: [{
         fieldName: 'album',
         comparator: 'EQUALS',
         fieldValue: {
           value: albumNames[i]
         }
-      }]
+      }],
+      desiredKeys: ['image', 'fileName']
     };
-    promises.push(database.performQuery(query));
+    promises.push(publicDB.performQuery(query));
   };
-  Promise.all(promises).then((responses) => {
+
+  try {
+    const responses = await Promise.all(promises);
     let allPhotos = [];
-    for (let response of responses) {
+    for (let i = 0; i < responses.length; i++) {
+      let response = responses[i];
       let records = response.records;
       let albumPhotos = [];
       for (let record of records) {
-        let photo = record.fields.image.value;
+        let photo = {
+          image: record.fields.image.value,
+          fileName: record.fields.fileName.value
+        };
         albumPhotos.push(photo);
       };
+      
       shuffleArray(albumPhotos);
       albumPhotos = albumPhotos.slice(0, qtys[i]);
       allPhotos = allPhotos.concat(albumPhotos);
     };
     shuffleArray(allPhotos);
     displayPhotos(allPhotos);
-  });
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+  }
 };
 
 // Helper function to randomize array length based on user input
@@ -276,10 +266,10 @@ const shuffleArray = (array) => {
 
 // Helper function for displaying photos
 const displayPhotos = (photos) => {
-  allImages.innerHTML = ""; // Clears existing photos on page
+  allImages.innerHTML = "";
   for (let i = 0; i < photos.length; i++) {
   let img = document.createElement("img");
-  img.src = photos[i];
+  img.src = photos[i].image;
   allImages.appendChild(img);
   };
 };
