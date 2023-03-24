@@ -12,7 +12,7 @@
 
 const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
-// const signInBtn = document.querySelector("#apple-sign-in-button");
+const signInBtn = document.querySelector("#apple-sign-in-button");
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
@@ -22,31 +22,55 @@ let userIdentity = null;
 
 console.log(process.env.NODE_ENV + " AND ALL other env variables logging out");
 
-//* INITIALIZE SIGN IN WITH APPLE
-// const handleAppleSignIn = () => {
-  AppleID.auth.init({
-    clientId: process.env.APPLE_CLIENT_ID,
-    redirectURI: process.env.CLOUD_REDIRECT_URI,
-    usePopup: true
-  });
-  // AppleID.auth.signIn();
-// }
-
-// start authentication flow
-// const signInApple = async () => {
-//   const response = await AppleID.auth.signIn();
-//   console.log("signInApple: " + response);
-//   return response;
-// };
-
+//* SIGN IN WITH APPLE
 // Listen for sign in success or failure
 document.addEventListener('AppleIDSignInOnSuccess', (event) => {
   console.log("Apple ID sign in successful: ", event.detail.data);
+  landingPage.classList.add("hide");
+  flashCardPage.classList.remove("hide");
 });
 document.addEventListener('AppleIDSignInOnFailure', (event) => {
   console.log("Apple ID sign in failed: ", event.detail.error);
 });
 
+// Check if the current page is the callback page
+const urlParams = new URLSearchParams(window.location.search);
+const isCallback = urlParams.get('callback') === 'true';
+
+if (isCallback) {
+  // Handle the authentication callback
+  AppleID.auth.init({
+    clientId: process.env.APPLE_CLIENT_ID,
+    redirectURI: process.env.ICLOUD_REDIRECT_URI,
+    scope: 'name email',
+    state: 'state',
+    usePopup: true
+  });
+
+  const signInWithApple = () => {
+    const options = {
+      clientId: process.env.APPLE_CLIENT_ID,
+      scope: 'name email',
+      redirectURI: process.env.CLOUD_REDIRECT_URI,
+      usePopup: true
+    };
+  
+    AppleID.auth.signIn(options);
+  }
+
+  AppleID.auth.parseResponse(window.location.search)
+    .then(response => {
+      console.log(response);
+      // Redirect the user to the flash card page without the callback query parameter
+      window.location.replace('/src/index.html');
+    })
+    .catch(error => {
+      console.error(error);
+      window.location.replace('/src/index.html');
+    });
+} else {
+  signInBtn.addEventListener("click", signInWithApple);
+}
 
 //* SET UP CLOUDKIT
 async function fetchAlbums() {
@@ -110,7 +134,7 @@ async function fetchAlbums() {
 //     signInBtn.addEventListener("click", () => {
 //       CloudKit.signIn({
 //         scope: 'email',
-//         redirectURI: process.env.ICLOUD_REDIRECT_URI
+//         redirectURI: process.env.ICLOUD_REDIRECT_URI_DEV
 //       }).then((response) => {
 //         console.log(response);
 //         if (response.isSuccess) {
