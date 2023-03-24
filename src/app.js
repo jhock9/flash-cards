@@ -23,11 +23,14 @@ let userIdentity = null;
 console.log(process.env.NODE_ENV + " AND ALL other env variables logging out");
 
 //* SIGN IN WITH APPLE
+
 // Listen for sign in success or failure
 document.addEventListener('AppleIDSignInOnSuccess', (event) => {
   console.log("Apple ID sign in successful: ", event.detail.data);
   landingPage.classList.add("hide");
   flashCardPage.classList.remove("hide");
+
+  await fetchAlbumList();
 });
 document.addEventListener('AppleIDSignInOnFailure', (event) => {
   console.log("Apple ID sign in failed: ", event.detail.error);
@@ -72,85 +75,93 @@ if (isCallback) {
   signInBtn.addEventListener("click", signInWithApple);
 }
 
-//* SET UP CLOUDKIT
-async function fetchAlbums() {
+//* Configure CloudKit JS
+
+const configureCloudKit = () => {
   CloudKit.configure ({
     containers: [{
       containerIdentifier: process.env.ICLOUD_CONTAINER,
       apiTokenAuth: {
           apiToken: process.env.ICLOUD_API_KEY,
           persist: true, // creates a cookie that can be used to re-authenticate the user
-          serverToServerKeyAuth: {
-            keyID: process.env.APPLE_KEY_ID,
-            privateKeyFile: '../AuthKey.p8',
-          },
+          // serverToServerKeyAuth: {
+          //   keyID: process.env.APPLE_KEY_ID,
+          //   privateKeyFile: '../AuthKey.p8',
+          // },
         },
       environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
     }]
   });
 
-  const container = CloudKit.getDefaultContainer();
-  const publicDB = container.publicCloudDatabase;
-  const privateDB = container.privateCloudDatabase;
+const container = CloudKit.getDefaultContainer();
+const publicDB = container.publicCloudDatabase;
+const privateDB = container.privateCloudDatabase;
 
-  // Fetch albums
-  const query = { recordType: 'Album' };
-  const response = await database.performQuery(query);
+async function fetchAlbumList() {
+  try {
+    const response = await publicDB.performQuery({ recordType: 'Album' });
+    if (response.hasErrors) {
+      console.error('Error fetching album list:', response.errors[0]);
+      return;
+    }
 
-  if (response.hasErrors) {
-    console.error('Error fetching albums:', response.errors[0]);
-    return [];
+    const albums = response.records.map(record => ({
+      id: record.recordName,
+      name: record.fields.name.value,
+    }));
+
+    console.log('Album list:', albums);
+  } catch (error) {
+    console.error('Error fetching album list:', error);
   }
-
-  return response.records.map(record => record.fields.name.value);
 }
 
-// container.setUpAuth().then((userInfo) => {
-//   if(userInfo) {
-//     // this.gotoAuthenticatedState(userInfo);
-//     console.log(userInfo + " " + "is authenticated.");
-//   } else {
-//     // this.gotoUnauthenticatedState();
-//     console.log(userInfo + " " + "is not authenticated.");
-//   }
-// });
+configureCloudKit();
 
-// container.whenUserSignsIn().then((userInfo) => {
-//   console.log(userInfo + " " + "just signed in.");
-// });
-// container.whenUserSignsOut().then((userInfo) => {
-//   console.log(userInfo + " " + "just signed out.");
-// });
+container.setUpAuth().then((userInfo) => {
+  if(userInfo) {
+    console.log(userInfo + " " + "is authenticated.");
+  } else {
+    console.log(userInfo + " " + "is not authenticated.");
+  }
+});
 
-
-// CloudKit.getAuthStatus().then((response) => {
-//   if (response.status === 'AUTHORIZED') {
-//     console.log("User is already signed in.");
-//     landingPage.classList.add("hide");
-//     flashCardPage.classList.remove("hide");
-//     fetchAlbums();
-//   } else {
-//     console.log("User is not signed in.");
-//     signInBtn.addEventListener("click", () => {
-//       CloudKit.signIn({
-//         scope: 'email',
-//         redirectURI: process.env.ICLOUD_REDIRECT_URI_DEV
-//       }).then((response) => {
-//         console.log(response);
-//         if (response.isSuccess) {
-//           landingPage.classList.add("hide");
-//           flashCardPage.classList.remove("hide");
-//           userIdentity = response.userIdentity;
-//           fetchAlbums();
-//         } else {
-//           console.error('Error signing in:', response.error);
-//         };
-//       });
-//     });
-//   };
-// });
+container.whenUserSignsIn().then((userInfo) => {
+  console.log(userInfo + " " + "just signed in.");
+});
+container.whenUserSignsOut().then((userInfo) => {
+  console.log(userInfo + " " + "just signed out.");
+});
 
 
+CloudKit.getAuthStatus().then((response) => {
+  if (response.status === 'AUTHORIZED') {
+    console.log("User is already signed in.");
+    landingPage.classList.add("hide");
+    flashCardPage.classList.remove("hide");
+    fetchAlbumList();
+  } else {
+    console.log("User is not signed in.");
+    signInBtn.addEventListener("click", () => {
+      CloudKit.signIn({
+        scope: 'email',
+        redirectURI: process.env.ICLOUD_REDIRECT_URI
+      }).then((response) => {
+        console.log(response);
+        if (response.isSuccess) {
+          landingPage.classList.add("hide");
+          flashCardPage.classList.remove("hide");
+          userIdentity = response.userIdentity;
+          fetchAlbumList();
+        } else {
+          console.error('Error signing in:', response.error);
+        };
+      });
+    });
+  };
+});
+
+//!! This is where I left off
 //* CREATING KEYWORD LIST FOR USER TO CHOOSE FROM 
 // Using album names as keywords 
 const fetchAlbums = () => {
