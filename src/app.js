@@ -1,41 +1,48 @@
 
 "use strict";
-require('dotenv').config();
+// require('dotenv').config();
 
-const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
-const signInBtn = document.querySelector("#sign-in-button");
+const flashCardPage = document.querySelector("#flash-card-page");
+// const signInBtn = document.querySelector("#sign-in-button");
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
 let validAlbums = [];
-let userIdentity = null;
-
-console.log(process.env.NODE_ENV + " AND ALL other env variables logging out");
+let config = {};
 
 //* GOOGLE SIGN IN
-function onSignIn(googleUser) {
+const onSignIn = (googleUser) => {
   const profile = googleUser.getBasicProfile();
   console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
   console.log("Name: " + profile.getName());
   console.log("Image URL: " + profile.getImageUrl());
-  console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+  console.log("Email: " + profile.getEmail());
 
   landingPage.classList.add("hide");
   flashCardPage.classList.remove("hide");
   fetchAlbumList();
 }
 
-// Load the Google Photos API client library
-function loadGooglePhotosApi() {
+//* LOADING ENVIRONMENT VARIABLES
+const fetchConfig = async () => {
+  const response = await fetch("/config");
+  config = await response.json();
+}
+// Call fetchConfig() before using the Google API
+fetchConfig().then(() => {
+  loadGooglePhotosApi();
+});
+
+const loadGooglePhotosApi = () => {
   return new Promise((resolve) => {
     gapi.load('client', async () => {
       try {
         // Initialize the Google Photos API client library
         await gapi.client.init({
-          apiKey: process.env.GOOGLE_API_KEY,
-          clientId: process.env.GOOGLE_CLIENT_ID,
+          apiKey: config.GOOGLE_API_KEY,
+          clientId: config.GOOGLE_CLIENT_ID,
           scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
         });
 
@@ -57,10 +64,9 @@ function loadGooglePhotosApi() {
   });
 }
 
-
+console.log(config.NODE_ENV + " AND ALL other env variables logging out");
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
-
 const fetchAlbumList = async () => {
   try {
     const response = await gapi.client.photoslibrary.albums.list({});
@@ -89,7 +95,6 @@ const fetchAlbumList = async () => {
 
 // Adds album names to list
 const createList = (validAlbums) => {
-  const objectList = document.querySelector('.object-list');
   for (let albumName of validAlbums) {
     let div = document.createElement('div');
     div.classList.add('object-item', 'center');

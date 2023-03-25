@@ -2,10 +2,17 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003; 
-const appleSignin = require("apple-signin-auth");
+require("dotenv").config();
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src')));
+
+app.get("/config", (req, res) => {
+  res.json({
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+  });
+});
 
 // Log serving file
 app.use((req, res, next) => {
@@ -59,22 +66,3 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).send('Something went wrong!');
 });
-
-// Verify Apple Sign In token
-const verifyToken = async (req, res) => {
-  const {authorization, user} = req.body;
-  console.log("Authorization: ", authorization);
-  console.log("User: ", user);
-  try {
-    const { sub: userAppleId } = await appleSignin.verifyIdToken(
-      authorization.id_token,
-      {
-        audience: process.env.APPLE_CLIENT_ID,
-        ignoreExpiration: true,
-      }
-    );
-    console.log("User ID: ", userAppleId);
-  } catch (err) {
-    console.error("Error verifying Apple ID token: ", err);
-  }
-};
