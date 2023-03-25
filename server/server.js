@@ -1,13 +1,14 @@
 const path = require('path');
 const express = require('express');
+
 const app = express();
-const port = process.env.PORT || 3003; 
-require("dotenv").config();
+const port = process.env.PORT || 3003;
+require('dotenv').config();
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src')));
 
-app.get("/config", (req, res) => {
+app.get('/config', (req, res) => {
   res.json({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
