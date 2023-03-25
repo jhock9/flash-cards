@@ -111,16 +111,14 @@ footer p {
   margin: 0;
   padding: 0;
 }
-/* removed appleid-signin button
-#appleid-signin {
-  width: 30rem;
-  height: 5rem;
-  margin: 10rem 0;
-  padding: 0;
-  cursor: pointer;
-} */
 
-#apple-sign-in-button {  
+.g-signin2 {
+  margin: 8rem 0;
+  /* padding: 0; */
+  cursor: pointer;
+}
+/* 
+#sign-in-button {  
   width: 30rem;
   height: 5rem;
   margin: 10rem 0;
@@ -135,24 +133,24 @@ footer p {
   cursor: pointer;
 }
 
-#apple-sign-in-button i {
+#sign-in-button i {
   font-size: 2.5rem;
   margin: 0;
   padding: 0 1rem .3rem 0;
 }
 
-#apple-sign-in-button:hover {
+#sign-in-button:hover {
   background-color: #000000;
   color: #ffffff;
   outline: 4rem auto #000000;
   transition: all 0.1s ease-in-out;
 }
 
-#apple-sign-in-button:active {
+#sign-in-button:active {
   box-shadow: 0 0.1rem #888888;
   transform: translateY(0.15rem);
   transition: all 0.05s linear;
-} 
+}  */
 
 /**** FLASH-CARD-PAGE ****/
 #flash-card-page .content-wrapper {

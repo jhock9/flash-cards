@@ -1,18 +1,10 @@
-// TODO - things to keep track of
-// 1. Once the user is authenticated, you can use CloudKit's JavaScript API to access their iCloud Photos. 
-// 2. You need to make sure that your CloudKit container is set up to allow access to the user's iCloud Photos, 
-//    and that your web app has the necessary permissions to access the photos.
-// 3. Use the CloudKit API to query the database and retrieve the metadata for the photos you want to display in your app.
-// 4. Use the CloudKit API to download the photos and display them in your web app.
-// 5. Once finished, split code into separate .js files (app.js and cloudkit.js) and use webpack to bundle them together.
 
 "use strict";
-// require('dotenv').config();
-// const CloudKit = require('../cloudkit');
+require('dotenv').config();
 
 const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
-const signInBtn = document.querySelector("#apple-sign-in-button");
+const signInBtn = document.querySelector("#sign-in-button");
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
@@ -22,147 +14,66 @@ let userIdentity = null;
 
 console.log(process.env.NODE_ENV + " AND ALL other env variables logging out");
 
-//* SIGN IN WITH APPLE
+//* GOOGLE SIGN IN
+function onSignIn(googleUser) {
+  const profile = googleUser.getBasicProfile();
+  console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log("Name: " + profile.getName());
+  console.log("Image URL: " + profile.getImageUrl());
+  console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
 
-document.addEventListener('AppleIDSignInOnSuccess', (event) => {
-  console.log("Apple ID sign in successful: ", event.detail.data);
   landingPage.classList.add("hide");
   flashCardPage.classList.remove("hide");
-
   fetchAlbumList();
-});
-document.addEventListener('AppleIDSignInOnFailure', (event) => {
-  console.log("Apple ID sign in failed: ", event.detail.error);
-});
-
-// Check if the current page is the callback page
-const urlParams = new URLSearchParams(window.location.search);
-const isCallback = urlParams.get('callback') === 'true';
-
-if (isCallback) {
-  AppleID.auth.init({
-    clientId: process.env.APPLE_CLIENT_ID,
-    redirectURI: process.env.ICLOUD_REDIRECT_URI,
-    scope: 'name email',
-    state: 'state',
-    usePopup: true
-  });
-
-  const signInWithApple = () => {
-    const options = {
-      clientId: process.env.APPLE_CLIENT_ID,
-      scope: 'name email',
-      redirectURI: process.env.CLOUD_REDIRECT_URI,
-      usePopup: true
-    };
-  
-    AppleID.auth.signIn(options);
-  }
-
-  AppleID.auth.parseResponse(window.location.search)
-    .then(response => {
-      console.log(response);
-      window.location.replace('/src/index.html');
-    })
-    .catch(error => {
-      console.error(error);
-      window.location.replace('/src/index.html');
-    });
-} else {
-  signInBtn.addEventListener("click", signInWithApple);
 }
 
-//* CONFIGURE CLOUDKIT JS
+// Load the Google Photos API client library
+function loadGooglePhotosApi() {
+  return new Promise((resolve) => {
+    gapi.load('client', async () => {
+      try {
+        // Initialize the Google Photos API client library
+        await gapi.client.init({
+          apiKey: process.env.GOOGLE_API_KEY,
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+        });
 
-const configureCloudKit = () => {
-  CloudKit.configure ({
-    containers: [{
-      containerIdentifier: process.env.ICLOUD_CONTAINER,
-      apiTokenAuth: {
-          apiToken: process.env.ICLOUD_API_KEY,
-          persist: true, // creates a cookie that can be used to re-authenticate the user
-          // serverToServerKeyAuth: {
-          //   keyID: process.env.APPLE_KEY_ID,
-          //   privateKeyFile: '../AuthKey.p8',
-          // },
-        },
-      environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
-    }]
-  });
+        // Sign in the user
+        const GoogleAuth = gapi.auth2.getAuthInstance();
+        if (!GoogleAuth.isSignedIn.get()) {
+          await GoogleAuth.signIn();
+        }
 
-configureCloudKit();
-  
-const container = CloudKit.getDefaultContainer();
-const publicDB = container.publicCloudDatabase;
-const privateDB = container.privateCloudDatabase;
+        // Load the Google Photos API
+        await gapi.client.load('https://photoslibrary.googleapis.com/$discovery/rest?version=v1');
 
-container.setUpAuth().then((userInfo) => {
-  if(userInfo) {
-    console.log(userInfo + " " + "is authenticated.");
-  } else {
-    console.log(userInfo + " " + "is not authenticated.");
-  }
-});
-
-container.whenUserSignsIn().then((userInfo) => {
-  console.log(userInfo + " " + "just signed in.");
-});
-container.whenUserSignsOut().then((userInfo) => {
-  console.log(userInfo + " " + "just signed out.");
-});
-
-
-CloudKit.getAuthStatus().then((response) => {
-  if (response.status === 'AUTHORIZED') {
-    console.log("User is already signed in.");
-    landingPage.classList.add("hide");
-    flashCardPage.classList.remove("hide");
-    fetchAlbumList();
-  } else {
-    console.log("User is not signed in.");
-    signInBtn.addEventListener("click", () => {
-      CloudKit.signIn({
-        scope: 'email',
-        redirectURI: process.env.ICLOUD_REDIRECT_URI
-      }).then((response) => {
-        console.log(response);
-        if (response.isSuccess) {
-          landingPage.classList.add("hide");
-          flashCardPage.classList.remove("hide");
-          userIdentity = response.userIdentity;
-          fetchAlbumList();
-        } else {
-          console.error('Error signing in:', response.error);
-        };
-      });
+        resolve();
+      } catch (e) {
+        console.error('Error initializing Google Photos API:', e);
+        resolve();
+      }
     });
-  };
-});
+  });
+}
+
+
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
-const fetchAlbumList = async () => {
-  const albumQuery = {
-    recordType: 'Album',
-    filterBy: [{
-      fieldName: 'parent',
-      comparator: 'EQUALS',
-      fieldValue: {
-        value: 'VB-MAPP-FC'
-      }
-    }],
-  };
-  try {
-    const response = await publicDB.performQuery(albumQuery);
 
-    if (response.hasErrors) {
-      console.error(response.errors[0]);
+const fetchAlbumList = async () => {
+  try {
+    const response = await gapi.client.photoslibrary.albums.list({});
+
+    if (!response.result) {
+      console.error('Error fetching albums:', response);
       return;
     }
 
     validAlbums = [];
-    for (const record of response.records) {
-      const albumName = record.fields.name.value;
-      const photoCount = record.fields.photoCount.value;
+    for (const album of response.result.albums) {
+      const albumName = album.title;
+      const photoCount = album.mediaItemsCount;
 
       if (photoCount >= 10) {
         validAlbums.push(albumName);
@@ -216,36 +127,28 @@ const fetchPhotos = async (albumNames, qtys) => {
   let promises = [];
   for (let i = 0; i < albumNames.length; i++) {
     let query = {
-      recordType: 'Photo',
-      filterBy: [{
-        fieldName: 'album',
-        comparator: 'EQUALS',
-        fieldValue: {
-          value: albumNames[i]
-        }
-      }],
-      desiredKeys: ['image', 'fileName']
+      albumId: albumNames[i],
+      pageSize: qtys[i],
     };
-    promises.push(publicDB.performQuery(query));
+    promises.push(gapi.client.photoslibrary.mediaItems.search(query));
   };
 
   try {
     const responses = await Promise.all(promises);
     let allPhotos = [];
     for (let i = 0; i < responses.length; i++) {
-      let response = responses[i];
-      let records = response.records;
+      let response = responses[i].result;
+      let mediaItems = response.mediaItems;
       let albumPhotos = [];
-      for (let record of records) {
+      for (let mediaItem of mediaItems) {
         let photo = {
-          image: record.fields.image.value,
-          fileName: record.fields.fileName.value
+          image: mediaItem.baseUrl,
+          fileName: mediaItem.filename,
         };
         albumPhotos.push(photo);
       };
-      
+
       shuffleArray(albumPhotos);
-      albumPhotos = albumPhotos.slice(0, qtys[i]);
       allPhotos = allPhotos.concat(albumPhotos);
     };
     shuffleArray(allPhotos);
