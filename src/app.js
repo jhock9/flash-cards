@@ -1,6 +1,5 @@
 
 "use strict";
-// require('dotenv').config();
 
 const landingPage = document.querySelector("#landing-page");
 const flashCardPage = document.querySelector("#flash-card-page");
