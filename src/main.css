@@ -111,15 +111,15 @@ footer p {
   margin: 0;
   padding: 0;
 }
-
+/* removed appleid-signin button
 #appleid-signin {
   width: 30rem;
   height: 5rem;
   margin: 10rem 0;
   padding: 0;
   cursor: pointer;
-}
-/* 
+} */
+
 #apple-sign-in-button {  
   width: 30rem;
   height: 5rem;
@@ -147,11 +147,12 @@ footer p {
   outline: 4rem auto #000000;
   transition: all 0.1s ease-in-out;
 }
+
 #apple-sign-in-button:active {
-  box-shadow: 0 0.25rem #888888;
-  transform: translateY(0.25rem);
+  box-shadow: 0 0.1rem #888888;
+  transform: translateY(0.15rem);
   transition: all 0.05s linear;
-}  */
+} 
 
 /**** FLASH-CARD-PAGE ****/
 #flash-card-page .content-wrapper {
@@ -176,7 +177,7 @@ main {
   flex-direction: column !important;
 }
 
-.filter-container {
+#object-selection-form {
   width: 100%;
   max-width: 30rem;
   flex-direction: column;
@@ -222,7 +223,7 @@ main {
   transition: all 0.1s linear;
 }
 
-.filter-list {
+.object-list {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -230,7 +231,7 @@ main {
   overflow: hidden;
 }
 
-.filter-item {
+.object-item {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -326,7 +327,7 @@ main {
     max-width: 25rem;
   }
 
-  .filter-container {
+  #object-selection-form {
     margin: 0;
     min-width: 25rem;
   }

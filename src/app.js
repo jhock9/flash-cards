@@ -7,163 +7,142 @@
 // 5. Once finished, split code into separate .js files (app.js and cloudkit.js) and use webpack to bundle them together.
 
 "use strict";
-require('dotenv').config({ path: '../.env' });
+// require('dotenv').config();
 // const CloudKit = require('../cloudkit');
-const appleAuth = require('../apple-auth');
-const appleSignin = require("../apple-signin-auth");
 
 const flashCardPage = document.querySelector("#flash-card-page");
 const landingPage = document.querySelector("#landing-page");
-// const signInBtn = document.querySelector("#apple-sign-in-button");// need this still??
+const signInBtn = document.querySelector("#apple-sign-in-button");
 const submit = document.querySelector('#submit-btn');
-const filterList = document.querySelector('.filter-list');
-const filterInputs = Array.from(document.getElementsByClassName('qty'));
+const objectList = document.querySelector('.object-list');
+const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-let currentAlbums = [];
+let validAlbums = [];
 let userIdentity = null;
 
-console.log(process.env.NODE_ENV);
-console.log(process.env.ICLOUD_CONTAINER);
-console.log(process.env.ICLOUD_API_KEY);
-console.log(process.env.ICLOUD_REDIRECT_URI);
-
-//* SET UP CLOUDKIT
-CloudKit.configure ({
-  containers: [{
-    containerIdentifier: process.env.ICLOUD_CONTAINER,
-    apiTokenAuth: {
-        apiToken: process.env.ICLOUD_API_KEY,
-        persist: true, // creates a cookie that can be used to re-authenticate the user
-        serverToServerKeyAuth: {
-          keyID: process.env.APPLE_KEY_ID,
-          privateKeyFile: '../VBMAPP-AuthKey_5V3RA3367C.p8'
-        },
-      },
-    environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
-  }]
-});
-
-const container = CloudKit.getDefaultContainer();
-const publicDB = CloudKit.getDefaultContainer().publicCloudDatabase;
-const privateDB = CloudKit.getDefaultContainer().privateCloudDatabase;
+console.log(process.env.NODE_ENV + " AND ALL other env variables logging out");
 
 //* SIGN IN WITH APPLE
-const signInApple = async () => {
-  const response = await window.AppleID.auth.signIn();
-  console.log("signInApple: " + response);
-  const user = response.user;
-  const authorization = response.authorization;
-  const token = authorization.id_token;
-  try {
-    const { sub: userAppleId } = await appleSignin.verifyIdToken(token, {
-      audience: process.env.ICLOUD_CONTAINER,
-      ignoreExpiration: true,
-    });
-    console.log("User ID: ", userAppleId);
-    handleSignInWithApple(authorization);
-  } catch (err) {
-    console.error("Error verifying Apple ID token: ", err);
-  }
-  return response;  
-};
 
 document.addEventListener('AppleIDSignInOnSuccess', (event) => {
   console.log("Apple ID sign in successful: ", event.detail.data);
-});
+  landingPage.classList.add("hide");
+  flashCardPage.classList.remove("hide");
 
+  fetchAlbumList();
+});
 document.addEventListener('AppleIDSignInOnFailure', (event) => {
   console.log("Apple ID sign in failed: ", event.detail.error);
 });
 
-// Configure the Apple auth object with your app's configuration
-const auth = new appleAuth({
-  clientId: process.env.ICLOUD_CONTAINER,
-  teamId: process.env.APPLE_TEAM_ID,
-  keyId: process.env.APPLE_KEY_ID,
-  privateKeyPath: '../VBMAPP-AuthKey_5V3RA3367C.p8',
-});
+// Check if the current page is the callback page
+const urlParams = new URLSearchParams(window.location.search);
+const isCallback = urlParams.get('callback') === 'true';
 
-const handleSignInWithApple = async (authorization) => {
-  try {
-    // Exchange the authorization code for an access token and ID token
-    const { access_token, id_token } = await auth.accessToken(authorization.code);
-    // Verify the ID token using the apple-auth library
-    const { sub: userAppleId } = await appleSignin.verifyIdToken(id_token, {
-      audience: process.env.ICLOUD_CONTAINER,
-      ignoreExpiration: true,
-    });
-    console.log("User ID: ", userAppleId); // Now can fetch photos from iCloud
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-// Query the database for photos
-const query = { /* your query here */ };
-publicDB.performQuery(query)
-  .then((response) => {
-    // Handle the response
-  })
-  .catch((error) => {
-    // Handle the error
+if (isCallback) {
+  AppleID.auth.init({
+    clientId: process.env.APPLE_CLIENT_ID,
+    redirectURI: process.env.ICLOUD_REDIRECT_URI,
+    scope: 'name email',
+    state: 'state',
+    usePopup: true
   });
 
-// container.setUpAuth().then((userInfo) => {
-//   if(userInfo) {
-//     // this.gotoAuthenticatedState(userInfo);
-//     console.log(userInfo + " " + "is authenticated.");
-//   } else {
-//     // this.gotoUnauthenticatedState();
-//     console.log(userInfo + " " + "is not authenticated.");
-//   }
-// });
+  const signInWithApple = () => {
+    const options = {
+      clientId: process.env.APPLE_CLIENT_ID,
+      scope: 'name email',
+      redirectURI: process.env.CLOUD_REDIRECT_URI,
+      usePopup: true
+    };
+  
+    AppleID.auth.signIn(options);
+  }
 
-// container.whenUserSignsIn().then((userInfo) => {
-//   console.log(userInfo + " " + "just signed in.");
-// });
-// container.whenUserSignsOut().then((userInfo) => {
-//   console.log(userInfo + " " + "just signed out.");
-// });
+  AppleID.auth.parseResponse(window.location.search)
+    .then(response => {
+      console.log(response);
+      window.location.replace('/src/index.html');
+    })
+    .catch(error => {
+      console.error(error);
+      window.location.replace('/src/index.html');
+    });
+} else {
+  signInBtn.addEventListener("click", signInWithApple);
+}
+
+//* CONFIGURE CLOUDKIT JS
+
+const configureCloudKit = () => {
+  CloudKit.configure ({
+    containers: [{
+      containerIdentifier: process.env.ICLOUD_CONTAINER,
+      apiTokenAuth: {
+          apiToken: process.env.ICLOUD_API_KEY,
+          persist: true, // creates a cookie that can be used to re-authenticate the user
+          // serverToServerKeyAuth: {
+          //   keyID: process.env.APPLE_KEY_ID,
+          //   privateKeyFile: '../AuthKey.p8',
+          // },
+        },
+      environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+    }]
+  });
+
+configureCloudKit();
+  
+const container = CloudKit.getDefaultContainer();
+const publicDB = container.publicCloudDatabase;
+const privateDB = container.privateCloudDatabase;
+
+container.setUpAuth().then((userInfo) => {
+  if(userInfo) {
+    console.log(userInfo + " " + "is authenticated.");
+  } else {
+    console.log(userInfo + " " + "is not authenticated.");
+  }
+});
+
+container.whenUserSignsIn().then((userInfo) => {
+  console.log(userInfo + " " + "just signed in.");
+});
+container.whenUserSignsOut().then((userInfo) => {
+  console.log(userInfo + " " + "just signed out.");
+});
 
 
-// CloudKit.getAuthStatus().then((response) => {
-//   if (response.status === 'AUTHORIZED') {
-//     console.log("User is already signed in.");
-//     landingPage.classList.add("hide");
-//     flashCardPage.classList.remove("hide");
-//     fetchAlbums();
-//   } else {
-//     console.log("User is not signed in.");
-//     signInBtn.addEventListener("click", () => {
-//       CloudKit.signIn({
-//         scope: 'email',
-//         redirectURI: process.env.ICLOUD_REDIRECT_URI
-//       }).then((response) => {
-//         console.log(response);
-//         if (response.isSuccess) {
-//           landingPage.classList.add("hide");
-//           flashCardPage.classList.remove("hide");
-//           userIdentity = response.userIdentity;
-//           fetchAlbums();
-//         } else {
-//           console.error('Error signing in:', response.error);
-//         };
-//       });
-//     });
-//   };
-// });
-console.log(process.env.NODE_ENV);
-console.log(process.env.ICLOUD_CONTAINER);
-console.log(process.env.ICLOUD_API_KEY);
-console.log(process.env.ICLOUD_REDIRECT_URI);
+CloudKit.getAuthStatus().then((response) => {
+  if (response.status === 'AUTHORIZED') {
+    console.log("User is already signed in.");
+    landingPage.classList.add("hide");
+    flashCardPage.classList.remove("hide");
+    fetchAlbumList();
+  } else {
+    console.log("User is not signed in.");
+    signInBtn.addEventListener("click", () => {
+      CloudKit.signIn({
+        scope: 'email',
+        redirectURI: process.env.ICLOUD_REDIRECT_URI
+      }).then((response) => {
+        console.log(response);
+        if (response.isSuccess) {
+          landingPage.classList.add("hide");
+          flashCardPage.classList.remove("hide");
+          userIdentity = response.userIdentity;
+          fetchAlbumList();
+        } else {
+          console.error('Error signing in:', response.error);
+        };
+      });
+    });
+  };
+});
 
-//* CREATING KEYWORD LIST FOR USER TO CHOOSE FROM 
-// Using album names as keywords 
-const fetchAlbums = () => {
-  let container = CloudKit.getDefaultContainer();
-  let database = container.publicCloudDatabase;
-  let albumQuery = {
-    recordType: 'Albums',
+//* CREATING OBJECT LIST FROM ALBUM NAMES
+const fetchAlbumList = async () => {
+  const albumQuery = {
+    recordType: 'Album',
     filterBy: [{
       fieldName: 'parent',
       comparator: 'EQUALS',
@@ -172,28 +151,37 @@ const fetchAlbums = () => {
       }
     }],
   };
-  database.performQuery(albumQuery).then((response) => {
+  try {
+    const response = await publicDB.performQuery(albumQuery);
+
     if (response.hasErrors) {
       console.error(response.errors[0]);
-    } else {
-      let records = response.records;
-      for (let i = 0; i < records.length; i++) {
-        let record = records[i];
-        let albumName = record.fields.name.value;
-        currentAlbums.push(albumName);
-      };
-      createList(currentAlbums);
-    };
-  });
-};
-// setInterval(fetchAlbums, 86400000);
+      return;
+    }
 
-// Adds albums/keywords to list
-const createList = (currentAlbums) => {
-  currentAlbums.sort();
-  for (let albumName of currentAlbums) {
+    validAlbums = [];
+    for (const record of response.records) {
+      const albumName = record.fields.name.value;
+      const photoCount = record.fields.photoCount.value;
+
+      if (photoCount >= 10) {
+        validAlbums.push(albumName);
+      }
+    }
+
+    validAlbums.sort();
+    createList(validAlbums);
+  } catch (error) {
+    console.error('Error fetching albums:', error);
+  }
+};
+
+// Adds album names to list
+const createList = (validAlbums) => {
+  const objectList = document.querySelector('.object-list');
+  for (let albumName of validAlbums) {
     let div = document.createElement('div');
-    div.classList.add('filter-item', 'center');
+    div.classList.add('object-item', 'center');
     let label = document.createElement('label');
     label.classList.add('name', 'center');
     label.htmlFor = albumName;
@@ -201,63 +189,70 @@ const createList = (currentAlbums) => {
     let input = document.createElement('input');
     input.classList.add('qty', 'center');
     input.type = 'text';
-    input.id = fileName;
+    input.id = albumName;
     input.placeholder = 0;
     div.appendChild(label);
     div.appendChild(input);
-    filterList.appendChild(div);
+    objectList.appendChild(div);
   }
 };
-createList(currentAlbums);
 
-//* EXECUTE PROGRAM
-submit.addEventListener('click', () => {
+//* DISPLAY PHOTOS
+submit.addEventListener('click', async (e) => {
+  e.preventDefault(); // Prevent form submission
   let selectedAlbums = [];
   let selectedQtys = [];
-  filterInputs.forEach(input => {
+  objectInputs.forEach(input => {
     if (input.value) {
       selectedAlbums.push(input.id);
       selectedQtys.push(input.value);
+      input.value = 0; // Reset the quantity value
     }
   });
-  fetchPhotos(selectedAlbums, selectedQtys);
-  fetchAlbums();
+  await fetchPhotos(selectedAlbums, selectedQtys);
 });
 
-//* FETCHING, SHUFFLING & DISPLAYING PHOTOS BASED ON USER INPUT
-const fetchPhotos = (albumNames, qtys) => {
-  let container = CloudKit.getDefaultContainer();
-  let database = container.publicCloudDatabase;
+const fetchPhotos = async (albumNames, qtys) => {
   let promises = [];
   for (let i = 0; i < albumNames.length; i++) {
     let query = {
-      recordType: 'Photos',
+      recordType: 'Photo',
       filterBy: [{
         fieldName: 'album',
         comparator: 'EQUALS',
         fieldValue: {
           value: albumNames[i]
         }
-      }]
+      }],
+      desiredKeys: ['image', 'fileName']
     };
-    promises.push(database.performQuery(query));
+    promises.push(publicDB.performQuery(query));
   };
-  Promise.all(promises).then((responses) => {
+
+  try {
+    const responses = await Promise.all(promises);
     let allPhotos = [];
-    for (let response of responses) {
+    for (let i = 0; i < responses.length; i++) {
+      let response = responses[i];
       let records = response.records;
       let albumPhotos = [];
       for (let record of records) {
-        let photo = record.fields.image.value;
+        let photo = {
+          image: record.fields.image.value,
+          fileName: record.fields.fileName.value
+        };
         albumPhotos.push(photo);
       };
+      
       shuffleArray(albumPhotos);
       albumPhotos = albumPhotos.slice(0, qtys[i]);
       allPhotos = allPhotos.concat(albumPhotos);
     };
     shuffleArray(allPhotos);
     displayPhotos(allPhotos);
-  });
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+  }
 };
 
 // Helper function to randomize array length based on user input
@@ -271,17 +266,10 @@ const shuffleArray = (array) => {
 
 // Helper function for displaying photos
 const displayPhotos = (photos) => {
-  allImages.innerHTML = ""; // Clears existing photos on page
+  allImages.innerHTML = "";
   for (let i = 0; i < photos.length; i++) {
   let img = document.createElement("img");
-  img.src = photos[i];
+  img.src = photos[i].image;
   allImages.appendChild(img);
   };
 };
-// } else {
-//   // if (process.env.NODE_ENV !== 'production') {
-//     require('dotenv').config({
-//       path: `${__dirname}/../.env`
-//     });
-//   // }
-  // }
