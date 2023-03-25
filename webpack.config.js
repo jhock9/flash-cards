@@ -13,17 +13,17 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, use: {loader: 'babel-loader', options: { presets: ['@babel/preset-env']}}},
-      { test: /\.css$/, use: ['style-loader', 'css-loader']},
-      { test: /\.s(a|c)ss$/, use: ['style-loader', 'css-loader', 'sass-loader']},
-      { test: /\.(png|svg|jpg|jpeg|gif)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' }},
-      { test: /\.(woff|woff2|eot|ttf|otf)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' }},
-    ]
+      { test: /\.js$/, exclude: /node_modules/, use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env'] } } },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.s(a|c)ss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+      { test: /\.(png|svg|jpg|jpeg|gif)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' } },
+      { test: /\.(woff|woff2|eot|ttf|otf)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' } },
+    ],
   },
   resolve: {
     fallback: {
-      "os": false 
-    }
+      os: false,
+    },
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -32,18 +32,16 @@ module.exports = {
       template: './src/index.html',
       filename: 'index.html',
       inject: 'body',
-      favicon: './favicon-32x32.png'
+      favicon: path.resolve(__dirname, 'favicon-32x32.png'),
     }),
     new CopyPlugin({
       patterns: [
         { from: 'src/assets', to: 'assets' },
-        { from: 'src/main.css', to: './' }
+        { from: 'src/main.css', to: './' },
       ],
     }),
     new webpack.IgnorePlugin({
-      checkResource: (resource) => {
-        return resource.startsWith('fs') && process.env.NODE_ENV === 'production';
-      },
+      checkResource: (resource) => resource.startsWith('fs') && process.env.NODE_ENV === 'production',
     }),
   ],
   devServer: {
