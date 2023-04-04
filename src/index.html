@@ -13,18 +13,6 @@
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <meta name="google-signin-client_id" content="%GOOGLE_CLIENT_ID%">
 
-  <script>
-    async function loadConfig() {
-      const response = await fetch("/config");
-      const config = await response.json();
-      document
-        .querySelector("meta[name='google-signin-client_id']")
-        .setAttribute("content", config.GOOGLE_CLIENT_ID);
-    }
-    loadConfig();
-  </script>
-  
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
@@ -48,7 +36,7 @@
             Google account<br>
             to continue.</p>
         </div>
-        <div class="g-signin2 center" id="google-signin" data-onsuccess="onSignIn" data-longtitle="true"></div>
+        <div class="g-signin2 center" id="google-signin" data-longtitle="true" data-onsuccess="onSignIn" data-onfailure="onSignInFailure"></div>
         <!-- <button class="center" id="sign-in-button"><i class="fab fa-google></i>"></i>&nbsp;Sign in with Google</button> -->
       </section>
       

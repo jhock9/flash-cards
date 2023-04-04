@@ -5,10 +5,41 @@ const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
+const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'];
+const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 let config = {};
+let GOOGLE_API_KEY = '';
+let GOOGLE_CLIENT_ID = '';
 
+
+const setClientIDMetaTag = () => {
+  const metaTag = document.querySelector("meta[name='google-signin-client_id']");
+  if (metaTag) {
+    metaTag.setAttribute("content", GOOGLE_CLIENT_ID);
+    console.log("Updated meta tag with client ID:", GOOGLE_CLIENT_ID);
+  } else {
+    console.error("Meta tag 'google-signin-client_id' not found");
+  }
+};
+
+const loadConfig = async () => {
+  try {
+    const response = await fetch("/config");
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+    const config = await response.json();
+    GOOGLE_API_KEY = config.GOOGLE_API_KEY;
+    GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID;
+    console.log("Fetched config:", config);
+  } catch (error) {
+    console.error("Error fetching config:", error);
+  }
+};
+
+loadConfig();
 //* GOOGLE SIGN IN
-const onSignIn = (googleUser) => {
+const onSignIn = async (googleUser) => {
   const profile = googleUser.getBasicProfile();
   console.log(`ID: ${profile.getId()}`); // Do not send to your backend! Use an ID token instead.
   console.log(`Name: ${profile.getName()}`);
@@ -18,56 +49,33 @@ const onSignIn = (googleUser) => {
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
+  await loadGooglePhotosApiWithAuthInstance();
 };
 
-//* LOADING ENVIRONMENT VARIABLES
-const fetchConfig = async () => {
-  const response = await fetch('/config');
-  config = await response.json();
+const onSignInFailure = (error) => {
+  console.error('Sign-in error:', error);
 };
 
-window.addEventListener('load', () => {
-  fetchConfig().then(() => {
-    console.log('Config loaded');
-    if (typeof gapi !== 'undefined') {
-      console.log('gapi already defined');
-      loadGooglePhotosApiWithAuthInstance();
-    } else {
-      console.log('loading gapi');
-      loadGooglePhotosApiWithInit();
-    }
-  });
+window.addEventListener("load", () => {
+  loadConfig()
+    .then(() => {
+      console.log("Config loaded");
+      console.log(`
+        NODE_ENV: ${config.NODE_ENV}, 
+        GOOGLE_API_KEY: ${config.GOOGLE_API_KEY}, 
+        GOOGLE_CLIENT_ID: ${config.GOOGLE_CLIENT_ID},
+        AND ALL other env variables logging out
+      `);
+      setClientIDMetaTag();
+      gapi.load("client", () => {
+        initGooglePhotosApiClient();
+      });
+    })
+    .catch((error) => {
+      console.error("Error loading config:", error);
+    });
 });
 
-const loadGooglePhotosApiWithInit = () => {
-  console.log('Loading Google Photos API with gapi.auth2.init()...');
-  gapi.load('client', async () => {
-    console.log('gapi loaded');
-    try {
-      // Initialize the Google Photos API client library
-      await gapi.client.init({
-        apiKey: config.GOOGLE_API_KEY,
-        clientId: config.GOOGLE_CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-      });
-      console.log('gapi client initialized');
-      // Sign in the user
-      const GoogleAuth = gapi.auth2.getAuthInstance();
-      if (!GoogleAuth.isSignedIn.get()) {
-        await GoogleAuth.signIn();
-        showFlashCardPage();
-      }
-      console.log('user signed in');
-      // Load the Google Photos API
-      await gapi.client.load('https://photoslibrary.googleapis.com/$discovery/rest?version=v1');
-      console.log('Google Photos API loaded');
-      resolve();
-    } catch (e) {
-      console.error('Error initializing Google Photos API:', e);
-      resolve();
-    }
-  });
-};
 
 const loadGooglePhotosApiWithAuthInstance = async () => {
   console.log('Loading Google Photos API with gapi.auth2.getAuthInstance()...');
@@ -85,13 +93,41 @@ const loadGooglePhotosApiWithAuthInstance = async () => {
   }
 };
 
+const initGooglePhotosApiClient = async () => {
+  console.log("Initializing Google Photos API client library...");
+
+  try {
+    await gapi.load("client:auth2", async () => {
+      await gapi.client.init({
+        apiKey: GOOGLE_API_KEY,
+        clientId: GOOGLE_CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES,
+      });
+
+      // Add this line to render the Google Sign-In button
+      gapi.signin2.render("google-signin", {
+        scope: SCOPES,
+        width: 240,
+        height: 50,
+        longtitle: true,
+        theme: "dark",
+        onsuccess: onSignIn,
+      });
+
+      console.log("Google Photos API client library initialized.");
+      setIsSignedIn(gapi.auth2.getAuthInstance().isSignedIn.get());
+    });
+  } catch (error) {
+    console.error("Error initializing Google Photos API client library:", error);
+  }
+}
 
 const showFlashCardPage = () => {
   console.log('Switching to flash card page...');
   document.querySelector('#sign-in-page').style.display = 'none';
   document.querySelector('#flash-card-page').style.display = 'block';
 };
-console.log(`${config.NODE_ENV} AND ALL other env variables logging out`);
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
 const fetchAlbumList = async () => {
