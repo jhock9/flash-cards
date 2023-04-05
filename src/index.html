@@ -5,17 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VB-MAPP Flash Cards</title>
+
   <link rel="shortcut icon" href="../favicon-32x32.png" type="image/x-icon">
-
   <link rel="stylesheet" href="main.css">
-
-  <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
+  
+  <meta name="google-signin-client_id" content="process.env.GOOGLE_CLIENT_ID">
   <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <meta name="google-signin-client_id" content="%GOOGLE_CLIENT_ID%">
+  <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -36,8 +36,7 @@
             Google account<br>
             to continue.</p>
         </div>
-        <div class="g-signin2 center" id="google-signin" data-longtitle="true" data-onsuccess="onSignIn" data-onfailure="onSignInFailure"></div>
-        <!-- <button class="center" id="sign-in-button"><i class="fab fa-google></i>"></i>&nbsp;Sign in with Google</button> -->
+        <div class="g-signin2 center" id="google-signin"></div>
       </section>
       
       <footer>
@@ -46,7 +45,7 @@
     </div>
   </div>
   
-  <div id="flash-card-page" class="hide">
+  <div id="flashcards-page" class="hide">
     <div class="content-wrapper center">
       <main class="center">
         <aside class="center">
@@ -57,7 +56,7 @@
           </figure>
           
           <form class="center" id="object-selection-form">
-            <button type="submit" class="btn center" id="submit-btn">Submit <i class="fas fa-angle-double-right"></i></button>
+            <button type="submit" class="btn center" id="submit-btn">Submit&nbsp;<i class="fas fa-angle-double-right"></i></button>
             <div class="object-list center"> 
             </div>
           </form>
@@ -70,11 +69,15 @@
       </main>
 
       <footer>
-        <p class="copyright center">&copy; <script>document.write(new Date().getFullYear())</script> ABA Co-Op. All Rights Reserved.</p>
+        <p class="center">
+          &copy;&nbsp;
+          <script>document.write(new Date().getFullYear());</script>
+          &nbsp;ABA Co-Op. All Rights Reserved.
+        </p>
       </footer>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="test.js"></script>
 </body> 
 </html>
