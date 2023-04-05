@@ -1,12 +1,18 @@
 require('dotenv').config();
+
 const path = require('path');
 const express = require('express');
+
 const app = express();
 const port = process.env.PORT || 3003;
-
+const helmet = require('helmet');
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src')));
+
+app.use(helmet({
+  crossOriginOpenerPolicy: 'same-origin-allow-popups',
+}));
 
 console.log('Environment variables:', {
   NODE_ENV: process.env.NODE_ENV,
@@ -16,6 +22,7 @@ console.log('Environment variables:', {
 
 app.get('/config', (req, res) => {
   res.json({
+    NODE_ENV: process.env.NODE_ENV,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   });
