@@ -5,14 +5,9 @@ const express = require('express');
 
 const app = express();
 const port = process.env.PORT || 3003;
-const helmet = require('helmet');
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '../src')));
-
-app.use(helmet({
-  crossOriginOpenerPolicy: 'same-origin-allow-popups',
-}));
+app.use(express.static(path.join(__dirname, '../src/')));
 
 console.log('Environment variables:', {
   NODE_ENV: process.env.NODE_ENV,
@@ -20,13 +15,13 @@ console.log('Environment variables:', {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 });
 
-app.get('/config', (req, res) => {
-  res.json({
-    NODE_ENV: process.env.NODE_ENV,
-    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  });
-});
+// app.get('/config', (req, res) => {
+//   res.json({
+//     NODE_ENV: process.env.NODE_ENV,
+//     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+//     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+//   });
+// });
 
 // Log serving file
 app.use((req, res, next) => {
@@ -34,7 +29,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// SETTING CONTENT-TYPE HEADERS FOR FILES
+// Set referrer-policy header
+app.use((req, res, next) => {
+  if (req.headers.host === 'localhost' && req.protocol === 'http') {
+    res.set('Referrer-Policy', 'no-referrer-when-downgrade');
+  }
+  next();
+});
+
+// Setting content-type headers for files
 app.use((req, res, next) => {
   if (req.url.endsWith('.js')) {
     res.setHeader('Content-Type', 'application/javascript');
