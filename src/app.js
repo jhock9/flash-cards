@@ -8,9 +8,9 @@ const allImages = document.querySelector('.images-container');
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'];
 const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
 let config = {};
+let NODE_ENV = '';
 let GOOGLE_API_KEY = '';
 let GOOGLE_CLIENT_ID = '';
-
 
 const setClientIDMetaTag = () => {
   const metaTag = document.querySelector("meta[name='google-signin-client_id']");
@@ -29,6 +29,7 @@ const loadConfig = async () => {
       throw new Error(`HTTP error ${response.status}`);
     }
     const config = await response.json();
+    NODE_ENV = config.NODE_ENV;
     GOOGLE_API_KEY = config.GOOGLE_API_KEY;
     GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID;
     console.log("Fetched config:", config);
@@ -61,9 +62,9 @@ window.addEventListener("load", () => {
     .then(() => {
       console.log("Config loaded");
       console.log(`
-        NODE_ENV: ${config.NODE_ENV}, 
-        GOOGLE_API_KEY: ${config.GOOGLE_API_KEY}, 
-        GOOGLE_CLIENT_ID: ${config.GOOGLE_CLIENT_ID},
+        NODE_ENV: ${NODE_ENV}, 
+        GOOGLE_API_KEY: ${GOOGLE_API_KEY}, 
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID},
         AND ALL other env variables logging out
       `);
       setClientIDMetaTag();
