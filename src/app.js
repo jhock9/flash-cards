@@ -1,5 +1,5 @@
 const landingPage = document.querySelector('#landing-page');
-const flashCardPage = document.querySelector('#flash-card-page');
+const flashCardPage = document.querySelector('#flashcards-page');
 // const signInBtn = document.querySelector("#sign-in-button");
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
@@ -127,7 +127,7 @@ const initGooglePhotosApiClient = async () => {
 const showFlashCardPage = () => {
   console.log('Switching to flash card page...');
   document.querySelector('#sign-in-page').style.display = 'none';
-  document.querySelector('#flash-card-page').style.display = 'block';
+  document.querySelector('#flashcards-page').style.display = 'block';
 };
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
