@@ -1,48 +1,63 @@
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
-// const signInBtn = document.querySelector("#sign-in-button");
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'];
-const SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly';
-let config = {};
-let NODE_ENV = '';
-let GOOGLE_API_KEY = '';
-let GOOGLE_CLIENT_ID = '';
+const NODE_ENV = process.env.NODE_ENV;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
-const setClientIDMetaTag = () => {
-  const metaTag = document.querySelector("meta[name='google-signin-client_id']");
-  if (metaTag) {
-    metaTag.setAttribute("content", GOOGLE_CLIENT_ID);
-    console.log("Updated meta tag with client ID:", GOOGLE_CLIENT_ID);
-  } else {
-    console.error("Meta tag 'google-signin-client_id' not found");
-  }
-};
-
-const loadConfig = async () => {
-  try {
-    const response = await fetch("/config");
-    if (!response.ok) {
-      throw new Error(`HTTP error ${response.status}`);
-    }
-    const config = await response.json();
-    NODE_ENV = config.NODE_ENV;
-    GOOGLE_API_KEY = config.GOOGLE_API_KEY;
-    GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID;
-    console.log("Fetched config:", config);
-  } catch (error) {
-    console.error("Error fetching config:", error);
-  }
-};
-
-loadConfig();
 //* GOOGLE SIGN IN
-const onSignIn = async (googleUser) => {
-  const profile = googleUser.getBasicProfile();
-  console.log(`ID: ${profile.getId()}`); // Do not send to your backend! Use an ID token instead.
+console.log(`
+NODE_ENV: ${NODE_ENV}, 
+GOOGLE_API_KEY: ${GOOGLE_API_KEY}, 
+GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID},
+AND ALL other env variables logging out
+`);
+
+// Initialize Google Identity Services
+window.addEventListener('load', function() {
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('google-signin'),
+    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
+  );
+});
+
+// Handle the authentication response
+function handleCredentialResponse(response) {
+  // Process the credential response, e.g., by sending it to your server for validation and authorization
+  onSignIn(response);
+}
+
+// Sign in success callback
+const onSignIn = async (response) => {
+  const id_token = response.credential;
+  
+  // Send the ID token to your server for authentication and authorization
+  try {
+    const serverResponse = await fetch('/api/authenticate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id_token }),
+    });
+
+    if (!serverResponse.ok) {
+      throw new Error('Server authentication failed');
+    }
+  } catch (error) {
+    console.error('Error sending ID token to server:', error);
+    return;
+  }
+  // Optional: Retrieve user profile information
+  const profile = response.getBasicProfile();
+  console.log(`ID: ${profile.getId()}`); // Do not send to the backend! Use an ID token instead.
   console.log(`Name: ${profile.getName()}`);
   console.log(`Image URL: ${profile.getImageUrl()}`);
   console.log(`Email: ${profile.getEmail()}`);
@@ -50,84 +65,11 @@ const onSignIn = async (googleUser) => {
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
-  await loadGooglePhotosApiWithAuthInstance();
 };
 
+// Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
-};
-
-window.addEventListener("load", () => {
-  loadConfig()
-    .then(() => {
-      console.log("Config loaded");
-      console.log(`
-        NODE_ENV: ${NODE_ENV}, 
-        GOOGLE_API_KEY: ${GOOGLE_API_KEY}, 
-        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID},
-        AND ALL other env variables logging out
-      `);
-      setClientIDMetaTag();
-      gapi.load("client", () => {
-        initGooglePhotosApiClient();
-      });
-    })
-    .catch((error) => {
-      console.error("Error loading config:", error);
-    });
-});
-
-
-const loadGooglePhotosApiWithAuthInstance = async () => {
-  console.log('Loading Google Photos API with gapi.auth2.getAuthInstance()...');
-  try {
-    // Initialize the Google Photos API client library
-    const GoogleAuth = gapi.auth2.getAuthInstance();
-    if (!GoogleAuth.isSignedIn.get()) {
-      await GoogleAuth.signIn();
-    }
-    await gapi.client.load('https://photoslibrary.googleapis.com/$discovery/rest?version=v1');
-
-    console.log('Google Photos API loaded');
-  } catch (e) {
-    console.error('Error initializing Google Photos API:', e);
-  }
-};
-
-const initGooglePhotosApiClient = async () => {
-  console.log("Initializing Google Photos API client library...");
-
-  try {
-    await gapi.load("client:auth2", async () => {
-      await gapi.client.init({
-        apiKey: GOOGLE_API_KEY,
-        clientId: GOOGLE_CLIENT_ID,
-        discoveryDocs: DISCOVERY_DOCS,
-        scope: SCOPES,
-      });
-
-      // Add this line to render the Google Sign-In button
-      gapi.signin2.render("google-signin", {
-        scope: SCOPES,
-        width: 240,
-        height: 50,
-        longtitle: true,
-        theme: "dark",
-        onsuccess: onSignIn,
-      });
-
-      console.log("Google Photos API client library initialized.");
-      setIsSignedIn(gapi.auth2.getAuthInstance().isSignedIn.get());
-    });
-  } catch (error) {
-    console.error("Error initializing Google Photos API client library:", error);
-  }
-}
-
-const showFlashCardPage = () => {
-  console.log('Switching to flash card page...');
-  document.querySelector('#sign-in-page').style.display = 'none';
-  document.querySelector('#flashcards-page').style.display = 'block';
 };
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
