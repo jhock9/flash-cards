@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './src/app.js',
@@ -26,6 +27,7 @@ module.exports = {
     },
   },
   plugins: [
+    new Dotenv(),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       hash: true,
@@ -48,5 +50,8 @@ module.exports = {
     static: path.resolve('./'),
     open: true,
     port: 3003,
+    proxy: {
+      '/api': 'http://localhost:3003',
+    },
   },
 };
