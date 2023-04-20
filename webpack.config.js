@@ -41,14 +41,16 @@ module.exports = {
         { from: 'src/main.css', to: './' },
       ],
     }),
-    new Dotenv(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID),
-        GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
-      },
+    new Dotenv({
+      systemvars: true, // Load system environment variables as well
     }),
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+    //     GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID),
+    //     GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
+    //   },
+    // }),
     new webpack.IgnorePlugin({
       checkResource: (resource) => resource.startsWith('fs') && process.env.NODE_ENV === 'production',
     }),
