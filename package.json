@@ -9,7 +9,7 @@
     "dev:server": "NODE_ENV=development nodemon server/server.js",
     "dev:webpack": "webpack --mode=development --hot",
     "build": "NODE_ENV=production webpack --mode=production",
-    "start": "node server.js"
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
