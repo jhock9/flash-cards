@@ -10,7 +10,7 @@ const googleApiKey = process.env.GOOGLE_API_KEY;
 
 //* GOOGLE SIGN IN
 console.log(`
-NODE_ENV: $nodeEnv}, 
+NODE_ENV: ${nodeEnv}, 
 GOOGLE_API_KEY: ${googleApiKey}, 
 GOOGLE_CLIENT_ID: ${googleClientID},
 AND ALL other env variables logging out
