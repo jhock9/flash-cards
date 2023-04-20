@@ -4,22 +4,22 @@ const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-const NODE_ENV = process.env.NODE_ENV;
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const nodeEnv = process.env.NODE_ENV;
+const googleClientID = process.env.GOOGLE_CLIENT_ID;
+const googleApiKey = process.env.GOOGLE_API_KEY;
 
 //* GOOGLE SIGN IN
 console.log(`
-NODE_ENV: ${NODE_ENV}, 
-GOOGLE_API_KEY: ${GOOGLE_API_KEY}, 
-GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID},
+NODE_ENV: ${nodeEnv}, 
+GOOGLE_API_KEY: ${googleApiKey}, 
+GOOGLE_CLIENT_ID: ${googleClientID},
 AND ALL other env variables logging out
 `);
 
 // Initialize Google Identity Services
 window.addEventListener('load', function() {
   google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
+    client_id: googleClientID,
     callback: handleCredentialResponse
   });
   google.accounts.id.renderButton(
