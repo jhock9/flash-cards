@@ -43,7 +43,7 @@ body {
 }
 
 #landing-page,
-#flash-card-page,
+#flashcards-page,
 .content-wrapper {
   min-height: 100vh;
   width: 100%;
@@ -112,15 +112,13 @@ footer p {
   padding: 0;
 }
 
-#appleid-signin {
-  width: 30rem;
-  height: 5rem;
-  margin: 10rem 0;
-  padding: 0;
+.g-signin2 {
+  margin: 8rem 0;
+  /* padding: 0; */
   cursor: pointer;
 }
 /* 
-#apple-sign-in-button {  
+#sign-in-button {  
   width: 30rem;
   height: 5rem;
   margin: 10rem 0;
@@ -135,35 +133,36 @@ footer p {
   cursor: pointer;
 }
 
-#apple-sign-in-button i {
+#sign-in-button i {
   font-size: 2.5rem;
   margin: 0;
   padding: 0 1rem .3rem 0;
 }
 
-#apple-sign-in-button:hover {
+#sign-in-button:hover {
   background-color: #000000;
   color: #ffffff;
   outline: 4rem auto #000000;
   transition: all 0.1s ease-in-out;
 }
-#apple-sign-in-button:active {
-  box-shadow: 0 0.25rem #888888;
-  transform: translateY(0.25rem);
+
+#sign-in-button:active {
+  box-shadow: 0 0.1rem #888888;
+  transform: translateY(0.15rem);
   transition: all 0.05s linear;
 }  */
 
-/**** FLASH-CARD-PAGE ****/
-#flash-card-page .content-wrapper {
+/**** FLASHCARDS-PAGE ****/
+#flashcards-page .content-wrapper {
   justify-content: space-between;
   flex-direction: column;
 }
 
-#flash-card-page figure {
+#flashcards-page figure {
   margin: 3rem 0;
 }
 
-#flash-card-page figure .logo img {
+#flashcards-page figure .logo img {
   width: 100%;
   max-width: 20rem;
   margin: 0 3rem;
@@ -176,7 +175,7 @@ main {
   flex-direction: column !important;
 }
 
-.filter-container {
+#object-selection-form {
   width: 100%;
   max-width: 30rem;
   flex-direction: column;
@@ -222,7 +221,7 @@ main {
   transition: all 0.1s linear;
 }
 
-.filter-list {
+.object-list {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -230,7 +229,7 @@ main {
   overflow: hidden;
 }
 
-.filter-item {
+.object-item {
   width: 100%;
   margin: 0;
   padding: 0;
@@ -305,7 +304,7 @@ main {
     display: none;
   }
 
-  /**** Flash-Card-Page ****/
+  /**** Flashcards-Page ****/
   main {  
     justify-content: space-between !important;
     align-items: flex-start !important;
@@ -317,16 +316,16 @@ main {
     margin-left: 3rem;
   }
 
-  #flash-card-page figure {
+  #flashcards-page figure {
     width: 30rem;
     margin: 3rem;
   }  
 
-  #flash-card-page figure .logo img {
+  #flashcards-page figure .logo img {
     max-width: 25rem;
   }
 
-  .filter-container {
+  #object-selection-form {
     margin: 0;
     min-width: 25rem;
   }
@@ -347,7 +346,7 @@ main {
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
 
-    /**** Flash-Card-Page ****/
+    /**** Flashcards-Page ****/
   aside {
     margin-left: 0;
     max-width: 25%;
