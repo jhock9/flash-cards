@@ -5,7 +5,9 @@
   "main": "./src/app.js",
   "scripts": {
     "lint": "eslint .",
-    "dev": "nodemon server/server.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:webpack\"",
+    "dev:server": "NODE_ENV=development nodemon server/server.js",
+    "dev:webpack": "webpack --mode=development --hot",
     "build": "NODE_ENV=production webpack --mode=production"
   },
   "repository": {
@@ -32,6 +34,7 @@
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "babel-loader": "^9.1.2",
+    "concurrently": "^8.0.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "dotenv-webpack": "^8.0.1",
