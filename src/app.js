@@ -4,20 +4,38 @@ const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-const nodeEnv = process.env.NODE_ENV;
-const googleClientID = process.env.GOOGLE_CLIENT_ID;
-const googleApiKey = process.env.GOOGLE_API_KEY;
+// const nodeEnv = process.env.NODE_ENV;
+// const googleClientID = process.env.GOOGLE_CLIENT_ID;
+// const googleApiKey = process.env.GOOGLE_API_KEY;
+let nodeEnv, googleClientID, googleApiKey;
+
+(async () => {
+  try {
+    const response = await fetch('/config');
+    const config = await response.json();
+    nodeEnv = config.NODE_ENV;
+    googleClientID = config.GOOGLE_CLIENT_ID;
+    googleApiKey = config.GOOGLE_API_KEY;
+
+    console.log(`
+    NODE_ENV: ${nodeEnv}, 
+    GOOGLE_API_KEY: ${googleApiKey}, 
+    GOOGLE_CLIENT_ID: ${googleClientID},
+    AND ALL other env variables logging out
+    `);
+    
+    initGoogleSignIn(); // Initialize Google Sign-In after fetching config
+  } catch (error) {
+    console.error('Error fetching configuration:', error);
+  }
+})();
 
 //* GOOGLE SIGN IN
-console.log(`
-NODE_ENV: ${nodeEnv}, 
-GOOGLE_API_KEY: ${googleApiKey}, 
-GOOGLE_CLIENT_ID: ${googleClientID},
-AND ALL other env variables logging out
-`);
 
 // Initialize Google Identity Services
-window.addEventListener('load', function() {
+const initGoogleSignIn = () => {
+// window.addEventListener('load', () => {
+
   google.accounts.id.initialize({
     client_id: googleClientID,
     callback: handleCredentialResponse
@@ -26,10 +44,10 @@ window.addEventListener('load', function() {
     document.getElementById('google-signin'),
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
-});
+};
 
 // Handle the authentication response
-function handleCredentialResponse(response) {
+const handleCredentialResponse = (response) => {
   // Process the credential response, e.g., by sending it to your server for validation and authorization
   onSignIn(response);
 }

@@ -12,19 +12,19 @@ const client = new OAuth2Client(CLIENT_ID);
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
+app.get('/config', (req, res) => {
+  res.json({
+    NODE_ENV: process.env.NODE_ENV,
+    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  });
+});
+
 console.log('Environment variables:', {
   NODE_ENV: process.env.NODE_ENV,
   GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 });
-
-// app.get('/config', (req, res) => {
-//   res.json({
-//     NODE_ENV: process.env.NODE_ENV,
-//     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-//     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-//   });
-// });
 
 // Log serving file
 app.use((req, res, next) => {
