@@ -17,12 +17,12 @@ const fetchConfig = async () => {
     googleClientID = config.GOOGLE_CLIENT_ID;
     googleApiKey = config.GOOGLE_API_KEY;
 
-    console.log(`
-    NODE_ENV: ${nodeEnv}, 
-    GOOGLE_API_KEY: ${googleApiKey}, 
-    GOOGLE_CLIENT_ID: ${googleClientID},
-    AND ALL other env variables logging out
-    `);
+    // console.log(`
+    // NODE_ENV: ${nodeEnv}, 
+    // GOOGLE_API_KEY: ${googleApiKey}, 
+    // GOOGLE_CLIENT_ID: ${googleClientID},
+    // AND ALL other env variables logging out
+    // `);
     
     initGoogleSignIn(); // Initialize Google Sign-In after fetching config
   } catch (error) {
@@ -46,6 +46,16 @@ const initGoogleSignIn = () => {
     document.getElementById('google-signin'),
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
+  gapi.load('client', loadGoogleApiClient);
+};
+
+const loadGoogleApiClient = async () => {
+  try {
+    await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
+    console.log('Google Photos API loaded');
+  } catch (error) {
+    console.error('Error loading Google Photos API:', error);
+  }
 };
 
 // Handle the authentication response by sending to server for validation/authorization
@@ -74,6 +84,8 @@ const onSignIn = async (response) => {
     console.error('Error sending ID token to server:', error);
     return;
   }
+  
+  console.log('Response:', response);
   // Optional: Retrieve user profile information
   console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
   console.log(`Name: ${response.name}`);
