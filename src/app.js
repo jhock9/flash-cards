@@ -34,6 +34,10 @@ let nodeEnv, googleClientID, googleApiKey;
 // Initialize Google Identity Services
 const initGoogleSignIn = () => {
 // window.addEventListener('load', () => {
+  const onloadElement = document.getElementById('g_id_onload');
+  onloadElement.setAttribute('data-client_id', process.env.GOOGLE_CLIENT_ID);
+  
+
 
   google.accounts.id.initialize({
     client_id: googleClientID,
