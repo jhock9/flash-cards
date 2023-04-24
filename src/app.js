@@ -31,7 +31,6 @@ let nodeEnv, googleClientID, googleApiKey;
 })();
 
 //* GOOGLE SIGN IN
-
 // Initialize Google Identity Services
 const initGoogleSignIn = () => {
 // window.addEventListener('load', () => {
