@@ -39,6 +39,7 @@ module.exports = {
       patterns: [
         { from: 'src/assets', to: 'assets' },
         { from: 'src/main.css', to: './' },
+        { from: './favicon-32x32.png', to: './' },
       ],
     }),
     new Dotenv({
