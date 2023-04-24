@@ -35,7 +35,7 @@ let nodeEnv, googleClientID, googleApiKey;
 const initGoogleSignIn = () => {
 // window.addEventListener('load', () => {
   const onloadElement = document.getElementById('g_id_onload');
-  onloadElement.setAttribute('data-client_id', process.env.GOOGLE_CLIENT_ID);
+  onloadElement.setAttribute('data-client_id', googleClientID);
   
 
 
