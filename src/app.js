@@ -9,7 +9,7 @@ const allImages = document.querySelector('.images-container');
 // const googleApiKey = process.env.GOOGLE_API_KEY;
 let nodeEnv, googleClientID, googleApiKey;
 
-(async () => {
+const fetchConfig = async () => {
   try {
     const response = await fetch('/config');
     const config = await response.json();
@@ -28,7 +28,8 @@ let nodeEnv, googleClientID, googleApiKey;
   } catch (error) {
     console.error('Error fetching configuration:', error);
   }
-})();
+};
+fetchConfig();
 
 //* GOOGLE SIGN IN
 // Initialize Google Identity Services
@@ -36,8 +37,6 @@ const initGoogleSignIn = () => {
 // window.addEventListener('load', () => {
   const onloadElement = document.getElementById('g_id_onload');
   onloadElement.setAttribute('data-client_id', googleClientID);
-  
-
 
   google.accounts.id.initialize({
     client_id: googleClientID,
@@ -49,9 +48,8 @@ const initGoogleSignIn = () => {
   );
 };
 
-// Handle the authentication response
+// Handle the authentication response by sending to server for validation/authorization
 const handleCredentialResponse = (response) => {
-  // Process the credential response, e.g., by sending it to your server for validation and authorization
   onSignIn(response);
 }
 
@@ -59,7 +57,7 @@ const handleCredentialResponse = (response) => {
 const onSignIn = async (response) => {
   const id_token = response.credential;
   
-  // Send the ID token to your server for authentication and authorization
+  // Send the ID token to your server for authentication/authorization
   try {
     const serverResponse = await fetch('/api/authenticate', {
       method: 'POST',
