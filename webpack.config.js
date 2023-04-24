@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const dotenv = require('dotenv').config().parsed;
 
 module.exports = {
   entry: './src/app.js',
@@ -33,13 +34,13 @@ module.exports = {
       template: './src/index.html',
       filename: 'index.html',
       inject: 'body',
-      favicon: path.resolve(__dirname, 'favicon-32x32.png'),
+      favicon: path.resolve(__dirname, 'src/favicon.ico'),
     }),
     new CopyPlugin({
       patterns: [
         { from: 'src/assets', to: 'assets' },
         { from: 'src/main.css', to: './' },
-        { from: './favicon-32x32.png', to: './' },
+        { from: 'src/favicon.ico', to: './' },
       ],
     }),
     new Dotenv({
@@ -47,9 +48,9 @@ module.exports = {
     }),
     // new webpack.DefinePlugin({
     //   'process.env': {
-    //     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-    //     GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID),
-    //     GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
+    //     NODE_ENV: JSON.stringify(dotenv.NODE_ENV),
+    //     GOOGLE_CLIENT_ID: JSON.stringify(dotenv.GOOGLE_CLIENT_ID),
+    //     GOOGLE_API_KEY: JSON.stringify(dotenv.GOOGLE_API_KEY),
     //   },
     // }),
     new webpack.IgnorePlugin({
