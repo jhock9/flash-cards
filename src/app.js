@@ -75,12 +75,11 @@ const onSignIn = async (response) => {
     return;
   }
   // Optional: Retrieve user profile information
-  const profile = response.getBasicProfile();
-  console.log(`ID: ${profile.getId()}`); // Do not send to the backend! Use an ID token instead.
-  console.log(`Name: ${profile.getName()}`);
-  console.log(`Image URL: ${profile.getImageUrl()}`);
-  console.log(`Email: ${profile.getEmail()}`);
-
+  console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
+  console.log(`Name: ${response.name}`);
+  console.log(`Image URL: ${response.picture}`);
+  console.log(`Email: ${response.email}`);
+  
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
