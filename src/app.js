@@ -62,7 +62,6 @@ const loadGoogleApiClient = async () => {
 const handleCredentialResponse = async (response) => {
   console.log('Credential response:', response);
   const id_token = response.credential;
-  const access_token = google.accounts.id.getOAuthToken();
 
   try {
     const serverResponse = await fetch('/api/authenticate', {
@@ -96,17 +95,17 @@ const handleCredentialResponse = async (response) => {
   // Initialize the gapi client with the access token
   console.log('Initializing gapi client');
   await gapi.client.init({
-    apiKey: '',
-    clientId: '',
+    apiKey: googleApiKey,
+    clientId: googleClientID,
     discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'],
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
   });
   console.log('gapi client initialized');
 
   // Set the access token for the gapi client
-  console.log('Setting access token for gapi client');
-  gapi.client.setToken({ access_token });
-  console.log('Access token set for gapi client:', access_token);
+  console.log('Setting ID token for gapi client');
+  gapi.client.setToken({ id_token });
+  console.log('ID token set for gapi client:', id_token);
   
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
