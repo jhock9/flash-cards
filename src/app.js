@@ -31,9 +31,6 @@ fetchConfig();
 // Configure GIS library
 const initGoogleSignIn = () => {
   const onloadElement = document.getElementById('g_id_onload');
-  onloadElement.setAttribute('data-client_id', googleClientID);
-
-  console.log('Google Client ID:', googleClientID);
 
   google.accounts.id.initialize({
     client_id: googleClientID,
