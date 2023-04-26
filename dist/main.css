@@ -112,18 +112,11 @@ footer p {
   padding: 0;
 }
 
-.g-signin2 {
-  margin: 8rem 0;
-  /* padding: 0; */
-  cursor: pointer;
+#g_id_onload,
+#google-signin {
+  margin: 6rem 0;
 }
 
-#signin-btn {
-  width: 30rem;
-  height: 5rem;
-  margin: 10rem 0;
-  padding: 0;
-}
 /* 
 #sign-in-button {  
   width: 30rem;
