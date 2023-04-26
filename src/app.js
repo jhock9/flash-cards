@@ -13,16 +13,13 @@ const fetchConfig = async () => {
   try {
     const response = await fetch('/config');
     const config = await response.json();
+    console.log('Config:', config);
+
     nodeEnv = config.NODE_ENV;
     googleClientID = config.GOOGLE_CLIENT_ID;
     googleApiKey = config.GOOGLE_API_KEY;
 
-    // console.log(`
-    // NODE_ENV: ${nodeEnv}, 
-    // GOOGLE_API_KEY: ${googleApiKey}, 
-    // GOOGLE_CLIENT_ID: ${googleClientID},
-    // AND ALL other env variables logging out
-    // `);
+    console.log('Google Client ID:', googleClientID);
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
@@ -35,6 +32,8 @@ fetchConfig();
 const initGoogleSignIn = () => {
   const onloadElement = document.getElementById('g_id_onload');
   onloadElement.setAttribute('data-client_id', googleClientID);
+
+  console.log('Google Client ID:', googleClientID);
 
   google.accounts.id.initialize({
     client_id: googleClientID,
@@ -69,6 +68,9 @@ const handleCredentialResponse = async (response) => {
       body: JSON.stringify({ id_token }),
     });
 
+    const serverResponseJson = await serverResponse.json(); 
+    console.log('Server response JSON:', serverResponseJson); 
+
     if (!serverResponse.ok) {
       throw new Error('Server authentication failed');
     }
@@ -98,7 +100,8 @@ const onSignInFailure = (error) => {
 const fetchAlbumList = async () => {
   try {
     const response = await gapi.client.photoslibrary.albums.list({});
-
+    console.log('Albums list response:', response);
+    
     if (!response.result) {
       console.error('Error fetching albums:', response);
       return;
