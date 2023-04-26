@@ -107,9 +107,13 @@ const onSignInFailure = (error) => {
 };
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
-const fetchAlbumList = async () => {
+const fetchAlbumList = async (access_token) => {
   try {
-    const response = await gapi.client.photoslibrary.albums.list({});
+    const response = await gapi.client.photoslibrary.albums.list({
+      headers: {
+        'Authorization': `Bearer ${access_token}`,
+      },
+    });
     console.log('Albums list response:', response);
 
     if (!response.result) {
