@@ -93,11 +93,21 @@ const handleCredentialResponse = async (response) => {
   console.log(`Image URL: ${decodedIdToken.picture}`);
   console.log(`Email: ${decodedIdToken.email}`);
 
-  // Initialize the gapi client
+  // Initialize the gapi client with the access token
+  console.log('Initializing gapi client');
   await gapi.client.init({
-    accessToken: access_token
+    apiKey: '',
+    clientId: '',
+    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'],
+    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
   });
-    
+  console.log('gapi client initialized');
+
+  // Set the access token for the gapi client
+  console.log('Setting access token for gapi client');
+  gapi.client.setToken({ access_token });
+  console.log('Access token set for gapi client:', access_token);
+  
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
@@ -113,6 +123,8 @@ const fetchAlbumList = async () => {
   try {
     const response = await gapi.client.photoslibrary.albums.list({});
     console.log('Albums list response:', response);
+    console.log('Access token in use:', gapi.client.getToken().access_token);
+    console.log('Received albums:', response.result.albums);
 
     if (!response.result) {
       console.error('Error fetching albums:', response);
