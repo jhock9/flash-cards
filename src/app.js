@@ -40,7 +40,14 @@ const initGoogleSignIn = () => {
     callback: handleCredentialResponse,
     on_failure: onSignInFailure
   });
-  google.accounts.id.renderButton(document.getElementById('google-signin'));
+
+  setTimeout(() => {
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin'),
+      { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
+    );
+  }, 500);
+
   gapi.load('client', loadGoogleApiClient);
 };
 
@@ -101,7 +108,7 @@ const fetchAlbumList = async () => {
   try {
     const response = await gapi.client.photoslibrary.albums.list({});
     console.log('Albums list response:', response);
-    
+
     if (!response.result) {
       console.error('Error fetching albums:', response);
       return;
