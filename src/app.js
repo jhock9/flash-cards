@@ -62,7 +62,7 @@ const loadGoogleApiClient = async () => {
 const handleCredentialResponse = async (response) => {
   console.log('Credential response:', response);
   const id_token = response.credential;
-  const access_token = response.oauth_token;
+  const access_token = google.accounts.id.getOAuthToken();
 
   try {
     const serverResponse = await fetch('/api/authenticate', {
