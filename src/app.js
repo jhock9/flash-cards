@@ -94,7 +94,7 @@ const handleCredentialResponse = async (response) => {
   console.log(`Email: ${decodedIdToken.email}`);
 
   // Set the access token for the gapi client
-  gapi.client.setToken({ access_token });
+  gapi.auth.setToken({ access_token });
     
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
@@ -107,13 +107,9 @@ const onSignInFailure = (error) => {
 };
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
-const fetchAlbumList = async (access_token) => {
+const fetchAlbumList = async () => {
   try {
-    const response = await gapi.client.photoslibrary.albums.list({
-      headers: {
-        'Authorization': `Bearer ${access_token}`,
-      },
-    });
+    const response = await gapi.client.photoslibrary.albums.list({});
     console.log('Albums list response:', response);
 
     if (!response.result) {
