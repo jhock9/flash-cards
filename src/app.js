@@ -93,8 +93,11 @@ const handleCredentialResponse = async (response) => {
   console.log(`Image URL: ${decodedIdToken.picture}`);
   console.log(`Email: ${decodedIdToken.email}`);
 
-  // Set the access token for the gapi client
-  gapi.auth.setToken({ access_token });
+  // Initialize the gapi client
+  await gapi.client.init({
+    apiKey: googleApiKey,
+    accessToken: access_token
+  });
     
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
