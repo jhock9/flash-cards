@@ -82,13 +82,22 @@ const handleCredentialResponse = async (response) => {
     console.error('Error sending ID token to server:', error);
     return;
   }
+
+    // Get user profile information from the id_token
+    const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
+
+    console.log('Decoded ID token:', decodedIdToken);
+    console.log(`ID: ${decodedIdToken.sub}`);
+    console.log(`Name: ${decodedIdToken.name}`);
+    console.log(`Image URL: ${decodedIdToken.picture}`);
+    console.log(`Email: ${decodedIdToken.email}`);
   
-  console.log('Response:', response);
-  // Optional: Retrieve user profile information
-  console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
-  console.log(`Name: ${response.name}`);
-  console.log(`Image URL: ${response.picture}`);
-  console.log(`Email: ${response.email}`);
+  // console.log('Response:', response);
+  // // Optional: Retrieve user profile information
+  // console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
+  // console.log(`Name: ${response.name}`);
+  // console.log(`Image URL: ${response.picture}`);
+  // console.log(`Email: ${response.email}`);
   
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
