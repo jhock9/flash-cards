@@ -4,9 +4,9 @@ const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-// const nodeEnv = process.env.NODE_ENV;
-// const googleClientID = process.env.GOOGLE_CLIENT_ID;
-// const googleApiKey = process.env.GOOGLE_API_KEY;
+
+//* GOOGLE SIGN-IN
+// Fetch environental variables for Google Identity Services (GIS)
 let nodeEnv, googleClientID, googleApiKey;
 
 const fetchConfig = async () => {
@@ -24,31 +24,28 @@ const fetchConfig = async () => {
     // AND ALL other env variables logging out
     // `);
     
-    initGoogleSignIn(); // Initialize Google Sign-In after fetching config
+    initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
     console.error('Error fetching configuration:', error);
   }
 };
 fetchConfig();
 
-//* GOOGLE SIGN IN
-// Initialize Google Identity Services
+// Configure GIS library
 const initGoogleSignIn = () => {
-// window.addEventListener('load', () => {
   const onloadElement = document.getElementById('g_id_onload');
   onloadElement.setAttribute('data-client_id', googleClientID);
 
   google.accounts.id.initialize({
     client_id: googleClientID,
-    callback: handleCredentialResponse
+    callback: handleCredentialResponse,
+    on_failure: onSignInFailure
   });
-  google.accounts.id.renderButton(
-    document.getElementById('google-signin'),
-    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
-  );
+  google.accounts.id.renderButton(document.getElementById('google-signin'));
   gapi.load('client', loadGoogleApiClient);
 };
 
+// Load Google Photos API client library
 const loadGoogleApiClient = async () => {
   try {
     await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
@@ -58,16 +55,11 @@ const loadGoogleApiClient = async () => {
   }
 };
 
-// Handle the authentication response by sending to server for validation/authorization
-const handleCredentialResponse = (response) => {
-  onSignIn(response);
-}
-
-// Sign in success callback
-const onSignIn = async (response) => {
+// Handle authentication response by sending to server for validation/authorization
+const handleCredentialResponse = async (response) => {
+  console.log(response);
   const id_token = response.credential;
   
-  // Send the ID token to your server for authentication/authorization
   try {
     const serverResponse = await fetch('/api/authenticate', {
       method: 'POST',
