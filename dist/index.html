@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="main.css">
   
   <!-- <meta name="google-signin-client_id" content="502783176615-glprg4san0n97t9dqqjq60ndfa0sf73a.apps.googleusercontent.com"> -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://accounts.google.com/gsi/client" onload="initClient()" async defer></script>
   <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.ico?28623daea4cdf99d61e7"></head>
+<link rel="icon" href="favicon.ico?0af619c4387c4781ba3e"></head>
 
 <body>
   <div id="landing-page" class="center">
@@ -36,11 +36,11 @@
             Google account<br>
             to continue.</p>
         </div>
-        <!-- <div class="g-signin2 center" id="google-signin" long-title="true"></div> -->
+
         <div id="g_id_onload"
           data-client_id=""
           data-context="signin"
-          data-ux_mode="redirect"
+          data-ux_mode="popup"
           data-login_uri="https://vb-mapp-flash-cards.herokuapp.com/index.html" 
           data-auto_prompt="false">
         </div>
@@ -95,5 +95,5 @@
   </div>
 
   <script src="app.js"></script>
-<script defer src="bundle.js?28623daea4cdf99d61e7"></script></body> 
+<script defer src="bundle.js?0af619c4387c4781ba3e"></script></body> 
 </html>
