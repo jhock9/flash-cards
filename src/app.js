@@ -95,7 +95,6 @@ const handleCredentialResponse = async (response) => {
 
   // Initialize the gapi client
   await gapi.client.init({
-    apiKey: googleApiKey,
     accessToken: access_token
   });
     
