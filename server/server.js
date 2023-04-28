@@ -83,7 +83,7 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
   try {
     // Verify the ID token using the Google Auth Library
     const ticket = await client.verifyIdToken({
-      idToken: id_token,
+      accessToken: access_token,
       audience: CLIENT_ID,
     });
     const payload = ticket.getPayload();
@@ -92,7 +92,7 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
     // Returns a success response to the client-side application
     res.json({ status: 'success', message: 'Authentication and authorization successful' });
   } catch (error) {
-    console.error('Error validating ID token:', error);
+    console.error('Error validating access token:', error);
     res.status(401).json({ status: 'failure', message: 'Authentication failed' });
   }
 });

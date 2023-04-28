@@ -1,3 +1,5 @@
+import jwt_decode from "jwt-decode";
+
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
@@ -5,10 +7,12 @@ const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
 
-//* GOOGLE SIGN-IN
-// Fetch environental variables for Google Identity Services (GIS)
-let nodeEnv, googleClientID, googleApiKey;
+let nodeEnv;
+let googleClientID;
+let googleApiKey;
+let access_token;
 
+// Fetch and Config env. variables from server.js
 const fetchConfig = async () => {
   try {
     const response = await fetch('/config');
@@ -28,23 +32,22 @@ const fetchConfig = async () => {
 };
 fetchConfig();
 
-// Configure GIS library
-const initGoogleSignIn = () => {
-  const onloadElement = document.getElementById('g_id_onload');
+//* Google Identity Services AUTHENTICATION
 
+// Initialize GIS library
+const initGoogleSignIn = () => {
   google.accounts.id.initialize({
     client_id: googleClientID,
     callback: handleCredentialResponse,
     on_failure: onSignInFailure
   });
 
-  setTimeout(() => {
-    google.accounts.id.renderButton(
-      document.getElementById('google-signin'),
-      { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
-    );
-  }, 500);
+  google.accounts.id.renderButton(
+    document.getElementById('google-signin'),
+    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
+  );
 
+  google.accounts.id.prompt();
   gapi.load('client', loadGoogleApiClient);
 };
 
@@ -58,55 +61,81 @@ const loadGoogleApiClient = async () => {
   }
 };
 
+//* Google Identity Services AUTHORIZATION
 // Handle authentication response by sending to server for validation/authorization
-const handleCredentialResponse = async (response) => {
-  console.log('Credential response:', response);
-  const id_token = response.credential;
-
+const handleCredentialResponse = (response) => {
   try {
-    const serverResponse = await fetch('/api/authenticate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id_token }),
-    });
-
-    const serverResponseJson = await serverResponse.json(); 
-    console.log('Server response JSON:', serverResponseJson); 
-
-    if (!serverResponse.ok) {
-      throw new Error('Server authentication failed');
-    }
+    console.log("Encoded JWT ID token: " + response.credential)
+    const userObject = jwt_decode(response.credential);
+    console.log("Decoded User Info: " + userObject);
   } catch (error) {
-    console.error('Error sending ID token to server:', error);
-    return;
+    console.error('Error decoding user credential:', error);
   }
+};
 
-  // Get user profile information from the id_token
-  const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
+  // Initialize token client
+const setTokenClient = () => {
+  console.log('Initializing token client');
+  google.accounts.oauth2.initTokenClient({   
+    client_Id: googleClientID,
+    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+    callback: async (tokenResponse) => {
+      try {
+        console.log(tokenResponse);
+        access_token = tokenResponse.access_token;
+        console.log("Access token set: " + access_token);
+        console.log('token client initialized');
 
-  console.log('Decoded ID token:', decodedIdToken);
-  console.log(`ID: ${decodedIdToken.sub}`);
-  console.log(`Name: ${decodedIdToken.name}`);
-  console.log(`Image URL: ${decodedIdToken.picture}`);
-  console.log(`Email: ${decodedIdToken.email}`);
+        if(tokenResponse && access_token) {
+          // Server Authentication
+          try {
+            const serverResponse = await fetch('/api/authenticate', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ access_token }),
+            });
+      
+            const serverResponseJson = await serverResponse.json(); 
+            console.log('Server response JSON:', serverResponseJson); 
+      
+            if (!serverResponse.ok) {
+              throw new Error('Server authentication failed');
+            }
+          } catch (error) {
+            console.error('Error sending ID token to server:', error);
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing token client:', error);
+      }
 
-  // Initialize the gapi client with the access token
-  console.log('Initializing gapi client');
-  await gapi.client.init({
-    apiKey: googleApiKey,
-    clientId: googleClientID,
-    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'],
-    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
+      // Load Photos
+      const loadPhotos = () => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.googleapis.com/photoslibrary/v1/albums');
+        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+        xhr.send();
+
+        // Handle onload event
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            var albums = JSON.parse(xhr.responseText);
+            for (var i = 0; i < albums.length; i++) {
+              console.log(albums[i].title);
+            }
+          } else {
+            console.log('Error: ' + xhr.status);
+          }
+        };
+      }
+      
+      loadPhotos();
+    }
   });
-  console.log('gapi client initialized');
 
-  // Set the access token for the gapi client
-  console.log('Setting ID token for gapi client');
-  gapi.client.setToken({ id_token });
-  console.log('ID token set for gapi client:', id_token);
-  
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
