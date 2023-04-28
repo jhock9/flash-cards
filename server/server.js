@@ -83,7 +83,7 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
   try {
     // Verify the ID token using the Google Auth Library
     const ticket = await client.verifyIdToken({
-      accessToken: access_token,
+      accessToken: id_token,
       audience: CLIENT_ID,
     });
     const payload = ticket.getPayload();

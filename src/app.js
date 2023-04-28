@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
@@ -14,6 +14,7 @@ let access_token;
 
 // Fetch and Config env. variables from server.js
 const fetchConfig = async () => {
+  console.log('Fetching configuration...');
   try {
     const response = await fetch('/config');
     const config = await response.json();
@@ -36,6 +37,7 @@ fetchConfig();
 
 // Initialize GIS library
 const initGoogleSignIn = () => {
+  console.log('Initializing GIS...');
   google.accounts.id.initialize({
     client_id: googleClientID,
     callback: handleCredentialResponse,
@@ -53,6 +55,7 @@ const initGoogleSignIn = () => {
 
 // Load Google Photos API client library
 const loadGoogleApiClient = async () => {
+  console.log('Loading Google Photos API...');
   try {
     await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
     console.log('Google Photos API loaded');
@@ -64,10 +67,14 @@ const loadGoogleApiClient = async () => {
 //* Google Identity Services AUTHORIZATION
 // Handle authentication response by sending to server for validation/authorization
 const handleCredentialResponse = (response) => {
+  console.log('Handling credential response...');
   try {
     console.log("Encoded JWT ID token: " + response.credential)
     const userObject = jwt_decode(response.credential);
     console.log("Decoded User Info: " + userObject);
+
+    setTokenClient();
+
   } catch (error) {
     console.error('Error decoding user credential:', error);
   }
@@ -75,7 +82,7 @@ const handleCredentialResponse = (response) => {
 
   // Initialize token client
 const setTokenClient = () => {
-  console.log('Initializing token client');
+  console.log('Initializing token client...');
   google.accounts.oauth2.initTokenClient({   
     client_Id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
@@ -114,6 +121,7 @@ const setTokenClient = () => {
 
       // Load Photos
       const loadPhotos = () => {
+        console.log('Loading photos...');
         let xhr = new XMLHttpRequest();
         xhr.open('GET', 'https://www.googleapis.com/photoslibrary/v1/albums');
         xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
@@ -131,7 +139,7 @@ const setTokenClient = () => {
           }
         };
       }
-      
+
       loadPhotos();
     }
   });
@@ -148,6 +156,7 @@ const onSignInFailure = (error) => {
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
 const fetchAlbumList = async () => {
+  console.log('Fetching album list...');
   try {
     const response = await gapi.client.photoslibrary.albums.list({});
     console.log('Albums list response:', response);
@@ -178,6 +187,7 @@ const fetchAlbumList = async () => {
 
 // Adds album names to list
 const createList = (validAlbums) => {
+  console.log('Creating list...');
   for (const albumName of validAlbums) {
     const div = document.createElement('div');
     div.classList.add('object-item', 'center');
@@ -212,6 +222,7 @@ submit.addEventListener('click', async (e) => {
 });
 
 const fetchPhotos = async (albumNames, qtys) => {
+  console.log('Fetching photos...');
   const promises = [];
   for (let i = 0; i < albumNames.length; i++) {
     const query = {
