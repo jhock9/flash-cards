@@ -1,4 +1,10 @@
-// import jwt_decode from "jwt-decode";
+import jwt_decode from "jwt-decode";
+import g_api from "googleapis";
+import { OAuth2 } from "google-auth-library";
+// const {jwt_decode} = require('jwt-decode');
+// const {g_api} = require('googleapis');
+// const { OAuth2 } = require('google-auth-library');
+
 
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
@@ -50,11 +56,11 @@ const initGoogleSignIn = () => {
   );
 
   google.accounts.id.prompt();
-  gapi.load('client', loadGoogleApiClient);
+  gapi.load('client', loadGoogleApiClient); //!
 };
-
+//! gapi deprecate -- replace
 // Load Google Photos API client library
-const loadGoogleApiClient = async () => {
+const loadGoogleApiClient = async () => { 
   console.log('Loading Google Photos API...');
   try {
     await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
@@ -83,41 +89,77 @@ const handleCredentialResponse = (response) => {
   // Initialize token client
 const setTokenClient = () => {
   console.log('Initializing token client...');
-  google.accounts.oauth2.initTokenClient({   
-    client_Id: googleClientID,
-    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-    callback: async (tokenResponse) => {
-      try {
-        console.log(tokenResponse);
-        access_token = tokenResponse.access_token;
-        console.log("Access token set: " + access_token);
-        console.log('token client initialized');
+  const oauth2Client = new OAuth2(googleClientID, "", "");
+  oauth2Client.getToken({ code: access_token, redirectUri: "postmessage", access_type: 'offline' }, async (error, token) => {
+    if (error) {
+      console.error("Error getting access token:", error);
+      return;
+    }
+    access_token = token.access_token;
+    const refresh_token = token.refresh_token;
+    console.log("Access token set: " + access_token);
+    console.log("Refresh token set: " + refresh_token);
+    console.log('token client initialized');
 
-        if(tokenResponse && access_token) {
-          // Server Authentication
-          try {
-            const serverResponse = await fetch('/api/authenticate', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ access_token }),
-            });
-      
-            const serverResponseJson = await serverResponse.json(); 
-            console.log('Server response JSON:', serverResponseJson); 
-      
-            if (!serverResponse.ok) {
-              throw new Error('Server authentication failed');
-            }
-          } catch (error) {
-            console.error('Error sending ID token to server:', error);
-            return;
-          }
+    if (access_token) {
+      // Server Authentication
+      try {
+        const serverResponse = await fetch('/api/authenticate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id_token: access_token }),
+        });
+
+        const serverResponseJson = await serverResponse.json(); 
+        console.log('Server response JSON:', serverResponseJson); 
+
+        if (!serverResponse.ok) {
+          throw new Error('Server authentication failed');
         }
       } catch (error) {
-        console.error('Error initializing token client:', error);
+        console.error('Error sending ID token to server:', error);
+        return;
       }
+    }
+
+  // console.log('Initializing token client...');
+  // google.accounts.oauth2.initTokenClient({   
+  //   client_Id: googleClientID,
+  //   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  //   callback: async (tokenResponse) => {
+  //     try {
+  //       console.log(tokenResponse);
+  //       access_token = tokenResponse.access_token;
+  //       console.log("Access token set: " + access_token);
+  //       console.log('token client initialized');
+
+  //       if(tokenResponse && access_token) {
+  //         // Server Authentication
+  //         try {
+  //           const serverResponse = await fetch('/api/authenticate', {
+  //             method: 'POST',
+  //             headers: {
+  //               'Content-Type': 'application/json',
+  //             },
+  //             body: JSON.stringify({ access_token }),
+  //           });
+      
+  //           const serverResponseJson = await serverResponse.json(); 
+  //           console.log('Server response JSON:', serverResponseJson); 
+      
+  //           if (!serverResponse.ok) {
+  //             throw new Error('Server authentication failed');
+  //           }
+  //         } catch (error) {
+  //           console.error('Error sending ID token to server:', error);
+  //           return;
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('Error initializing token client:', error);
+  //     }
 
       // Load Photos
       const loadPhotos = () => {

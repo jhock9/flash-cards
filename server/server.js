@@ -4,10 +4,22 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
-// Import the Google Auth Library
+// Import the Google Auth and Google APIs libraries
 const { OAuth2Client } = require('google-auth-library');
+const { google } = require('googleapis');
+const photoslibrary = google.photoslibrary('v1');
+
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
 const client = new OAuth2Client(CLIENT_ID);
+
+// Set up your OAuth2 client for the Google Photos API
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URL
+);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -17,6 +29,8 @@ app.get('/config', (req, res) => {
     NODE_ENV: process.env.NODE_ENV,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    REDIRECT_URL: process.env.GOOGLE_REDIRECT_URL
   });
 });
 
@@ -83,11 +97,17 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
   try {
     // Verify the ID token using the Google Auth Library
     const ticket = await client.verifyIdToken({
-      accessToken: id_token,
+      idToken: id_token,
       audience: CLIENT_ID,
     });
     const payload = ticket.getPayload();
     const userId = payload['sub'];
+    const accessToken = payload['at_hash']; // Use the provided access token
+
+    // Set the access token for the OAuth2 client
+    oauth2Client.setCredentials({
+      access_token: accessToken,
+    });
 
     // Returns a success response to the client-side application
     res.json({ status: 'success', message: 'Authentication and authorization successful' });
@@ -96,6 +116,20 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
     res.status(401).json({ status: 'failure', message: 'Authentication failed' });
   }
 });
+
+// Server-side endpoint for fetching albums from Google Photos API
+app.get('/api/albums', async (req, res) => {
+  try {
+    const response = await photoslibrary.albums.list({
+      auth: oauth2Client
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching albums:', error);
+    res.status(500).json({ status: 'failure', message: 'Failed to fetch albums' });
+  }
+});
+
 
 // Start server
 app.listen(port, () => {
