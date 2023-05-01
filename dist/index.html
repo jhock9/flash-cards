@@ -1,1 +1,98 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VB-MAPP Flash Cards</title><link rel="shortcut icon" href="../favicon-32x32.png" type="image/x-icon"><link rel="stylesheet" href="main.css"><script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script><script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js"></script><script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script><script type="module" src="app.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet"><link rel="icon" href="favicon-32x32.png?f6179d570877f272b5d3"></head><body><div id="landing-page" class="center"><div class="content-wrapper center"><section class="center"><figure class="center"><div class="logo center"><img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"></div></figure><div class="welcome-text center"><h1 class="center">Welcome to the<br>VB-MAPP<br>Flashcard App</h1><p class="center">Please sign in to your<br>Apple iCloud account<br>to continue.</p></div><div id="appleid-signin" data-color="white" data-border="true" data-type="sign in"></div></section><footer><p class="copyright center">&copy;&nbsp;<script>document.write(new Date().getFullYear())</script>&nbsp;ABA Co-Op. All Rights Reserved.</p></footer></div></div><div id="flash-card-page" class="hide"><div class="content-wrapper center"><main class="center"><aside class="center"><figure class="center"><div class="logo center"><img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo"> \</div></figure><div class="filter-container center" id="filter"><button class="btn center" id="submit-btn">Submit <i class="fas fa-angle-double-right"></i></button><div class="filter-list center"></div></div></aside><section class="images-wrapper center"><div class="images-container center"></div></section></main><footer><p class="copyright center">&copy;<script>document.write(new Date().getFullYear())</script>ABA Co-Op. All Rights Reserved.</p></footer></div></div><script src="app.js"></script><script defer="defer" src="bundle.js?f6179d570877f272b5d3"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VB-MAPP Flash Cards</title>
+
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="main.css">
+  
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.ico?2f0171bf6c29765ca69f"></head>
+
+<body>
+  <div id="landing-page" class="center">
+    <div class="content-wrapper center">
+      <section class="center">
+        <figure class="center">
+          <div class="logo center">
+            <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo">
+          </div>  
+        </figure>
+        
+        <div class="welcome-text center">
+          <h1 class="center"> Welcome to the<br>
+            VB-MAPP<br>
+            Flashcard App</h1>
+          <p class ="center"> Please sign in to your<br> 
+            Google account<br>
+            to continue.</p>
+        </div>
+        
+        <div id="g_id_onload"
+          data-client_id=""
+          data-context="use"
+          data-ux_mode="popup"
+          data-login_uri="https://vb-mapp-flash-cards.herokuapp.com/index.html" 
+          data-auto_prompt="false">
+        </div>
+
+        <div id="google-signin" class="g_id_signin"
+          data-type="standard"
+          data-shape="rectangular"
+          data-theme="outline"
+          data-text="signin_with"
+          data-size="large"
+          data-logo_alignment="left">
+        </div>
+      </section>
+      
+      <footer>
+        <p class="copyright center">&copy;&nbsp;<script>document.write(new Date().getFullYear())</script>&nbsp;ABA Co-Op. All Rights Reserved.</p>
+      </footer>
+    </div>
+  </div>
+  
+  <div id="flashcards-page" class="hide">
+    <div class="content-wrapper center">
+      <main class="center">
+        <aside class="center">
+          <figure class="center">
+            <div class="logo center">
+              <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo">
+            </div>
+          </figure>
+          
+          <form class="center" id="object-selection-form">
+            <button type="submit" class="btn center" id="submit-btn">Submit&nbsp;<i class="fas fa-angle-double-right"></i></button>
+            <div class="object-list center"> 
+            </div>
+          </form>
+        </aside>
+
+        <section class="images-wrapper center">
+          <div class="images-container center">
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p class="center">
+          &copy;&nbsp;
+          <script>document.write(new Date().getFullYear());</script>
+          &nbsp;ABA Co-Op. All Rights Reserved.
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+<script defer src="bundle.js?2f0171bf6c29765ca69f"></script></body> 
+</html>
