@@ -1,21 +1,26 @@
+import jwt_decode from "jwt-decode";
+
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-//* GOOGLE SIGN-IN
-// Fetch environental variables for Google Identity Services (GIS)
-let nodeEnv, googleClientID, googleApiKey;
+
+let nodeEnv, googleClientID, googleApiKey, googleClientSecret, redirectUrl;
+
 const fetchConfig = async () => {
   try {
     const response = await fetch('/config');
     const config = await response.json();
     console.log('Config:', config);
+  
     nodeEnv = config.NODE_ENV;
     googleClientID = config.GOOGLE_CLIENT_ID;
     googleApiKey = config.GOOGLE_API_KEY;
-    console.log('Google Client ID:', googleClientID);
+    googleClientSecret = config.GOOGLE_CLIENT_SECRET;
+    redirectUrl = config.REDIRECT_URL;
+    console.log('Config:', config); 
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
@@ -23,78 +28,102 @@ const fetchConfig = async () => {
   }
 };
 fetchConfig();
-// Configure GIS library
+
+//* GOOGLE AUTHENTICATION
+
 const initGoogleSignIn = () => {
-  const onloadElement = document.getElementById('g_id_onload');
+  // const onloadElement = document.getElementById('g_id_onload');
   google.accounts.id.initialize({
     client_id: googleClientID,
     callback: handleCredentialResponse,
     on_failure: onSignInFailure
   });
-  setTimeout(() => {
-    google.accounts.id.renderButton(
-      document.getElementById('google-signin'),
-      { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
-    );
-  }, 500);
-  gapi.load('client', loadGoogleApiClient);
-};
-// Load Google Photos API client library
-const loadGoogleApiClient = async () => {
-  try {
-    await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
-    console.log('Google Photos API loaded');
-  } catch (error) {
-    console.error('Error loading Google Photos API:', error);
-  }
-};
-// Handle authentication response by sending to server for validation/authorization
-const handleCredentialResponse = async (response) => {
-  console.log('Credential response:', response);
-  const id_token = response.credential;
   
+  google.accounts.id.renderButton(
+    document.getElementById('google-signin'),
+    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
+  );
+
+  google.accounts.id.prompt();
+};
+
+const handleCredentialResponse = (response) => {
+  console.log('Handling credential response...');
   try {
-    const serverResponse = await fetch('/api/authenticate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id_token }),
-    });
-    const serverResponseJson = await serverResponse.json(); 
-    console.log('Server response JSON:', serverResponseJson); 
-    if (!serverResponse.ok) {
-      throw new Error('Server authentication failed');
-    }
+    console.log("Encoded JWT ID token: " + response.credential)
+    const userObject = jwt_decode(response.credential);
+    console.log("Decoded User Info: " + userObject);
+
+    // setTokenClient();
+
   } catch (error) {
-    console.error('Error sending ID token to server:', error);
-    return;
+    console.error('Error decoding user credential:', error);
   }
 
-    // Get user profile information from the id_token
-    const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
-
-    console.log('Decoded ID token:', decodedIdToken);
-    console.log(`ID: ${decodedIdToken.sub}`);
-    console.log(`Name: ${decodedIdToken.name}`);
-    console.log(`Image URL: ${decodedIdToken.picture}`);
-    console.log(`Email: ${decodedIdToken.email}`);
-  
-  // console.log('Response:', response);
-  // // Optional: Retrieve user profile information
-  // console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
-  // console.log(`Name: ${response.name}`);
-  // console.log(`Image URL: ${response.picture}`);
-  // console.log(`Email: ${response.email}`);
-  
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
 };
+
+// // Load Google Photos API client library
+// const loadGoogleApiClient = async () => {
+//   try {
+//     await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
+//     console.log('Google Photos API loaded');
+//   } catch (error) {
+//     console.error('Error loading Google Photos API:', error);
+//   }
+// };
+
+// // Handle authentication response by sending to server for validation/authorization
+// const handleCredentialResponse = async (response) => {
+//   console.log('Credential response:', response);
+//   const id_token = response.credential;
+  
+//   try {
+//     const serverResponse = await fetch('/api/authenticate', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ id_token }),
+//     });
+//     const serverResponseJson = await serverResponse.json(); 
+//     console.log('Server response JSON:', serverResponseJson); 
+//     if (!serverResponse.ok) {
+//       throw new Error('Server authentication failed');
+//     }
+//   } catch (error) {
+//     console.error('Error sending ID token to server:', error);
+//     return;
+//   }
+
+//   // Get user profile information from the id_token
+//   const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
+
+//   console.log('Decoded ID token:', decodedIdToken);
+//   console.log(`ID: ${decodedIdToken.sub}`);
+//   console.log(`Name: ${decodedIdToken.name}`);
+//   console.log(`Image URL: ${decodedIdToken.picture}`);
+//   console.log(`Email: ${decodedIdToken.email}`);
+  
+//   // console.log('Response:', response);
+//   // // Optional: Retrieve user profile information
+//   // console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
+//   // console.log(`Name: ${response.name}`);
+//   // console.log(`Image URL: ${response.picture}`);
+//   // console.log(`Email: ${response.email}`);
+  
+//   landingPage.classList.add('hide');
+//   flashCardPage.classList.remove('hide');
+//   fetchAlbumList();
+// };
+
 // Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
+
 //* CREATING OBJECT LIST FROM ALBUM NAMES
 const fetchAlbumList = async () => {
   try {
@@ -120,6 +149,7 @@ const fetchAlbumList = async () => {
     console.error('Error fetching albums:', error);
   }
 };
+
 // Adds album names to list
 const createList = (validAlbums) => {
   for (const albumName of validAlbums) {
@@ -139,6 +169,7 @@ const createList = (validAlbums) => {
     objectList.appendChild(div);
   }
 };
+
 //* DISPLAY PHOTOS
 submit.addEventListener('click', async (e) => {
   e.preventDefault(); // Prevent form submission
@@ -153,8 +184,10 @@ submit.addEventListener('click', async (e) => {
   });
   await fetchPhotos(selectedAlbums, selectedQtys);
 });
+
 const fetchPhotos = async (albumNames, qtys) => {
   const promises = [];
+
   for (let i = 0; i < albumNames.length; i++) {
     const query = {
       albumId: albumNames[i],
@@ -162,6 +195,7 @@ const fetchPhotos = async (albumNames, qtys) => {
     };
     promises.push(gapi.client.photoslibrary.mediaItems.search(query));
   }
+
   try {
     const responses = await Promise.all(promises);
     let allPhotos = [];
@@ -185,6 +219,7 @@ const fetchPhotos = async (albumNames, qtys) => {
     console.error('Error fetching photos:', error);
   }
 };
+
 // Helper function to randomize array length based on user input
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -193,6 +228,7 @@ const shuffleArray = (array) => {
   }
   return array;
 };
+
 // Helper function for displaying photos
 const displayPhotos = (photos) => {
   allImages.innerHTML = '';

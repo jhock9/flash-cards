@@ -29,8 +29,8 @@ app.get('/config', (req, res) => {
     NODE_ENV: process.env.NODE_ENV,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    REDIRECT_URL: process.env.GOOGLE_REDIRECT_URL
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    REDIRECT_URL: process.env.REDIRECT_URL
   });
 });
 
