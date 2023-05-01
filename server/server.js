@@ -4,22 +4,22 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
-// Import the Google Auth and Google APIs libraries
-const { OAuth2Client } = require('google-auth-library');
-const { google } = require('googleapis');
+// // Import the Google Auth and Google APIs libraries
+// const { OAuth2Client } = require('google-auth-library');
+// const { google } = require('googleapis');
 // const photoslibrary = google.photoslibrary('v1');
 
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
-const client = new OAuth2Client(CLIENT_ID);
+// const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+// const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+// const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
+// const client = new OAuth2Client(CLIENT_ID);
 
-// Set up your OAuth2 client for the Google Photos API
-const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URL
-);
+// // Set up your OAuth2 client for the Google Photos API
+// const oauth2Client = new google.auth.OAuth2(
+//   CLIENT_ID,
+//   CLIENT_SECRET,
+//   REDIRECT_URL
+// );
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -33,12 +33,6 @@ app.get('/config', (req, res) => {
     REDIRECT_URL: process.env.GOOGLE_REDIRECT_URL
   });
 });
-
-// console.log('Environment variables:', {
-//   NODE_ENV: process.env.NODE_ENV,
-//   GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-//   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-// });
 
 // Log serving file
 app.use((req, res, next) => {
@@ -102,12 +96,12 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
     });
     const payload = ticket.getPayload();
     const userId = payload['sub'];
-    const accessToken = payload['at_hash']; // Use the provided access token
+    // const accessToken = payload['at_hash']; // Use the provided access token
 
-    // Set the access token for the OAuth2 client
-    oauth2Client.setCredentials({
-      access_token: accessToken,
-    });
+    // // Set the access token for the OAuth2 client
+    // oauth2Client.setCredentials({
+    //   access_token: accessToken,
+    // });
 
     // Returns a success response to the client-side application
     res.json({ status: 'success', message: 'Authentication and authorization successful' });
