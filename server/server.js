@@ -7,7 +7,7 @@ const port = process.env.PORT || 3003;
 // Import the Google Auth and Google APIs libraries
 const { OAuth2Client } = require('google-auth-library');
 const { google } = require('googleapis');
-const photoslibrary = google.photoslibrary('v1');
+// const photoslibrary = google.photoslibrary('v1');
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -117,19 +117,18 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
   }
 });
 
-// Server-side endpoint for fetching albums from Google Photos API
-app.get('/api/albums', async (req, res) => {
-  try {
-    const response = await photoslibrary.albums.list({
-      auth: oauth2Client
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error fetching albums:', error);
-    res.status(500).json({ status: 'failure', message: 'Failed to fetch albums' });
-  }
-});
-
+// // Server-side endpoint for fetching albums from Google Photos API
+// app.get('/api/albums', async (req, res) => {
+//   try {
+//     const response = await photoslibrary.albums.list({
+//       auth: oauth2Client
+//     });
+//     res.json(response.data);
+//   } catch (error) {
+//     console.error('Error fetching albums:', error);
+//     res.status(500).json({ status: 'failure', message: 'Failed to fetch albums' });
+//   }
+// });
 
 // Start server
 app.listen(port, () => {
