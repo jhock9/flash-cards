@@ -1,4 +1,5 @@
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
+// import jwt_decode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/dist/jwt-decode.min.js';
 
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
