@@ -1,35 +1,20 @@
-import jwt_decode from "jwt-decode";
-import g_api from "googleapis";
-import { OAuth2 } from "google-auth-library";
-// const {jwt_decode} = require('jwt-decode');
-// const {g_api} = require('googleapis');
-// const { OAuth2 } = require('google-auth-library');
-
-
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-
-let nodeEnv;
-let googleClientID;
-let googleApiKey;
-let access_token;
-
-// Fetch and Config env. variables from server.js
+//* GOOGLE SIGN-IN
+// Fetch environental variables for Google Identity Services (GIS)
+let nodeEnv, googleClientID, googleApiKey;
 const fetchConfig = async () => {
-  console.log('Fetching configuration...');
   try {
     const response = await fetch('/config');
     const config = await response.json();
     console.log('Config:', config);
-
     nodeEnv = config.NODE_ENV;
     googleClientID = config.GOOGLE_CLIENT_ID;
     googleApiKey = config.GOOGLE_API_KEY;
-
     console.log('Google Client ID:', googleClientID);
     
     initGoogleSignIn(); // Initialize Google Sign-In
@@ -38,30 +23,24 @@ const fetchConfig = async () => {
   }
 };
 fetchConfig();
-
-//* Google Identity Services AUTHENTICATION
-
-// Initialize GIS library
+// Configure GIS library
 const initGoogleSignIn = () => {
-  console.log('Initializing GIS...');
+  const onloadElement = document.getElementById('g_id_onload');
   google.accounts.id.initialize({
     client_id: googleClientID,
     callback: handleCredentialResponse,
     on_failure: onSignInFailure
   });
-
-  google.accounts.id.renderButton(
-    document.getElementById('google-signin'),
-    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
-  );
-
-  google.accounts.id.prompt();
-  gapi.load('client', loadGoogleApiClient); //!
+  setTimeout(() => {
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin'),
+      { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
+    );
+  }, 500);
+  gapi.load('client', loadGoogleApiClient);
 };
-//! gapi deprecate -- replace
 // Load Google Photos API client library
-const loadGoogleApiClient = async () => { 
-  console.log('Loading Google Photos API...');
+const loadGoogleApiClient = async () => {
   try {
     await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
     console.log('Google Photos API loaded');
@@ -69,167 +48,85 @@ const loadGoogleApiClient = async () => {
     console.error('Error loading Google Photos API:', error);
   }
 };
-
-//* Google Identity Services AUTHORIZATION
 // Handle authentication response by sending to server for validation/authorization
-const handleCredentialResponse = (response) => {
-  console.log('Handling credential response...');
+const handleCredentialResponse = async (response) => {
+  console.log('Credential response:', response);
+  const id_token = response.credential;
+
   try {
-    console.log("Encoded JWT ID token: " + response.credential)
-    const userObject = jwt_decode(response.credential);
-    console.log("Decoded User Info: " + userObject);
-
-    setTokenClient();
-
+    const serverResponse = await fetch('/api/authenticate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id_token }),
+    });
+    const serverResponseJson = await serverResponse.json(); 
+    console.log('Server response JSON:', serverResponseJson); 
+    if (!serverResponse.ok) {
+      throw new Error('Server authentication failed');
+    }
   } catch (error) {
-    console.error('Error decoding user credential:', error);
+    console.error('Error sending ID token to server:', error);
+    return;
   }
-};
-
-  // Initialize token client
-const setTokenClient = () => {
-  console.log('Initializing token client...');
-  const oauth2Client = new OAuth2(googleClientID, "", "");
-  oauth2Client.getToken({ code: access_token, redirectUri: "postmessage", access_type: 'offline' }, async (error, token) => {
-    if (error) {
-      console.error("Error getting access token:", error);
-      return;
-    }
-    access_token = token.access_token;
-    const refresh_token = token.refresh_token;
-    console.log("Access token set: " + access_token);
-    console.log("Refresh token set: " + refresh_token);
-    console.log('token client initialized');
-
-    if (access_token) {
-      // Server Authentication
-      try {
-        const serverResponse = await fetch('/api/authenticate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id_token: access_token }),
-        });
-
-        const serverResponseJson = await serverResponse.json(); 
-        console.log('Server response JSON:', serverResponseJson); 
-
-        if (!serverResponse.ok) {
-          throw new Error('Server authentication failed');
-        }
-      } catch (error) {
-        console.error('Error sending ID token to server:', error);
-        return;
-      }
-    }
-
-  // console.log('Initializing token client...');
-  // google.accounts.oauth2.initTokenClient({   
-  //   client_Id: googleClientID,
-  //   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  //   callback: async (tokenResponse) => {
-  //     try {
-  //       console.log(tokenResponse);
-  //       access_token = tokenResponse.access_token;
-  //       console.log("Access token set: " + access_token);
-  //       console.log('token client initialized');
-
-  //       if(tokenResponse && access_token) {
-  //         // Server Authentication
-  //         try {
-  //           const serverResponse = await fetch('/api/authenticate', {
-  //             method: 'POST',
-  //             headers: {
-  //               'Content-Type': 'application/json',
-  //             },
-  //             body: JSON.stringify({ access_token }),
-  //           });
-      
-  //           const serverResponseJson = await serverResponse.json(); 
-  //           console.log('Server response JSON:', serverResponseJson); 
-      
-  //           if (!serverResponse.ok) {
-  //             throw new Error('Server authentication failed');
-  //           }
-  //         } catch (error) {
-  //           console.error('Error sending ID token to server:', error);
-  //           return;
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error('Error initializing token client:', error);
-  //     }
-
-      // Load Photos
-      const loadPhotos = () => {
-        console.log('Loading photos...');
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://www.googleapis.com/photoslibrary/v1/albums');
-        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-        xhr.send();
-
-        // Handle onload event
-        xhr.onload = () => {
-          if (xhr.status === 200) {
-            var albums = JSON.parse(xhr.responseText);
-            for (var i = 0; i < albums.length; i++) {
-              console.log(albums[i].title);
-            }
-          } else {
-            console.log('Error: ' + xhr.status);
-          }
-        };
-      }
-
-      loadPhotos();
-    }
+  // Get user profile information from the id_token
+  const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
+  console.log('Decoded ID token:', decodedIdToken);
+  console.log(`ID: ${decodedIdToken.sub}`);
+  console.log(`Name: ${decodedIdToken.name}`);
+  console.log(`Image URL: ${decodedIdToken.picture}`);
+  console.log(`Email: ${decodedIdToken.email}`);
+  // Initialize the gapi client with the access token
+  console.log('Initializing gapi client');
+  await gapi.client.init({
+    apiKey: googleApiKey,
+    clientId: googleClientID,
+    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'],
+    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
   });
+  console.log('gapi client initialized');
+
+  // Set the access token for the gapi client
+  console.log('Setting ID token for gapi client');
+  gapi.client.setToken({ id_token });
+  console.log('ID token set for gapi client:', id_token);
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
 };
-
 // Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
-
 //* CREATING OBJECT LIST FROM ALBUM NAMES
 const fetchAlbumList = async () => {
-  console.log('Fetching album list...');
   try {
     const response = await gapi.client.photoslibrary.albums.list({});
     console.log('Albums list response:', response);
     console.log('Access token in use:', gapi.client.getToken().access_token);
     console.log('Received albums:', response.result.albums);
-
     if (!response.result) {
       console.error('Error fetching albums:', response);
       return;
     }
-
     const validAlbums = [];
     for (const album of response.result.albums) {
       const albumName = album.title;
       const photoCount = album.mediaItemsCount;
-
       if (photoCount >= 10) {
         validAlbums.push(albumName);
       }
     }
-
     validAlbums.sort();
     createList(validAlbums);
   } catch (error) {
     console.error('Error fetching albums:', error);
   }
 };
-
 // Adds album names to list
 const createList = (validAlbums) => {
-  console.log('Creating list...');
   for (const albumName of validAlbums) {
     const div = document.createElement('div');
     div.classList.add('object-item', 'center');
@@ -247,7 +144,6 @@ const createList = (validAlbums) => {
     objectList.appendChild(div);
   }
 };
-
 //* DISPLAY PHOTOS
 submit.addEventListener('click', async (e) => {
   e.preventDefault(); // Prevent form submission
@@ -262,9 +158,7 @@ submit.addEventListener('click', async (e) => {
   });
   await fetchPhotos(selectedAlbums, selectedQtys);
 });
-
 const fetchPhotos = async (albumNames, qtys) => {
-  console.log('Fetching photos...');
   const promises = [];
   for (let i = 0; i < albumNames.length; i++) {
     const query = {
@@ -273,7 +167,6 @@ const fetchPhotos = async (albumNames, qtys) => {
     };
     promises.push(gapi.client.photoslibrary.mediaItems.search(query));
   }
-
   try {
     const responses = await Promise.all(promises);
     let allPhotos = [];
@@ -288,7 +181,6 @@ const fetchPhotos = async (albumNames, qtys) => {
         };
         albumPhotos.push(photo);
       }
-
       shuffleArray(albumPhotos);
       allPhotos = allPhotos.concat(albumPhotos);
     }
@@ -298,7 +190,6 @@ const fetchPhotos = async (albumNames, qtys) => {
     console.error('Error fetching photos:', error);
   }
 };
-
 // Helper function to randomize array length based on user input
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -307,7 +198,6 @@ const shuffleArray = (array) => {
   }
   return array;
 };
-
 // Helper function for displaying photos
 const displayPhotos = (photos) => {
   allImages.innerHTML = '';
