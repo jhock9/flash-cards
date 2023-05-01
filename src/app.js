@@ -52,7 +52,7 @@ const handleCredentialResponse = (response) => {
   try {
     console.log("Encoded JWT ID token: " + response.credential)
     const userObject = jwt_decode(response.credential);
-    console.log("Decoded User Info: " + userObject);
+    console.log("Decoded User Info: " + JSON.stringify(userObject));
 
     // setTokenClient();
 
