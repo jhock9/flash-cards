@@ -32,7 +32,6 @@ fetchConfig();
 //* GOOGLE AUTHENTICATION
 
 const initGoogleSignIn = () => {
-  // const onloadElement = document.getElementById('g_id_onload');
   google.accounts.id.initialize({
     client_id: googleClientID,
     callback: handleCredentialResponse,
