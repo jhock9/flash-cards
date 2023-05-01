@@ -52,7 +52,7 @@ const loadGoogleApiClient = async () => {
 const handleCredentialResponse = async (response) => {
   console.log('Credential response:', response);
   const id_token = response.credential;
-
+  
   try {
     const serverResponse = await fetch('/api/authenticate', {
       method: 'POST',
@@ -70,28 +70,23 @@ const handleCredentialResponse = async (response) => {
     console.error('Error sending ID token to server:', error);
     return;
   }
-  // Get user profile information from the id_token
-  const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
-  console.log('Decoded ID token:', decodedIdToken);
-  console.log(`ID: ${decodedIdToken.sub}`);
-  console.log(`Name: ${decodedIdToken.name}`);
-  console.log(`Image URL: ${decodedIdToken.picture}`);
-  console.log(`Email: ${decodedIdToken.email}`);
-  // Initialize the gapi client with the access token
-  console.log('Initializing gapi client');
-  await gapi.client.init({
-    apiKey: googleApiKey,
-    clientId: googleClientID,
-    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest'],
-    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly'
-  });
-  console.log('gapi client initialized');
 
-  // Set the access token for the gapi client
-  console.log('Setting ID token for gapi client');
-  gapi.client.setToken({ id_token });
-  console.log('ID token set for gapi client:', id_token);
+    // Get user profile information from the id_token
+    const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
 
+    console.log('Decoded ID token:', decodedIdToken);
+    console.log(`ID: ${decodedIdToken.sub}`);
+    console.log(`Name: ${decodedIdToken.name}`);
+    console.log(`Image URL: ${decodedIdToken.picture}`);
+    console.log(`Email: ${decodedIdToken.email}`);
+  
+  // console.log('Response:', response);
+  // // Optional: Retrieve user profile information
+  // console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
+  // console.log(`Name: ${response.name}`);
+  // console.log(`Image URL: ${response.picture}`);
+  // console.log(`Email: ${response.email}`);
+  
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   fetchAlbumList();
