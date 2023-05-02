@@ -44,6 +44,9 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
+  document.getElementById('google-signin').addEventListener('click', () => {
+    getToken();
+  });
   // google.accounts.id.prompt();
 };
 
@@ -60,6 +63,7 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
+  initTokenClient();
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   // fetchAlbumList();
@@ -121,7 +125,7 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
       // Load Albums List
       (() => {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://www.googleapis.com/calendar/v1/albums');
+        xhr.open('GET', 'https://www.googleapis.com/auth/photoslibrary.readonly');
         xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
         xhr.send();
         // add params for list requirements (must have 10 photos, etc.)
@@ -136,12 +140,6 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
 const getToken = () => {
   tokenClient.requestAccessToken();
 }
-
-document.getElementById('google-signin').addEventListener('click', () => {
-  getToken();
-});
-
-initTokenClient();
 
 // // Load Google Photos API client library
 // const loadGoogleApiClient = async () => {
