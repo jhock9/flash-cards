@@ -130,9 +130,12 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
         xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
         xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
 
-        xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = () => {
           if (xhr.readyState === 4 && xhr.status === 200) {
             console.log("Success:", xhr.responseText);
+            const jsonResponse = JSON.parse(xhr.responseText);
+            const albums = jsonResponse.albums;
+            console.log("Photo albums:", albums);
           } else if (xhr.readyState === 4) {
             console.error("Error in XMLHttpRequest:", xhr.statusText);
           }
