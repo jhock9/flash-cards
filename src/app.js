@@ -114,19 +114,30 @@ const handleCredentialResponse = (response) => {
 //!! tokenClient = implicit grant model => token model
 let tokenClient;
 const initTokenClient = () => {  // or fetchAlbumList function -- html onload
+  console.log("initTokenClient called");
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     callback: (tokenResponse) => {
       console.log(tokenResponse);
       access_token = tokenResponse.access_token; //GIS addon
+      console.log(access_token);
       // tokenClient.requestAccessToken();
 
       // Load Albums List
       (() => {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://www.googleapis.com/auth/photoslibrary.readonly');
+        xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
         xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log("Success:", xhr.responseText);
+          } else if (xhr.readyState === 4) {
+            console.error("Error in XMLHttpRequest:", xhr.statusText);
+          }
+        };     
+
         xhr.send();
         // add params for list requirements (must have 10 photos, etc.)
       })();
