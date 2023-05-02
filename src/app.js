@@ -44,11 +44,16 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
-  document.getElementById('google-signin').addEventListener('click', () => {
-    getToken();
-  });
+  // document.getElementById('google-signin').addEventListener('click', () => {
+  //   getToken();
+  // });
   // google.accounts.id.prompt();
 };
+
+submit.addEventListener('click', (e) => {
+  e.preventDefault(); // Prevent form submission
+  getToken();
+});
 
 const handleCredentialResponse = (response) => {
   console.log('Handling credential response...');
@@ -119,7 +124,7 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     callback: (tokenResponse) => {
-      console.log(tokenResponse);
+      console.log("Callback executed", tokenResponse);
       access_token = tokenResponse.access_token; //GIS addon
       console.log(access_token);
       // tokenClient.requestAccessToken();
@@ -152,6 +157,7 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
 };
 
 const getToken = () => {
+  console.log("getToken called");
   tokenClient.requestAccessToken();
 }
 
