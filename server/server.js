@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
+// const url = require('url');
 
 // // Import the Google Auth and Google APIs libraries
 // const { OAuth2Client } = require('google-auth-library');
@@ -123,6 +124,17 @@ app.post('/api/authenticate', express.json(), async (req, res) => {
 //     res.status(500).json({ status: 'failure', message: 'Failed to fetch albums' });
 //   }
 // });
+
+// //*Exchanging authorization code for refresh and access tokens
+// // Receive the callback from Google's OAuth 2.0 server.
+// if (req.url.startsWith('/oauth2callback')) {
+//   // Handle the OAuth 2.0 server response
+//   let q = url.parse(req.url, true).query;
+
+//   // Get access and refresh tokens (if access_type is offline)
+//   let { tokens } = await oauth2Client.getToken(q.code);
+//   oauth2Client.setCredentials(tokens);
+// }
 
 // Start server
 app.listen(port, () => {

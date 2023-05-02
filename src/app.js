@@ -65,6 +65,58 @@ const handleCredentialResponse = (response) => {
   fetchAlbumList();
 };
 
+//* GOOGLE AUTHORIZATION
+
+// //!! codeClient = authorization code model => code model
+// const codeClient = google.accounts.oauth2.initCodeClient({
+//   client_id: googleClientID,
+//   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+//   ux_mode: 'popup',
+//   // set to the name of the function you will use to send authorization codes to your platform
+//   callback: (codeResponse) => { 
+//     console.log(codeResponse);
+//     // We now have access to a live token to use for ANY google API
+
+//     // const xhr = new XMLHttpRequest();
+//     // xhr.open('POST', code_receiver_uri, true);
+//     // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//     // // Set custom header for CRSF
+//     // xhr.setRequestHeader('X-Requested-With', 'XmlHttpRequest');
+//     // xhr.onload = function() {
+//     //   console.log('Auth code response: ' + xhr.responseText);
+//     // };
+//     // xhr.send('code=' + codeResponse.code);
+//   },
+// });
+
+// {/* HTML CODE <button onclick="codeClient.requestCode();">Authorize with Google</button> */}
+// document.getElementById('google-signin').addEventListener('click', () => {
+//   codeClient.requestCode();
+// });
+
+//!! tokenClient = implicit grant model => token model
+// let tokenClient;
+const setTokenClient = () => {  // or fetchAlbumList function
+  google.accounts.oauth2.initTokenClient({
+    client_id: googleClientID,
+    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+    callback: (tokenResponse) => {
+      console.log(tokenResponse);
+      // We now have access to a live token to use for ANY google API
+      // tokenClient = tokenResponse;
+      // tokenClient.requestAccessToken();
+      tokenResponse.requestAccessToken();
+    }
+  });
+  // return tokenClient;
+  // console.log(tokenClient);
+};
+
+{/* HTML CODE <button onclick="tokenClient.requestAccessToken();">Authorize with Google</button> */}
+document.getElementById('google-signin').addEventListener('click', () => {
+  setTokenClient();
+});
+
 // // Load Google Photos API client library
 // const loadGoogleApiClient = async () => {
 //   try {
@@ -75,11 +127,6 @@ const handleCredentialResponse = (response) => {
 //   }
 // };
 
-// // Handle authentication response by sending to server for validation/authorization
-// const handleCredentialResponse = async (response) => {
-//   console.log('Credential response:', response);
-//   const id_token = response.credential;
-  
 //   try {
 //     const serverResponse = await fetch('/api/authenticate', {
 //       method: 'POST',
@@ -98,26 +145,6 @@ const handleCredentialResponse = (response) => {
 //     return;
 //   }
 
-//   // Get user profile information from the id_token
-//   const decodedIdToken = JSON.parse(atob(id_token.split('.')[1]));
-
-//   console.log('Decoded ID token:', decodedIdToken);
-//   console.log(`ID: ${decodedIdToken.sub}`);
-//   console.log(`Name: ${decodedIdToken.name}`);
-//   console.log(`Image URL: ${decodedIdToken.picture}`);
-//   console.log(`Email: ${decodedIdToken.email}`);
-  
-//   // console.log('Response:', response);
-//   // // Optional: Retrieve user profile information
-//   // console.log(`ID: ${response.sub}`); // Do not send to the backend! Use an ID token instead.
-//   // console.log(`Name: ${response.name}`);
-//   // console.log(`Image URL: ${response.picture}`);
-//   // console.log(`Email: ${response.email}`);
-  
-//   landingPage.classList.add('hide');
-//   flashCardPage.classList.remove('hide');
-//   fetchAlbumList();
-// };
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
