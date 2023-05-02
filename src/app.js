@@ -52,7 +52,7 @@ const handleCredentialResponse = (response) => {
   try {
     console.log("Encoded JWT ID token: " + response.credential)
     const userObject = jwt_decode(response.credential);
-    console.log("Decoded User Info: " + JSON.stringify(userObject));
+    console.log("Decoded User Info: " + JSON.stringify(userObject, null, 2));
 
     // setTokenClient();
 
@@ -62,8 +62,9 @@ const handleCredentialResponse = (response) => {
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
-  fetchAlbumList();
+  // fetchAlbumList();
 };
+
 
 //* GOOGLE AUTHORIZATION
 
@@ -139,6 +140,8 @@ const getToken = () => {
 document.getElementById('google-signin').addEventListener('click', () => {
   getToken();
 });
+
+initTokenClient();
 
 // // Load Google Photos API client library
 // const loadGoogleApiClient = async () => {
