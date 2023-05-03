@@ -7,12 +7,12 @@ const port = process.env.PORT || 3003;
 
 // Import the Google Auth and Google APIs libraries
 const { OAuth2Client } = require('google-auth-library');
-// const { google } = require('googleapis');
+const { google } = require('googleapis');
 // const photoslibrary = google.photoslibrary('v1');
 
-// const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-// const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-// const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
 // const client = new OAuth2Client(CLIENT_ID);
 
 // Set up your OAuth2 client for the Google Photos API
