@@ -3,37 +3,61 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
-// const url = require('url');
-
-// Import the Google Auth and Google APIs libraries
-const { OAuth2Client } = require('google-auth-library');
-const { google } = require('googleapis');
-// const photoslibrary = google.photoslibrary('v1');
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
-// const client = new OAuth2Client(CLIENT_ID);
-
-// Set up your OAuth2 client for the Google Photos API
-const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URL
-);
+const API_KEY = process.env.GOOGLE_API_KEY;
+const NODE_ENV = process.env.NODE_ENV;
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
 app.get('/config', (req, res) => {
   res.json({
-    NODE_ENV: process.env.NODE_ENV,
-    GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    REDIRECT_URL: process.env.REDIRECT_URL
+    NODE_ENV: NODE_ENV,
+    GOOGLE_API_KEY: GOOGLE_API_KEY,
+    GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
+    REDIRECT_URL: REDIRECT_URL
   });
 });
+
+//* Obtaining OAuth 2.0 access tokens
+// Import the Google Auth and Google APIs libraries
+const { google } = require('googleapis');
+// const { OAuth2Client } = require('google-auth-library');
+// const photoslibrary = google.photoslibrary('v1');
+
+// Set up your OAuth2 client for the API
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URL,
+);
+
+// Generate a url that asks permissions for the scope
+const authorizationUrl = oauth2Client.generateAuthUrl({
+  access_type: 'offline', // (gets refresh_token)
+  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  include_granted_scopes: true // Enable incremental authorization
+});
+
+// Redirect to Google's OAuth 2.0 server
+res.writeHead(301, { "Location": authorizationUrl });
+
+// Exchange authorization code for refresh and access tokens
+const url = require('url');
+
+// Receive the callback from Google's OAuth 2.0 server.
+if (req.url.startsWith('/oauth2callback')) {
+  // Handle the OAuth 2.0 server response
+  let q = url.parse(req.url, true).query;
+
+  // Get access and refresh tokens (if access_type is offline)
+  let { tokens } = await oauth2Client.getToken(q.code);
+  oauth2Client.setCredentials(tokens);
+}
 
 // Log serving file
 app.use((req, res, next) => {
