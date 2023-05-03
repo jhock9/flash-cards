@@ -88,9 +88,11 @@ app.use((req, res, next) => {
 // Server-side endpoint for exchanging Google Authorization code
 app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (req, res) => {
   const { code } = req.body;
+  console.log('Received code:', code);
 
   try {
     const { tokens } = await oauth2Client.getToken(code);
+    console.log('Received tokens:', tokens);
     // tokens object will contain access_token and refresh_token
     oauth2Client.setCredentials(tokens);
     res.json({ status: 'success', message: 'Token exchange successful', tokens });

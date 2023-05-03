@@ -72,7 +72,6 @@ const initCodeClient = () => { // or fetchAlbumList function
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     ux_mode: 'popup',
     callback: (codeResponse) => { 
-      console.log(codeResponse);
       console.log('Callback EXECUTED. codeResponse RECEIVED.');
 
       // Send auth code to your backend platform
@@ -88,8 +87,7 @@ const initCodeClient = () => { // or fetchAlbumList function
       xhr.send(new URLSearchParams({ code: codeResponse.code }));
     }
   })
-  console.log(codeClient);
-  // console.log('codeClient UPDATE');
+  console.log('codeClient UPDATED.');
 };
 
 const getAuthCode = () => {
