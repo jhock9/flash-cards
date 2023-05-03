@@ -21,7 +21,7 @@ const fetchConfig = async () => {
     googleApiKey = config.GOOGLE_API_KEY;
     googleClientSecret = config.GOOGLE_CLIENT_SECRET;
     redirectUrl = config.REDIRECT_URL;
-    console.log('Config:', config); 
+    console.log('Config loaded.'); 
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
@@ -58,9 +58,9 @@ const initGoogleSignIn = () => {
 const handleCredentialResponse = (response) => {
   console.log('Handling credential response...');
   try {
-    console.log("Encoded JWT ID token: " + response.credential)
+    console.log("Encoded JWT ID token loaded.")
     const userObject = jwt_decode(response.credential);
-    console.log("Decoded User Info: " + JSON.stringify(userObject, null, 2));
+    console.log('Decoded User Info loaded.');
 
     // setTokenClient();
 
@@ -80,13 +80,13 @@ const handleCredentialResponse = (response) => {
 //!! tokenClient = implicit grant model => token model
 let tokenClient;
 const initTokenClient = () => {  // or fetchAlbumList function -- html onload
-  console.log("initTokenClient called");
+  console.log('initTokenClient called');
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     callback: (tokenResponse) => {
-      console.log("Callback executed", tokenResponse);
-      access_token = tokenResponse.access_token; //GIS addon
+      console.log('Callback executed', tokenResponse);
+      access_token = tokenResponse.access_token; //? should I add a let here?
       console.log(access_token);
       // tokenClient.requestAccessToken();
 
@@ -98,19 +98,19 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
 
         xhr.onreadystatechange = () => {
           if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log("Success:", xhr.responseText);
+            console.log('Success:', xhr.responseText);
             const jsonResponse = JSON.parse(xhr.responseText);
             const albums = jsonResponse.albums;
-            console.log("Photo albums:", albums);
+            console.log('Photo albums:', albums);
           } else if (xhr.readyState === 4) {
-            console.error("Error in XMLHttpRequest:", xhr.statusText);
+            console.error('Error in XMLHttpRequest:', xhr.statusText);
           }
         };     
 
         xhr.send();
         // add params for list requirements (must have 10 photos, etc.)
       })();
-      console.log('Photo albums loaded');
+      console.log('Photo albums loaded'); //! didnt show on console
 
     }
   })
@@ -118,7 +118,7 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
 };
 
 const getToken = () => {
-  console.log("getToken called");
+  console.log('getToken called');
   tokenClient.requestAccessToken();
 }
 
