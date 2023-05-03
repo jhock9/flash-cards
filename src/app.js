@@ -1,7 +1,3 @@
-// const jwt_decode = require('jwt-decode')
-// import jwt_decode from "jwt-decode";
-// import jwt_decode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/dist/jwt-decode.min.js';
-
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
@@ -21,7 +17,7 @@ const fetchConfig = async () => {
     googleApiKey = config.GOOGLE_API_KEY;
     googleClientSecret = config.GOOGLE_CLIENT_SECRET;
     redirectUrl = config.REDIRECT_URL;
-    console.log('Config loaded.'); 
+    console.log('Config LOADED.'); 
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
@@ -44,9 +40,6 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
-  // document.getElementById('google-signin').addEventListener('click', () => {
-  //   getToken();
-  // });
   // google.accounts.id.prompt();
 };
 
@@ -56,13 +49,11 @@ const initGoogleSignIn = () => {
 // });
 
 const handleCredentialResponse = (response) => {
-  console.log('Handling credential response...');
+  console.log('handleCredentialResponse CALLED.');
   try {
-    console.log("Encoded JWT ID token loaded.")
+    console.log("Encoded JWT ID token LOADED.")
     const userObject = jwt_decode(response.credential);
-    console.log('Decoded User Info loaded.');
-
-    // setTokenClient();
+    console.log('Decoded User Info LOADED.');
 
   } catch (error) {
     console.error('Error decoding user credential:', error);
@@ -80,15 +71,14 @@ const handleCredentialResponse = (response) => {
 //!! tokenClient = implicit grant model => token model
 let tokenClient;
 const initTokenClient = () => {  // or fetchAlbumList function -- html onload
-  console.log('initTokenClient called');
+  console.log('initTokenClient CALLED.');
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     callback: (tokenResponse) => {
-      console.log('Callback executed', tokenResponse);
-      access_token = tokenResponse.access_token; //? should I add a let here?
+      console.log('Callback EXECUTED.');
+      let access_token = tokenResponse.access_token;
       console.log(access_token);
-      // tokenClient.requestAccessToken();
 
       // Load Albums List
       (() => {
@@ -98,10 +88,10 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
 
         xhr.onreadystatechange = () => {
           if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log('Success:', xhr.responseText);
+            console.log('Photo album data RETRIEVED');
             const jsonResponse = JSON.parse(xhr.responseText);
             const albums = jsonResponse.albums;
-            console.log('Photo albums:', albums);
+            console.log('Photo albums JSON.parsed LOADED.');
           } else if (xhr.readyState === 4) {
             console.error('Error in XMLHttpRequest:', xhr.statusText);
           }
@@ -110,15 +100,13 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
         xhr.send();
         // add params for list requirements (must have 10 photos, etc.)
       })();
-      console.log('Photo albums loaded'); //! didnt show on console
-
     }
   })
   console.log(tokenClient);
 };
 
 const getToken = () => {
-  console.log('getToken called');
+  console.log('getToken CALLED.');
   tokenClient.requestAccessToken();
 }
 
