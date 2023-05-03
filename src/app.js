@@ -50,10 +50,10 @@ const initGoogleSignIn = () => {
   // google.accounts.id.prompt();
 };
 
-submit.addEventListener('click', (e) => {
-  e.preventDefault(); // Prevent form submission
-  getToken();
-});
+// submit.addEventListener('click', (e) => {
+//   e.preventDefault(); // Prevent form submission
+//   getToken();
+// });
 
 const handleCredentialResponse = (response) => {
   console.log('Handling credential response...');
@@ -69,53 +69,14 @@ const handleCredentialResponse = (response) => {
   }
 
   initTokenClient();
+  getToken();
+
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   // fetchAlbumList();
 };
 
-
 //* GOOGLE AUTHORIZATION
-
-// //!! codeClient = authorization code model => code model
-// let codeClient;
-// const initCodeClient = () => { // or fetchAlbumList function -- html onload
-//   codeClient = google.accounts.oauth2.initCodeClient({
-//     client_id: googleClientID,
-//     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-//     ux_mode: 'popup',
-//     // set to the name of the function you will use to send authorization codes to your platform
-//     callback: (codeResponse) => { 
-//       console.log(codeResponse);
-
-//       // Send auth code to your backend platform
-//       let code_receiver_uri = '/api/authenticate';
-
-//       const xhr = new XMLHttpRequest();
-//       xhr.open('POST', code_receiver_uri, true);
-//       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-//       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-//       xhr.onload = () => {
-//         console.log('Signed in as: ' + xhr.responseText);
-//       };
-//       xhr.send('code=' + response.code);
-//       // After receipt, the code is exchanged for an access token and
-//       // refresh token, and the platform then updates this web app
-//       // running in user's browser with the requested calendar info.
-
-//     }
-//   })
-//   console.log(codeClient);
-// };
-
-// const getAuthCode = () => {
-//   codeClient.requestCode();
-// }
-
-// document.getElementById('google-signin').addEventListener('click', () => {
-//   getAuthCode();
-// });
-
 //!! tokenClient = implicit grant model => token model
 let tokenClient;
 const initTokenClient = () => {  // or fetchAlbumList function -- html onload
@@ -161,34 +122,44 @@ const getToken = () => {
   tokenClient.requestAccessToken();
 }
 
-// // Load Google Photos API client library
-// const loadGoogleApiClient = async () => {
-//   try {
-//     await gapi.client.load('https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest');
-//     console.log('Google Photos API loaded');
-//   } catch (error) {
-//     console.error('Error loading Google Photos API:', error);
-//   }
+// //!! codeClient = authorization code model => code model
+// let codeClient;
+// const initCodeClient = () => { // or fetchAlbumList function -- html onload
+//   codeClient = google.accounts.oauth2.initCodeClient({
+//     client_id: googleClientID,
+//     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+//     ux_mode: 'popup',
+//     // set to the name of the function you will use to send authorization codes to your platform
+//     callback: (codeResponse) => { 
+//       console.log(codeResponse);
+
+//       // Send auth code to your backend platform
+//       let code_receiver_uri = '/api/authenticate';
+
+//       const xhr = new XMLHttpRequest();
+//       xhr.open('POST', code_receiver_uri, true);
+//       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+//       xhr.onload = () => {
+//         console.log('Signed in as: ' + xhr.responseText);
+//       };
+//       xhr.send('code=' + response.code);
+//       // After receipt, the code is exchanged for an access token and
+//       // refresh token, and the platform then updates this web app
+//       // running in user's browser with the requested calendar info.
+
+//     }
+//   })
+//   console.log(codeClient);
 // };
 
-//   try {
-//     const serverResponse = await fetch('/api/authenticate', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ id_token }),
-//     });
-//     const serverResponseJson = await serverResponse.json(); 
-//     console.log('Server response JSON:', serverResponseJson); 
-//     if (!serverResponse.ok) {
-//       throw new Error('Server authentication failed');
-//     }
-//   } catch (error) {
-//     console.error('Error sending ID token to server:', error);
-//     return;
-//   }
+// const getAuthCode = () => {
+//   codeClient.requestCode();
+// }
 
+// document.getElementById('google-signin').addEventListener('click', () => {
+//   getAuthCode();
+// });
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
