@@ -54,7 +54,7 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  initTokenClient();
+  initCodeClient();
   getAuthCode();
 
   landingPage.classList.add('hide');
@@ -66,7 +66,7 @@ const handleCredentialResponse = (response) => {
 //!! codeClient = authorization code model => code model
 let codeClient;
 const initCodeClient = () => { // or fetchAlbumList function
-  console.log('initTokenClient CALLED.');
+  console.log('initCodeClient CALLED.');
   codeClient = google.accounts.oauth2.initCodeClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
