@@ -5,8 +5,8 @@ const app = express();
 const port = process.env.PORT || 3003;
 // const url = require('url');
 
-// // Import the Google Auth and Google APIs libraries
-// const { OAuth2Client } = require('google-auth-library');
+// Import the Google Auth and Google APIs libraries
+const { OAuth2Client } = require('google-auth-library');
 // const { google } = require('googleapis');
 // const photoslibrary = google.photoslibrary('v1');
 
@@ -15,12 +15,12 @@ const port = process.env.PORT || 3003;
 // const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
 // const client = new OAuth2Client(CLIENT_ID);
 
-// // Set up your OAuth2 client for the Google Photos API
-// const oauth2Client = new google.auth.OAuth2(
-//   CLIENT_ID,
-//   CLIENT_SECRET,
-//   REDIRECT_URL
-// );
+// Set up your OAuth2 client for the Google Photos API
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URL
+);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -85,30 +85,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// Server-side endpoint for handling ID token validation and authorization
-app.post('/api/authenticate', express.json(), async (req, res) => {
-  const { id_token } = req.body;
+// Server-side endpoint for exchanging Google Authorization code
+app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (req, res) => {
+  const { code } = req.body;
 
   try {
-    // Verify the ID token using the Google Auth Library
-    const ticket = await client.verifyIdToken({
-      idToken: id_token,
-      audience: CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-    const userId = payload['sub'];
-    // const accessToken = payload['at_hash']; // Use the provided access token
-
-    // // Set the access token for the OAuth2 client
-    // oauth2Client.setCredentials({
-    //   access_token: accessToken,
-    // });
-
-    // Returns a success response to the client-side application
-    res.json({ status: 'success', message: 'Authentication and authorization successful' });
+    const { tokens } = await oauth2Client.getToken(code);
+    // tokens object will contain access_token and refresh_token
+    oauth2Client.setCredentials(tokens);
+    res.json({ status: 'success', message: 'Token exchange successful', tokens });
   } catch (error) {
-    console.error('Error validating access token:', error);
-    res.status(401).json({ status: 'failure', message: 'Authentication failed' });
+    console.error('Error exchanging authorization code:', error);
+    res.status(500).json({ status: 'failure', message: 'Token exchange failed' });
   }
 });
 

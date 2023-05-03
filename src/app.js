@@ -43,11 +43,6 @@ const initGoogleSignIn = () => {
   // google.accounts.id.prompt();
 };
 
-// submit.addEventListener('click', (e) => {
-//   e.preventDefault(); // Prevent form submission
-//   getToken();
-// });
-
 const handleCredentialResponse = (response) => {
   console.log('handleCredentialResponse CALLED.');
   try {
@@ -60,7 +55,7 @@ const handleCredentialResponse = (response) => {
   }
 
   initTokenClient();
-  getToken();
+  getAuthCode();
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
@@ -68,86 +63,39 @@ const handleCredentialResponse = (response) => {
 };
 
 //* GOOGLE AUTHORIZATION
-//!! tokenClient = implicit grant model => token model
-let tokenClient;
-const initTokenClient = () => {  // or fetchAlbumList function -- html onload
+//!! codeClient = authorization code model => code model
+let codeClient;
+const initCodeClient = () => { // or fetchAlbumList function
   console.log('initTokenClient CALLED.');
-  tokenClient = google.accounts.oauth2.initTokenClient({
+  codeClient = google.accounts.oauth2.initCodeClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-    callback: (tokenResponse) => {
-      console.log('Callback EXECUTED.');
-      let access_token = tokenResponse.access_token;
-      console.log(access_token);
+    ux_mode: 'popup',
+    callback: (codeResponse) => { 
+      console.log(codeResponse);
+      console.log('Callback EXECUTED. codeResponse RECEIVED.');
 
-      // Load Albums List
-      (() => {
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
-        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+      // Send auth code to your backend platform
+      let code_receiver_uri = '/api/exchange-code';
 
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log('Photo album data RETRIEVED');
-            const jsonResponse = JSON.parse(xhr.responseText);
-            const albums = jsonResponse.albums;
-            console.log('Photo albums JSON.parsed LOADED.');
-          } else if (xhr.readyState === 4) {
-            console.error('Error in XMLHttpRequest:', xhr.statusText);
-          }
-        };     
-
-        xhr.send();
-        // add params for list requirements (must have 10 photos, etc.)
-      })();
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', code_receiver_uri, true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.onload = () => {
+        console.log('Signed in as: ' + xhr.responseText);
+      };
+      xhr.send(new URLSearchParams({ code: codeResponse.code }));
     }
   })
-  console.log(tokenClient);
+  console.log(codeClient);
+  // console.log('codeClient UPDATE');
 };
 
-const getToken = () => {
-  console.log('getToken CALLED.');
-  tokenClient.requestAccessToken();
+const getAuthCode = () => {
+  console.log('getAuthCode CALLED.');
+  codeClient.requestCode();
 }
-
-// //!! codeClient = authorization code model => code model
-// let codeClient;
-// const initCodeClient = () => { // or fetchAlbumList function -- html onload
-//   codeClient = google.accounts.oauth2.initCodeClient({
-//     client_id: googleClientID,
-//     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-//     ux_mode: 'popup',
-//     // set to the name of the function you will use to send authorization codes to your platform
-//     callback: (codeResponse) => { 
-//       console.log(codeResponse);
-
-//       // Send auth code to your backend platform
-//       let code_receiver_uri = '/api/authenticate';
-
-//       const xhr = new XMLHttpRequest();
-//       xhr.open('POST', code_receiver_uri, true);
-//       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-//       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-//       xhr.onload = () => {
-//         console.log('Signed in as: ' + xhr.responseText);
-//       };
-//       xhr.send('code=' + response.code);
-//       // After receipt, the code is exchanged for an access token and
-//       // refresh token, and the platform then updates this web app
-//       // running in user's browser with the requested calendar info.
-
-//     }
-//   })
-//   console.log(codeClient);
-// };
-
-// const getAuthCode = () => {
-//   codeClient.requestCode();
-// }
-
-// document.getElementById('google-signin').addEventListener('click', () => {
-//   getAuthCode();
-// });
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
