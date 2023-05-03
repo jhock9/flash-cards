@@ -5,7 +5,7 @@ const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
 
-let nodeEnv, googleClientID, googleApiKey, googleClientSecret, , redirectUrl;
+let nodeEnv, googleClientID, googleApiKey, googleClientSecret, redirectUrl;
 
 const fetchConfig = async () => {
   try {
