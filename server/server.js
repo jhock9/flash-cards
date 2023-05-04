@@ -16,10 +16,10 @@ app.use(express.static(path.join(__dirname, '../src/')));
 app.get('/config', (req, res) => {
   res.json({
     NODE_ENV: NODE_ENV,
-    GOOGLE_API_KEY: GOOGLE_API_KEY,
-    GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
-    REDIRECT_URL: REDIRECT_URL
+    GOOGLE_API_KEY: API_KEY,
+    GOOGLE_CLIENT_ID: CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: CLIENT_SECRET,
+    REDIRECT_URL: REDIRECT_URL,
   });
 });
 
