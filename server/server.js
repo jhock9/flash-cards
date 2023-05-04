@@ -26,7 +26,6 @@ app.get('/config', (req, res) => {
 //* Obtaining OAuth 2.0 access tokens
 // Import the Google Auth and Google APIs libraries
 const { google } = require('googleapis');
-// const { OAuth2Client } = require('google-auth-library');
 // const photoslibrary = google.photoslibrary('v1');
 
 // Set up your OAuth2 client for the API
@@ -45,22 +44,44 @@ const authorizationUrl = oauth2Client.generateAuthUrl({
 
 // Redirect to Google's OAuth 2.0 server
 app.get('/auth', (req, res) => {
-  res.writeHead(301, { "Location": authorizationUrl });
-  res.end();
+  console.log('Redirecting to Google\'s OAuth 2.0 server:', authorizationUrl);
+  // res.writeHead(301, { "Location": authorizationUrl });
+  // res.end();
+  res.redirect(301, authorizationUrl); // swapped this for the two lines above
 });
 
 // Exchange authorization code for refresh and access tokens
 const url = require('url');
 
 // Receive the callback from Google's OAuth 2.0 server.
-if (req.url.startsWith('/oauth2callback')) {
+app.get('/oauth2callback', async (req, res) => {
+  console.log('Handling the OAuth 2.0 server response');
   // Handle the OAuth 2.0 server response
   let q = url.parse(req.url, true).query;
+  console.log('Received query:', q);
 
   // Get access and refresh tokens (if access_type is offline)
-  let { tokens } = await oauth2Client.getToken(q.code);
-  oauth2Client.setCredentials(tokens);
-}
+  try {
+    let { tokens } = await oauth2Client.getToken(q.code);
+    console.log('Received tokens:', tokens);
+    oauth2Client.setCredentials(tokens);
+    console.log('Credentials set for the OAuth2 client');
+    res.redirect('/'); // Redirect user to the home page after successful token exchange
+  } catch (error) {
+    console.error('Error exchanging authorization code:', error);
+    res.status(500).send('Token exchange failed');
+  }
+});
+
+
+// if (req.url.startsWith('/oauth2callback')) {
+//   // Handle the OAuth 2.0 server response
+//   let q = url.parse(req.url, true).query;
+
+//   // Get access and refresh tokens (if access_type is offline)
+//   let { tokens } = await oauth2Client.getToken(q.code);
+//   oauth2Client.setCredentials(tokens);
+// }
 
 // Log serving file
 app.use((req, res, next) => {
@@ -122,6 +143,7 @@ app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (r
     console.log('Received tokens:', tokens);
     // tokens object will contain access_token and refresh_token
     oauth2Client.setCredentials(tokens);
+    console.log('Credentials set for the OAuth2 client');
     res.json({ status: 'success', message: 'Token exchange successful', tokens });
   } catch (error) {
     console.error('Error exchanging authorization code:', error);
@@ -141,17 +163,6 @@ app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (r
 //     res.status(500).json({ status: 'failure', message: 'Failed to fetch albums' });
 //   }
 // });
-
-// //*Exchanging authorization code for refresh and access tokens
-// // Receive the callback from Google's OAuth 2.0 server.
-// if (req.url.startsWith('/oauth2callback')) {
-//   // Handle the OAuth 2.0 server response
-//   let q = url.parse(req.url, true).query;
-
-//   // Get access and refresh tokens (if access_type is offline)
-//   let { tokens } = await oauth2Client.getToken(q.code);
-//   oauth2Client.setCredentials(tokens);
-// }
 
 // Start server
 app.listen(port, () => {
