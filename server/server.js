@@ -61,16 +61,18 @@ app.get('/oauth2callback', async (req, res) => {
   console.log('Received query:', q);
 
   // Get access and refresh tokens (if access_type is offline)
-  // try {
-    let { tokens } = await oauth2Client.getToken(q.code);
-    console.log('Received tokens:', tokens);
-    oauth2Client.setCredentials(tokens);
-    console.log('Credentials set for the OAuth2 client');
-    // res.redirect('/'); // Redirect user to the home page after successful token exchange
-  // } catch (error) {
-  //   console.error('Error exchanging authorization code:', error);
-  //   res.status(500).send('Token exchange failed');
-  // }
+  (async () => {
+    try {
+      let { tokens } = await oauth2Client.getToken(q.code);
+      console.log('Received tokens:', tokens);
+      oauth2Client.setCredentials(tokens);
+      console.log('Credentials set for the OAuth2 client');
+      res.redirect('/'); // Redirect user to the home page after successful token exchange
+    } catch (error) {
+      console.error('Error exchanging authorization code:', error);
+      res.status(500).send('Token exchange failed');
+    }
+  })();
 });
 
 
@@ -138,17 +140,19 @@ app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (r
   const { code } = req.body;
   console.log('Received code:', code);
 
-  // try {
-    const { tokens } = await oauth2Client.getToken(code);
-    console.log('Received tokens:', tokens);
-    // tokens object will contain access_token and refresh_token
-    oauth2Client.setCredentials(tokens);
-    console.log('Credentials set for the OAuth2 client');
-    res.json({ status: 'success', message: 'Token exchange successful', tokens });
-  // } catch (error) {
-  //   console.error('Error exchanging authorization code:', error);
-  //   res.status(500).json({ status: 'failure', message: 'Token exchange failed' });
-  // }
+  (async () => {
+    try {
+      const { tokens } = await oauth2Client.getToken(code);
+      console.log('Received tokens:', tokens);
+      // tokens object will contain access_token and refresh_token
+      oauth2Client.setCredentials(tokens);
+      console.log('Credentials set for the OAuth2 client');
+      res.json({ status: 'success', message: 'Token exchange successful', tokens });
+    } catch (error) {
+      console.error('Error exchanging authorization code:', error);
+      res.status(500).json({ status: 'failure', message: 'Token exchange failed' });
+    }
+  })();
 });
 
 // // Server-side endpoint for fetching albums from Google Photos API
