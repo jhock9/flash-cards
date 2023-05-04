@@ -13,8 +13,8 @@ const fetchConfig = async () => {
     const config = await response.json();
   
     nodeEnv = config.NODE_ENV;
-    googleClientID = config.GOOGLE_CLIENT_ID;
     googleApiKey = config.GOOGLE_API_KEY;
+    googleClientID = config.GOOGLE_CLIENT_ID;
     googleClientSecret = config.GOOGLE_CLIENT_SECRET;
     redirectUrl = config.REDIRECT_URL;
     console.log('Config LOADED.'); 

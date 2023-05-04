@@ -4,11 +4,11 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
+const NODE_ENV = process.env.NODE_ENV;
+const API_KEY = process.env.GOOGLE_API_KEY;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_URL = process.env.GOOGLE_REDIRECT_URL;
-const API_KEY = process.env.GOOGLE_API_KEY;
-const NODE_ENV = process.env.NODE_ENV;
+const REDIRECT_URL = process.env.REDIRECT_URL;
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
