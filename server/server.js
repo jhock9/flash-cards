@@ -44,6 +44,7 @@ const authorizationUrl = oauth2Client.generateAuthUrl({
   include_granted_scopes: true // Enable incremental authorization
 });
 
+//!! this is where it falls apart
 // Redirect to Google's OAuth 2.0 server
 app.get('/auth', (req, res) => {
   console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
@@ -76,36 +77,28 @@ app.get('/oauth2callback', async (req, res) => {
     }
   })();
 });
+//!! this is where it falls apart
 
-// if (req.url.startsWith('/oauth2callback')) {
-//   // Handle the OAuth 2.0 server response
-//   let q = url.parse(req.url, true).query;
+// Redirect to Google's OAuth 2.0 server
+  console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
+  res.writeHead(301, { "Location": authorizationUrl });
 
-//   // Get access and refresh tokens (if access_type is offline)
-//   let { tokens } = await oauth2Client.getToken(q.code);
-//   oauth2Client.setCredentials(tokens);
-// }
+// Exchange authorization code for refresh and access tokens
+const url = require('url');
 
-// // Server-side endpoint for exchanging Google Authorization code
-// app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (req, res) => {
-//   const { code } = req.body;
-//   console.log('Received code:', code);
+console.log('Handling the OAuth 2.0 server response');
+if (req.url.startsWith('/oauth2callback')) {
+  // Handle the OAuth 2.0 server response
+  let q = url.parse(req.url, true).query;
+  console.log('Received query:', q);
 
-//   (async () => {
-//     try {
-//       console.log('Using redirect_uri:', oauth2Client.redirectUri);
-//       const { tokens } = await oauth2Client.getToken(code, { redirect_uri: 'https://vb-mapp-flash-cards.herokuapp.com/oauth2callback' });
-//       console.log('Received tokens:', tokens);
-//       // tokens object will contain access_token and refresh_token
-//       oauth2Client.setCredentials(tokens);
-//       console.log('Credentials set for the OAuth2 client');
-//       res.json({ status: 'success', message: 'Token exchange successful', tokens });
-//     } catch (error) {
-//       console.error('Error exchanging authorization code:', error);
-//       res.status(500).json({ status: 'failure', message: 'Token exchange failed' });
-//     }
-//   })();
-// });
+  // Get access and refresh tokens (if access_type is offline)
+  let { tokens } = await oauth2Client.getToken(q.code);
+  console.log('Received tokens:', tokens);
+  oauth2Client.setCredentials(tokens);
+  console.log('Credentials set for the OAuth2 client');
+}
+//!trying above
 
 // // Server-side endpoint for fetching albums from Google Photos API
 // app.get('/api/albums', async (req, res) => {
@@ -173,7 +166,6 @@ app.use((req, res, next) => {
 // Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
-  console.log('Using redirect URL:', REDIRECT_URL);
 });
 
 // Error handler
