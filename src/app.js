@@ -75,7 +75,7 @@ const initCodeClient = () => { // or fetchAlbumList function
       console.log('Callback EXECUTED. codeResponse RECEIVED.');
 
       // Send auth code to your backend platform
-      let code_receiver_uri = '/api/exchange-code';
+      let code_receiver_uri = '/api/exchange-code'; //? IS THIS CORRECT?
 
       const xhr = new XMLHttpRequest();
       xhr.open('POST', code_receiver_uri, true);
@@ -84,7 +84,8 @@ const initCodeClient = () => { // or fetchAlbumList function
       xhr.onload = () => {
         console.log('Signed in as: ' + xhr.responseText);
       };
-      xhr.send(new URLSearchParams({ code: codeResponse.code }));
+      xhr.send('code=' + codeResponse.code);
+      console.log('code: ' + codeResponse.code)
     }
   })
   console.log('codeClient UPDATED.');
