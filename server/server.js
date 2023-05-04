@@ -28,20 +28,25 @@ app.get('/oauth2callback', async (req, res) => {
   // Extract the code from the URL
   const code = req.query.code;
 
-  try {
-    // Exchange the code for tokens
-    const { tokens } = await oauth2Client.getToken(code);
-    console.log('Received tokens:', tokens);
-    
-    // Set the credentials for the OAuth2 client
-    oauth2Client.setCredentials(tokens);
-    
-    // Redirect the user to the main page of your app
-    res.redirect('/');
-  } catch (error) {
-    console.error('Error exchanging authorization code:', error);
-    res.status(500).send('Error exchanging the authorization code for tokens');
+  const getTokens = async() => {
+    try {
+      // Exchange the code for tokens
+      const { tokens } = await oauth2Client.getToken(code);
+      console.log('Received tokens:', tokens);
+      
+      // Set the credentials for the OAuth2 client
+      oauth2Client.setCredentials(tokens);
+      
+      // Redirect the user to the main page of your app
+      res.redirect('/');
+    } catch (error) {
+      console.error('Error exchanging authorization code:', error);
+      res.status(500).send('Error exchanging the authorization code for tokens');
+    }
   }
+
+  getTokens();
+
 });
 
 // Import the Google Auth and Google APIs libraries
