@@ -9,6 +9,7 @@ const API_KEY = process.env.GOOGLE_API_KEY;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
+console.log('REDIRECT_URL:', REDIRECT_URL);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -34,6 +35,7 @@ const oauth2Client = new google.auth.OAuth2(
   CLIENT_SECRET,
   REDIRECT_URL,
 );
+console.log('OAuth2 client created with redirect URL:', oauth2Client.redirectUri);
 
 // Generate a url that asks permissions for the scope
 const authorizationUrl = oauth2Client.generateAuthUrl({
@@ -142,7 +144,8 @@ app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (r
 
   (async () => {
     try {
-      const { tokens } = await oauth2Client.getToken(code);
+      console.log('Using redirect_uri:', oauth2Client.redirectUri);
+      const { tokens } = await oauth2Client.getToken(code, { redirect_uri: 'https://vb-mapp-flash-cards.herokuapp.com/oauth2callback' });
       console.log('Received tokens:', tokens);
       // tokens object will contain access_token and refresh_token
       oauth2Client.setCredentials(tokens);
@@ -171,6 +174,7 @@ app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (r
 // Start server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+  console.log('Using redirect URL:', REDIRECT_URL);
 });
 
 // Error handler
