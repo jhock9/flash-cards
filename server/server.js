@@ -9,7 +9,7 @@ const API_KEY = process.env.GOOGLE_API_KEY;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
-console.log('REDIRECT_URL:', REDIRECT_URL);
+// console.log('REDIRECT_URL:', REDIRECT_URL);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -26,79 +26,79 @@ app.get('/config', (req, res) => {
 
 //* Obtaining OAuth 2.0 access tokens
 // Import the Google Auth and Google APIs libraries
-const { google } = require('googleapis');
-// const photoslibrary = google.photoslibrary('v1');
+// const { google } = require('googleapis');
+// // const photoslibrary = google.photoslibrary('v1');
 
-// Set up your OAuth2 client for the API
-const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URL,
-);
-console.log('OAuth2 client created with redirect URL:', oauth2Client.redirectUri);
+// // Set up your OAuth2 client for the API
+// const oauth2Client = new google.auth.OAuth2(
+//   CLIENT_ID,
+//   CLIENT_SECRET,
+//   REDIRECT_URL,
+// );
+// console.log('OAuth2 client created with redirect URL:', oauth2Client.redirectUri);
 
-// Generate a url that asks permissions for the scope
-const authorizationUrl = oauth2Client.generateAuthUrl({
-  access_type: 'offline', // (gets refresh_token)
-  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  include_granted_scopes: true // Enable incremental authorization
-});
+// // Generate a url that asks permissions for the scope
+// const authorizationUrl = oauth2Client.generateAuthUrl({
+//   access_type: 'offline', // (gets refresh_token)
+//   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+//   include_granted_scopes: true // Enable incremental authorization
+// });
 
-//!! this is where it falls apart
-// Redirect to Google's OAuth 2.0 server
-app.get('/auth', (req, res) => {
-  console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
-  // res.writeHead(301, { "Location": authorizationUrl });
-  // res.end();
-  res.redirect(301, authorizationUrl); // swapped this for the two lines above
-});
+// //!! this is where it falls apart
+// // Redirect to Google's OAuth 2.0 server
+// app.get('/auth', (req, res) => {
+//   console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
+//   // res.writeHead(301, { "Location": authorizationUrl });
+//   // res.end();
+//   res.redirect(301, authorizationUrl); // swapped this for the two lines above
+// });
 
-// Exchange authorization code for refresh and access tokens
-const url = require('url');
+// // Exchange authorization code for refresh and access tokens
+// const url = require('url');
 
-// Receive the callback from Google's OAuth 2.0 server.
-app.get('/oauth2callback', async (req, res) => {
-  console.log('Handling the OAuth 2.0 server response');
-  // Handle the OAuth 2.0 server response
-  let q = url.parse(req.url, true).query;
-  console.log('Received query:', q);
+// // Receive the callback from Google's OAuth 2.0 server.
+// app.get('/oauth2callback', async (req, res) => {
+//   console.log('Handling the OAuth 2.0 server response');
+//   // Handle the OAuth 2.0 server response
+//   let q = url.parse(req.url, true).query;
+//   console.log('Received query:', q);
 
-  // Get access and refresh tokens (if access_type is offline)
-  (async () => {
-    try {
-      let { tokens } = await oauth2Client.getToken(q.code);
-      console.log('Received tokens:', tokens);
-      oauth2Client.setCredentials(tokens);
-      console.log('Credentials set for the OAuth2 client');
-      res.redirect('/'); // Redirect user to the home page after successful token exchange
-    } catch (error) {
-      console.error('Error exchanging authorization code:', error);
-      res.status(500).send('Token exchange failed');
-    }
-  })();
-});
-//!! this is where it falls apart
+//   // Get access and refresh tokens (if access_type is offline)
+//   (async () => {
+//     try {
+//       let { tokens } = await oauth2Client.getToken(q.code);
+//       console.log('Received tokens:', tokens);
+//       oauth2Client.setCredentials(tokens);
+//       console.log('Credentials set for the OAuth2 client');
+//       res.redirect('/'); // Redirect user to the home page after successful token exchange
+//     } catch (error) {
+//       console.error('Error exchanging authorization code:', error);
+//       res.status(500).send('Token exchange failed');
+//     }
+//   })();
+// });
+// //!! this is where it falls apart
 
-// Redirect to Google's OAuth 2.0 server
-  console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
-  res.writeHead(301, { "Location": authorizationUrl });
+// // Redirect to Google's OAuth 2.0 server
+//   console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
+//   res.writeHead(301, { "Location": authorizationUrl });
 
-// Exchange authorization code for refresh and access tokens
-const url = require('url');
+// // Exchange authorization code for refresh and access tokens
+// const url = require('url');
 
-console.log('Handling the OAuth 2.0 server response');
-if (req.url.startsWith('/oauth2callback')) {
-  // Handle the OAuth 2.0 server response
-  let q = url.parse(req.url, true).query;
-  console.log('Received query:', q);
+// console.log('Handling the OAuth 2.0 server response');
+// if (req.url.startsWith('/oauth2callback')) {
+//   // Handle the OAuth 2.0 server response
+//   let q = url.parse(req.url, true).query;
+//   console.log('Received query:', q);
 
-  // Get access and refresh tokens (if access_type is offline)
-  let { tokens } = await oauth2Client.getToken(q.code);
-  console.log('Received tokens:', tokens);
-  oauth2Client.setCredentials(tokens);
-  console.log('Credentials set for the OAuth2 client');
-}
-//!trying above
+//   // Get access and refresh tokens (if access_type is offline)
+//   let { tokens } = await oauth2Client.getToken(q.code);
+//   console.log('Received tokens:', tokens);
+//   oauth2Client.setCredentials(tokens);
+//   console.log('Credentials set for the OAuth2 client');
+// }
+// //!trying above
 
 // // Server-side endpoint for fetching albums from Google Photos API
 // app.get('/api/albums', async (req, res) => {

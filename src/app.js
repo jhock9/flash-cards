@@ -75,7 +75,7 @@ const initCodeClient = () => { // or fetchAlbumList function
       console.log('Callback EXECUTED. codeResponse RECEIVED.');
 
       // Send auth code to your backend platform
-      let code_receiver_uri = '/oauth2callback'; //? IS THIS CORRECT?
+      let code_receiver_uri = '/oauth2callback';
 
       const xhr = new XMLHttpRequest();
       xhr.open('POST', code_receiver_uri, true);
