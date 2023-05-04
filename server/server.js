@@ -46,7 +46,7 @@ const authorizationUrl = oauth2Client.generateAuthUrl({
 
 // Redirect to Google's OAuth 2.0 server
 app.get('/auth', (req, res) => {
-  console.log('Redirecting to Google\'s OAuth 2.0 server:', authorizationUrl);
+  console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
   // res.writeHead(301, { "Location": authorizationUrl });
   // res.end();
   res.redirect(301, authorizationUrl); // swapped this for the two lines above
@@ -77,7 +77,6 @@ app.get('/oauth2callback', async (req, res) => {
   })();
 });
 
-
 // if (req.url.startsWith('/oauth2callback')) {
 //   // Handle the OAuth 2.0 server response
 //   let q = url.parse(req.url, true).query;
@@ -86,6 +85,40 @@ app.get('/oauth2callback', async (req, res) => {
 //   let { tokens } = await oauth2Client.getToken(q.code);
 //   oauth2Client.setCredentials(tokens);
 // }
+
+// // Server-side endpoint for exchanging Google Authorization code
+// app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (req, res) => {
+//   const { code } = req.body;
+//   console.log('Received code:', code);
+
+//   (async () => {
+//     try {
+//       console.log('Using redirect_uri:', oauth2Client.redirectUri);
+//       const { tokens } = await oauth2Client.getToken(code, { redirect_uri: 'https://vb-mapp-flash-cards.herokuapp.com/oauth2callback' });
+//       console.log('Received tokens:', tokens);
+//       // tokens object will contain access_token and refresh_token
+//       oauth2Client.setCredentials(tokens);
+//       console.log('Credentials set for the OAuth2 client');
+//       res.json({ status: 'success', message: 'Token exchange successful', tokens });
+//     } catch (error) {
+//       console.error('Error exchanging authorization code:', error);
+//       res.status(500).json({ status: 'failure', message: 'Token exchange failed' });
+//     }
+//   })();
+// });
+
+// // Server-side endpoint for fetching albums from Google Photos API
+// app.get('/api/albums', async (req, res) => {
+//   try {
+//     const response = await photoslibrary.albums.list({
+//       auth: oauth2Client
+//     });
+//     res.json(response.data);
+//   } catch (error) {
+//     console.error('Error fetching albums:', error);
+//     res.status(500).json({ status: 'failure', message: 'Failed to fetch albums' });
+//   }
+// });
 
 // Log serving file
 app.use((req, res, next) => {
@@ -136,40 +169,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-// Server-side endpoint for exchanging Google Authorization code
-app.post('/api/exchange-code', express.urlencoded({ extended: false }), async (req, res) => {
-  const { code } = req.body;
-  console.log('Received code:', code);
-
-  (async () => {
-    try {
-      console.log('Using redirect_uri:', oauth2Client.redirectUri);
-      const { tokens } = await oauth2Client.getToken(code, { redirect_uri: 'https://vb-mapp-flash-cards.herokuapp.com/oauth2callback' });
-      console.log('Received tokens:', tokens);
-      // tokens object will contain access_token and refresh_token
-      oauth2Client.setCredentials(tokens);
-      console.log('Credentials set for the OAuth2 client');
-      res.json({ status: 'success', message: 'Token exchange successful', tokens });
-    } catch (error) {
-      console.error('Error exchanging authorization code:', error);
-      res.status(500).json({ status: 'failure', message: 'Token exchange failed' });
-    }
-  })();
-});
-
-// // Server-side endpoint for fetching albums from Google Photos API
-// app.get('/api/albums', async (req, res) => {
-//   try {
-//     const response = await photoslibrary.albums.list({
-//       auth: oauth2Client
-//     });
-//     res.json(response.data);
-//   } catch (error) {
-//     console.error('Error fetching albums:', error);
-//     res.status(500).json({ status: 'failure', message: 'Failed to fetch albums' });
-//   }
-// });
 
 // Start server
 app.listen(port, () => {
