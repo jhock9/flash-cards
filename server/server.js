@@ -106,7 +106,7 @@ app.post('/oauth2callback', express.json(), async (req, res) => {
 });
 
 // Server-side endpoint for fetching albums from Google Photos API
-const photoslibrary = google.photoslibrary('v1');
+const photos = google.photoslibrary({version: 'v1', auth: oauth2Client});
 
 app.get('/api/list-albums', async (req, res) => {
   try {
