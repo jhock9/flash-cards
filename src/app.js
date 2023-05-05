@@ -5,19 +5,15 @@ const objectList = document.querySelector('.object-list');
 const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
 
-let nodeEnv, googleClientID, googleApiKey, googleClientSecret, redirectUrl;
+let googleClientID;
 
 const fetchConfig = async () => {
   try {
     const response = await fetch('/config');
     const config = await response.json();
   
-    nodeEnv = config.NODE_ENV;
-    googleApiKey = config.GOOGLE_API_KEY;
     googleClientID = config.GOOGLE_CLIENT_ID;
-    googleClientSecret = config.GOOGLE_CLIENT_SECRET;
-    redirectUrl = config.REDIRECT_URL;
-    console.log('Config LOADED.'); 
+    console.log('Google Client ID LOADED.'); 
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {

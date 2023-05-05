@@ -4,8 +4,6 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3003;
 
-const NODE_ENV = process.env.NODE_ENV;
-const API_KEY = process.env.GOOGLE_API_KEY;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
@@ -15,18 +13,13 @@ app.use(express.static(path.join(__dirname, '../src/')));
 
 app.get('/config', (req, res) => {
   res.json({
-    NODE_ENV: NODE_ENV,
-    GOOGLE_API_KEY: API_KEY,
     GOOGLE_CLIENT_ID: CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: CLIENT_SECRET,
-    REDIRECT_URL: REDIRECT_URL,
   });
 });
 
 //* Obtaining OAuth 2.0 access tokens
-// Import the Google Auth and Google APIs libraries
+// Import the Google Auth APIs libraries
 const { google } = require('googleapis');
-// // const photoslibrary = google.photoslibrary('v1');
 
 // Set up your OAuth2 client for the API
 const oauth2Client = new google.auth.OAuth2(
@@ -113,20 +106,26 @@ app.post('/oauth2callback', express.json(), async (req, res) => {
 });
 
 // Server-side endpoint for fetching albums from Google Photos API
-const photos = google.photos({version: 'v1', auth: oauth2Client});
+const photoslibrary = google.photoslibrary('v1');
 
 app.get('/api/list-albums', async (req, res) => {
   try {
-    const response = await photos.albums.list({
+    const response = await photoslibrary.albums.list({
       auth: oauth2Client,
     });
 
     res.status(200).json(response.data);
   } catch (error) {
     console.error('Error calling Google Photos API:', error);
-    res.status(500).send('Error calling Google Photos API.');
+
+    if (error.code === 401) {
+      res.status(401).send('Unauthorized: Access token expired or revoked.');
+    } else {
+      res.status(500).send('Error calling Google Photos API.');
+    }
   }
 });
+
 
 // Log serving file
 app.use((req, res, next) => {
@@ -142,41 +141,58 @@ app.use((req, res, next) => {
   next();
 });
 
-//* Setting content-type headers for files
+// Setting content-type headers for files
 app.use((req, res, next) => {
-  if (req.url.endsWith('.js')) {
-    res.setHeader('Content-Type', 'application/javascript');
+  const contentTypeMap = {
+    '.js': 'application/javascript',
+    '.html': 'text/html',
+    '.css': 'text/css',
+    '.png': 'image/png',
+    '.ico': 'image/x-icon',
+  };
+
+  const ext = path.extname(req.url);
+  if (contentTypeMap[ext]) {
+    res.setHeader('Content-Type', contentTypeMap[ext]);
   }
+
   next();
 });
 
-app.use((req, res, next) => {
-  if (req.url.endsWith('.html')) {
-    res.setHeader('Content-Type', 'text/html');
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (req.url.endsWith('.js')) {
+//     res.setHeader('Content-Type', 'application/javascript');
+//   }
+//   next();
+// });
 
-app.use((req, res, next) => {
-  if (req.url.endsWith('.css')) {
-    res.setHeader('Content-Type', 'text/css');
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (req.url.endsWith('.html')) {
+//     res.setHeader('Content-Type', 'text/html');
+//   }
+//   next();
+// });
 
-app.use((req, res, next) => {
-  if (req.url.endsWith('.png')) {
-    res.setHeader('Content-Type', 'image/png');
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (req.url.endsWith('.css')) {
+//     res.setHeader('Content-Type', 'text/css');
+//   }
+//   next();
+// });
 
-app.use((req, res, next) => {
-  if (req.url.endsWith('.ico')) {
-    res.setHeader('Content-Type', 'image/x-icon');
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (req.url.endsWith('.png')) {
+//     res.setHeader('Content-Type', 'image/png');
+//   }
+//   next();
+// });
+
+// app.use((req, res, next) => {
+//   if (req.url.endsWith('.ico')) {
+//     res.setHeader('Content-Type', 'image/x-icon');
+//   }
+//   next();
+// });
 
 // Start server
 app.listen(port, () => {
