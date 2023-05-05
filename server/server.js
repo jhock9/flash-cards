@@ -30,11 +30,12 @@ const oauth2Client = new google.auth.OAuth2(
 );
 console.log('OAuth2 client CREATED.');
 
+// Exchange authorization code for refresh and access tokens
 app.post('/oauth2callback', express.json(), async (req, res) => {
   console.log('HANDLING OAuth 2.0 server response');
   try {
-    const code = req.body.code;
-    const { tokens } = await oauth2Client.getToken(code);
+    let q = url.parse(req.url, true).query;
+    const { tokens } = await oauth2Client.getToken(q.code);
     oauth2Client.setCredentials(tokens);
     res.status(200).send('Tokens obtained.');
     console.log('Tokens RECEIVED.', tokens);
@@ -44,7 +45,7 @@ app.post('/oauth2callback', express.json(), async (req, res) => {
   }
 });
 
-// Server-side endpoint for fetching albums from Google Photos API
+// Fetch albums from Google Photos API
 app.get('/api/list-albums', async (req, res) => {
   try {
     const url = 'https://photoslibrary.googleapis.com/v1/albums';
