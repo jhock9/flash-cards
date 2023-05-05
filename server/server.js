@@ -83,22 +83,21 @@ app.get('/config', (req, res) => {
 //   console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
 //   res.writeHead(301, { "Location": authorizationUrl });
 
-// // Exchange authorization code for refresh and access tokens
-// const url = require('url');
+// Exchange authorization code for refresh and access tokens
+const url = require('url');
 
-// console.log('Handling the OAuth 2.0 server response');
-// if (req.url.startsWith('/oauth2callback')) {
-//   // Handle the OAuth 2.0 server response
-//   let q = url.parse(req.url, true).query;
-//   console.log('Received query:', q);
+console.log('Handling the OAuth 2.0 server response');
+if (req.url.startsWith('/oauth2callback')) {
+  // Handle the OAuth 2.0 server response
+  let q = url.parse(req.url, true).query;
+  console.log('Received query:', q);
 
-//   // Get access and refresh tokens (if access_type is offline)
-//   let { tokens } = await oauth2Client.getToken(q.code);
-//   console.log('Received tokens:', tokens);
-//   oauth2Client.setCredentials(tokens);
-//   console.log('Credentials set for the OAuth2 client');
-// }
-// //!trying above
+  // Get access and refresh tokens (if access_type is offline)
+  let { tokens } = await oauth2Client.getToken(q.code);
+  console.log('Received tokens:', tokens);
+  oauth2Client.setCredentials(tokens);
+  console.log('Credentials set for the OAuth2 client');
+}
 
 // // Server-side endpoint for fetching albums from Google Photos API
 // app.get('/api/albums', async (req, res) => {

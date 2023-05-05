@@ -63,7 +63,6 @@ const handleCredentialResponse = (response) => {
 };
 
 //* GOOGLE AUTHORIZATION
-//!! codeClient = authorization code model => code model
 let codeClient;
 const initCodeClient = () => { // or fetchAlbumList function
   console.log('initCodeClient CALLED.');
