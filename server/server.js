@@ -110,7 +110,7 @@ const photos = google.photoslibrary({version: 'v1', auth: oauth2Client});
 
 app.get('/api/list-albums', async (req, res) => {
   try {
-    const response = await photoslibrary.albums.list({
+    const response = await photos.albums.list({
       auth: oauth2Client,
     });
 
