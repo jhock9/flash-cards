@@ -1,6 +1,7 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
+const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3003;
 
@@ -29,68 +30,6 @@ const oauth2Client = new google.auth.OAuth2(
 );
 console.log('OAuth2 client CREATED.');
 
-// // Generate a url that asks permissions for the scope
-// const authorizationUrl = oauth2Client.generateAuthUrl({
-//   access_type: 'offline', // (gets refresh_token)
-//   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-//   include_granted_scopes: true // Enable incremental authorization
-// });
-
-// //!! this is where it falls apart
-// // Redirect to Google's OAuth 2.0 server
-// app.get('/auth', (req, res) => {
-//   console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
-//   // res.writeHead(301, { "Location": authorizationUrl });
-//   // res.end();
-//   res.redirect(301, authorizationUrl); // swapped this for the two lines above
-// });
-
-// // Exchange authorization code for refresh and access tokens
-// const url = require('url');
-
-// // Receive the callback from Google's OAuth 2.0 server.
-// app.get('/oauth2callback', async (req, res) => {
-//   console.log('Handling the OAuth 2.0 server response');
-//   // Handle the OAuth 2.0 server response
-//   let q = url.parse(req.url, true).query;
-//   console.log('Received query:', q);
-
-//   // Get access and refresh tokens (if access_type is offline)
-//   (async () => {
-//     try {
-//       let { tokens } = await oauth2Client.getToken(q.code);
-//       console.log('Received tokens:', tokens);
-//       oauth2Client.setCredentials(tokens);
-//       console.log('Credentials set for the OAuth2 client');
-//       res.redirect('/'); // Redirect user to the home page after successful token exchange
-//     } catch (error) {
-//       console.error('Error exchanging authorization code:', error);
-//       res.status(500).send('Token exchange failed');
-//     }
-//   })();
-// });
-
-// // Redirect to Google's OAuth 2.0 server
-  // console.log(`Redirecting to Google's OAuth 2.0 server:`, authorizationUrl);
-  // res.writeHead(301, { "Location": authorizationUrl });
-
-// Exchange authorization code for refresh and access tokens
-// const url = require('url');
-
-// console.log('HANDLING OAuth 2.0 server response');
-// if (req.url.startsWith('/oauth2callback')) {
-//   // Handle the OAuth 2.0 server response
-//   let q = url.parse(req.url, true).query;
-//   console.log('Received query:', q);
-
-//   // Get access and refresh tokens (if access_type is offline)
-//   let { tokens } = await oauth2Client.getToken(q.code);
-//   console.log('Tokens RECEIVED.', tokens);
-//   oauth2Client.setCredentials(tokens);
-//   console.log('OAuth2 client credentials SET.');
-// }
-// //!! this is where it falls apart
-
 app.post('/oauth2callback', express.json(), async (req, res) => {
   console.log('HANDLING OAuth 2.0 server response');
   try {
@@ -106,26 +45,21 @@ app.post('/oauth2callback', express.json(), async (req, res) => {
 });
 
 // Server-side endpoint for fetching albums from Google Photos API
-const photoslibrary = google.photos({version: 'v1', auth: oauth2Client});
-
 app.get('/api/list-albums', async (req, res) => {
   try {
-    const response = await photoslibrary.albums.list({
-      auth: oauth2Client,
+    const url = 'https://photoslibrary.googleapis.com/v1/albums';
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
+        'Content-Type': 'application/json',
+      },
     });
-
-    res.status(200).json(response.data);
+    res.json(response.data);
   } catch (error) {
-    console.error('Error calling Google Photos API:', error);
-
-    if (error.code === 401) {
-      res.status(401).send('Unauthorized: Access token expired or revoked.');
-    } else {
-      res.status(500).send('Error calling Google Photos API.');
-    }
+    console.error(error);
+    res.status(500).send('Error fetching albums');
   }
 });
-
 
 // Log serving file
 app.use((req, res, next) => {
@@ -158,41 +92,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
-// app.use((req, res, next) => {
-//   if (req.url.endsWith('.js')) {
-//     res.setHeader('Content-Type', 'application/javascript');
-//   }
-//   next();
-// });
-
-// app.use((req, res, next) => {
-//   if (req.url.endsWith('.html')) {
-//     res.setHeader('Content-Type', 'text/html');
-//   }
-//   next();
-// });
-
-// app.use((req, res, next) => {
-//   if (req.url.endsWith('.css')) {
-//     res.setHeader('Content-Type', 'text/css');
-//   }
-//   next();
-// });
-
-// app.use((req, res, next) => {
-//   if (req.url.endsWith('.png')) {
-//     res.setHeader('Content-Type', 'image/png');
-//   }
-//   next();
-// });
-
-// app.use((req, res, next) => {
-//   if (req.url.endsWith('.ico')) {
-//     res.setHeader('Content-Type', 'image/x-icon');
-//   }
-//   next();
-// });
 
 // Start server
 app.listen(port, () => {
