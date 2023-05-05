@@ -3,7 +3,6 @@ const path = require('path');
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const url = require('url');
 const port = process.env.PORT || 3003;
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -35,8 +34,8 @@ console.log('OAuth2 client CREATED.');
 app.post('/oauth2callback', express.json(), async (req, res) => {
   console.log('HANDLING OAuth 2.0 server response');
   try {
-    let q = url.parse(req.url, true).query;
-    const { tokens } = await oauth2Client.getToken(q.code);
+    const code = req.body.code;
+    const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
     res.status(200).send('Tokens obtained.');
     console.log('Tokens RECEIVED.', tokens);
