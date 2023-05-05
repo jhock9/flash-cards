@@ -42,9 +42,9 @@ const initGoogleSignIn = () => {
 const handleCredentialResponse = (response) => {
   console.log('handleCredentialResponse CALLED.');
   try {
-    console.log("Encoded JWT ID token LOADED.")
+    console.log('Encoded JWT ID token LOADED.')
     const userObject = jwt_decode(response.credential);
-    console.log('Decoded User Info LOADED.');
+    console.log('Decoded User Info LOADED: ' + userObject);
 
   } catch (error) {
     console.error('Error decoding user credential:', error);
@@ -52,6 +52,9 @@ const handleCredentialResponse = (response) => {
 
   initCodeClient();
   getAuthCode();
+
+// Call listAlbums with the access token
+  listAlbums(response.credential);
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
@@ -96,7 +99,32 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-// //* CREATING OBJECT LIST FROM ALBUM NAMES
+//* CREATING OBJECT LIST FROM ALBUM NAMES
+const listAlbums = async (accessToken) => {
+  try {
+    console.log('listAlbums CALLED.');
+    const url = 'https://photoslibrary.googleapis.com/v1/albums';
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log('Fetch COMPLETED.');
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Data Parsed:', data);
+      // Use the data here
+    } else {
+      console.error('Error fetching albums:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching albums:', error);
+  }
+};
+
+
 // const fetchAlbumList = async () => {
 //   try {
 //     const response = await gapi.client.photoslibrary.albums.list({});
