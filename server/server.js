@@ -9,6 +9,11 @@ const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
+// Use the middleware for all routes
+app.use(jsonParser);
+
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
