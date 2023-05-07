@@ -42,7 +42,7 @@ const initGoogleSignIn = () => {
 const handleCredentialResponse = (response) => {
   console.log('handleCredentialResponse CALLED.');
   try {
-    console.log('Encoded JWT ID token LOADED.')
+    console.log('Encoded JWT ID token: ' + response)
     const userObject = jwt_decode(response.credential);
     console.log('Decoded User Info LOADED: ' + userObject);
 
@@ -54,6 +54,7 @@ const handleCredentialResponse = (response) => {
   getAuthCode();
 
 // Call listAlbums with the access token
+  console.log('Access Token:', access_token);
   listAlbums(response.credential);
 
   landingPage.classList.add('hide');
@@ -70,7 +71,7 @@ const initCodeClient = () => { // or fetchAlbumList function
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     ux_mode: 'popup',
     callback: (codeResponse) => { 
-      console.log('Callback EXECUTED. codeResponse RECEIVED.');
+      console.log('Callback EXECUTED. codeResponse: ' + codeResponse);
 
       // // Send auth code to your backend platform
       // let code_receiver_uri = '/oauth2callback';
@@ -87,7 +88,7 @@ const initCodeClient = () => { // or fetchAlbumList function
       console.log('code: ' + codeResponse.code)
     }
   })
-  console.log('codeClient UPDATED.');
+  console.log('codeClient: ' + codeClient);
 };
 
 // Send auth code to your backend platform
@@ -125,6 +126,7 @@ const onSignInFailure = (error) => {
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
 const listAlbums = async (accessToken) => {
+  console.log('Access Token: ', access_token);
   try {
     console.log('listAlbums CALLED.');
     const url = 'https://photoslibrary.googleapis.com/v1/albums';
