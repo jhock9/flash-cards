@@ -72,21 +72,45 @@ const initCodeClient = () => { // or fetchAlbumList function
     callback: (codeResponse) => { 
       console.log('Callback EXECUTED. codeResponse RECEIVED.');
 
-      // Send auth code to your backend platform
-      let code_receiver_uri = '/oauth2callback';
+      // // Send auth code to your backend platform
+      // let code_receiver_uri = '/oauth2callback';
 
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', code_receiver_uri, true);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      xhr.onload = () => {
-        console.log('Signed in as: ' + xhr.responseText);
-      };
-      xhr.send('code=' + codeResponse.code);
+      // const xhr = new XMLHttpRequest();
+      // xhr.open('POST', code_receiver_uri, true);
+      // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      // xhr.onload = () => {
+      //   console.log('Signed in as: ' + xhr.responseText);
+      // };
+      // xhr.send('code=' + codeResponse.code);
+
       console.log('code: ' + codeResponse.code)
     }
   })
   console.log('codeClient UPDATED.');
+};
+
+// Send auth code to your backend platform
+const sendCodeToServer = async (code) => {
+  let code_receiver_uri = '/oauth2callback';
+
+  try {
+    const response = await fetch(code_receiver_uri, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code }),
+    });
+
+    if (response.ok) {
+      console.log('Signed in as: ' + (await response.text()));
+    } else {
+      console.error('Error sending code:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error sending code:', error);
+  }
 };
 
 const getAuthCode = () => {
