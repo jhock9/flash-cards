@@ -71,7 +71,7 @@ const initCodeClient = () => { // or fetchAlbumList function
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     ux_mode: 'popup',
     callback: (codeResponse) => { 
-      console.log('Callback EXECUTED. codeResponse: ' + codeResponse);
+      console.log('Callback EXECUTED. codeResponse: ', codeResponse);
 
       // // Send auth code to your backend platform
       // let code_receiver_uri = '/oauth2callback';
