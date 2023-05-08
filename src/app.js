@@ -82,7 +82,7 @@ const initCodeClient = () => { // or fetchAlbumList function
       } catch (error) {
         console.error('Error sending code and retrieving access token:', error);
       }
-    }
+    
 
       // // Send auth code to your backend platform
       // let code_receiver_uri = '/oauth2callback';
@@ -96,7 +96,7 @@ const initCodeClient = () => { // or fetchAlbumList function
       // };
       // xhr.send('code=' + codeResponse.code);
 
-      console.log('code: ', codeResponse.code)
+      console.log('code: ', codeResponse.code);
     }
   })
   console.log('codeClient: ', codeClient);
