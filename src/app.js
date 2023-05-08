@@ -54,7 +54,7 @@ const handleCredentialResponse = (response) => {
   getAuthCode();
 
 // Call listAlbums with the access token
-  console.log('Access Token:', access_token);
+  console.log('Access Token: ', access_token);
   listAlbums(response.credential);
 
   landingPage.classList.add('hide');
@@ -85,10 +85,10 @@ const initCodeClient = () => { // or fetchAlbumList function
       // };
       // xhr.send('code=' + codeResponse.code);
 
-      console.log('code: ' + codeResponse.code)
+      console.log('code: ', codeResponse.code)
     }
   })
-  console.log('codeClient: ' + codeClient);
+  console.log('codeClient: ', codeClient);
 };
 
 // Send auth code to your backend platform
