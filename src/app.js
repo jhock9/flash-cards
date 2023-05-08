@@ -54,8 +54,7 @@ const handleCredentialResponse = (response) => {
   getAuthCode();
 
 // Call listAlbums with the access token
-  console.log('Access Token: ', access_token);
-  listAlbums(response.credential);
+  listAlbums(response.credential); //? is this the right place for this, and/or is this the right parameter?
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
