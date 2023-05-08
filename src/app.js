@@ -41,11 +41,11 @@ const initGoogleSignIn = () => {
 
 const handleCredentialResponse = (response) => {
   console.log('handleCredentialResponse CALLED.');
+  let decodedUserInfo;
   try {
     console.log('Encoded JWT ID token: ', response.credential)
-    const userObject = jwt_decode(response.credential);
-    console.log('Decoded User Info LOADED: ', userObject);
-
+    decodedUserInfo = jwt_decode(response.credential);
+    console.log('Decoded User Info LOADED: ', decodedUserInfo);
   } catch (error) {
     console.error('Error decoding user credential:', error);
   }
@@ -53,8 +53,12 @@ const handleCredentialResponse = (response) => {
   initCodeClient();
   getAuthCode();
 
-// Call listAlbums with the access token
-  listAlbums(userObject.access_token);
+  // Call listAlbums with the access token
+  if (decodedUserInfo) {
+    listAlbums(decodedUserInfo.access_token);
+  } else {
+    console.error("Cannot call listAlbums because decodedUserInfo is not available");
+  }
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
@@ -131,7 +135,7 @@ const listAlbums = async (access_token) => {
     const url = 'https://photoslibrary.googleapis.com/v1/albums';
     const response = await fetch(url, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${access_token}`,
         'Content-Type': 'application/json',
       },
     });
