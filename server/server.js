@@ -46,13 +46,17 @@ app.post('/oauth2callback', jsonParser, async (req, res) => {
     console.log('Received tokens:', tokens);
     oauth2Client.setCredentials(tokens);
 
-    res.status(200).json({ success: true });
+    // Get the user's email address
+    const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
+    const userinfoResponse = await oauth2.userinfo.get();
+    const userEmail = userinfoResponse.data.email;
+
+    res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
   } catch (error) {
     console.error('ERROR exchanging authorization code:', error);
     res.status(500).json({ success: false, error: error.toString() });
   }
 });
-
 
 // Fetch albums from Google Photos API
 app.get('/api/list-albums', async (req, res) => {

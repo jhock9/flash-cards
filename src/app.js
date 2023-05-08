@@ -73,8 +73,16 @@ const initCodeClient = () => { // or fetchAlbumList function
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     ux_mode: 'popup',
-    callback: (codeResponse) => { 
+    callback: async (codeResponse) => {
       console.log('Callback EXECUTED. codeResponse: ', codeResponse);
+
+      try {
+        const accessToken = await sendCodeToServer(codeResponse.code);
+        listAlbums(accessToken);
+      } catch (error) {
+        console.error('Error sending code and retrieving access token:', error);
+      }
+    }
 
       // // Send auth code to your backend platform
       // let code_receiver_uri = '/oauth2callback';
@@ -108,14 +116,22 @@ const sendCodeToServer = async (code) => {
     });
 
     if (response.ok) {
-      console.log('Signed in as: ' + (await response.text()));
+      const data = await response.json();
+      if (data.success) {
+        console.log('Signed in as: ' + data.user_email);
+        return data.access_token;
+      } else {
+        throw new Error(data.error);
+      }
     } else {
-      console.error('Error sending code:', response.statusText);
+      throw new Error(response.statusText);
     }
   } catch (error) {
     console.error('Error sending code:', error);
+    throw error;
   }
 };
+
 
 const getAuthCode = () => {
   console.log('getAuthCode CALLED.');
