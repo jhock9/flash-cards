@@ -54,7 +54,7 @@ const handleCredentialResponse = (response) => {
   getAuthCode();
 
 // Call listAlbums with the access token
-  listAlbums(response.credential); //? is this the right place for this, and/or is this the right parameter?
+  listAlbums(userObject.access_token);
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
@@ -124,7 +124,7 @@ const onSignInFailure = (error) => {
 };
 
 //* CREATING OBJECT LIST FROM ALBUM NAMES
-const listAlbums = async (accessToken) => {
+const listAlbums = async (access_token) => {
   console.log('Access Token: ', access_token);
   try {
     console.log('listAlbums CALLED.');
