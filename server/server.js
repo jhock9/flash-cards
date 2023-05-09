@@ -56,7 +56,8 @@ app.post('/oauth2callback', jsonParser, async (req, res) => {
     res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
   } catch (error) {
     console.error('ERROR exchanging authorization code:', error);
-    res.status(500).json({ success: false, error: error.toString() });
+    // res.status(500).json({ success: false, error: error.toString() });
+    res.status(400).json({ error: error.toString() });
   }
 });
 
