@@ -33,7 +33,7 @@ const oauth2Client = new google.auth.OAuth2(
   CLIENT_SECRET,
   REDIRECT_URL,
 );
-console.log('OAuth2 client CREATED.');
+console.log('OAuth2 client CREATED: ', oauth2Client);
 
 // Exchange authorization code for refresh and access tokens
 app.post('/oauth2callback', jsonParser, async (req, res) => {
