@@ -4,10 +4,12 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3003;
+const {google} = require('googleapis');
 
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
+console.log(`Redirect URL is: ${REDIRECT_URL}`);
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -19,18 +21,18 @@ app.use(express.static(path.join(__dirname, '../src/')));
 
 app.get('/config', (req, res) => {
   res.json({
-    GOOGLE_CLIENT_ID: CLIENT_ID,
+    GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
   });
 });
 
 //* Obtaining OAuth 2.0 access tokens
 // Import the Google Auth APIs libraries
-const { google } = require('googleapis');
 
 // Set up your OAuth2 client for the API
+console.log(`Creating OAuth2 client with Redirect URL: ${REDIRECT_URL}`);
 const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
   REDIRECT_URL,
 );
 console.log('OAuth2 client CREATED: ', oauth2Client);
@@ -62,9 +64,10 @@ app.post('/oauth2callback', jsonParser, async (req, res) => {
 app.get('/api/list-albums', async (req, res) => {
   try {
     const url = 'https://photoslibrary.googleapis.com/v1/albums';
+    const accessToken = await oauth2Client.getAccessToken();
     const response = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       },
     });
