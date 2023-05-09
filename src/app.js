@@ -57,7 +57,7 @@ const handleCredentialResponse = (response) => {
 
   initCodeClient();
   getAuthCode();
-  
+
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   // fetchAlbumList();
@@ -97,7 +97,6 @@ const initCodeClient = () => { // or fetchAlbumList function
       console.log('code: ', codeResponse.code);
     }
   })
-  console.log('Callback EXECUTED. codeResponse: ', codeResponse);
   console.log('codeClient: ', codeClient);
 };
 
