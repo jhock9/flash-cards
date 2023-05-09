@@ -126,7 +126,6 @@ const sendCodeToServer = async (code) => {
     }
   } catch (error) {
     console.error('Error sending code:', error);
-    alert(`An error occurred: ${error.message}`);
     throw error;
   }
 };
