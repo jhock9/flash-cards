@@ -46,20 +46,18 @@ const handleCredentialResponse = (response) => {
     console.log('Encoded JWT ID token: ', response.credential)
     decodedUserInfo = jwt_decode(response.credential);
     console.log('Decoded User Info LOADED: ', decodedUserInfo);
+    if (decodedUserInfo) {
+      console.log('Decoded user info is available.');
+    } else {
+      console.error("Cannot call listAlbums because decodedUserInfo is not available");
+    }
   } catch (error) {
     console.error('Error decoding user credential:', error);
   }
 
   initCodeClient();
   getAuthCode();
-
-  // Call listAlbums with the access token
-  if (decodedUserInfo) {
-    listAlbums(decodedUserInfo.access_token);
-  } else {
-    console.error("Cannot call listAlbums because decodedUserInfo is not available");
-  }
-
+  
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   // fetchAlbumList();
@@ -99,6 +97,7 @@ const initCodeClient = () => { // or fetchAlbumList function
       console.log('code: ', codeResponse.code);
     }
   })
+  console.log('Callback EXECUTED. codeResponse: ', codeResponse);
   console.log('codeClient: ', codeClient);
 };
 
@@ -114,9 +113,9 @@ const sendCodeToServer = async (code) => {
       },
       body: JSON.stringify({ code }),
     });
-
     if (response.ok) {
       const data = await response.json();
+      console.log('Response from server:', data);
       if (data.success) {
         console.log('Signed in as: ' + data.user_email);
         return data.access_token;
@@ -156,6 +155,7 @@ const listAlbums = async (access_token) => {
       },
     });
     console.log('Fetch COMPLETED.');
+    console.log('Response from Google API:', response);
 
     if (response.ok) {
       const data = await response.json();
