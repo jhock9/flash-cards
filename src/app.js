@@ -1,7 +1,3 @@
-// const jwt_decode = require('jwt-decode')
-// import jwt_decode from "jwt-decode";
-// import jwt_decode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/dist/jwt-decode.min.js';
-
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
@@ -66,7 +62,7 @@ const handleCredentialResponse = (response) => {
   }
 
   initCodeClient();
-  getAuthCode();
+  getToken();
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
