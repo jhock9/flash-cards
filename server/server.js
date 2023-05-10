@@ -11,10 +11,40 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 console.log(`Redirect URL is: ${REDIRECT_URL}`);
 
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
+// Log serving file
+app.use((req, res, next) => {
+  console.log(`Serving file at path: ${req.path}`);
+  next();
+});
+
+// Set referrer-policy header
+app.use((req, res, next) => {
+  if (req.headers.host === 'localhost' && req.protocol === 'http') {
+    res.set('Referrer-Policy', 'no-referrer-when-downgrade');
+  }
+  next();
+});
+
+// Setting content-type headers for files
+app.use((req, res, next) => {
+  const contentTypeMap = {
+    '.js': 'application/javascript',
+    '.html': 'text/html',
+    '.css': 'text/css',
+    '.png': 'image/png',
+    '.ico': 'image/x-icon',
+  };
+
+  const ext = path.extname(req.url);
+  if (contentTypeMap[ext]) {
+    res.setHeader('Content-Type', contentTypeMap[ext]);
+  }
+
+  next();
+});
+
 // Use the middleware for all routes
-app.use(jsonParser);
+app.use(express.json());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -76,38 +106,6 @@ app.get('/api/list-albums', async (req, res) => {
     console.error(error);
     res.status(500).send('Error fetching albums');
   }
-});
-
-// Log serving file
-app.use((req, res, next) => {
-  console.log(`Serving file at path: ${req.path}`);
-  next();
-});
-
-// Set referrer-policy header
-app.use((req, res, next) => {
-  if (req.headers.host === 'localhost' && req.protocol === 'http') {
-    res.set('Referrer-Policy', 'no-referrer-when-downgrade');
-  }
-  next();
-});
-
-// Setting content-type headers for files
-app.use((req, res, next) => {
-  const contentTypeMap = {
-    '.js': 'application/javascript',
-    '.html': 'text/html',
-    '.css': 'text/css',
-    '.png': 'image/png',
-    '.ico': 'image/x-icon',
-  };
-
-  const ext = path.extname(req.url);
-  if (contentTypeMap[ext]) {
-    res.setHeader('Content-Type', contentTypeMap[ext]);
-  }
-
-  next();
 });
 
 // Start server
