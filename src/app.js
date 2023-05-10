@@ -39,10 +39,7 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
-  // document.getElementById('google-signin').addEventListener('click', () => {
-  //   getToken();
-  // });
-  // google.accounts.id.prompt();
+  google.accounts.id.prompt();
 };
 
 const handleCredentialResponse = (response) => {
@@ -66,12 +63,11 @@ const handleCredentialResponse = (response) => {
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
-  // fetchAlbumList();
 };
 
 //* GOOGLE AUTHORIZATION
 let tokenClient;
-const initTokenClient = () => {  // or fetchAlbumList function -- html onload
+const initTokenClient = () => {
   console.log('initTokenClient CALLED.');
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: googleClientID,
@@ -79,7 +75,7 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
     callback: (tokenResponse) => {
       console.log('Callback executed', tokenResponse);
       let access_token = tokenResponse.access_token;
-      console.log(access_token);
+      console.log('Access token in initTokenClient callback: ', access_token);
       
       fetchAlbumList();
     }
@@ -99,7 +95,9 @@ const onSignInFailure = (error) => {
 
 // //* CREATING OBJECT LIST FROM ALBUM NAMES
 const fetchAlbumList = () => {
+  console.log('fetchAlbumList CALLED.');
   let access_token = tokenClient.getToken().access_token;
+  console.log('Access token in fetchAlbumList: ', access_token);
 
   let xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
