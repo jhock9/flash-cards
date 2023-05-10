@@ -61,7 +61,7 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  initCodeClient();
+  initTokenClient();
   getToken();
 
   landingPage.classList.add('hide');
@@ -103,38 +103,38 @@ const initTokenClient = () => {  // or fetchAlbumList function -- html onload
       })();
     }
   })
-  console.log('codeClient: ', codeClient);
+  console.log('tokenClient: ', tokenClient);
 };
 
-// Send auth code to your backend platform
-const sendCodeToServer = async (code) => {
-  let code_receiver_uri = '/oauth2callback';
+// // Send auth code to your backend platform
+// const sendCodeToServer = async (code) => {
+//   let code_receiver_uri = '/oauth2callback';
 
-  try {
-    const response = await fetch(code_receiver_uri, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Response from server:', data);
-      if (data.success) {
-        console.log('Signed in as: ' + data.user_email);
-        return data.access_token;
-      } else {
-        throw new Error(data.error);
-      }
-    } else {
-      throw new Error(response.statusText);
-    }
-  } catch (error) {
-    console.error('Error sending code:', error);
-    throw error;
-  }
-};
+//   try {
+//     const response = await fetch(code_receiver_uri, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({ code }),
+//     });
+//     if (response.ok) {
+//       const data = await response.json();
+//       console.log('Response from server:', data);
+//       if (data.success) {
+//         console.log('Signed in as: ' + data.user_email);
+//         return data.access_token;
+//       } else {
+//         throw new Error(data.error);
+//       }
+//     } else {
+//       throw new Error(response.statusText);
+//     }
+//   } catch (error) {
+//     console.error('Error sending code:', error);
+//     throw error;
+//   }
+// };
 
 const getToken = () => {
   console.log('getToken CALLED.');
