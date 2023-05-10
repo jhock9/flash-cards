@@ -1,9 +1,6 @@
-
-```
-GOOGLE
+flash-cards
 ├─ .gitignore
 ├─ Procfile
-├─ Authkey.p8
 ├─ README.md
 ├─ dist
 │  ├─ assets
@@ -11,11 +8,11 @@ GOOGLE
 │  │  ├─ ABA-Logo-Tag.png
 │  │  └─ ABA-Logo.png
 │  ├─ bundle.js
-│  ├─ favicon-32x32.png
+│  ├─ favicon.ico
 │  ├─ index.html
-│  └─ main.css
-├─ favicon-32x32.png
-├─ favicon.ico
+│  ├─ main.css
+│  └─ support
+│     └─ jwt-decode.js
 ├─ node_modules
 ├─ package-lock.json
 ├─ package.json
@@ -27,8 +24,14 @@ GOOGLE
 │  │  ├─ ABA-Box.png
 │  │  ├─ ABA-Logo-Tag.png
 │  │  └─ ABA-Logo.png
+│  ├─ favicon-32x32.png
+│  ├─ favicon.ico
 │  ├─ index.html
-│  └─ main.css
-└─ webpack.config.js
-
-```
+│  ├─ main.css
+│  └─ support
+│     └─ jwt-decode.js
+├─ test-pages
+│  ├─ flashcards.html
+│  ├─ landing.html
+│  └─ react-app.js
+├─ webpack.config.js
