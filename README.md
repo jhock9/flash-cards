@@ -1,4 +1,3 @@
-``
 flash-cards
 ├─ .gitignore
 ├─ Procfile
@@ -14,6 +13,7 @@ flash-cards
 │  ├─ main.css
 │  └─ support
 │     └─ jwt-decode.js
+├─ node_modules
 ├─ package-lock.json
 ├─ package.json
 ├─ server
