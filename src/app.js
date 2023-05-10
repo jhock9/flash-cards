@@ -1,3 +1,7 @@
+// const jwt_decode = require('jwt-decode')
+// import jwt_decode from "jwt-decode";
+// import jwt_decode from 'https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/dist/jwt-decode.min.js';
+
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
@@ -13,7 +17,10 @@ const fetchConfig = async () => {
     const config = await response.json();
   
     googleClientID = config.GOOGLE_CLIENT_ID;
-    console.log('Google Client ID LOADED.'); 
+    googleApiKey = config.GOOGLE_API_KEY;
+    googleClientSecret = config.GOOGLE_CLIENT_SECRET;
+    redirectUrl = config.REDIRECT_URL;
+    console.log('Config LOADED.'); 
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
@@ -36,6 +43,9 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
+  // document.getElementById('google-signin').addEventListener('click', () => {
+  //   getToken();
+  // });
   // google.accounts.id.prompt();
 };
 
@@ -64,37 +74,37 @@ const handleCredentialResponse = (response) => {
 };
 
 //* GOOGLE AUTHORIZATION
-let codeClient;
-const initCodeClient = () => { // or fetchAlbumList function
-  console.log('initCodeClient CALLED.');
-  codeClient = google.accounts.oauth2.initCodeClient({
+let tokenClient;
+const initTokenClient = () => {  // or fetchAlbumList function -- html onload
+  console.log('initTokenClient CALLED.');
+  tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-    ux_mode: 'popup',
-    callback: async (codeResponse) => {
-      console.log('Callback EXECUTED. codeResponse: ', codeResponse);
+    callback: (tokenResponse) => {
+      console.log('Callback executed', tokenResponse);
+      let access_token = tokenResponse.access_token;
+      console.log(access_token);
 
-      try {
-        const accessToken = await sendCodeToServer(codeResponse.code);
-        listAlbums(accessToken);
-      } catch (error) {
-        console.error('Error sending code and retrieving access token:', error);
-      }
-    
+      // Load Albums List
+      (() => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
+        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
 
-      // // Send auth code to your backend platform
-      // let code_receiver_uri = '/oauth2callback';
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log('Photo album data:', xhr.responseText);
+            const jsonResponse = JSON.parse(xhr.responseText);
+            const albums = jsonResponse.albums;
+            console.log('Photo albums JSON.parsed:', albums);
+          } else if (xhr.readyState === 4) {
+            console.error('Error in XMLHttpRequest:', xhr.statusText);
+          }
+        };     
 
-      // const xhr = new XMLHttpRequest();
-      // xhr.open('POST', code_receiver_uri, true);
-      // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      // xhr.onload = () => {
-      //   console.log('Signed in as: ' + xhr.responseText);
-      // };
-      // xhr.send('code=' + codeResponse.code);
-
-      console.log('code: ', codeResponse.code);
+        xhr.send();
+        // add params for list requirements (must have 10 photos, etc.)
+      })();
     }
   })
   console.log('codeClient: ', codeClient);
@@ -130,10 +140,9 @@ const sendCodeToServer = async (code) => {
   }
 };
 
-
-const getAuthCode = () => {
-  console.log('getAuthCode CALLED.');
-  codeClient.requestCode();
+const getToken = () => {
+  console.log('getToken CALLED.');
+  tokenClient.requestAccessToken();
 }
 
 // Sign in failure callback
