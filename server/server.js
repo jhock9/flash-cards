@@ -68,7 +68,7 @@ const oauth2Client = new google.auth.OAuth2(
 console.log('OAuth2 client CREATED: ', oauth2Client);
 
 // Exchange authorization code for refresh and access tokens
-app.post('/oauth2callback', jsonParser, async (req, res) => {
+app.post('/oauth2callback', async (req, res) => {
   try {
     console.log('HANDLING OAuth 2.0 server response');
     const code = req.body.code;
