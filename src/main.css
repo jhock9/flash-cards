@@ -265,7 +265,7 @@ main {
 }
 
 .image {
-  width: 17rem;
+  width: 23rem;
   aspect-ratio: 1/1;
   border: 0.25rem solid var(--second-color);
   border-radius: .5rem;
@@ -337,9 +337,6 @@ main {
   .image {
     min-width: 20rem;
     border-width: 0.35rem;
-    border-radius: .75rem;
-    margin: 2rem;
-    padding: 1rem;
   }
 }
 
