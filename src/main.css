@@ -148,12 +148,8 @@ main figure {
 }
 
 #logo-button {
-  position: fixed; 
-  left: 0; 
-  top: 0; 
   background: none; 
   border: none; 
-  cursor: pointer; 
 }
 
 #logo-button img {
@@ -163,8 +159,12 @@ main figure {
 }
 
 #logo-button.collapsed img {
+  position: fixed;
+  left: 0; 
+  top: 0; 
   max-width: 5rem; 
   height: 5rem;
+  cursor: pointer; 
 }
 
 #object-selection-form {
