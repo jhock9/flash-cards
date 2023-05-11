@@ -2,9 +2,8 @@ const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
-// const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-
+let accessToken;
 let googleClientID;
 
 const fetchConfig = async () => {
@@ -71,10 +70,10 @@ const initTokenClient = () => {
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     callback: (tokenResponse) => {
       console.log('Callback executed', tokenResponse);
-      let access_token = tokenResponse.access_token;
-      console.log('Access token in initTokenClient callback: ', access_token);
+      accessToken = tokenResponse.access_token;
+      console.log('Access token in initTokenClient callback: ', accessToken);
       
-      fetchAlbumList(access_token);
+      fetchAlbumList(accessToken);
     }
   })
   console.log('tokenClient: ', tokenClient);
@@ -91,13 +90,13 @@ const onSignInFailure = (error) => {
 };
 
 // //* CREATING OBJECT LIST FROM ALBUM NAMES
-const fetchAlbumList = (access_token) => {
+const fetchAlbumList = (accessToken) => {
   console.log('fetchAlbumList CALLED.');
-  console.log('Access token in fetchAlbumList: ', access_token);
+  console.log('Access token in fetchAlbumList: ', accessToken);
 
   let xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
-  xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -177,7 +176,6 @@ submit.addEventListener('click', async (e) => {
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
-  let access_token = tokenClient.getToken().access_token;
   const promises = [];
 
   for (let i = 0; i < albumNames.length; i++) {
@@ -185,7 +183,7 @@ const fetchPhotos = (albumNames, qtys) => {
     const promise = new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:search');
-      xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
       xhr.setRequestHeader('Content-Type', 'application/json');
 
       xhr.onreadystatechange = () => {
