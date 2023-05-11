@@ -172,8 +172,6 @@ submit.addEventListener('click', async (e) => {
     return;
   }
   
-  console.log('selectedAlbums :', isAnySelected)
-
   await fetchPhotos(selectedAlbums, selectedQtys);
 });
 
