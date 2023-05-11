@@ -163,6 +163,11 @@ submit.addEventListener('click', async (e) => {
     }
   });
 
+  if (isNaN(quantity) || quantity <= 0) {
+    alert("Please enter a positive integer for quantity.");
+    return;
+  }
+  
   console.log('Selected albums:', selectedAlbums);
   console.log('Selected quantities:', selectedQtys);
 
@@ -173,6 +178,8 @@ submit.addEventListener('click', async (e) => {
   
   await fetchPhotos(selectedAlbums, selectedQtys);
 });
+
+
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
@@ -257,6 +264,7 @@ const displayPhotos = (photos) => {
   for (let i = 0; i < photos.length; i++) {
     const img = document.createElement('img');
     img.src = photos[i].image;
+    img.classList.add('image');
     console.log('Image URL:', img.src); 
     allImages.appendChild(img);
   }
