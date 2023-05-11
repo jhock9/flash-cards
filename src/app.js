@@ -155,34 +155,19 @@ submit.addEventListener('click', async (e) => {
   const selectedAlbums = [];
   const selectedQtys = [];
 
-  let inputIsValid = true;
-
   objectInputs.forEach((input) => {
-  const quantity = input.value;
     if (input.value > 0) {
       selectedAlbums.push(input.id);
-      selectedQtys.push(quantity);
+      selectedQtys.push(input.value);
       input.value = ''; // Reset the quantity value
     }
-  
-    // Check if the quantity is a positive integer
-    if (isNaN(quantity) || quantity <= 0) {
-      alert("Please enter a positive integer for quantity.");
-      inputIsValid = false; // Mark the input as invalid
-      return; // Skip the remaining logic in this iteration
-    }
   });
-
-  if (!inputIsValid) {
-    // If any input was invalid, stop execution
-    return;
-  }
   
   console.log('Selected albums:', selectedAlbums);
   console.log('Selected quantities:', selectedQtys);
 
   if (selectedAlbums.length === 0) { // Check if any album was selected
-    alert('Please enter a quantity for at least one category before submitting.');
+    alert('Please enter a positive number for at least two categories before submitting.');
     return;
   }
   
