@@ -162,21 +162,26 @@ submit.addEventListener('click', async (e) => {
     }
   });
 
-  const isAnySelected = selectedAlbums.length > 0;
+  console.log('Selected albums:', selectedAlbums);
+  console.log('Selected quantities:', selectedQtys);
 
+  const isAnySelected = selectedAlbums.length > 0;
   if (!isAnySelected) {
       alert('Please enter a quantity for at least one category before submitting.');
     return;
   }
+  console.log('selectedAlbums :', isAnySelected)
 
   await fetchPhotos(selectedAlbums, selectedQtys);
 });
 
 const fetchPhotos = (albumNames, qtys) => {
+  console.log('fetchPhotos CALLED.');
   let access_token = tokenClient.getToken().access_token;
   const promises = [];
 
   for (let i = 0; i < albumNames.length; i++) {
+    console.log(`Fetching photos for album: ${albumNames[i]}, quantity: ${qtys[i]}`);
     const promise = new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:search');
@@ -184,9 +189,10 @@ const fetchPhotos = (albumNames, qtys) => {
       xhr.setRequestHeader('Content-Type', 'application/json');
 
       xhr.onreadystatechange = () => {
+        console.log(`XHR state: ${xhr.readyState}, status: ${xhr.status}`);
         if (xhr.readyState === 4 && xhr.status === 200) {
           const jsonResponse = JSON.parse(xhr.responseText);
-          console.log(jsonResponse);
+          console.log('Received response for album', albumNames[i], ':', jsonResponse);
           const mediaItems = jsonResponse.mediaItems;
           resolve(mediaItems);
         } else if (xhr.readyState === 4) {
@@ -209,8 +215,11 @@ const fetchPhotos = (albumNames, qtys) => {
     promises.push(promise);
   }
 
+  console.log('All promises prepared, waiting for all to resolve...');
+
   Promise.all(promises)
     .then((responses) => {
+      console.log('All promises resolved. Processing responses...');
       let allPhotos = [];
       for (let i = 0; i < responses.length; i++) {
         const mediaItems = responses[i];
@@ -226,6 +235,7 @@ const fetchPhotos = (albumNames, qtys) => {
         allPhotos = allPhotos.concat(albumPhotos);
       }
       shuffleArray(allPhotos);
+      console.log('Photos shuffled and ready for display.');
       displayPhotos(allPhotos);
     })
     .catch((error) => {
