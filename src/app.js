@@ -13,10 +13,7 @@ const fetchConfig = async () => {
     const config = await response.json();
   
     googleClientID = config.GOOGLE_CLIENT_ID;
-    googleApiKey = config.GOOGLE_API_KEY;
-    googleClientSecret = config.GOOGLE_CLIENT_SECRET;
-    redirectUrl = config.REDIRECT_URL;
-    console.log('Config LOADED.'); 
+    console.log('googleClientID LOADED.'); 
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
@@ -77,7 +74,7 @@ const initTokenClient = () => {
       let access_token = tokenResponse.access_token;
       console.log('Access token in initTokenClient callback: ', access_token);
       
-      fetchAlbumList();
+      fetchAlbumList(access_token);
     }
   })
   console.log('tokenClient: ', tokenClient);
@@ -94,9 +91,8 @@ const onSignInFailure = (error) => {
 };
 
 // //* CREATING OBJECT LIST FROM ALBUM NAMES
-const fetchAlbumList = () => {
+const fetchAlbumList = (access_token) => {
   console.log('fetchAlbumList CALLED.');
-  let access_token = tokenClient.getToken().access_token;
   console.log('Access token in fetchAlbumList: ', access_token);
 
   let xhr = new XMLHttpRequest();
