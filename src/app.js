@@ -155,16 +155,26 @@ submit.addEventListener('click', async (e) => {
   const selectedAlbums = [];
   const selectedQtys = [];
 
+  let inputIsValid = true;
+
   objectInputs.forEach((input) => {
+  const quantity = input.value;
     if (input.value > 0) {
       selectedAlbums.push(input.id);
-      selectedQtys.push(input.value);
+      selectedQtys.push(quantity);
       input.value = ''; // Reset the quantity value
+    }
+  
+    // Check if the quantity is a positive integer
+    if (isNaN(quantity) || quantity <= 0) {
+      alert("Please enter a positive integer for quantity.");
+      inputIsValid = false; // Mark the input as invalid
+      return; // Skip the remaining logic in this iteration
     }
   });
 
-  if (isNaN(quantity) || quantity <= 0) {
-    alert("Please enter a positive integer for quantity.");
+  if (!inputIsValid) {
+    // If any input was invalid, stop execution
     return;
   }
   
