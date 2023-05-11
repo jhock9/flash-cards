@@ -2,9 +2,8 @@ const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
-const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
-
+let accessToken;
 let googleClientID;
 
 const fetchConfig = async () => {
@@ -13,7 +12,7 @@ const fetchConfig = async () => {
     const config = await response.json();
   
     googleClientID = config.GOOGLE_CLIENT_ID;
-    console.log('Google Client ID LOADED.'); 
+    console.log('googleClientID LOADED.'); 
     
     initGoogleSignIn(); // Initialize Google Sign-In
   } catch (error) {
@@ -43,7 +42,7 @@ const handleCredentialResponse = (response) => {
   console.log('handleCredentialResponse CALLED.');
   let decodedUserInfo;
   try {
-    console.log('Encoded JWT ID token: ', response.credential)
+    console.log('Encoded JWT ID token RETRIEVED')
     decodedUserInfo = jwt_decode(response.credential);
     console.log('Decoded User Info LOADED: ', decodedUserInfo);
     if (decodedUserInfo) {
@@ -55,85 +54,34 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  initCodeClient();
-  getAuthCode();
+  initTokenClient();
+  getToken();
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
-  // fetchAlbumList();
 };
 
 //* GOOGLE AUTHORIZATION
-let codeClient;
-const initCodeClient = () => { // or fetchAlbumList function
-  console.log('initCodeClient CALLED.');
-  codeClient = google.accounts.oauth2.initCodeClient({
+let tokenClient;
+const initTokenClient = () => {
+  console.log('initTokenClient CALLED.');
+  tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-    ux_mode: 'popup',
-    callback: async (codeResponse) => {
-      console.log('Callback EXECUTED. codeResponse: ', codeResponse);
-
-      try {
-        const accessToken = await sendCodeToServer(codeResponse.code);
-        listAlbums(accessToken);
-      } catch (error) {
-        console.error('Error sending code and retrieving access token:', error);
-      }
-    
-
-      // // Send auth code to your backend platform
-      // let code_receiver_uri = '/oauth2callback';
-
-      // const xhr = new XMLHttpRequest();
-      // xhr.open('POST', code_receiver_uri, true);
-      // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      // xhr.onload = () => {
-      //   console.log('Signed in as: ' + xhr.responseText);
-      // };
-      // xhr.send('code=' + codeResponse.code);
-
-      console.log('code: ', codeResponse.code);
+    callback: (tokenResponse) => {
+      console.log('Callback executed', tokenResponse);
+      accessToken = tokenResponse.access_token;
+      console.log('Access token in initTokenClient callback: ', accessToken);
+      
+      fetchAlbumList(accessToken);
     }
   })
-  console.log('codeClient: ', codeClient);
+  console.log('tokenClient: ', tokenClient);
 };
 
-// Send auth code to your backend platform
-const sendCodeToServer = async (code) => {
-  let code_receiver_uri = '/oauth2callback';
-
-  try {
-    const response = await fetch(code_receiver_uri, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ code }),
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Response from server:', data);
-      if (data.success) {
-        console.log('Signed in as: ' + data.user_email);
-        return data.access_token;
-      } else {
-        throw new Error(data.error);
-      }
-    } else {
-      throw new Error(response.statusText);
-    }
-  } catch (error) {
-    console.error('Error sending code:', error);
-    throw error;
-  }
-};
-
-
-const getAuthCode = () => {
-  console.log('getAuthCode CALLED.');
-  codeClient.requestCode();
+const getToken = () => {
+  console.log('getToken CALLED.');
+  tokenClient.requestAccessToken();
 }
 
 // Sign in failure callback
@@ -141,144 +89,178 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-//* CREATING OBJECT LIST FROM ALBUM NAMES
-const listAlbums = async (access_token) => {
-  console.log('Access Token: ', access_token);
-  try {
-    console.log('listAlbums CALLED.');
-    const url = 'https://photoslibrary.googleapis.com/v1/albums';
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${access_token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    console.log('Fetch COMPLETED.');
-    console.log('Response from Google API:', response);
+// //* CREATING OBJECT LIST FROM ALBUM NAMES
+const fetchAlbumList = (accessToken) => {
+  console.log('fetchAlbumList CALLED.');
+  console.log('Access token in fetchAlbumList: ', accessToken);
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Data Parsed:', data);
-      // Use the data here
-    } else {
-      console.error('Error fetching albums:', response.statusText);
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
+  xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log('Photo album data RETRIEVED');
+      const jsonResponse = JSON.parse(xhr.responseText);
+      const albums = jsonResponse.albums;
+      console.log('Photo albums JSON.parsed:', albums);
+      
+      const validAlbums = [];
+      const allowedAlbumNames = ['airplane', 'boat', 'flower', 'tree', 'doctor', 'construction worker'];
+      for (const album of albums) {
+        const albumName = album.title;
+        const albumId = album.id;
+        const photoCount = album.mediaItemsCount;
+        if (photoCount >= 10 && allowedAlbumNames.includes(albumName.toLowerCase())) {
+          validAlbums.push({name: albumName, id: albumId});
+        }
+      }
+
+      validAlbums.sort((a, b) => a.name.localeCompare(b.name));      
+      console.log('Valid Albums:', validAlbums);
+      createList(validAlbums);
+    } else if (xhr.readyState === 4) {
+      console.error('Error in XMLHttpRequest:', xhr.statusText);
     }
-  } catch (error) {
-    console.error('Error fetching albums:', error);
+  };     
+
+  xhr.send();
+};
+
+// Adds album names to list
+const createList = (validAlbums) => {
+  for (const album of validAlbums) {
+    const div = document.createElement('div');
+    div.classList.add('object-item', 'center');
+    const label = document.createElement('label');
+    label.classList.add('name', 'center');
+    label.htmlFor = album.name;
+    label.innerText = album.name;
+    const input = document.createElement('input');
+    input.classList.add('qty', 'center');
+    input.type = 'text';
+    input.id = album.id;
+    input.placeholder = 0;
+    div.appendChild(label);
+    div.appendChild(input);
+    objectList.appendChild(div);
   }
 };
 
+//* DISPLAY PHOTOS
+submit.addEventListener('click', async (e) => {
+  e.preventDefault(); // Prevent form submission
+  console.log('Submit button clicked');
+  const objectInputs = Array.from(document.getElementsByClassName('qty'));
+  const selectedAlbums = [];
+  const selectedQtys = [];
 
-// const fetchAlbumList = async () => {
-//   try {
-//     const response = await gapi.client.photoslibrary.albums.list({});
-//     console.log('Albums list response:', response);
-//     console.log('Access token in use:', gapi.client.getToken().access_token);
-//     console.log('Received albums:', response.result.albums);
-//     if (!response.result) {
-//       console.error('Error fetching albums:', response);
-//       return;
-//     }
-//     const validAlbums = [];
-//     for (const album of response.result.albums) {
-//       const albumName = album.title;
-//       const photoCount = album.mediaItemsCount;
-//       if (photoCount >= 10) {
-//         validAlbums.push(albumName);
-//       }
-//     }
-//     validAlbums.sort();
-//     createList(validAlbums);
-//   } catch (error) {
-//     console.error('Error fetching albums:', error);
-//   }
-// };
+  objectInputs.forEach((input) => {
+    if (input.value > 0) {
+      selectedAlbums.push(input.id);
+      selectedQtys.push(input.value);
+      input.value = ''; // Reset the quantity value
+    }
+  });
+  
+  console.log('Selected albums:', selectedAlbums);
+  console.log('Selected quantities:', selectedQtys);
 
-// // Adds album names to list
-// const createList = (validAlbums) => {
-//   for (const albumName of validAlbums) {
-//     const div = document.createElement('div');
-//     div.classList.add('object-item', 'center');
-//     const label = document.createElement('label');
-//     label.classList.add('name', 'center');
-//     label.htmlFor = albumName;
-//     label.innerText = albumName;
-//     const input = document.createElement('input');
-//     input.classList.add('qty', 'center');
-//     input.type = 'text';
-//     input.id = albumName;
-//     input.placeholder = 0;
-//     div.appendChild(label);
-//     div.appendChild(input);
-//     objectList.appendChild(div);
-//   }
-// };
+  if (selectedAlbums.length === 0) { // Check if any album was selected
+    alert('Please enter a positive number for at least two categories before submitting.');
+    return;
+  }
+  
+  await fetchPhotos(selectedAlbums, selectedQtys);
+});
 
-// //* DISPLAY PHOTOS
-// submit.addEventListener('click', async (e) => {
-//   e.preventDefault(); // Prevent form submission
-//   const selectedAlbums = [];
-//   const selectedQtys = [];
-//   objectInputs.forEach((input) => {
-//     if (input.value) {
-//       selectedAlbums.push(input.id);
-//       selectedQtys.push(input.value);
-//       input.value = 0; // Reset the quantity value
-//     }
-//   });
-//   await fetchPhotos(selectedAlbums, selectedQtys);
-// });
 
-// const fetchPhotos = async (albumNames, qtys) => {
-//   const promises = [];
 
-//   for (let i = 0; i < albumNames.length; i++) {
-//     const query = {
-//       albumId: albumNames[i],
-//       pageSize: qtys[i],
-//     };
-//     promises.push(gapi.client.photoslibrary.mediaItems.search(query));
-//   }
+const fetchPhotos = (albumNames, qtys) => {
+  console.log('fetchPhotos CALLED.');
+  const promises = [];
 
-//   try {
-//     const responses = await Promise.all(promises);
-//     let allPhotos = [];
-//     for (let i = 0; i < responses.length; i++) {
-//       const response = responses[i].result;
-//       const { mediaItems } = response;
-//       const albumPhotos = [];
-//       for (const mediaItem of mediaItems) {
-//         const photo = {
-//           image: mediaItem.baseUrl,
-//           fileName: mediaItem.filename,
-//         };
-//         albumPhotos.push(photo);
-//       }
-//       shuffleArray(albumPhotos);
-//       allPhotos = allPhotos.concat(albumPhotos);
-//     }
-//     shuffleArray(allPhotos);
-//     displayPhotos(allPhotos);
-//   } catch (error) {
-//     console.error('Error fetching photos:', error);
-//   }
-// };
+  for (let i = 0; i < albumNames.length; i++) {
+    console.log(`Fetching photos for album: ${albumNames[i]}, quantity: ${qtys[i]}`);
+    const promise = new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:search');
+      xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+      xhr.setRequestHeader('Content-Type', 'application/json');
 
-// // Helper function to randomize array length based on user input
-// const shuffleArray = (array) => {
-//   for (let i = array.length - 1; i > 0; i--) {
-//     const j = Math.floor(Math.random() * (i + 1));
-//     [array[i], array[j]] = [array[j], array[i]];
-//   }
-//   return array;
-// };
+      xhr.onreadystatechange = () => {
+        console.log(`XHR state: ${xhr.readyState}, status: ${xhr.status}`);
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const jsonResponse = JSON.parse(xhr.responseText);
+          console.log('Received response for album', albumNames[i], ':', jsonResponse);
+          const mediaItems = jsonResponse.mediaItems;
+          resolve(mediaItems);
+        } else if (xhr.readyState === 4) {
+          reject('Error in XMLHttpRequest:', xhr.statusText);
+        }
+      };
 
-// // Helper function for displaying photos
-// const displayPhotos = (photos) => {
-//   allImages.innerHTML = '';
-//   for (let i = 0; i < photos.length; i++) {
-//     const img = document.createElement('img');
-//     img.src = photos[i].image;
-//     allImages.appendChild(img);
-//   }
-// };
+      xhr.onerror = () => {
+        reject(new Error('Network Error'));
+      };
+      
+      const body = JSON.stringify({
+        albumId: albumNames[i],
+        pageSize: qtys[i],
+      });
+
+      xhr.send(body);
+    });
+
+    promises.push(promise);
+  }
+
+  console.log('All promises prepared, waiting for all to resolve...');
+
+  Promise.all(promises)
+    .then((responses) => {
+      console.log('All promises resolved. Processing responses...');
+      let allPhotos = [];
+      for (let i = 0; i < responses.length; i++) {
+        const mediaItems = responses[i];
+        const albumPhotos = [];
+        for (const mediaItem of mediaItems) {
+          const photo = {
+            image: mediaItem.baseUrl,
+            fileName: mediaItem.filename,
+          };
+          albumPhotos.push(photo);
+        }
+        shuffleArray(albumPhotos);
+        allPhotos = allPhotos.concat(albumPhotos);
+      }
+      shuffleArray(allPhotos);
+      console.log('Photos shuffled and ready for display.');
+      displayPhotos(allPhotos);
+    })
+    .catch((error) => {
+      console.error('Error fetching photos:', error);
+    });
+};
+
+// Helper function to randomize array length based on user input
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
+// Helper function for displaying photos
+const displayPhotos = (photos) => {
+  console.log('displayPhotos called with', photos);
+  allImages.innerHTML = '';
+  for (let i = 0; i < photos.length; i++) {
+    const img = document.createElement('img');
+    img.src = photos[i].image;
+    img.classList.add('image');
+    console.log('Image URL:', img.src); 
+    allImages.appendChild(img);
+  }
+};
