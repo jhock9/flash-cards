@@ -2,7 +2,7 @@ const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
-const objectInputs = Array.from(document.getElementsByClassName('qty'));
+// const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const allImages = document.querySelector('.images-container');
 
 let googleClientID;
@@ -152,24 +152,26 @@ const createList = (validAlbums) => {
 submit.addEventListener('click', async (e) => {
   e.preventDefault(); // Prevent form submission
   console.log('Submit button clicked');
+  const objectInputs = Array.from(document.getElementsByClassName('qty'));
   const selectedAlbums = [];
   const selectedQtys = [];
+
   objectInputs.forEach((input) => {
-    if (input.value) {
+    if (input.value > 0) {
       selectedAlbums.push(input.id);
       selectedQtys.push(input.value);
-      input.value = 0; // Reset the quantity value
+      input.value = ''; // Reset the quantity value
     }
   });
 
   console.log('Selected albums:', selectedAlbums);
   console.log('Selected quantities:', selectedQtys);
 
-  const isAnySelected = selectedAlbums.length > 0;
-  if (!isAnySelected) {
-      alert('Please enter a quantity for at least one category before submitting.');
+  if (selectedAlbums.length === 0) { // Check if any album was selected
+    alert('Please enter a quantity for at least one category before submitting.');
     return;
   }
+  
   console.log('selectedAlbums :', isAnySelected)
 
   await fetchPhotos(selectedAlbums, selectedQtys);
