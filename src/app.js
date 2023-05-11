@@ -1,5 +1,7 @@
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
+const sidePanel = document.querySelector('#sidepanel');
+const logoButton = document.querySelector('#logo-button');
 const submit = document.querySelector('#submit-btn');
 const objectList = document.querySelector('.object-list');
 const allImages = document.querySelector('.images-container');
@@ -138,8 +140,11 @@ const createList = (validAlbums) => {
     label.innerText = album.name;
     const input = document.createElement('input');
     input.classList.add('qty', 'center');
-    input.type = 'text';
+    input.type = 'number';
     input.id = album.id;
+    input.min = "1";
+    input.max = "9";
+    input.step = "1";
     input.placeholder = 0;
     div.appendChild(label);
     div.appendChild(input);
@@ -167,14 +172,24 @@ submit.addEventListener('click', async (e) => {
   console.log('Selected quantities:', selectedQtys);
 
   if (selectedAlbums.length === 0) { // Check if any album was selected
-    alert('Please enter a positive number for at least two categories before submitting.');
+    alert('Please enter a number between 1-9 in two categories before submitting.');
     return;
   }
   
   await fetchPhotos(selectedAlbums, selectedQtys);
+  
+  sidePanel.classList.remove('open');
+  sidePanel.classList.add('closed');
+  logoButton.classList.add('collapsed');
 });
 
-
+logoButton.addEventListener('click', () => {
+  if (sidePanel.classList.contains('closed')) {
+    sidePanel.classList.remove('closed');
+    sidePanel.classList.add('open');
+    logoButton.classList.remove('collapsed');
+  }
+});
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
