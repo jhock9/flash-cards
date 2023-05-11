@@ -162,6 +162,8 @@ submit.addEventListener('click', async (e) => {
     }
   });
 
+  const isAnySelected = selectedAlbums.length > 0;
+
   if (!isAnySelected) {
       alert('Please enter a quantity for at least one category before submitting.');
     return;
