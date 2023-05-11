@@ -36,7 +36,7 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
-  google.accounts.id.prompt();
+  // google.accounts.id.prompt();
 };
 
 const handleCredentialResponse = (response) => {
@@ -117,7 +117,7 @@ const fetchAlbumList = (access_token) => {
         }
       }
 
-      validAlbums.sort();
+      validAlbums.sort((a, b) => a.name.localeCompare(b.name));      
       console.log('Valid Albums:', validAlbums);
       createList(validAlbums);
     } else if (xhr.readyState === 4) {
@@ -151,6 +151,7 @@ const createList = (validAlbums) => {
 //* DISPLAY PHOTOS
 submit.addEventListener('click', async (e) => {
   e.preventDefault(); // Prevent form submission
+  console.log('Submit button clicked');
   const selectedAlbums = [];
   const selectedQtys = [];
   objectInputs.forEach((input) => {
@@ -183,6 +184,7 @@ const fetchPhotos = (albumNames, qtys) => {
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
           const jsonResponse = JSON.parse(xhr.responseText);
+          console.log(jsonResponse);
           const mediaItems = jsonResponse.mediaItems;
           resolve(mediaItems);
         } else if (xhr.readyState === 4) {
@@ -240,10 +242,12 @@ const shuffleArray = (array) => {
 
 // Helper function for displaying photos
 const displayPhotos = (photos) => {
+  console.log('displayPhotos called with', photos);
   allImages.innerHTML = '';
   for (let i = 0; i < photos.length; i++) {
     const img = document.createElement('img');
     img.src = photos[i].image;
+    console.log('Image URL:', img.src); 
     allImages.appendChild(img);
   }
 };
