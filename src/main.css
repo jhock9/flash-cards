@@ -1,11 +1,13 @@
 /**** BASE & COMMON STYLES ****/
 :root {
   --primary-color: #32a0da;
-  --second-color: #7bba51;
-  --third-color: #f5995c;
+  --second-color: #f5995c;
+  --third-color: #7bba51;
   --fourth-color: #dd4559;
-  --background-color: #f4f4f4;
+  --bg-primary: #f4f4f4;
   --text-color: #000000;
+  --bg-second:#E8E8E8;
+  --sidepanel: #333333;
 }
 
 .hide {
@@ -37,7 +39,7 @@ body {
   font-family: "Mulish", sans-serif;
   color: #000000;
   font-size: 2rem;
-  background-color: var(--background-color);
+  background-color: var(--bg-primary);
   padding: 0;
   margin: 0;
 }
@@ -53,7 +55,7 @@ figure {
   width: 100%;
   margin-top: 5rem;
   padding: 0;
-  background-color: var(--background-color);
+  background-color: var(--bg-primary);
 }
 
 figure .logo {
@@ -62,14 +64,16 @@ figure .logo {
 }
 
 footer {
+  position: fixed;
+  bottom: 0;
   width: 100%;
-  background-color: var(--third-color);
+  background-color: var(--bg-second);
   padding: 1rem 0;
 }
 
 footer p {
   font-size: 1.5rem;
-  color: #ffffff;
+  color: var(--text-color);
   margin: 0;
   padding: 0;
 }
@@ -121,6 +125,12 @@ footer p {
 #flashcards-page .content-wrapper {
   justify-content: space-between;
   flex-direction: column;
+  margin-left: 0;
+  transition: margin-left .5s;
+}
+
+#flashcards-page .content-wrapper.shifted {
+  margin-left: 10rem; /* Same as the width of the side panel when open */
 }
 
 main {  
@@ -130,41 +140,59 @@ main {
   flex-direction: column !important;
 }
 
-main #sidepanel {
-  transition: margin-left .5s;
-  width: 100%;
-}
-
-main #sidepanel.open {
-  margin-left: 0;
-}
-
-main #sidepanel.closed {
-  margin-left: -100%;
-}
-
 main figure {
   margin: 3rem 0;
+  background-color: var(--bg-second);
+
 }
 
-#logo-button {
-  background: none; 
-  border: none; 
-}
-
-#logo-button img {
-  width: 100%; 
-  max-width: 20rem; 
-  margin: 0 3rem;
-}
-
-#logo-button.collapsed img {
+/* Side-panel styles */
+#side-panel {
   position: fixed;
-  left: 0; 
-  top: 0; 
-  max-width: 5rem; 
-  height: 5rem;
-  cursor: pointer; 
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  background-color: #111;
+  opacity: 0.9;
+  overflow-x: hidden;
+  transition: 0.5s;
+  z-index: 1;
+  padding-top: 20rem;
+}
+
+/* #side-panel {
+  transition: margin-left .5s;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--bg-second);
+  opacity: 0.7;
+  z-index: 1;
+} */
+
+#side-panel.open {
+  width: 10rem; /* or use a percentage */
+}
+
+#side-panel .btn {
+  margin-top: 0.2rem;
+}
+
+#open-btn {
+  font-size: 3rem;
+  position: absolute; /* this is messing up the open/close */
+  top: 1rem;
+  left: 1rem;
+  background-color: #111;
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#open-btn:hover {
+  background-color: #444;
 }
 
 #object-selection-form {
@@ -174,7 +202,7 @@ main figure {
   margin: 0 2rem;
   padding: 2rem;
   background-color: #ffffff;
-  border: 0.25rem solid var(--primary-color);
+  border: 0.25rem solid var(--second-color);
 }
 
 #submit-btn {
@@ -183,12 +211,12 @@ main figure {
   margin: 1rem;
   padding-left: 1rem;
   background-color: #ffffff;
-  color: var(--primary-color);
+  color: var(--second-color);
   font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .8rem;
-  border: .25rem solid var(--primary-color);
+  border: .25rem solid var(--second-color);
   border-radius: .5rem;
   box-shadow: 0 .25rem #cccccc;
   cursor: pointer;
@@ -201,9 +229,9 @@ main figure {
 
 #submit-btn:hover,
 #submit-btn:focus {
-  background-color: var(--primary-color);
+  background-color: var(--second-color);
   color: #ffffff;
-  outline: 4rem auto var(--primary-color);
+  outline: 4rem auto var(--second-color);
   transition: all 0.25s ease-in-out;
 }
 
@@ -238,7 +266,7 @@ main figure {
 .qty {
   width: 3rem;
   border: 0.1rem solid #e2e7e7;
-  background-color: var(--background-color);
+  background-color: var(--bg-primary);
   height: 100%;
   font-size: 2rem;
   padding: 0.25rem;
@@ -251,15 +279,22 @@ main figure {
 }
 
 .images-container {
+  position: absolute;
+  left: 0;
   width: 100%;
-  padding: 0;
+  height: 100vh;
+  /* padding: 0; */
+  padding-left: 5%;
   margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .image {
   width: 25rem;
   aspect-ratio: 1/1;
-  border: 0.25rem solid var(--second-color);
+  border: 0.25rem solid var(--primary-color);
   border-radius: .5rem;
   margin: 1rem;
   padding: .5rem;

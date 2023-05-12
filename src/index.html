@@ -11,7 +11,6 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="main.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/dist/jwt-decode.min.js"></script> -->
   <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +19,7 @@
 </head>
 
 <body>
-  <div id="landing-page" class="center">
+  <div id="landing-page" class="hide center">
     <div class="content-wrapper center">
       <section class="center">
         <figure class="center">
@@ -62,25 +61,24 @@
     </div>
   </div>
   
-  <div id="flashcards-page" class="hide">
+  <div id="flashcards-page" class=" ">
     <div class="content-wrapper center">
+      <!-- <button id="logo-button" onclick="toggleNav()"><i class="fa-solid fa-filter"></i></button> -->
+      <button id="open-btn" onclick="toggleNav()"><i class="fa-solid fa-bars"></i></button>
+      
+      <aside id="side-panel" class="center">
+        <!-- <figure class="center"> -->
+        <button id="close-btn" onclick="toggleNav()">×</button>
+        <!-- </figure> -->
+        
+        <form class="center" id="object-selection-form">
+          <button type="submit" class="btn center" id="submit-btn">Submit&nbsp;<i class="fas fa-angle-double-right"></i></button>
+          <div class="object-list center"> 
+          </div>
+        </form>
+      </aside>
+      
       <main class="center">
-        <aside id="sidepanel" class="open center">
-          <figure class="center">
-            <div class="logo center">
-              <button id="logo-button">
-                <img src="assets/ABA-Logo.png" alt="ABA Co-Op Logo">               
-              </button>
-            </div>
-          </figure>
-          
-          <form class="center" id="object-selection-form">
-            <button type="submit" class="btn center" id="submit-btn">Submit&nbsp;<i class="fas fa-angle-double-right"></i></button>
-            <div class="object-list center"> 
-            </div>
-          </form>
-        </aside>
-
         <section class="images-wrapper center">
           <div class="images-container center">
           </div>

@@ -1,8 +1,9 @@
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
-const sidePanel = document.querySelector('#sidepanel');
-const logoButton = document.querySelector('#logo-button');
+const sidePanel = document.querySelector('#side-panel');
+const openBtn = document.querySelector('#open-btn');
 const submit = document.querySelector('#submit-btn');
+var contentWrapper = document.getElementById("content-wrapper");
 const objectList = document.querySelector('.object-list');
 const allImages = document.querySelector('.images-container');
 let accessToken;
@@ -146,6 +147,13 @@ const createList = (validAlbums) => {
     input.max = "9";
     input.step = "1";
     input.placeholder = 0;
+
+    input.addEventListener('input', function() {
+      if (this.value.length > 1) {
+        this.value = this.value.slice(0, 1);
+      }
+    });
+
     div.appendChild(label);
     div.appendChild(input);
     objectList.appendChild(div);
@@ -177,19 +185,18 @@ submit.addEventListener('click', async (e) => {
   }
   
   await fetchPhotos(selectedAlbums, selectedQtys);
-  
-  sidePanel.classList.remove('open');
-  sidePanel.classList.add('closed');
-  logoButton.classList.add('collapsed');
+  toggleNav();
 });
 
-logoButton.addEventListener('click', () => {
-  if (sidePanel.classList.contains('closed')) {
-    sidePanel.classList.remove('closed');
-    sidePanel.classList.add('open');
-    logoButton.classList.remove('collapsed');
+const toggleNav = () => { 
+  if (sidePanel.classList.contains("open")) {
+    sidePanel.classList.remove("open");
+    contentWrapper.classList.remove("shifted");
+  } else {
+    sidePanel.classList.add("open");
+    contentWrapper.classList.add("shifted");
   }
-});
+}
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
