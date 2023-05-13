@@ -62,25 +62,64 @@
   </div>
   
   <div id="flashcards-page" class=" ">
-    <div class="content-wrapper center">
-      <!-- <button id="logo-button" onclick="toggleNav()"><i class="fa-solid fa-filter"></i></button> -->
-      <button id="open-btn" onclick="toggleNav()"><i class="fa-solid fa-bars"></i></button>
-      
+    <div id="flash-content-wrapper" class="content-wrapper center">
       <aside id="side-panel" class="center">
-        <!-- <figure class="center"> -->
-        <button id="close-btn" onclick="toggleNav()">×</button>
-        <!-- </figure> -->
-        
-        <form class="center" id="object-selection-form">
-          <button type="submit" class="btn center" id="submit-btn">Submit&nbsp;<i class="fas fa-angle-double-right"></i></button>
-          <div class="object-list center"> 
+        <form id="object-selection-form" class="center">
+          <button type="submit" class=" center" id="submit-btn">Submit&nbsp;<i class="fas fa-angle-double-right"></i></button>
+          <div id="object-list" class="center"> 
+
+            <div class="object-item center"> <!-- //!!THIS IS A SAMPLE OUTPUT FOR PLACEHOLDING -->
+              <label class="name center" for="airplane">airplane</label>
+              <input class="qty center" type="number" placeholder="0">
+            </div>
+            <div class="object-item center">
+              <label class="name center" for="boat">boat</label>
+              <input class="qty center" type="number" placeholder="0">
+            </div>
+            <div class="object-item center">
+              <label class="name center" for="flower">flower</label>
+              <input class="qty center" type="number" placeholder="0">
+            </div>
+            <div class="object-item center">
+              <label class="name center" for="tree">tree</label>
+              <input class="qty center" type="number" placeholder="0">
+            </div>              
+            <div class="object-item center">
+              <label class="name center" for="flower">doctor</label>
+              <input class="qty center" type="number" placeholder="0">
+            </div>
+            <div class="object-item center">
+              <label class="name center" for="tree">construction worker</label>
+              <input class="qty center" type="number" placeholder="0"> <!-- //!!THIS IS A SAMPLE OUTPUT FOR PLACEHOLDING -->
+            </div>
           </div>
         </form>
       </aside>
-      
+
+      <div id="btn-container">
+        <!-- <button id="logo-button" onclick="toggleNav()"><i class="fa-solid fa-filter"></i></button> -->
+        <button id="open-btn"><i class="fa-solid fa-bars"></i></button>
+      </div>
+
       <main class="center">
         <section class="images-wrapper center">
           <div class="images-container center">
+
+            <div> <!-- //!!THIS IS A SAMPLE OUTPUT FOR PLACEHOLDING -->
+              <img src="airplane-image-1.jpg" class="image"><p>airplane-image-1</p>
+              <img src="airplane-image-2.jpg" class="image"><p>airplane-image-2</p>
+              <img src="boat-image-1.jpg" class="image"><p>boat-image-1</p>
+              <img src="boat-image-2.jpg" class="image"><p>boat-image-2</p>
+              <img src="flower-image-1.jpg" class="image"><p>flower-image-1</p>
+              <img src="flower-image-2.jpg" class="image"><p>flower-image-2</p>
+              <img src="tree-image-1.jpg" class="image"><p>tree-image-1</p>
+              <img src="tree-image-2.jpg" class="image"><p>tree-image-2</p>              <img src="tree-image-1.jpg" class="image"><p>tree-image-1</p>
+              <img src="tree-image-2.jpg" class="image"><p>doctor-image-1</p>              <img src="tree-image-1.jpg" class="image"><p>tree-image-1</p>
+              <img src="tree-image-2.jpg" class="image"><p>doctor-image-2</p>              <img src="tree-image-1.jpg" class="image"><p>tree-image-1</p>
+              <img src="tree-image-2.jpg" class="image"><p>construction worker-image-1</p>              <img src="tree-image-1.jpg" class="image"><p>tree-image-1</p>
+              <img src="tree-image-2.jpg" class="image"><p>construction worker-image-2</p>
+            <div> <!-- //!!THIS IS A SAMPLE OUTPUT FOR PLACEHOLDING -->
+              
           </div>
         </section>
       </main>
