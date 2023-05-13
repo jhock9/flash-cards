@@ -170,11 +170,11 @@ main figure {
 #submit-btn {
   width: 20rem;
   height: 5rem;
-  margin: 1rem;
+  margin: 2rem;
   padding-left: 1rem;
   background-color: var(--bg-primary);
   color: var(--text-default);
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .8rem;
@@ -206,7 +206,7 @@ main figure {
   margin: 0;
   padding: 0;
   transition: max-height 0.2s ease-out;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 
 .object-item {
@@ -223,6 +223,7 @@ main figure {
   justify-content: flex-start;
   font-weight: 700;
   color: var(--text-alt);
+  font-style: italic;
 }
 
 .qty {
@@ -321,7 +322,6 @@ main figure {
   }
 
   /**** Landing-Page ****/
-
   #landing-page figure .logo img {
     max-width: 40rem;
   }
@@ -342,12 +342,9 @@ main figure {
     flex-flow: row nowrap !important;
   }
   
-  #side-panel {
-  }
-
   #side-panel.open {
-    width: 30%;
-    max-width: 30rem;
+    width: 40%;
+    max-width: 40rem;
   }
 
   #object-selection-form {
@@ -364,11 +361,6 @@ main figure {
 @media screen and (min-width: 1200px) {
 
     /**** Flashcards-Page ****/
-  aside {
-    margin-left: 0;
-    max-width: 25%;
-  }
-
   .image {
     min-width: 25rem;
   }
