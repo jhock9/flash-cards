@@ -3,8 +3,8 @@ const flashCardPage = document.querySelector('#flashcards-page');
 const sidePanel = document.querySelector('#side-panel');
 const openBtn = document.querySelector('#open-btn');
 const submit = document.querySelector('#submit-btn');
-var contentWrapper = document.getElementById("content-wrapper");
-const objectList = document.querySelector('.object-list');
+const contentWrapper = document.querySelector('#flash-content-wrapper');
+const objectList = document.querySelector('#object-list');
 const allImages = document.querySelector('.images-container');
 let accessToken;
 let googleClientID;
@@ -182,21 +182,20 @@ submit.addEventListener('click', async (e) => {
   if (selectedAlbums.length === 0) { // Check if any album was selected
     alert('Please enter a number between 1-9 in two categories before submitting.');
     return;
+  } else {
+    toggleNav();
   }
   
   await fetchPhotos(selectedAlbums, selectedQtys);
-  toggleNav();
 });
 
-const toggleNav = () => { 
-  if (sidePanel.classList.contains("open")) {
-    sidePanel.classList.remove("open");
-    contentWrapper.classList.remove("shifted");
-  } else {
-    sidePanel.classList.add("open");
-    contentWrapper.classList.add("shifted");
-  }
+function toggleNav() {
+  sidePanel.classList.toggle('open');
+  contentWrapper.classList.toggle('open');
 }
+
+openBtn.addEventListener('click', toggleNav);
+
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
