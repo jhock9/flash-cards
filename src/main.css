@@ -5,10 +5,6 @@
   --third-color: #7bba51;
   --fourth-color: #dd4559;
   --bg-primary: #f4f4f4;
-  --text-default: #000000;
-  --text-alt: #f4f4f4;
-  --bg-second:#E8E8E8;
-  --sidepanel: #333333;
 }
 
 .hide {
@@ -38,7 +34,7 @@ html {
 
 body {
   font-family: "Mulish", sans-serif;
-  color: var(--text-default);
+  color: #000000;
   font-size: 2rem;
   background-color: var(--bg-primary);
   padding: 0;
@@ -50,32 +46,6 @@ body {
 .content-wrapper {
   min-height: 100vh;
   width: 100%;
-}
-
-figure {
-  width: 100%;
-  margin-top: 5rem;
-  padding: 0;
-  background-color: var(--bg-primary);
-}
-
-figure .logo {
-  width: 100%;
-  justify-content: center;
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: var(--bg-second);
-  padding: 1rem 0;
-}
-
-footer p {
-  font-size: 1.5rem;
-  margin: 0;
-  padding: 0;
 }
 
 /**** END OF BASE & COMMON STYLES ****/
@@ -90,7 +60,19 @@ footer p {
   justify-content: space-between;
 }
 
-#landing-page figure .logo img {
+figure {
+  width: 100%;
+  margin-top: 5rem;
+  padding: 0;
+  background-color: var(--bg-primary);
+}
+
+figure .logo {
+  width: 100%;
+  justify-content: center;
+}
+
+figure .logo img {
   width: 100%;
   max-width: 25rem;
   margin: 0 3rem;
@@ -121,6 +103,20 @@ footer p {
   margin: 6rem 0;
 }
 
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--second-color);
+  padding: 1rem 0;
+}
+
+footer p {
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
 /**** FLASHCARDS-PAGE ****/
 #flash-content-wrapper {
   flex-direction: column;
@@ -135,28 +131,24 @@ main {
   flex-direction: column !important;
 }
 
-main figure {
-  margin: 3rem 0;
-  background-color: var(--bg-second);
-}
-
 /* Side-panel styles */
 #side-panel {
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
-  width: 0;
+  width: 100%;
   padding-top: 2rem;
   align-items: flex-start;
-  background-color: var(--sidepanel);
+  background-color: var(--primary-color);
   overflow-x: hidden;
-  transition: 0.5s;
-  z-index: 1;
+  transform: translateX(-100%); 
+  transition: transform 0.6s; 
+  z-index: 4;
 }
 
 #side-panel.open {
-  width: 100%; /* or use a percentage */
+  transform: translateX(0);
 }
 
 #object-selection-form {
@@ -164,7 +156,7 @@ main figure {
   max-width: 40rem;
   flex-direction: column;
   margin: 2rem;
-  background-color: var(--sidepanel);
+  background-color: var(--primary-color);
 }
 
 #submit-btn {
@@ -172,15 +164,15 @@ main figure {
   height: 5rem;
   margin: 2rem;
   padding-left: 1rem;
-  background-color: var(--bg-primary);
-  color: var(--text-default);
+  background-color: var(--second-color);
+  color: #ffffff;
   font-size: 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .8rem;
-  border: .25rem solid var(--bg-second);
+  border: .25rem solid #ffffff;
   border-radius: .5rem;
-  box-shadow: 0 .25rem #444;
+  box-shadow: 0 .25rem #cccccc;
   cursor: pointer;
 }
 
@@ -191,12 +183,14 @@ main figure {
 
 #submit-btn:hover,
 #submit-btn:focus {
-  background-color: var(--bg-second);
-  outline: 4rem auto var(--bg-primary);
+  background-color: #ffffff;
+  outline: 4rem auto var(--second-color);
+  color: var(--second-color);
+  transition: all 0.15s ease-in-out;
 }
 
 #submit-btn:active {
-  box-shadow: 0 0.25rem var(--bg-primary);
+  box-shadow: 0 0.25rem #ffffff;
   transform: translateY(0.2rem);
   transition: all 0.1s linear;
 }
@@ -204,35 +198,34 @@ main figure {
 #object-list {
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 2rem 0;
   transition: max-height 0.2s ease-out;
   overflow: hidden;
 }
 
 .object-item {
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   width: 80%;
-  margin: 0.5rem;
-  padding: 0;
+  margin: 0;
+  padding: .75rem 0;
   justify-content: space-between;
 }
 
 .name {
-  /* width: 80%; */
   padding: 0.5rem 0;
   justify-content: flex-start;
   font-weight: 700;
-  color: var(--text-alt);
+  color: #ffffff;
   font-style: italic;
 }
 
 .qty {
   width: 3rem;
   border: 0.1rem solid #e2e7e7;
-  background-color: var(--bg-primary);
+  background-color: #ffffff;
   height: 100%;
-  font-size: 2rem;
-  padding: 0.5rem;
+  font-size: rem;
+  padding: 0.25rem;
   font-style: italic;
   text-align: center;
 }
@@ -257,9 +250,10 @@ main figure {
 }
 
 #btn-container {
-  background-color: var(--fourth-color);
-  opacity: 1;
-  padding: 10rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2;
 }
 
 #open-btn {
@@ -267,9 +261,10 @@ main figure {
   top: 1rem;
   left: 1rem;
   font-size: 3rem;
-  background-color: var(--sidepanel);
+  background-color: var(--second-color);
   color: white;
-  padding: 1rem;
+  padding: 0.8rem 1.2rem;
+  margin: 1rem;
   border: none;
   cursor: pointer;
   transition: 0.3s;
@@ -284,22 +279,17 @@ main figure {
 }
 
 .images-container {
-  position: absolute;
-  left: 0;
   width: 100%;
-  height: 100vh;
-  /* padding: 0; */
-  padding-left: 5%;
+  padding: 2rem;
   margin: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
+  justify-content: space-around;
+  gap: 1rem;
 }
 
 .image {
   width: 25rem;
   aspect-ratio: 1/1;
-  border: 0.25rem solid var(--primary-color);
+  border: 0.25rem solid var(--third-color);
   border-radius: .5rem;
   margin: 1rem;
   padding: .5rem;
@@ -313,16 +303,8 @@ main figure {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
 
-  footer {
-    padding: 1.5rem 0;
-  }
-
-  footer p{
-    font-size: 2rem;
-  }
-
   /**** Landing-Page ****/
-  #landing-page figure .logo img {
+  figure .logo img {
     max-width: 40rem;
   }
 
@@ -335,6 +317,14 @@ main figure {
     display: none;
   }
 
+  footer {
+    padding: 1.5rem 0;
+  }
+
+  footer p{
+    font-size: 2rem;
+  }
+
   /**** Flashcards-Page ****/
   main {  
     justify-content: space-between !important;
@@ -342,7 +332,8 @@ main figure {
     flex-flow: row nowrap !important;
   }
   
-  #side-panel.open {
+  #side-panel {
+    left: 0;
     width: 40%;
     max-width: 40rem;
   }

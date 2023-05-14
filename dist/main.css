@@ -5,9 +5,6 @@
   --third-color: #7bba51;
   --fourth-color: #dd4559;
   --bg-primary: #f4f4f4;
-  --text-color: #000000;
-  --bg-second:#E8E8E8;
-  --sidepanel: #333333;
 }
 
 .hide {
@@ -51,33 +48,6 @@ body {
   width: 100%;
 }
 
-figure {
-  width: 100%;
-  margin-top: 5rem;
-  padding: 0;
-  background-color: var(--bg-primary);
-}
-
-figure .logo {
-  width: 100%;
-  justify-content: center;
-}
-
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: var(--bg-second);
-  padding: 1rem 0;
-}
-
-footer p {
-  font-size: 1.5rem;
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
-}
-
 /**** END OF BASE & COMMON STYLES ****/
 
 /* ==========================================================================
@@ -90,7 +60,19 @@ footer p {
   justify-content: space-between;
 }
 
-#landing-page figure .logo img {
+figure {
+  width: 100%;
+  margin-top: 5rem;
+  padding: 0;
+  background-color: var(--bg-primary);
+}
+
+figure .logo {
+  width: 100%;
+  justify-content: center;
+}
+
+figure .logo img {
   width: 100%;
   max-width: 25rem;
   margin: 0 3rem;
@@ -121,16 +103,25 @@ footer p {
   margin: 6rem 0;
 }
 
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--second-color);
+  padding: 1rem 0;
+}
+
+footer p {
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
 /**** FLASHCARDS-PAGE ****/
-#flashcards-page .content-wrapper {
-  justify-content: space-between;
+#flash-content-wrapper {
   flex-direction: column;
   margin-left: 0;
   transition: margin-left .5s;
-}
-
-#flashcards-page .content-wrapper.shifted {
-  margin-left: 10rem; /* Same as the width of the side panel when open */
 }
 
 main {  
@@ -140,83 +131,46 @@ main {
   flex-direction: column !important;
 }
 
-main figure {
-  margin: 3rem 0;
-  background-color: var(--bg-second);
-
-}
-
 /* Side-panel styles */
 #side-panel {
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   bottom: 0;
-  width: 0;
-  background-color: #111;
-  opacity: 0.9;
-  overflow-x: hidden;
-  transition: 0.5s;
-  z-index: 1;
-  padding-top: 20rem;
-}
-
-/* #side-panel {
-  transition: margin-left .5s;
   width: 100%;
-  height: 100vh;
-  background-color: var(--bg-second);
-  opacity: 0.7;
-  z-index: 1;
-} */
+  padding-top: 2rem;
+  align-items: flex-start;
+  background-color: var(--primary-color);
+  overflow-x: hidden;
+  transform: translateX(-100%); 
+  transition: transform 0.6s; 
+  z-index: 4;
+}
 
 #side-panel.open {
-  width: 10rem; /* or use a percentage */
-}
-
-#side-panel .btn {
-  margin-top: 0.2rem;
-}
-
-#open-btn {
-  font-size: 3rem;
-  position: absolute; /* this is messing up the open/close */
-  top: 1rem;
-  left: 1rem;
-  background-color: #111;
-  color: white;
-  padding: 0.5rem;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-#open-btn:hover {
-  background-color: #444;
+  transform: translateX(0);
 }
 
 #object-selection-form {
   width: 100%;
-  max-width: 30rem;
+  max-width: 40rem;
   flex-direction: column;
-  margin: 0 2rem;
-  padding: 2rem;
-  background-color: #ffffff;
-  border: 0.25rem solid var(--second-color);
+  margin: 2rem;
+  background-color: var(--primary-color);
 }
 
 #submit-btn {
   width: 20rem;
   height: 5rem;
-  margin: 1rem;
+  margin: 2rem;
   padding-left: 1rem;
-  background-color: #ffffff;
-  color: var(--second-color);
-  font-size: 1.5rem;
+  background-color: var(--second-color);
+  color: #ffffff;
+  font-size: 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .8rem;
-  border: .25rem solid var(--second-color);
+  border: .25rem solid #ffffff;
   border-radius: .5rem;
   box-shadow: 0 .25rem #cccccc;
   cursor: pointer;
@@ -229,49 +183,95 @@ main figure {
 
 #submit-btn:hover,
 #submit-btn:focus {
-  background-color: var(--second-color);
-  color: #ffffff;
+  background-color: #ffffff;
   outline: 4rem auto var(--second-color);
-  transition: all 0.25s ease-in-out;
+  color: var(--second-color);
+  transition: all 0.15s ease-in-out;
 }
 
 #submit-btn:active {
-  box-shadow: 0 0.25rem #888888;
+  box-shadow: 0 0.25rem #ffffff;
   transform: translateY(0.2rem);
   transition: all 0.1s linear;
 }
 
-.object-list {
+#object-list {
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 2rem 0;
   transition: max-height 0.2s ease-out;
   overflow: hidden;
 }
 
 .object-item {
-  width: 100%;
+  font-size: 2.25rem;
+  width: 80%;
   margin: 0;
-  padding: 0;
+  padding: .75rem 0;
   justify-content: space-between;
 }
 
 .name {
-  width: 80%;
   padding: 0.5rem 0;
   justify-content: flex-start;
   font-weight: 700;
+  color: #ffffff;
+  font-style: italic;
 }
 
 .qty {
   width: 3rem;
   border: 0.1rem solid #e2e7e7;
-  background-color: var(--bg-primary);
+  background-color: #ffffff;
   height: 100%;
-  font-size: 2rem;
+  font-size: rem;
   padding: 0.25rem;
   font-style: italic;
   text-align: center;
+}
+
+.qty[type="number"] {
+  font-size: 2.5rem;
+}
+
+.qty::placeholder {
+  font-size: 2.5rem;
+}
+
+.qty::-webkit-outer-spin-button,
+.qty::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.qty::-moz-number-spin-box {
+  -moz-appearance: none;
+  margin: 0;
+}
+
+#btn-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+#open-btn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  font-size: 3rem;
+  background-color: var(--second-color);
+  color: white;
+  padding: 0.8rem 1.2rem;
+  margin: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#open-btn:hover {
+  background-color: #444;
 }
 
 .images-wrapper {
@@ -279,22 +279,17 @@ main figure {
 }
 
 .images-container {
-  position: absolute;
-  left: 0;
   width: 100%;
-  height: 100vh;
-  /* padding: 0; */
-  padding-left: 5%;
+  padding: 2rem;
   margin: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
+  justify-content: space-around;
+  gap: 1rem;
 }
 
 .image {
   width: 25rem;
   aspect-ratio: 1/1;
-  border: 0.25rem solid var(--primary-color);
+  border: 0.25rem solid var(--third-color);
   border-radius: .5rem;
   margin: 1rem;
   padding: .5rem;
@@ -308,17 +303,8 @@ main figure {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
 
-  footer {
-    padding: 1.5rem 0;
-  }
-
-  footer p{
-    font-size: 2rem;
-  }
-
   /**** Landing-Page ****/
-
-  #landing-page figure .logo img {
+  figure .logo img {
     max-width: 40rem;
   }
 
@@ -331,6 +317,14 @@ main figure {
     display: none;
   }
 
+  footer {
+    padding: 1.5rem 0;
+  }
+
+  footer p{
+    font-size: 2rem;
+  }
+
   /**** Flashcards-Page ****/
   main {  
     justify-content: space-between !important;
@@ -338,18 +332,10 @@ main figure {
     flex-flow: row nowrap !important;
   }
   
-  aside {
-    max-width: 30rem;
-    margin-left: 3rem;
-  }
-
-  #flashcards-page figure {
-    width: 30rem;
-    margin: 3rem;
-  }  
-
-  #flashcards-page figure .logo img {
-    max-width: 25rem;
+  #side-panel {
+    left: 0;
+    width: 40%;
+    max-width: 40rem;
   }
 
   #object-selection-form {
@@ -366,11 +352,6 @@ main figure {
 @media screen and (min-width: 1200px) {
 
     /**** Flashcards-Page ****/
-  aside {
-    margin-left: 0;
-    max-width: 25%;
-  }
-
   .image {
     min-width: 25rem;
   }
