@@ -258,7 +258,7 @@ main {
 
 .btn {
   font-size: 3.5rem;
-  color: white;
+  color: #ffffff;
   margin: 1rem;
   border: none;
   cursor: pointer;
@@ -276,6 +276,17 @@ main {
   background-color: var(--second-color);
 }
 
+#open-btn:hover {
+  background-color: #ffffff;
+  color: var(--second-color);
+  border-color: var(--second-color);
+}
+
+#open-btn.clicked {
+  background-color: var(--second-color);
+  color: #ffffff;
+}
+
 #refresh-btn {
   position: fixed;
   top: 9rem;
@@ -283,24 +294,21 @@ main {
   background-color: var(--third-color);
 }
 
-#open-btn:hover {
-  background-color: var(--bg-primary);
-  color: var(--second-color);
-  border-color: var(--second-color);
-}
-
 #refresh-btn:hover {
-  background-color: var(--bg-primary);
+  background-color: #ffffff;
   color: var(--third-color);
   border-color: var(--third-color);
 }
 
-#open-btn.clicked {
-  background-color: var(--second-color);
-}
-
 #refresh-btn.clicked {
   background-color: var(--third-color);
+  color: #ffffff;
+}
+
+#refresh-btn.clicked:hover {
+  background-color: #ffffff;
+  color: var(--third-color);
+  border-color: var(--third-color);
 }
 
 .images-wrapper {
