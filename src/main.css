@@ -224,7 +224,7 @@ main {
   border: 0.1rem solid #e2e7e7;
   background-color: #ffffff;
   height: 100%;
-  font-size: 2.5rem;
+  font-size: rem;
   padding: 0.25rem;
   font-style: italic;
   text-align: center;
