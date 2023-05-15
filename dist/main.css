@@ -164,12 +164,12 @@ main {
   height: 5rem;
   margin: 2rem;
   padding-left: 1rem;
-  background-color: var(--second-color);
-  color: #ffffff;
   font-size: 1.8rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .8rem;
+  color: #ffffff;
+  background-color: var(--second-color);
   border: .25rem solid #ffffff;
   border-radius: .5rem;
   box-shadow: 0 .25rem #cccccc;
@@ -183,16 +183,18 @@ main {
 
 #submit-btn:hover,
 #submit-btn:focus {
+  color: var(--second-color);
   background-color: #ffffff;
   outline: 4rem auto var(--second-color);
-  color: var(--second-color);
   transition: all 0.15s ease-in-out;
 }
 
 #submit-btn:active {
+  color: #ffffff;
+  background-color: var(--second-color);
   box-shadow: 0 0.25rem #ffffff;
-  transform: translateY(0.2rem);
   transition: all 0.1s linear;
+  transform: translateY(0.2rem);
 }
 
 #object-list {
@@ -257,16 +259,15 @@ main {
 }
 
 .btn {
-  font-size: 3.5rem;
-  color: #ffffff;
-  margin: 1rem;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-  border-radius: 4px;
-  border: .25rem solid transparent;
   width: 6rem;
   aspect-ratio: 1/1;
+  margin: 1rem;
+  cursor: pointer;
+  font-size: 3.5rem;
+  color: #ffffff;
+  border-radius: 4px;
+  border: .25rem solid transparent;
+  transition: 0.3s;
 }
 
 #open-btn {
@@ -277,14 +278,17 @@ main {
 }
 
 #open-btn:hover {
-  background-color: #ffffff;
   color: var(--second-color);
+  background-color: #ffffff;
   border-color: var(--second-color);
 }
 
-#open-btn.clicked {
-  background-color: var(--second-color);
+#open-btn:active {
   color: #ffffff;
+  background-color: var(--second-color);
+  box-shadow: 0 0.25rem #ffffff;
+  transition: all 0.1s linear;
+  transform: translateY(0.2rem);
 }
 
 #refresh-btn {
@@ -295,20 +299,17 @@ main {
 }
 
 #refresh-btn:hover {
-  background-color: #ffffff;
   color: var(--third-color);
+  background-color: #ffffff;
   border-color: var(--third-color);
 }
 
-#refresh-btn.clicked {
-  background-color: var(--third-color);
+#refresh-btn:active {
   color: #ffffff;
-}
-
-#refresh-btn.clicked:hover {
-  background-color: #ffffff;
-  color: var(--third-color);
-  border-color: var(--third-color);
+  background-color: var(--third-color);
+  box-shadow: 0 0.25rem #ffffff;
+  transition: all 0.1s linear;
+  transform: translateY(0.2rem);
 }
 
 .images-wrapper {
