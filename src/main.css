@@ -295,6 +295,14 @@ main {
   border-color: var(--third-color);
 }
 
+#open-btn.clicked {
+  background-color: var(--second-color);
+}
+
+#refresh-btn.clicked {
+  background-color: var(--third-color);
+}
+
 .images-wrapper {
   padding: 2rem;
 }

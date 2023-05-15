@@ -203,12 +203,16 @@ function toggleNav() {
   contentWrapper.classList.toggle('open');
 }
 
-openBtn.addEventListener('click', toggleNav);
+openBtn.addEventListener('click', () => {
+  toggleNav();
+  openBtn.classList.toggle('clicked');
+});
 
 refreshBtn.addEventListener('click', () => {
   if (lastSelectedAlbums !== null && lastSelectedQtys !== null) {
     fetchPhotos(lastSelectedAlbums, lastSelectedQtys);
   }
+  refreshBtn.classList.add('clicked');
 });
 
 const fetchPhotos = (albumNames, qtys) => {
