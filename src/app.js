@@ -1,13 +1,17 @@
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
-const sidePanel = document.querySelector('#side-panel');
-const openBtn = document.querySelector('#open-btn');
-const submit = document.querySelector('#submit-btn');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
+const sidePanel = document.querySelector('#side-panel');
 const objectList = document.querySelector('#object-list');
+const submit = document.querySelector('#submit-btn');
+const openBtn = document.querySelector('#open-btn');
+const refreshBtn = document.querySelector('#refresh-btn');
 const allImages = document.querySelector('.images-container');
+
 let accessToken;
 let googleClientID;
+let lastSelectedAlbums = null;
+let lastSelectedQtys = null;
 
 const fetchConfig = async () => {
   try {
@@ -61,6 +65,8 @@ const handleCredentialResponse = (response) => {
   getToken();
 
   landingPage.classList.add('hide');
+  sidePanel.classList.add('open');
+  contentWrapper.classList.add('open');
   flashCardPage.classList.remove('hide');
 };
 
@@ -141,7 +147,8 @@ const createList = (validAlbums) => {
     label.innerText = album.name;
     const input = document.createElement('input');
     input.classList.add('qty', 'center');
-    input.type = 'number';
+    input.type = 'text';
+    input.type = 'numeric';
     input.id = album.id;
     input.min = "1";
     input.max = "9";
@@ -184,6 +191,8 @@ submit.addEventListener('click', async (e) => {
     return;
   } else {
     toggleNav();
+    lastSelectedAlbums = selectedAlbums;
+    lastSelectedQtys = selectedQtys;
   }
   
   await fetchPhotos(selectedAlbums, selectedQtys);
@@ -196,6 +205,11 @@ function toggleNav() {
 
 openBtn.addEventListener('click', toggleNav);
 
+refreshBtn.addEventListener('click', () => {
+  if (lastSelectedAlbums !== null && lastSelectedQtys !== null) {
+    fetchPhotos(lastSelectedAlbums, lastSelectedQtys);
+  }
+});
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
