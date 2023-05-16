@@ -1,10 +1,17 @@
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
+const contentWrapper = document.querySelector('#flash-content-wrapper');
+const sidePanel = document.querySelector('#side-panel');
+const objectList = document.querySelector('#object-list');
 const submit = document.querySelector('#submit-btn');
-const objectList = document.querySelector('.object-list');
+const openBtn = document.querySelector('#open-btn');
+const refreshBtn = document.querySelector('#refresh-btn');
 const allImages = document.querySelector('.images-container');
+
 let accessToken;
 let googleClientID;
+let lastSelectedAlbums = null;
+let lastSelectedQtys = null;
 
 const fetchConfig = async () => {
   try {
@@ -58,6 +65,8 @@ const handleCredentialResponse = (response) => {
   getToken();
 
   landingPage.classList.add('hide');
+  sidePanel.classList.add('open');
+  contentWrapper.classList.add('open');
   flashCardPage.classList.remove('hide');
 };
 
@@ -139,8 +148,19 @@ const createList = (validAlbums) => {
     const input = document.createElement('input');
     input.classList.add('qty', 'center');
     input.type = 'text';
+    input.type = 'numeric';
     input.id = album.id;
+    input.min = "1";
+    input.max = "9";
+    input.step = "1";
     input.placeholder = 0;
+
+    input.addEventListener('input', function() {
+      if (this.value.length > 1) {
+        this.value = this.value.slice(0, 1);
+      }
+    });
+
     div.appendChild(label);
     div.appendChild(input);
     objectList.appendChild(div);
@@ -167,14 +187,29 @@ submit.addEventListener('click', async (e) => {
   console.log('Selected quantities:', selectedQtys);
 
   if (selectedAlbums.length === 0) { // Check if any album was selected
-    alert('Please enter a positive number for at least two categories before submitting.');
+    alert('Please enter a number between 1-9 in two categories before submitting.');
     return;
+  } else {
+    toggleNav();
+    lastSelectedAlbums = selectedAlbums;
+    lastSelectedQtys = selectedQtys;
   }
   
   await fetchPhotos(selectedAlbums, selectedQtys);
 });
 
+function toggleNav() {
+  sidePanel.classList.toggle('open');
+  contentWrapper.classList.toggle('open');
+}
 
+openBtn.addEventListener('click', toggleNav);
+
+refreshBtn.addEventListener('click', () => {
+  if (lastSelectedAlbums !== null && lastSelectedQtys !== null) {
+    fetchPhotos(lastSelectedAlbums, lastSelectedQtys);
+  }
+});
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');

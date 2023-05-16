@@ -45,15 +45,8 @@ module.exports = {
       ],
     }),
     new Dotenv({
-      systemvars: true, // Load system environment variables as well
+      systemvars: true,
     }),
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify(dotenv.NODE_ENV),
-    //     GOOGLE_CLIENT_ID: JSON.stringify(dotenv.GOOGLE_CLIENT_ID),
-    //     GOOGLE_API_KEY: JSON.stringify(dotenv.GOOGLE_API_KEY),
-    //   },
-    // }),
     new webpack.IgnorePlugin({
       checkResource: (resource) => resource.startsWith('fs') && process.env.NODE_ENV === 'production',
     }),
