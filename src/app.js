@@ -72,18 +72,15 @@ const handleCredentialResponse = (response) => {
 };
 
 signoutBtn.addEventListener('click', (e) => {
-  e.preventDefault(); // Prevent form submission
+  e.preventDefault();
   google.accounts.id.disableAutoSelect();
-  google.accounts.id.prompt((notification) => {
-    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-      console.log('User signed out.');
-      clearUserSession();
-      
-      landingPage.classList.remove('hide');
-      flashCardPage.classList.add('hide');
-      window.location.reload;
-    }
-  })
+  
+  console.log('User signed out.');
+  localStorage.clear();
+  
+  landingPage.classList.remove('hide');
+  flashCardPage.classList.add('hide');
+  window.location.reload();
 });
 
 //* GOOGLE AUTHORIZATION
@@ -185,7 +182,7 @@ const createList = (validAlbums) => {
 
 //* DISPLAY PHOTOS
 submit.addEventListener('click', async (e) => {
-  e.preventDefault(); // Prevent form submission
+  e.preventDefault();
   console.log('Submit button clicked');
   const objectInputs = Array.from(document.getElementsByClassName('qty'));
   const selectedAlbums = [];
