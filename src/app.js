@@ -82,7 +82,11 @@ signoutBtn.addEventListener('click', (e) => {
       
       clearUserSession();
       
-      window.location.href = '/index.html';
+      // window.location.href = '/index.html';
+      landingPage.classList.remove('hide');
+      // sidePanel.classList.add('open');
+      // contentWrapper.classList.add('open');
+      flashCardPage.classList.add('hide');
     }
   })
 });

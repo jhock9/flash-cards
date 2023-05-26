@@ -139,7 +139,9 @@ main {
   bottom: 0;
   width: 100%;
   padding-top: 2rem;
+  flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
   background-color: var(--primary-color);
   overflow-x: hidden;
   transform: translateX(-100%); 
@@ -170,9 +172,8 @@ main {
   letter-spacing: .8rem;
   color: #ffffff;
   background-color: var(--second-color);
-  border: .25rem solid #ffffff;
-  border-radius: .5rem;
-  box-shadow: 0 .25rem #cccccc;
+  border: .4rem solid #ffffff;
+  border-radius: .4rem;
   cursor: pointer;
 }
 
@@ -181,20 +182,18 @@ main {
   padding: .1rem 0 0 .5rem;
 }
 
-#submit-btn:hover,
-#submit-btn:focus {
-  color: var(--second-color);
-  background-color: #ffffff;
-  outline: 4rem auto var(--second-color);
-  transition: all 0.15s ease-in-out;
+#submit-btn:hover {
+  border-color: transparent;
 }
 
 #submit-btn:active {
-  color: #ffffff;
-  background-color: var(--second-color);
-  box-shadow: 0 0.25rem #ffffff;
+  color: var(--second-color);
+  background-color: #ffffff;
+  border-color: var(--second-color);
+  box-shadow: 0 0.25rem #cccccc;
   transition: all 0.1s linear;
   transform: translateY(0.2rem);
+  outline: none;
 }
 
 #object-list {
@@ -251,7 +250,47 @@ main {
   margin: 0;
 }
 
-#btn-container {
+#sign-out-container {
+  width: 100%;
+  margin-top: auto;
+}
+
+#google-signout {
+  width: 18rem;
+  height: 4rem;
+  margin: 2rem;
+  padding-left: 1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6rem;
+  color: #000000;
+  background-color: var(--bg-primary);
+  border: .3rem solid #ffffff;
+  border-radius: .4rem;
+  cursor: pointer;
+}
+
+#submit-btn i {
+  margin: 0;
+  padding: .1rem 0 0 .5rem;
+}
+
+#submit-btn:hover {
+  border-color: transparent;
+}
+
+#submit-btn:active {
+  color: var(--fourth-color);
+  background-color: #ffffff;
+  border-color: var(--fourth-color);
+  box-shadow: 0 0.25rem #cccccc;
+  transition: all 0.1s linear;
+  transform: translateY(0.2rem);
+  outline: none;
+}
+
+#menu-container {
   position: fixed;
   top: 0;
   right: 0;
@@ -266,7 +305,7 @@ main {
   font-size: 3.5rem;
   color: #ffffff;
   border-radius: 4px;
-  border: .25rem solid transparent;
+  border: .4rem solid transparent;
   transition: 0.3s;
 }
 
@@ -277,20 +316,6 @@ main {
   background-color: var(--second-color);
 }
 
-#open-btn:hover {
-  color: var(--second-color);
-  background-color: #ffffff;
-  border-color: var(--second-color);
-}
-
-#open-btn:active {
-  color: #ffffff;
-  background-color: var(--second-color);
-  box-shadow: 0 0.25rem #ffffff;
-  transition: all 0.1s linear;
-  transform: translateY(0.2rem);
-}
-
 #refresh-btn {
   position: fixed;
   top: 9rem;
@@ -298,18 +323,28 @@ main {
   background-color: var(--third-color);
 }
 
+#open-btn:hover,
 #refresh-btn:hover {
-  color: var(--third-color);
-  background-color: #ffffff;
-  border-color: var(--third-color);
+  outline: 4rem auto #ffffff;
 }
 
+#open-btn:active,
 #refresh-btn:active {
-  color: #ffffff;
-  background-color: var(--third-color);
+  background-color: #ffffff;
   box-shadow: 0 0.25rem #ffffff;
   transition: all 0.1s linear;
   transform: translateY(0.2rem);
+  outline: none;
+}
+
+#open-btn:active {
+  color: var(--second-color);
+  border-color: var(--second-color);
+}
+
+#refresh-btn:active {
+  color: var(--third-color);
+  border-color: var(--third-color);
 }
 
 .images-wrapper {
