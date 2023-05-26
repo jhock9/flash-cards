@@ -76,17 +76,12 @@ signoutBtn.addEventListener('click', (e) => {
   google.accounts.id.disableAutoSelect();
   google.accounts.id.prompt((notification) => {
     if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-      // Perform additional sign-out logic here
-      // This can include clearing user session, redirecting to the sign-in page, etc.
       console.log('User signed out.');
-      
       clearUserSession();
       
-      // window.location.href = '/index.html';
       landingPage.classList.remove('hide');
-      // sidePanel.classList.add('open');
-      // contentWrapper.classList.add('open');
       flashCardPage.classList.add('hide');
+      window.location.reload;
     }
   })
 });
