@@ -4,6 +4,7 @@ const contentWrapper = document.querySelector('#flash-content-wrapper');
 const sidePanel = document.querySelector('#side-panel');
 const objectList = document.querySelector('#object-list');
 const submit = document.querySelector('#submit-btn');
+const signoutBtn = document.querySelector('#google-signout');
 const openBtn = document.querySelector('#open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 const allImages = document.querySelector('.images-container');
@@ -69,6 +70,22 @@ const handleCredentialResponse = (response) => {
   contentWrapper.classList.add('open');
   flashCardPage.classList.remove('hide');
 };
+
+signoutBtn.addEventListener('click', (e) => {
+  e.preventDefault(); // Prevent form submission
+  google.accounts.id.disableAutoSelect();
+  google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      // Perform additional sign-out logic here
+      // This can include clearing user session, redirecting to the sign-in page, etc.
+      console.log('User signed out.');
+      
+      clearUserSession();
+      
+      window.location.href = '/index.html';
+    }
+  })
+});
 
 //* GOOGLE AUTHORIZATION
 let tokenClient;
