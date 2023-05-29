@@ -154,10 +154,10 @@ main {
 }
 
 #object-selection-form {
-  width: 100%;
-  max-width: 38rem;
   flex: 1;
   flex-direction: column;
+  width: 100%;
+  max-width: 38rem;
   margin: 2rem;
   background-color: var(--primary-color);
   overflow: hidden;
@@ -200,6 +200,7 @@ main {
 
 #object-list {
   flex: 1;
+  align-content: flex-start; 
   width: 100%;
   margin: 0;
   padding: 2rem 0;
@@ -278,6 +279,7 @@ main {
   width: 100%;
   margin-top: auto;
   z-index: 2;
+  align-items: flex-end;
 }
 
 #google-signout {
