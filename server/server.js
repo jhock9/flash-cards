@@ -12,7 +12,7 @@ const NODE_ENV = process.env.NODE_ENV;
 console.log(`Redirect URL is: ${REDIRECT_URL}`);
 
 // Enforce HTTPS redirection in production
-// if (NODE_ENV === 'production') {
+if (NODE_ENV === 'production') {
   app.use((req, res, next) => {
     if (req.header('x-forwarded-proto') !== 'https') {
       res.redirect(`https://${req.header('host')}${req.url}`);
@@ -20,7 +20,7 @@ console.log(`Redirect URL is: ${REDIRECT_URL}`);
       next();
     }
   });
-// }
+}
 
 // Log serving file
 app.use((req, res, next) => {
