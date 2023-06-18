@@ -58,6 +58,16 @@ body {
   width: 100%;
 }
 
+.btn {
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: var(--white);
+  border-radius: .4rem;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 2rem;
+}
+
 /**** END OF BASE & COMMON STYLES ****/
 
 /* ==========================================================================
@@ -181,25 +191,23 @@ main {
   overflow: hidden;
 }
 
-#submit-btn {
+#submit-btn,
+#signout-btn {
   width: 18rem;
   height: 4rem;
-  margin: 2rem;
   padding-left: 1rem;
-  font-size: 1.6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .8rem;
-  color: var(--primary-color);
-  background-color: var(--white);
-  outline: 4rem auto var(--primary-color);
-  border-radius: .4rem;
-  cursor: pointer;
 }
 
 #submit-btn i {
-  margin: 0;
-  padding: .1rem 0 0 .5rem;
+margin: 0;
+padding: .3rem 0 0 .5rem;
+}
+
+#submit-btn {
+  font-size: 1.6rem;
+  letter-spacing: .8rem;
+  color: var(--primary-color);
+  outline: 4rem auto var(--primary-color);
 }
 
 #submit-btn:hover,
@@ -207,6 +215,24 @@ main {
   color: var(--white);
   background-color: var(--primary-color);
   outline: 4rem auto var(--primary-color);
+}
+
+#signout-btn {
+  font-size: 1.3rem;
+  letter-spacing: .6rem;
+  color: var(--black);
+  outline: 4rem auto var(--black);
+}
+
+#signout-btn i {
+  margin: 0;
+  padding: .1rem 0 0 .5rem;
+}
+
+#signout-btn:hover,
+#signout-btn:active {
+  color: var(--white);
+  background-color: var(--black);
 }
 
 #object-list {
@@ -249,7 +275,6 @@ main {
   padding: 0.5rem 0;
   justify-content: flex-start;
   font-weight: 700;
-  color: var(--white);
   font-style: italic;
 }
 
@@ -293,33 +318,6 @@ main {
   align-items: flex-end;
 }
 
-#google-signout {
-  width: 18rem;
-  height: 4rem;
-  margin: 2rem;
-  padding-left: 1rem;
-  font-size: 1.3rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .6rem;
-  color: var(--black);
-  background-color: var(--white);
-  outline: 4rem auto var(--black);
-  border-radius: .4rem;
-  cursor: pointer;
-}
-
-#google-signout i {
-  margin: 0;
-  padding: .1rem 0 0 .5rem;
-}
-
-#google-signout:hover,
-#google-signout:active {
-  color: var(--white);
-  background-color: var(--black);
-}
-
 /* Main-page styles */
 #menu-container {
   position: fixed;
@@ -328,24 +326,18 @@ main {
   z-index: 2;
 }
 
-.btn {
-  width: 6rem;
-  aspect-ratio: 1/1;
-  margin: 1rem;
-  cursor: pointer;
-  font-size: 3.5rem;
-  color: var(--white);
-  border-radius: 4px;
-  border: .4rem solid transparent;
-  transition: 0.3s;
-}
-
 #open-btn,
 #refresh-btn {
   position: fixed;
   top: 1rem;
   left: 1rem;
+  width: 6rem;
+  aspect-ratio: 1/1;
+  margin: 1rem;
+  font-size: 3.5rem;
+  color: var(--white);
   background-color: var(--primary-color);
+  outline: 4rem auto var(--primary-color);
 }
 
 #refresh-btn {
