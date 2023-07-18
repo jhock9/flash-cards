@@ -132,7 +132,7 @@ const fetchAlbumList = (accessToken) => {
         const albumName = album.title;
         const albumId = album.id;
         const photoCount = album.mediaItemsCount;
-        if (photoCount >= 10)) {
+        if (photoCount >= 10) {
           validAlbums.push({name: albumName, id: albumId});
         }
       }
