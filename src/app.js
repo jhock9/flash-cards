@@ -128,12 +128,11 @@ const fetchAlbumList = (accessToken) => {
       console.log('Photo albums JSON.parsed:', albums);
       
       const validAlbums = [];
-      const allowedAlbumNames = ['airplane', 'boat', 'flower', 'tree', 'doctor', 'construction worker'];
       for (const album of albums) {
         const albumName = album.title;
         const albumId = album.id;
         const photoCount = album.mediaItemsCount;
-        if (photoCount >= 10 && allowedAlbumNames.includes(albumName.toLowerCase())) {
+        if (photoCount >= 10)) {
           validAlbums.push({name: albumName, id: albumId});
         }
       }
