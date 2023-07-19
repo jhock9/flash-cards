@@ -352,7 +352,7 @@ padding: .3rem 0 0 .5rem;
 
 /* Main-page styles */
 main {  
-  margin: 5rem;
+  margin: 5rem 10rem;
   padding: 0;
 }
 
@@ -362,7 +362,6 @@ main {
 }
 
 .images-container {
-  height: 100vh;
   align-content: center;
   padding: 1rem;
   margin: 0;
