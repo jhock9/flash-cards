@@ -292,10 +292,15 @@ const fetchPhotos = (albumNames, qtys) => {
 
 // Helper function to randomize array length based on user input
 const shuffleArray = (array) => {
+  console.log('Original Array:', array);
+  
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
+    console.log(`Swapping elements at index ${i} and ${j}`);
     [array[i], array[j]] = [array[j], array[i]];
   }
+
+  console.log('Shuffled Array:', array);
   return array;
 };
 
