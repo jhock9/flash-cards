@@ -306,12 +306,14 @@ const displayPhotos = (photos) => {
   const numPhotos = photos.length;
   let flexBasis;
 
-  if (numPhotos > 4) {
+  if (numPhotos > 6) {
     flexBasis = `calc(25% - 2rem)`;
-  } else if (numPhotos > 2) {
+  } else if (numPhotos > 4) {
     flexBasis = `calc(33.33% - 2rem)`;
-  } else {
+  } else if (numPhotos > 1) {
     flexBasis = `calc(50% - 2rem)`;
+  } else {
+    flexBasis = `calc(80% - 2rem)`;
   }
 
   for (let i = 0; i < numPhotos; i++) {
