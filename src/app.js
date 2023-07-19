@@ -304,23 +304,23 @@ const displayPhotos = (photos) => {
   console.log('displayPhotos called with', photos);
   allImages.innerHTML = '';
   const numPhotos = photos.length;
-  // let flexBasis;
+  let flexBasis;
 
-  // if (numPhotos > 6) {
-  //   flexBasis = `calc(25% - 2rem)`;
-  // } else if (numPhotos > 4) {
-  //   flexBasis = `calc(33.33% - 2rem)`;
-  // } else if (numPhotos > 1) {
-  //   flexBasis = `calc(50% - 2rem)`;
-  // } else {
-  //   flexBasis = `calc(80% - 2rem)`;
-  // }
+  if (numPhotos > 6) {
+    flexBasis = `calc(25% - 2rem)`;
+  } else if (numPhotos > 4) {
+    flexBasis = `calc(33.33% - 2rem)`;
+  } else if (numPhotos > 1) {
+    flexBasis = `calc(50% - 2rem)`;
+  } else {
+    flexBasis = `calc(80% - 2rem)`;
+  }
 
   for (let i = 0; i < numPhotos; i++) {
     const img = document.createElement('img');
     img.src = photos[i].image;
     img.classList.add('image');
-    // img.style.flexBasis = flexBasis;
+    img.style.flexBasis = flexBasis;
     console.log('Image URL:', img.src); 
     allImages.appendChild(img);
   }
