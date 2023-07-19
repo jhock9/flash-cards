@@ -12,7 +12,6 @@ const allImages = document.querySelector('.images-container');
 let accessToken;
 let lastSelectedAlbums = null;
 let lastSelectedQtys = null;
-let numImages = 2;
 
 const fetchConfig = async () => {
   let googleClientID;
@@ -112,14 +111,6 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-//* RECALCULATING GRID ASPECT RATIO
-window.onresize = () => {
-  if (numImages > 2) {
-    const numColumns = Math.ceil(numImages / 2);
-    allImages.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
-  }
-};
-
 //* CREATING OBJECT LIST FROM ALBUM NAMES
 const fetchAlbumList = (accessToken) => {
   console.log('fetchAlbumList CALLED.');
@@ -214,14 +205,6 @@ submit.addEventListener('click', async (e) => {
     toggleNav();
     lastSelectedAlbums = selectedAlbums;
     lastSelectedQtys = selectedQtys;
-  }
-  
-  // Calculate # of images, columns, and reset grid
-  numImages = selectedQtys.reduce((a, b) => Number(a) + Number(b), 0);
-
-  if (numImages > 2) {
-    const numColumns = Math.ceil(numImages / 2);
-    allImages.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
   }
 
   await fetchPhotos(selectedAlbums, selectedQtys);
@@ -320,10 +303,22 @@ const shuffleArray = (array) => {
 const displayPhotos = (photos) => {
   console.log('displayPhotos called with', photos);
   allImages.innerHTML = '';
-  for (let i = 0; i < photos.length; i++) {
+  const numPhotos = photos.length;
+  let flexBasis;
+
+  if (numPhotos > 4) {
+    flexBasis = `calc(25% - 2rem)`;
+  } else if (numPhotos > 2) {
+    flexBasis = `calc(33.33% - 2rem)`;
+  } else {
+    flexBasis = `calc(50% - 2rem)`;
+  }
+
+  for (let i = 0; i < numPhotos; i++) {
     const img = document.createElement('img');
     img.src = photos[i].image;
     img.classList.add('image');
+    img.style.flexBasis = flexBasis;
     console.log('Image URL:', img.src); 
     allImages.appendChild(img);
   }
