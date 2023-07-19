@@ -307,11 +307,11 @@ const displayPhotos = (photos) => {
   let flexBasis;
 
   if (numPhotos > 6) {
-    flexBasis = `calc(25% - 2rem)`;
+    flexBasis = `calc((100% / 4) - 2rem)`;
   } else if (numPhotos > 4) {
-    flexBasis = `calc(33.33% - 2rem)`;
+    flexBasis = `calc((100% / 3) - 2rem)`;
   } else if (numPhotos > 1) {
-    flexBasis = `calc(50% - 2rem)`;
+    flexBasis = `calc((100% / 2) - 2rem)`;
   } else {
     flexBasis = `calc(80% - 2rem)`;
   }

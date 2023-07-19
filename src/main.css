@@ -363,7 +363,7 @@ main {
 
 .images-container {
   align-content: center;
-  padding: 1rem;
+  padding: 0;
   margin: 0;
   gap: 1rem;
 }
@@ -371,7 +371,6 @@ main {
 .image {
   max-width: 100%;
   min-width: 25rem;
-  /* min-width: 25rem; */
   aspect-ratio: 1/1;
   object-fit: cover;
   margin: 1rem;
