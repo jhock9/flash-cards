@@ -9,12 +9,12 @@ const openBtn = document.querySelector('#open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 const allImages = document.querySelector('.images-container');
 
+let googleClientID;
 let accessToken;
 let lastSelectedAlbums = null;
 let lastSelectedQtys = null;
 
 const fetchConfig = async () => {
-  let googleClientID;
   try {
     const response = await fetch('/config');
     const config = await response.json();
