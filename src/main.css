@@ -50,13 +50,18 @@ body {
 }
 
 .btn {
+  width: 8rem;
+  aspect-ratio: 1/1;
+  margin: 1rem;
+  padding-right: 1rem;
+  font-size: 4rem;
   font-weight: 700;
   text-transform: uppercase;
   background-color: var(--white);
+  border: .3rem solid var(--border-color);
   border-radius: .4rem;
   cursor: pointer;
   transition: 0.3s;
-  margin: 2rem;
 }
 
 /**** END OF BASE & COMMON STYLES ****/
@@ -143,16 +148,12 @@ footer p {
 }
 
 /**** FLASHCARDS-PAGE ****/
-#flashcards-page {
-  /* height: 100vh; */
-}
-
 #flash-content-wrapper {
-  /* width: 100%; */
-  /* height: 100%; */
-  /* flex-direction: column; */
-  /* margin-left: 0; */
-  /* transition: margin-left .5s; */
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  margin: 0;
+  transition: margin-left .5s;
 }
 
 /* Side-panel styles */
@@ -161,13 +162,14 @@ footer p {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 100%;
+  width: 80%;
   padding: 0;
   margin: 0;
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--second-color);
   border: .3rem solid var(--border-color);
+  /* border-right-color: var(--primary-color); */
   overflow-x: hidden;
   transform: translateX(-100%); 
   transition: transform 0.6s; 
@@ -183,53 +185,35 @@ footer p {
   flex-direction: column;
   width: 100%;
   max-width: 38rem;
-  margin: 2rem;
+  margin: 2rem 0;
   background-color: var(--second-color);
   overflow: hidden;
 }
 
-#submit-btn,
-#signout-btn {
-  width: 18rem;
-  height: 4rem;
-  padding-left: 1rem;
+#undo-btn,
+#random-btn, 
+#submit-btn {
+  color: var(--primary-color);
+  background-color: var(--white);
+  border-color: var(--border-color);
 }
 
+#undo-btn i,
+#random-btn i,
 #submit-btn i {
 margin: 0;
 padding: .3rem 0 0 .5rem;
 }
 
-#submit-btn {
-  font-size: 1.6rem;
-  letter-spacing: .8rem;
-  color: var(--primary-color);
-  outline: 4rem auto var(--primary-color);
-}
-
+#undo-btn:hover,
+#undo-btn:active,
+#random-btn:hover,
+#random-btn:active,
 #submit-btn:hover,
 #submit-btn:active {
   color: var(--white);
   background-color: var(--primary-color);
-  outline: 4rem auto var(--primary-color);
-}
-
-#signout-btn {
-  font-size: 1.3rem;
-  letter-spacing: .6rem;
-  color: var(--black);
-  outline: 4rem auto var(--black);
-}
-
-#signout-btn i {
-  margin: 0;
-  padding: .1rem 0 0 .5rem;
-}
-
-#signout-btn:hover,
-#signout-btn:active {
-  color: var(--white);
-  background-color: var(--black);
+  border-color: var(--primary-color);
 }
 
 #object-list {
@@ -315,39 +299,68 @@ padding: .3rem 0 0 .5rem;
   align-items: flex-end;
 }
 
-/* Menu-container styles */
-#menu-container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 2;
+#signout-btn {
+  width: 18rem;
+  height: 4rem;
+  padding-left: 1rem;
+  font-size: 1.3rem;
+  letter-spacing: .6rem;
+  color: var(--black);
+  background-color: var(--white);
+  border-color: var(--black);
+}
+
+#signout-btn i {
+  margin: 0;
+  padding: .1rem 0 0 .5rem;
+}
+
+#signout-btn:hover,
+#signout-btn:active {
+  color: var(--white);
+  background-color: var(--black);
 }
 
 #open-btn,
 #refresh-btn {
   position: fixed;
-  top: 1rem;
-  left: 1rem;
-  width: 6rem;
-  aspect-ratio: 1/1;
-  margin: 1rem;
-  font-size: 3.5rem;
-  color: var(--white);
-  background-color: var(--primary-color);
-  outline: 4rem auto var(--primary-color);
+  top: 3.3rem;
+  left: 0;
+  margin: 0;
+  color: var(--primary-color);
+  background-color: var(--white);
+  border-color: var(--border-color);
+  /* transition: left 0.6s; 
+  transform: translateX(-20%); */
+  z-index: 2;
+}
+
+#open-btn {
+  transform: translateX(0); 
+  transition: transform 0.6s; 
+  z-index: 4;
+}
+
+#open-btn.open {
+  position: absolute;
+  transition: transform 0.6s; 
+  transform: translateX(450%);
+  /* border: .3rem solid var(--border-color); */
 }
 
 #refresh-btn {
-  top: 9rem;
+  top: 13rem;
 }
 
-#open-btn:hover,
+/* #open-btn.open {
+  left: calc(100% - 7rem);
+} */
+
 #refresh-btn:hover,
-#open-btn:active,
 #refresh-btn:active {
-  color: var(--primary-color);
-  background-color: var(--white);
-  outline: 4rem auto var(--primary-color);
+  color: var(--white);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 /* Main-page styles */
@@ -423,25 +436,15 @@ main {
   }
 
   #object-selection-form {
-    margin: 0;
     min-width: 25rem;
   }
-  
-  main {  
-    /* justify-content: space-between !important; */
-    /* align-items: flex-start !important; */
-    /* flex-flow: row nowrap !important; */
-  }
-  .images-wrapper {
-    /* min-width: 65%; */
+
+  #open-btn.open {
+    transform: translateX(40.3rem);
   }
 }
 
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
 
-    /**** Flashcards-Page ****/
-  .image {
-    /* min-width: 25rem; */
-  }
 }

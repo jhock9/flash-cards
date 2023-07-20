@@ -179,6 +179,21 @@ const createList = (validAlbums) => {
   }
 };
 
+//* MENU BUTTONS
+function toggleNav() {
+  openBtn.classList.toggle('open');
+  sidePanel.classList.toggle('open');
+  contentWrapper.classList.toggle('open');
+}
+
+openBtn.addEventListener('click', toggleNav);
+
+refreshBtn.addEventListener('click', () => {
+  if (lastSelectedAlbums !== null && lastSelectedQtys !== null) {
+    fetchPhotos(lastSelectedAlbums, lastSelectedQtys);
+  }
+});
+
 //* DISPLAY PHOTOS
 submit.addEventListener('click', async (e) => {
   e.preventDefault();
@@ -208,19 +223,6 @@ submit.addEventListener('click', async (e) => {
   }
 
   await fetchPhotos(selectedAlbums, selectedQtys);
-});
-
-function toggleNav() {
-  sidePanel.classList.toggle('open');
-  contentWrapper.classList.toggle('open');
-}
-
-openBtn.addEventListener('click', toggleNav);
-
-refreshBtn.addEventListener('click', () => {
-  if (lastSelectedAlbums !== null && lastSelectedQtys !== null) {
-    fetchPhotos(lastSelectedAlbums, lastSelectedQtys);
-  }
 });
 
 const fetchPhotos = (albumNames, qtys) => {

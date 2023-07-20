@@ -70,7 +70,12 @@
     <div id="flash-content-wrapper" class="content-wrapper center">
       <aside id="side-panel" class="center">
         <form id="object-selection-form" class="center">
-          <button id="submit-btn" class="btn center" type="submit">Submit&nbsp;<i class="fas fa-angle-double-right"></i></button>
+          <div id="panel-btns" class="center">
+            <button id="undo-btn" class="btn center" type="submit"><i class="fa-solid fa-rotate-left"></i></i></button>
+            <button id="random-btn" class="btn center" type="submit"><i class="fa-solid fa-shuffle"></i></button>
+            <button id="submit-btn" class="btn center" type="submit"><i class="fas fa-angle-double-right"></i></button>  
+          </div>
+
           <div id="object-list" class="center"> 
           </div>
         </form>
@@ -80,10 +85,8 @@
         </div>
       </aside>
 
-      <div id="menu-container center">
-        <button id="open-btn" class="btn center"><i class="fa-solid fa-bars"></i></button>
-        <button id="refresh-btn" class="btn center"><i class="fa-solid fa-rotate"></i></button> 
-      </div>
+      <button id="open-btn" class="btn center"><i class="fa-solid fa-bars"></i></button>
+      <button id="refresh-btn" class="btn center"><i class="fa-solid fa-rotate"></i></button> 
 
       <main class="center">
         <section class="images-wrapper center">
