@@ -2,6 +2,7 @@ const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const sidePanel = document.querySelector('#side-panel');
+const objectSelectionForm = document.querySelector('#object-selection-form');
 const objectList = document.querySelector('#object-list');
 const submit = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
@@ -224,6 +225,13 @@ submit.addEventListener('click', async (e) => {
   }
 
   await fetchPhotos(selectedAlbums, selectedQtys);
+});
+
+objectSelectionForm.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // Prevent the default form submission behavior
+    objectSelectionForm.submit(); // Manually submit the form
+  }
 });
 
 const fetchPhotos = (albumNames, qtys) => {
