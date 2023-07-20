@@ -162,7 +162,8 @@ footer p {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 80%;
+  /* width: 80%; */
+  width: 41.4rem;
   padding: 0;
   margin: 0;
   flex-direction: column;
@@ -344,7 +345,7 @@ padding: .3rem 0 0 .5rem;
 #open-btn.open {
   position: absolute;
   transition: transform 0.6s; 
-  transform: translateX(450%);
+  transform: translateX(41.6rem);
   /* border: .3rem solid var(--border-color); */
 }
 
@@ -431,14 +432,13 @@ main {
   /**** Flashcards-Page ****/
   #side-panel {
     left: 0;
-    width: 40%;
     max-width: 40rem;
   }
 
   #object-selection-form {
     min-width: 25rem;
   }
-
+  
   #open-btn.open {
     transform: translateX(40.3rem);
   }
