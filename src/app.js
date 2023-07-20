@@ -66,6 +66,7 @@ const handleCredentialResponse = (response) => {
   getToken();
 
   landingPage.classList.add('hide');
+  openBtn.classList.add("open");
   sidePanel.classList.add('open');
   contentWrapper.classList.add('open');
   flashCardPage.classList.remove('hide');
@@ -180,7 +181,7 @@ const createList = (validAlbums) => {
 };
 
 //* MENU BUTTONS
-function toggleNav() {
+const toggleNav = () => {
   openBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
   contentWrapper.classList.toggle('open');
