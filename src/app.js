@@ -219,6 +219,9 @@ const handleFormSubmission = async (e) => {
     alert('Please enter a number between 1-9 in two categories before submitting.');
     return;
   } else {
+    //     // Do something with the selected albums and quantities
+    // console.log('Form submitted. Fetching photos...');
+    // fetchPhotos(selectedAlbums, selectedQtys);
     toggleNav();
     lastSelectedAlbums = selectedAlbums;
     lastSelectedQtys = selectedQtys;
@@ -231,12 +234,12 @@ submitBtn.addEventListener('click', async (e) => {
   await handleFormSubmission();
 });
 
-submitBtn.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    handleFormSubmission();
-  }
-});
+// submitBtn.addEventListener('keydown', (e) => {
+//   if (e.key === 'Enter') {
+//     e.preventDefault();
+//     handleFormSubmission();
+//   }
+// });
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
