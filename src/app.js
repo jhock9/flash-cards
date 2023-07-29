@@ -2,7 +2,6 @@ const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const sidePanel = document.querySelector('#side-panel');
-const objectSelectionForm = document.querySelector('#object-selection-form');
 const objectList = document.querySelector('#object-list');
 const submit = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
@@ -197,9 +196,10 @@ refreshBtn.addEventListener('click', () => {
 });
 
 //* DISPLAY PHOTOS
-submit.addEventListener('click', async (e) => {
+const handleFormSubmission = async (e) => {
+
   e.preventDefault();
-  console.log('Submit button clicked');
+  console.log('Submit button submitted.');
   const objectInputs = Array.from(document.getElementsByClassName('qty'));
   const selectedAlbums = [];
   const selectedQtys = [];
@@ -222,15 +222,16 @@ submit.addEventListener('click', async (e) => {
     toggleNav();
     lastSelectedAlbums = selectedAlbums;
     lastSelectedQtys = selectedQtys;
+    await fetchPhotos(selectedAlbums, selectedQtys);
   }
+};
 
-  await fetchPhotos(selectedAlbums, selectedQtys);
-});
+submit.addEventListener('click', handleFormSubmission);
 
-objectSelectionForm.addEventListener('keydown', (e) => {
+submitBtn.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
-    e.preventDefault(); // Prevent the default form submission behavior
-    objectSelectionForm.submit(); // Manually submit the form
+    e.preventDefault();
+    handleFormSubmission(e);
   }
 });
 
