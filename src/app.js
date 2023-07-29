@@ -228,7 +228,7 @@ const handleFormSubmission = async (e) => {
 
 submit.addEventListener('click', handleFormSubmission);
 
-submitBtn.addEventListener('keydown', (e) => {
+submit.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
     handleFormSubmission(e);
