@@ -196,7 +196,7 @@ refreshBtn.addEventListener('click', () => {
 });
 
 //* DISPLAY PHOTOS
-const handleFormSubmission = (e) => {
+const handleFormSubmission = async (e) => {
 
   e.preventDefault();
   console.log('Submit button submitted.');
