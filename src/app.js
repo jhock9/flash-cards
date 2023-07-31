@@ -229,15 +229,15 @@ const handleFormSubmission = async (e) => {
   }
 };
 
-submitBtn.addEventListener('click', (e) => {
+submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  handleFormSubmission();
+  await handleFormSubmission();
 });
 
-submitBtn.addEventListener('keydown', (e) => {
+submitBtn.addEventListener('keydown', async (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
-    handleFormSubmission();
+    await handleFormSubmission();
   }
 });
 
