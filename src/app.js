@@ -196,7 +196,7 @@ refreshBtn.addEventListener('click', () => {
 });
 
 //* DISPLAY PHOTOS
-const handleFormSubmission = async (e) => {
+const handleFormSubmission = (e) => {
 
   e.preventDefault();
   console.log('Submit button submitted.');
@@ -222,24 +222,24 @@ const handleFormSubmission = async (e) => {
     //     // Do something with the selected albums and quantities
     // console.log('Form submitted. Fetching photos...');
     // fetchPhotos(selectedAlbums, selectedQtys);
-    toggleNav();
     lastSelectedAlbums = selectedAlbums;
     lastSelectedQtys = selectedQtys;
     await fetchPhotos(selectedAlbums, selectedQtys);
+    toggleNav();
   }
 };
 
-submitBtn.addEventListener('click', async (e) => {
+submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  await handleFormSubmission();
+  handleFormSubmission();
 });
 
-// submitBtn.addEventListener('keydown', (e) => {
-//   if (e.key === 'Enter') {
-//     e.preventDefault();
-//     handleFormSubmission();
-//   }
-// });
+submitBtn.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    handleFormSubmission();
+  }
+});
 
 const fetchPhotos = (albumNames, qtys) => {
   console.log('fetchPhotos CALLED.');
