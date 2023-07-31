@@ -3,7 +3,6 @@ const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const sidePanel = document.querySelector('#side-panel');
 const objectList = document.querySelector('#object-list');
-const objectInputs = Array.from(document.getElementsByClassName('qty'));
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
@@ -199,6 +198,7 @@ refreshBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', () => {
+  const objectInputs = Array.from(document.getElementsByClassName('qty'));
   objectInputs.forEach((input) => {
     input.value = '';
   });
@@ -208,6 +208,7 @@ resetBtn.addEventListener('click', () => {
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
+  const objectInputs = Array.from(document.getElementsByClassName('qty'));
   const selectedAlbums = [];
   const selectedQtys = [];
 
@@ -262,8 +263,10 @@ randomBtn.addEventListener('click', () => {
     objectInputs[index].value = qty;
   }
 
-  // Programmatically click the submit button
-  submitBtn.click();
+  // Delay submitBtn click event trigger so it can finish executing 
+  setTimeout(() => {
+    submitBtn.click();
+  }, 0);
 });
 
 const fetchPhotos = (albumNames, qtys) => {
