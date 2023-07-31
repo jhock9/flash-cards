@@ -222,22 +222,22 @@ const handleFormSubmission = async (e) => {
     //     // Do something with the selected albums and quantities
     // console.log('Form submitted. Fetching photos...');
     // fetchPhotos(selectedAlbums, selectedQtys);
+    toggleNav();
     lastSelectedAlbums = selectedAlbums;
     lastSelectedQtys = selectedQtys;
-    await fetchPhotos(selectedAlbums, selectedQtys);
-    toggleNav();
   }
+  await fetchPhotos(selectedAlbums, selectedQtys);
 };
 
-submitBtn.addEventListener('click', async (e) => {
+submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
-  await handleFormSubmission();
+  handleFormSubmission();
 });
 
-submitBtn.addEventListener('keydown', async (e) => {
+submitBtn.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
-    await handleFormSubmission();
+    handleFormSubmission();
   }
 });
 
