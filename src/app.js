@@ -3,7 +3,7 @@ const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const sidePanel = document.querySelector('#side-panel');
 const objectList = document.querySelector('#object-list');
-const submit = document.querySelector('#submit-btn');
+const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const openBtn = document.querySelector('#open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
@@ -196,10 +196,9 @@ refreshBtn.addEventListener('click', () => {
 });
 
 //* DISPLAY PHOTOS
-const handleFormSubmission = async (e) => {
-
+submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  console.log('Submit button submitted.');
+  console.log('Submit button clicked');
   const objectInputs = Array.from(document.getElementsByClassName('qty'));
   const selectedAlbums = [];
   const selectedQtys = [];
@@ -219,26 +218,12 @@ const handleFormSubmission = async (e) => {
     alert('Please enter a number between 1-9 in two categories before submitting.');
     return;
   } else {
-    //     // Do something with the selected albums and quantities
-    // console.log('Form submitted. Fetching photos...');
-    // fetchPhotos(selectedAlbums, selectedQtys);
     toggleNav();
     lastSelectedAlbums = selectedAlbums;
     lastSelectedQtys = selectedQtys;
   }
+
   await fetchPhotos(selectedAlbums, selectedQtys);
-};
-
-submitBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
-  await handleFormSubmission();
-});
-
-submitBtn.addEventListener('keydown', async (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    await handleFormSubmission();
-  }
 });
 
 const fetchPhotos = (albumNames, qtys) => {
