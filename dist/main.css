@@ -191,7 +191,7 @@ footer p {
   overflow: hidden;
 }
 
-#undo-btn,
+#reset-btn,
 #random-btn, 
 #submit-btn {
   color: var(--primary-color);
@@ -199,15 +199,15 @@ footer p {
   border-color: var(--border-color);
 }
 
-#undo-btn i,
+#reset-btn i,
 #random-btn i,
 #submit-btn i {
 margin: 0;
 padding: .3rem 0 0 .5rem;
 }
 
-#undo-btn:hover,
-#undo-btn:active,
+#reset-btn:hover,
+#reset-btn:active,
 #random-btn:hover,
 #random-btn:active,
 #submit-btn:hover,

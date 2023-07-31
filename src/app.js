@@ -3,6 +3,9 @@ const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const sidePanel = document.querySelector('#side-panel');
 const objectList = document.querySelector('#object-list');
+const objectInputs = Array.from(document.getElementsByClassName('qty'));
+const resetBtn = document.querySelector('#reset-btn');
+const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const openBtn = document.querySelector('#open-btn');
@@ -180,7 +183,7 @@ const createList = (validAlbums) => {
   }
 };
 
-//* MENU BUTTONS
+//* BUTTONS
 const toggleNav = () => {
   openBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
@@ -195,11 +198,16 @@ refreshBtn.addEventListener('click', () => {
   }
 });
 
+resetBtn.addEventListener('click', () => {
+  objectInputs.forEach((input) => {
+    input.value = '';
+  });
+});
+
 //* DISPLAY PHOTOS
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
-  const objectInputs = Array.from(document.getElementsByClassName('qty'));
   const selectedAlbums = [];
   const selectedQtys = [];
 
@@ -224,6 +232,38 @@ submitBtn.addEventListener('click', async (e) => {
   }
 
   await fetchPhotos(selectedAlbums, selectedQtys);
+});
+
+randomBtn.addEventListener('click', () => {
+  const objectInputs = Array.from(document.getElementsByClassName('qty'));
+  const numItems = Math.floor(Math.random() * 3) + 2; // Random number between 2 and 4
+
+  // Reset all inputs
+  objectInputs.forEach((input) => {
+    input.value = '';
+  });
+
+  // Randomly select items and set quantities
+  for (let i = 0; i < numItems; i++) {
+    const index = Math.floor(Math.random() * objectInputs.length);
+    let maxQty;
+    switch(numItems) {
+      case 2:
+        maxQty = 6;
+        break;
+      case 3:
+        maxQty = 4;
+        break;
+      case 4:
+        maxQty = 3;
+        break;
+    }
+    const qty = Math.floor(Math.random() * maxQty) + 2; // Random number between 2 and maxQty
+    objectInputs[index].value = qty;
+  }
+
+  // Programmatically click the submit button
+  submitBtn.click();
 });
 
 const fetchPhotos = (albumNames, qtys) => {
