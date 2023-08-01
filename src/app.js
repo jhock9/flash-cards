@@ -2,19 +2,24 @@ const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const sidePanel = document.querySelector('#side-panel');
-const objectList = document.querySelector('#object-list');
+const tagsWrapper = document.querySelector('#tags-wrapper');
+const selectedTagsContainer = document.querySelector('#selected-tags-container');
+const tagsList = document.querySelector('#tags-list');
+const dropdown = document.getElementById('dropdown');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const openBtn = document.querySelector('#open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
-const allImages = document.querySelector('.images-container');
+const allImages = document.querySelector('#images-container');
 
 let googleClientID;
 let accessToken;
 let lastSelectedAlbums = null;
 let lastSelectedQtys = null;
+let selectedTags = [];
+
 
 const fetchConfig = async () => {
   try {
@@ -152,6 +157,7 @@ const fetchPhotos = (accessToken) => {
 const fetchDescriptions = async (accessToken) => {
   const photos = await fetchPhotos(accessToken);
   const descriptions = photos.map(photo => photo.description).filter(description => description);
+  console.log('Fetched descriptions:', descriptions);
   return descriptions;
 };
 
@@ -182,24 +188,51 @@ const initTags = async (accessToken) => {
   // Sort tags
   filteredTags.sort();
 
-  // Display tags
-  const dropdown = document.createElement('select');
+  // Display tags in dropdown and as selectable tags
   for (const tag of filteredTags) {
     const option = document.createElement('option');
     option.value = tag;
     option.text = tag;
     dropdown.add(option);
-  }
-  objectList.appendChild(dropdown);
 
-  // Handle user selection
-  dropdown.addEventListener('change', async () => {
-    const selectedTag = dropdown.value;
-    const photos = await fetchPhotos();
-    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTag));
-    displayPhotos(selectedPhotos);
-  });
-};
+    const tagDiv = document.createElement('div');
+    tagDiv.classList.add('tag');
+    const tagName = document.createElement('span');
+    tagName.classList.add('name', 'center');
+    tagName.innerText = tag;
+    tagDiv.appendChild(tagName);  
+    tagsList.appendChild(tagDiv);
+  }
+}
+
+// Handle user selection
+dropdown.addEventListener('change', () => {
+  const selectedTag = dropdown.value;
+
+  // Check if the tag is already selected or if 4 tags have already been selected
+  if (selectedTags.includes(selectedTag) || selectedTags.length >= 4) {
+    return;
+  }
+
+  selectedTags.push(selectedTag);
+
+  const tagDiv = document.createElement('div');
+  tagDiv.classList.add('selected-tag');
+  const tagName = document.createElement('span');
+  tagName.classList.add('name', 'center');
+  tagName.textContent = selectedTag;
+  const qtyInput = document.createElement('input');
+  qtyInput.classList.add('qty', 'center');
+  qtyInput.type = 'number';
+  qtyInput.type = 'numeric';
+  qtyInput.min = 1;
+  qtyInput.max = 9;
+  qtyInput.placeholder = 0;
+  tagDiv.appendChild(tagName);
+  tagDiv.appendChild(qtyInput);
+
+  selectedTagsContainer.appendChild(tagDiv);
+});
 
 // Helper function to randomize array length based on user input
 const shuffleArray = (array) => {
@@ -258,8 +291,8 @@ refreshBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', () => {
-  const objectInputs = Array.from(document.getElementsByClassName('qty'));
-  objectInputs.forEach((input) => {
+  const tagQty = Array.from(document.getElementsByClassName('qty'));
+  tagQty.forEach((input) => {
     input.value = '';
   });
 });
@@ -267,45 +300,34 @@ resetBtn.addEventListener('click', () => {
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
-  const objectInputs = Array.from(document.getElementsByClassName('qty'));
-  const selectedAlbums = [];
-  const selectedQtys = [];
 
-  objectInputs.forEach((input) => {
-    if (input.value > 0) {
-      selectedAlbums.push(input.id);
-      selectedQtys.push(input.value);
-      input.value = ''; // Reset the quantity value
-    }
-  });
-  
-  console.log('Selected albums:', selectedAlbums);
-  console.log('Selected quantities:', selectedQtys);
+  // Get the selected quantities from the input fields in the #selected-tags-container
+  const selectedQtys = Array.from(document.querySelectorAll('.selected-tag input')).map(input => input.value);
 
-  if (selectedAlbums.length === 0) { // Check if any album was selected
-    alert('Please enter a number between 1-9 in two categories before submitting.');
-    return;
-  } else {
-    toggleNav();
-    lastSelectedAlbums = selectedAlbums;
-    lastSelectedQtys = selectedQtys;
+  // Fetch and display the photos
+  const photos = await fetchPhotos();
+  const displayedPhotos = [];
+  for (let i = 0; i < selectedTags.length; i++) {
+    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTags[i]));
+    shuffleArray(selectedPhotos);
+    const photosToDisplay = selectedPhotos.slice(0, selectedQtys[i]);
+    displayedPhotos.push(...photosToDisplay);
   }
-
-  await fetchPhotos(selectedAlbums, selectedQtys);
+  displayPhotos(displayedPhotos);
 });
 
 randomBtn.addEventListener('click', () => {
-  const objectInputs = Array.from(document.getElementsByClassName('qty'));
+  const tagQty = Array.from(document.getElementsByClassName('qty'));
   const numItems = Math.floor(Math.random() * 3) + 2; // Random number between 2 and 4
 
   // Reset all inputs
-  objectInputs.forEach((input) => {
+  tagQty.forEach((input) => {
     input.value = '';
   });
 
   // Randomly select items and set quantities
   for (let i = 0; i < numItems; i++) {
-    const index = Math.floor(Math.random() * objectInputs.length);
+    const index = Math.floor(Math.random() * tagQty.length);
     let maxQty;
     switch(numItems) {
       case 2:
@@ -319,7 +341,7 @@ randomBtn.addEventListener('click', () => {
         break;
     }
     const qty = Math.floor(Math.random() * maxQty) + 2; // Random number between 2 and maxQty
-    objectInputs[index].value = qty;
+    tagQty[index].value = qty;
   }
 
   // Delay submitBtn click event trigger so it can finish executing 

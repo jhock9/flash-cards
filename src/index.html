@@ -76,11 +76,24 @@
             <button id="submit-btn" class="btn center" type="submit"><i class="fas fa-angle-double-right"></i></button>  
           </div>
 
-          <div id="object-list" class="center"> 
-            <!-- where the quantity selection section goes -->
-            <!-- where tags selected by user will go -->
-            <!-- where the dropdown box will go -->
-            <!-- where the tags displayed will go, like Apple Notes -->
+          <div id="tags-wrapper" class="center"> 
+            <!-- <div id="qty-selector" class="center"> 
+              where the quantity selection section goes
+              coded in html
+            </div> -->
+            <div id="selected-tags-container" class="center">
+              <!-- where tags selected by user and empty qty field will go --> 
+              <!-- added from js -->
+            </div>
+
+            <select id="dropdown" class="center">
+              <!-- tags added from js -->
+            </select>
+
+            <div id="tags-list" class="center">
+              <!-- where the tags displayed will go, like Apple Notes -->
+              <!-- added from js -->
+            </div>
           </div>
         </form>
         
@@ -93,8 +106,8 @@
       <button id="refresh-btn" class="btn center"><i class="fa-solid fa-rotate"></i></button> 
 
       <main class="center">
-        <section class="images-wrapper center">
-          <div class="images-container center">
+        <section id="images-wrapper" class="center">
+          <div id="images-container" class="center">
           </div>
         </section>
       </main>
