@@ -98,7 +98,7 @@ const initTokenClient = () => {
       accessToken = tokenResponse.access_token;
       console.log('Access token in initTokenClient callback: ', accessToken);
       
-      fetchAlbumList(accessToken);
+      initTags(accessToken);
     }
   })
   console.log('tokenClient: ', tokenClient);
@@ -114,71 +114,131 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-//* CREATING OBJECT LIST FROM ALBUM NAMES
-const fetchAlbumList = (accessToken) => {
-  console.log('fetchAlbumList CALLED.');
-  console.log('Access token in fetchAlbumList: ', accessToken);
+//* FETCH PHOTOS
+const fetchPhotos = (accessToken) => {
+  console.log('fetchPhotos CALLED.');
+  const promise = new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:search');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+    xhr.setRequestHeader('Content-Type', 'application/json');
 
-  let xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://photoslibrary.googleapis.com/v1/albums');
-  xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      console.log('Photo album data RETRIEVED');
-      const jsonResponse = JSON.parse(xhr.responseText);
-      const albums = jsonResponse.albums;
-      console.log('Photo albums JSON.parsed:', albums);
-      
-      const validAlbums = [];
-      for (const album of albums) {
-        const albumName = album.title;
-        const albumId = album.id;
-        const photoCount = album.mediaItemsCount;
-        if (photoCount >= 10) {
-          validAlbums.push({name: albumName, id: albumId});
-        }
+    xhr.onreadystatechange = () => {
+      console.log(`XHR state: ${xhr.readyState}, status: ${xhr.status}`);
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        const jsonResponse = JSON.parse(xhr.responseText);
+        console.log('Received response for all photos:', jsonResponse);
+        const mediaItems = jsonResponse.mediaItems;
+        resolve(mediaItems);
+      } else if (xhr.readyState === 4) {
+        reject('Error in XMLHttpRequest:', xhr.statusText);
       }
+    };
 
-      validAlbums.sort((a, b) => a.name.localeCompare(b.name));      
-      console.log('Valid Albums:', validAlbums);
-      createList(validAlbums);
-    } else if (xhr.readyState === 4) {
-      console.error('Error in XMLHttpRequest:', xhr.statusText);
-    }
-  };     
-
-  xhr.send();
-};
-
-// Adds album names to list
-const createList = (validAlbums) => {
-  for (const album of validAlbums) {
-    const div = document.createElement('div');
-    div.classList.add('object-item', 'center');
-    const label = document.createElement('label');
-    label.classList.add('name', 'center');
-    label.htmlFor = album.name;
-    label.innerText = album.name;
-    const input = document.createElement('input');
-    input.classList.add('qty', 'center');
-    input.type = 'text';
-    input.type = 'numeric';
-    input.id = album.id;
-    input.min = "1";
-    input.max = "9";
-    input.step = "1";
-    input.placeholder = 0;
-
-    input.addEventListener('input', function() {
-      if (this.value.length > 1) {
-        this.value = this.value.slice(0, 1);
-      }
+    xhr.onerror = () => {
+      reject(new Error('Network Error'));
+    };
+    
+    const body = JSON.stringify({
+      pageSize: 100, // Fetch as many photos as possible
     });
 
-    div.appendChild(label);
-    div.appendChild(input);
-    objectList.appendChild(div);
+    xhr.send(body);
+  });
+
+  return promise;
+};
+
+const fetchDescriptions = async (accessToken) => {
+  const photos = await fetchPhotos(accessToken);
+  const descriptions = photos.map(photo => photo.description).filter(description => description);
+  return descriptions;
+};
+
+const initTags = async (accessToken) => {
+  const descriptions = await fetchDescriptions(accessToken);
+
+  // Count tags
+  const tagCounts = {};
+  for (const description of descriptions) {
+    const tags = description.split(' ');
+    for (const tag of tags) {
+      if (tag in tagCounts) {
+        tagCounts[tag]++;
+      } else {
+        tagCounts[tag] = 1;
+      }
+    }
+  }
+
+  // Filter tags
+  const filteredTags = [];
+  for (const tag in tagCounts) {
+    if (tagCounts[tag] >= 5) {
+      filteredTags.push(tag);
+    }
+  }
+
+  // Sort tags
+  filteredTags.sort();
+
+  // Display tags
+  const dropdown = document.createElement('select');
+  for (const tag of filteredTags) {
+    const option = document.createElement('option');
+    option.value = tag;
+    option.text = tag;
+    dropdown.add(option);
+  }
+  objectList.appendChild(dropdown);
+
+  // Handle user selection
+  dropdown.addEventListener('change', async () => {
+    const selectedTag = dropdown.value;
+    const photos = await fetchPhotos();
+    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTag));
+    displayPhotos(selectedPhotos);
+  });
+};
+
+// Helper function to randomize array length based on user input
+const shuffleArray = (array) => {
+  console.log('Original Array:', array);
+  
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    console.log(`Swapping elements at index ${i} and ${j}`);
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  console.log('Shuffled Array:', array);
+  return array;
+};
+
+// Helper function for displaying photos
+const displayPhotos = (photos) => {
+  console.log('displayPhotos called with', photos);
+  allImages.innerHTML = '';
+  const numPhotos = photos.length;
+  let flexBasis;
+
+  if (numPhotos > 6) {
+    flexBasis = `calc((100% / 5) - 2rem)`;
+  } else if (numPhotos > 4) {
+    flexBasis = `calc((100% / 4) - 2rem)`;
+  } else if (numPhotos > 1) {
+    flexBasis = `calc((100% / 3) - 2rem)`;
+  } else {
+    flexBasis = `calc(80% - 2rem)`;
+  }
+
+  for (let i = 0; i < numPhotos; i++) {
+    const img = document.createElement('img');
+    img.src = photos[i].image;
+    img.classList.add('image');
+    img.style.flexBasis = flexBasis;
+    console.log('Image URL:', img.src); 
+    allImages.appendChild(img);
   }
 };
 
@@ -204,7 +264,6 @@ resetBtn.addEventListener('click', () => {
   });
 });
 
-//* DISPLAY PHOTOS
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
@@ -268,111 +327,3 @@ randomBtn.addEventListener('click', () => {
     submitBtn.click();
   }, 0);
 });
-
-const fetchPhotos = (albumNames, qtys) => {
-  console.log('fetchPhotos CALLED.');
-  const promises = [];
-
-  for (let i = 0; i < albumNames.length; i++) {
-    console.log(`Fetching photos for album: ${albumNames[i]}, quantity: ${qtys[i]}`);
-    const promise = new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:search');
-      xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-
-      xhr.onreadystatechange = () => {
-        console.log(`XHR state: ${xhr.readyState}, status: ${xhr.status}`);
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          const jsonResponse = JSON.parse(xhr.responseText);
-          console.log('Received response for album', albumNames[i], ':', jsonResponse);
-          const mediaItems = jsonResponse.mediaItems;
-          resolve(mediaItems);
-        } else if (xhr.readyState === 4) {
-          reject('Error in XMLHttpRequest:', xhr.statusText);
-        }
-      };
-
-      xhr.onerror = () => {
-        reject(new Error('Network Error'));
-      };
-      
-      const body = JSON.stringify({
-        albumId: albumNames[i],
-        pageSize: qtys[i],
-      });
-
-      xhr.send(body);
-    });
-
-    promises.push(promise);
-  }
-
-  console.log('All promises prepared, waiting for all to resolve...');
-
-  Promise.all(promises)
-    .then((responses) => {
-      console.log('All promises resolved. Processing responses...');
-      let allPhotos = [];
-      for (let i = 0; i < responses.length; i++) {
-        const mediaItems = responses[i];
-        const albumPhotos = [];
-        for (const mediaItem of mediaItems) {
-          const photo = {
-            image: mediaItem.baseUrl,
-            fileName: mediaItem.filename,
-          };
-          albumPhotos.push(photo);
-        }
-        shuffleArray(albumPhotos);
-        allPhotos = allPhotos.concat(albumPhotos);
-      }
-      shuffleArray(allPhotos);
-      console.log('Photos shuffled and ready for display.');
-      displayPhotos(allPhotos);
-    })
-    .catch((error) => {
-      console.error('Error fetching photos:', error);
-    });
-};
-
-// Helper function to randomize array length based on user input
-const shuffleArray = (array) => {
-  console.log('Original Array:', array);
-  
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    console.log(`Swapping elements at index ${i} and ${j}`);
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-
-  console.log('Shuffled Array:', array);
-  return array;
-};
-
-// Helper function for displaying photos
-const displayPhotos = (photos) => {
-  console.log('displayPhotos called with', photos);
-  allImages.innerHTML = '';
-  const numPhotos = photos.length;
-  let flexBasis;
-
-  if (numPhotos > 6) {
-    flexBasis = `calc((100% / 5) - 2rem)`;
-  } else if (numPhotos > 4) {
-    flexBasis = `calc((100% / 4) - 2rem)`;
-  } else if (numPhotos > 1) {
-    flexBasis = `calc((100% / 3) - 2rem)`;
-  } else {
-    flexBasis = `calc(80% - 2rem)`;
-  }
-
-  for (let i = 0; i < numPhotos; i++) {
-    const img = document.createElement('img');
-    img.src = photos[i].image;
-    img.classList.add('image');
-    img.style.flexBasis = flexBasis;
-    console.log('Image URL:', img.src); 
-    allImages.appendChild(img);
-  }
-};
