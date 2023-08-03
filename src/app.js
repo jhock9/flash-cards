@@ -221,7 +221,9 @@ dropdown.addEventListener('change', () => {
 
     // Remove the tag from the selected-tags-container
     const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-    tagDiv.remove();
+    if (tagDiv) {
+      tagDiv.remove();
+    }
 
     // Deselect the tag in the tags-list
     const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
@@ -281,8 +283,9 @@ dropdown.addEventListener('change', () => {
 
   // Highlight the tag in the tags-list
   const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-  tagSpan.classList.add('selected');
-
+  if (tagSpan) {
+    tagSpan.classList.add('selected');
+  }
 });
 
 // Select by tag
@@ -297,7 +300,9 @@ tagsList.addEventListener('click', (e) => {
 
       // Remove the tag from the selected-tags-container
       const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-      tagDiv.remove();
+      if (tagDiv) {
+        tagDiv.remove();
+      }
 
       // Deselect the tag in the tags-list
       e.target.parentElement.classList.remove('selected');
@@ -315,9 +320,6 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.classList.add('selected-tag', 'center');
     tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
 
-    tagDiv.appendChild(slider);
-    tagDiv.appendChild(tagName);
-
     // Add a quantity slider and tag name to the div
     const slider = document.createElement('input');
     slider.type = 'range';
@@ -332,11 +334,29 @@ tagsList.addEventListener('click', (e) => {
     tagName.classList.add('name', 'center');
     tagName.textContent = selectedTag;
 
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.classList.add('remove-btn', 'center'); 
+    const icon = document.createElement('i');
+    icon.classList.add('fa-solid', 'fa-square-minus');
+    removeBtn.appendChild(icon);
+  
+    // const qtyInput = document.createElement('input');
+    // qtyInput.classList.add('qty', 'center');
+    // qtyInput.type = 'number';
+    // qtyInput.type = 'numeric';
+    // qtyInput.min = 1;
+    // qtyInput.max = 9;
+    // qtyInput.placeholder = 0;
+  
     tagDiv.appendChild(slider);
     tagDiv.appendChild(sliderValue);
     tagDiv.appendChild(tagName);
+    tagDiv.appendChild(removeBtn);
+    // tagDiv.appendChild(qtyInput);
 
     selectedTagsContainer.appendChild(tagDiv);
+    
   } else if (e.target.classList === 'remove-btn') {
     const selectedTag = e.target.parentElement.dataset.tag;
 
@@ -348,7 +368,9 @@ tagsList.addEventListener('click', (e) => {
 
     // Deselect the tag in the tags-list
     const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-    tagSpan.classList.remove('selected');
+    if (tagSpan) {
+      tagSpan.classList.remove('selected');
+    }
   }
 });
 
