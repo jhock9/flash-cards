@@ -12,6 +12,7 @@ const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsContainer = document.querySelector('#selected-tags-container');
 const sliders = document.querySelectorAll(".slider");
 const sliderValues = document.querySelectorAll(".sliderValue");
+const removeBtns = document.querySelectorAll(".remove-btn");
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
 const tagsSelected = tagsList.querySelectorAll('.name');
@@ -255,6 +256,13 @@ dropdown.addEventListener('change', () => {
   tagName.classList.add('name', 'center');
   tagName.textContent = selectedTag;
 
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.classList.add('remove-btn', 'center'); 
+  const icon = document.createElement('i');
+  icon.classList.add('fa-solid', 'fa-square-minus');
+  removeBtn.appendChild(icon);
+
   // const qtyInput = document.createElement('input');
   // qtyInput.classList.add('qty', 'center');
   // qtyInput.type = 'number';
@@ -266,6 +274,7 @@ dropdown.addEventListener('change', () => {
   tagDiv.appendChild(slider);
   tagDiv.appendChild(sliderValue);
   tagDiv.appendChild(tagName);
+  tagDiv.appendChild(removeBtn);
   // tagDiv.appendChild(qtyInput);
 
   selectedTagsContainer.appendChild(tagDiv);
@@ -290,11 +299,8 @@ tagsList.addEventListener('click', (e) => {
       const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
       tagDiv.remove();
 
-      // Deselect the tag in the dropdown
-      const option = dropdown.querySelector(`option[value="${selectedTag}"]`);
-      option.selected = false;
-
-      return;
+      // Deselect the tag in the tags-list
+      e.target.parentElement.classList.remove('selected');
     }
 
     // Check if 4 tags have already been selected
@@ -331,10 +337,18 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.appendChild(tagName);
 
     selectedTagsContainer.appendChild(tagDiv);
+  } else if (e.target.classList === 'remove-btn') {
+    const selectedTag = e.target.parentElement.dataset.tag;
 
-    // Select the tag in the dropdown
-    const option = dropdown.querySelector(`option[value="${selectedTag}"]`);
-    option.selected = true;
+    // Remove the tag from the selectedTags array
+    selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+
+    // Remove the tag from the selected-tags-container
+    e.target.parentElement.remove();
+
+    // Deselect the tag in the tags-list
+    const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+    tagSpan.classList.remove('selected');
   }
 });
 
@@ -430,25 +444,6 @@ resetBtn.addEventListener('click', () => {
   });
 });
 
-submitBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
-  console.log('Submit button clicked');
-
-  // Get the selected quantities from the input fields in the #selected-tags-container
-  const selectedQtys = Array.from(document.querySelectorAll('.selected-tag input')).map(input => input.value);
-
-  // Fetch and display the photos
-  const photos = await fetchPhotos();
-  const displayedPhotos = [];
-  for (let i = 0; i < selectedTags.length; i++) {
-    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTags[i]));
-    shuffleArray(selectedPhotos);
-    const photosToDisplay = selectedPhotos.slice(0, selectedQtys[i]);
-    displayedPhotos.push(...photosToDisplay);
-  }
-  displayPhotos(displayedPhotos);
-});
-
 randomBtn.addEventListener('click', () => {
   const tagQty = Array.from(document.getElementsByClassName('qty'));
   const numItems = Math.floor(Math.random() * 3) + 2; // Random number between 2 and 4
@@ -481,4 +476,23 @@ randomBtn.addEventListener('click', () => {
   setTimeout(() => {
     submitBtn.click();
   }, 0);
+});
+
+submitBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  console.log('Submit button clicked');
+
+  // Get the selected quantities from the input fields in the #selected-tags-container
+  const selectedQtys = Array.from(document.querySelectorAll('.selected-tag input')).map(input => input.value);
+
+  // Fetch and display the photos
+  const photos = await fetchPhotos();
+  const displayedPhotos = [];
+  for (let i = 0; i < selectedTags.length; i++) {
+    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTags[i]));
+    shuffleArray(selectedPhotos);
+    const photosToDisplay = selectedPhotos.slice(0, selectedQtys[i]);
+    displayedPhotos.push(...photosToDisplay);
+  }
+  displayPhotos(displayedPhotos);
 });
