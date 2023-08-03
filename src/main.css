@@ -233,29 +233,6 @@ padding: .3rem 0 0 .5rem;
   border-bottom: .2rem solid var(--primary-color);
 }
 
-.selected-tag {
-  width: 80%;
-  padding: .75rem 0;
-  font-size: 2.25rem;
-  font-weight: 600;
-  letter-spacing: 0.1rem;
-  /* font-style: italic; */
-  justify-content: flex-start;
-}
-
-#selected-tags-container .name,
-#tags-list .name {
-  width: auto;
-  height: 3rem;
-  padding: 0.3rem 1rem;
-  font-size: 2rem;
-  font-weight: 400;
-  text-align: center;
-  background-color: var(--white);
-  border: .1rem solid var(--border-color);
-  border-radius: 0.8rem;
-}
-
 .slider {
   -webkit-appearance: none;
   width: 20%;
@@ -289,8 +266,31 @@ padding: .3rem 0 0 .5rem;
   text-align: center;
   color: var(--primary-color);
   font-weight: 700;
-  margin: 0 4rem 0 1.5rem;
+  margin: 0 3rem 0 1rem;
   padding: 0;
+}
+
+.selected-tag {
+  width: 90%;
+  padding: .75rem 0;
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  /* font-style: italic; */
+  justify-content: flex-start;
+}
+
+#selected-tags-container .name,
+#tags-list .name {
+  width: auto;
+  height: 3rem;
+  padding: 0.3rem 1rem;
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  background-color: var(--white);
+  border: .1rem solid var(--border-color);
+  border-radius: 0.8rem;
 }
 
 #selected-tags-container .name {
@@ -298,6 +298,31 @@ padding: .3rem 0 0 .5rem;
   background-color: var(--third-color);
   border-color: var(--white);
 }
+
+.remove-btn {
+  position: absolute;
+  right: 0;
+  width: auto;
+  margin: 0 4.5rem 0 1rem;
+  padding: 0;
+  font-size: 2.2rem;
+  color: var(--border-color);
+  background-color: var(--second-color);
+  border: none;
+}
+
+/* .remove-btn i {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+} */
+
+.remove-btn:hover,
+.remove-btn:active {
+  color: var(--primary-color);
+  background-color: var(--second-color);
+}
+
 /* 
 .qty {
   width: 2.2rem;
@@ -344,7 +369,7 @@ padding: .3rem 0 0 .5rem;
 
 #tags-list {
   align-content: flex-start; 
-  width: 90%;
+  width: 80%;
   padding-bottom: 2rem;
   transition: max-height 0.2s ease-out;
   overflow-y: auto;
