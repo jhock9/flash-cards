@@ -15,11 +15,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.ico?e692b794498bb4a9b607"></head>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.ico?9473fe01dec2b27d603a"></head>
 
 <body class="center">
   <div id="landing-page" class="center">
+        <!-- //!! hide class added for testing -->
     <div id="landing-content-wrapper" class="content-wrapper center">
       <section class="center">
         <figure class="center">
@@ -67,9 +68,11 @@
   </div>
   
   <div id="flashcards-page" class="hide center">
+        <!-- //!! hide class removed for testing -->
     <div id="flash-content-wrapper" class="content-wrapper center">
-      <aside id="side-panel" class="center">
-        <form id="object-selection-form" class="center">
+      <aside id="side-panel" class="center"> 
+        <!-- //!! open class added for testing -->
+        <form id="item-selection-form" class="center">
           <div id="panel-btns" class="center">
             <button id="reset-btn" class="btn center" type="button"><i class="fa-solid fa-rotate-left"></i></i></button>
             <button id="random-btn" class="btn center" type="button"><i class="fa-solid fa-shuffle"></i></button>
@@ -77,22 +80,72 @@
           </div>
 
           <div id="tags-wrapper" class="center"> 
-            <!-- <div id="qty-selector" class="center"> 
-              where the quantity selection section goes
-              coded in html
-            </div> -->
             <div id="selected-tags-container" class="center">
-              <!-- where tags selected by user and empty qty field will go --> 
-              <!-- added from js -->
+              <!-- //!! divs below for testing only -->
+              <!-- <div class="selected-tag center">
+                <input type="range" min="2" max="6" value="2" class="slider">
+                <span class="sliderValue"></span>
+                <input class="qty center" type="numeric" min="1" max="9" placeholder="0">
+                <span class="name center">airplane</span>
+              </div>
+
+              <div class="selected-tag center">
+                <input type="range" min="2" max="6" value="2" class="slider">
+                <span class="sliderValue"></span>
+                <input class="qty center" type="numeric" min="1" max="9" placeholder="0">
+                <span class="name center">boat</span>
+              </div>
+
+              <div class="selected-tag center">
+                <input type="range" min="2" max="6" value="2" class="slider">
+                <span class="sliderValue"></span>
+                <input class="qty center" type="numeric" min="1" max="9" placeholder="0">
+                <span class="name center">construction</span>
+              </div>
+
+              <div class="selected-tag center">
+                <input type="range" min="2" max="6" value="2" class="slider">
+                <span class="sliderValue"></span>
+                <input class="qty center" type="numeric" min="1" max="9" placeholder="0">
+                <span class="name center">doctor</span>
+              </div> -->
             </div>
 
             <select id="dropdown" class="center">
-              <!-- tags added from js -->
+              <!-- //!! options below for testing only -->
+              <!-- <option value="blue">airplane</option>
+              <option value="branches">boat</option>
+              <option value="brown">construction worker</option>
+              <option value="clouds">doctor</option>
+              <option value="flower">flower</option>
+              <option value="green">tree</option> -->
             </select>
+            
+            <div id="tags-list">
+              <!-- //!! divs below for testing only -->
+              <!-- <div class="tag center">
+                <span class="name center">airplane</span>
+              </div>
 
-            <div id="tags-list" class="center">
-              <!-- where the tags displayed will go, like Apple Notes -->
-              <!-- added from js -->
+              <div class="tag center">
+                <span class="name center">boat</span>
+              </div>
+
+              <div class="tag center">
+                <span class="name center">construction</span>
+              </div>
+
+              <div class="tag center">
+                <span class="name center">doctor</span>
+              </div>
+
+              <div class="tag center">
+                <span class="name center">flower</span>
+              </div>
+              
+              <div class="tag center">
+                <span class="name center">tree</span>
+              </div> -->
             </div>
           </div>
         </form>
@@ -116,6 +169,6 @@
 
   <script src="support/jwt-decode.js"></script>
   <script src="app.js"></script>
-<script defer src="bundle.js?e692b794498bb4a9b607"></script></body> 
+<script defer src="bundle.js?9473fe01dec2b27d603a"></script></body> 
 </html>
 <!--  -->

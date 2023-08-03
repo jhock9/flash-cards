@@ -1,25 +1,23 @@
 const landingPage = document.querySelector('#landing-page');
 const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
+const openBtn = document.querySelector('#open-btn');
+const refreshBtn = document.querySelector('#refresh-btn');
 const sidePanel = document.querySelector('#side-panel');
-const tagsWrapper = document.querySelector('#tags-wrapper');
-const selectedTagsContainer = document.querySelector('#selected-tags-container');
-const tagsList = document.querySelector('#tags-list');
-const dropdown = document.getElementById('dropdown');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
-const openBtn = document.querySelector('#open-btn');
-const refreshBtn = document.querySelector('#refresh-btn');
+const tagsWrapper = document.querySelector('#tags-wrapper');
+const selectedTagsContainer = document.querySelector('#selected-tags-container');
+const sliders = document.querySelectorAll(".slider");
+const sliderValues = document.querySelectorAll(".sliderValue");
+const dropdown = document.getElementById('dropdown');
+const tagsList = document.querySelector('#tags-list');
+const tagsSelected = tagsList.querySelectorAll('.name');
 const allImages = document.querySelector('#images-container');
 
 let googleClientID;
-let accessToken;
-let lastSelectedAlbums = null;
-let lastSelectedQtys = null;
-let selectedTags = [];
-
 
 const fetchConfig = async () => {
   try {
@@ -93,6 +91,8 @@ signoutBtn.addEventListener('click', (e) => {
 
 //* GOOGLE AUTHORIZATION
 let tokenClient;
+let accessToken;
+
 const initTokenClient = () => {
   console.log('initTokenClient CALLED.');
   tokenClient = google.accounts.oauth2.initTokenClient({
@@ -103,7 +103,7 @@ const initTokenClient = () => {
       accessToken = tokenResponse.access_token;
       console.log('Access token in initTokenClient callback: ', accessToken);
       
-      initTags(accessToken);
+      displayTags(accessToken);
     }
   })
   console.log('tokenClient: ', tokenClient);
@@ -119,7 +119,7 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-//* FETCH PHOTOS
+//* FETCH PHOTO DATA
 const fetchPhotos = (accessToken) => {
   console.log('fetchPhotos CALLED.');
   const promise = new Promise((resolve, reject) => {
@@ -161,7 +161,8 @@ const fetchDescriptions = async (accessToken) => {
   return descriptions;
 };
 
-const initTags = async (accessToken) => {
+//* DISPLAY TAGS
+const displayTags = async (accessToken) => {
   const descriptions = await fetchDescriptions(accessToken);
 
   // Count tags
@@ -196,42 +197,174 @@ const initTags = async (accessToken) => {
     dropdown.add(option);
 
     const tagDiv = document.createElement('div');
-    tagDiv.classList.add('tag');
+    tagDiv.classList.add('tag, center');
     const tagName = document.createElement('span');
-    tagName.classList.add('name', 'center');
+    tagName.classList.add('name, center');
     tagName.innerText = tag;
     tagDiv.appendChild(tagName);  
     tagsList.appendChild(tagDiv);
   }
 }
 
-// Handle user selection
+//* SELECT TAGS AND QUANTITIES
+let selectedTags = [];
+
+// Select by dropdown
 dropdown.addEventListener('change', () => {
   const selectedTag = dropdown.value;
 
-  // Check if the tag is already selected or if 4 tags have already been selected
-  if (selectedTags.includes(selectedTag) || selectedTags.length >= 4) {
+  // Check if the tag is already selected
+  if (selectedTags.includes(selectedTag)) {
+    // Remove the tag from the selectedTags array
+    selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+
+    // Remove the tag from the selected-tags-container
+    const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+    tagDiv.remove();
+
+    // Deselect the tag in the tags-list
+    const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+    tagSpan.classList.remove('selected');
+
+    return;
+  }
+
+  // Check if 4 tags have already been selected
+  if (selectedTags.length >= 4) {
     return;
   }
 
   selectedTags.push(selectedTag);
 
+  // Create a new div for the selected tag
   const tagDiv = document.createElement('div');
-  tagDiv.classList.add('selected-tag');
+  tagDiv.classList.add('selected-tag', 'center');
+  tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
+
+  // Add a quantity slider and tag name to the div
+  const slider = document.createElement('input');
+  slider.type = 'range';
+  slider.min = 2;
+  slider.max = 6; 
+  slider.value = 2;
+  slider.classList.add('slider');
+  const sliderValue = document.createElement('span');
+  sliderValue.classList.add('sliderValue');
+
   const tagName = document.createElement('span');
-  tagName.classList.add('name', 'center');
+  tagName.classList.add('name, center');
   tagName.textContent = selectedTag;
-  const qtyInput = document.createElement('input');
-  qtyInput.classList.add('qty', 'center');
-  qtyInput.type = 'number';
-  qtyInput.type = 'numeric';
-  qtyInput.min = 1;
-  qtyInput.max = 9;
-  qtyInput.placeholder = 0;
+
+  // const qtyInput = document.createElement('input');
+  // qtyInput.classList.add('qty', 'center');
+  // qtyInput.type = 'number';
+  // qtyInput.type = 'numeric';
+  // qtyInput.min = 1;
+  // qtyInput.max = 9;
+  // qtyInput.placeholder = 0;
+
+  tagDiv.appendChild(slider);
+  tagDiv.appendChild(sliderValue);
   tagDiv.appendChild(tagName);
-  tagDiv.appendChild(qtyInput);
+  // tagDiv.appendChild(qtyInput);
 
   selectedTagsContainer.appendChild(tagDiv);
+
+  // Highlight the tag in the tags-list
+  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+  tagSpan.classList.add('selected');
+
+});
+
+// Select by tag
+tagsList.addEventListener('click', (e) => {
+  if (e.target.classList.contains('name')) {
+    const selectedTag = e.target.textContent;
+
+    // Check if the tag is already selected
+    if (selectedTags.includes(selectedTag)) {
+      // Remove the tag from the selectedTags array
+      selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+
+      // Remove the tag from the selected-tags-container
+      const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+      tagDiv.remove();
+
+      // Deselect the tag in the dropdown
+      const option = dropdown.querySelector(`option[value="${selectedTag}"]`);
+      option.selected = false;
+
+      return;
+    }
+
+    // Check if 4 tags have already been selected
+    if (selectedTags.length >= 4) {
+      return;
+    }
+
+    selectedTags.push(selectedTag);
+
+    // Create a new div for the selected tag
+    const tagDiv = document.createElement('div');
+    tagDiv.classList.add('selected-tag', 'center');
+    tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
+
+    tagDiv.appendChild(slider);
+    tagDiv.appendChild(tagName);
+
+    // Add a quantity slider and tag name to the div
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 2;
+    slider.max = 6; 
+    slider.value = 2;
+    slider.classList.add('slider');
+    const sliderValue = document.createElement('span');
+    sliderValue.classList.add('sliderValue');
+
+    const tagName = document.createElement('span');
+    tagName.classList.add('name, center');
+    tagName.textContent = selectedTag;
+
+    tagDiv.appendChild(slider);
+    tagDiv.appendChild(sliderValue);
+    tagDiv.appendChild(tagName);
+
+    selectedTagsContainer.appendChild(tagDiv);
+
+    // Select the tag in the dropdown
+    const option = dropdown.querySelector(`option[value="${selectedTag}"]`);
+    option.selected = true;
+  }
+});
+
+// // Select by tag
+// let selectedCount = 0;
+// const max = 4;
+
+// tagsSelected.forEach(tag => {
+//   tag.addEventListener('click', () => {
+//     tag.classList.toggle('selected');
+
+//     if (tag.classList.contains('selected')) {
+//       selectedCount++;
+//     } else {
+//       selectedCount--;
+//     }
+    
+//     if (selectedCount > max) {
+//       selectedCount = max;
+//       tag.classList.remove('selected');
+//     }
+//   });
+// });
+
+sliders.forEach((slider, index) => {
+  slider.oninput = () => {
+    sliderValues[index].innerHTML = slider.value;
+  };
+  
+  sliderValues[index].innerHTML = slider.value;
 });
 
 // Helper function to randomize array length based on user input
