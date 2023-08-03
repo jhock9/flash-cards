@@ -10,8 +10,6 @@ const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsContainer = document.querySelector('#selected-tags-container');
-const sliders = document.querySelectorAll(".slider");
-const sliderValues = document.querySelectorAll(".sliderValue");
 const removeBtns = document.querySelectorAll(".remove-btn");
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
@@ -244,7 +242,7 @@ dropdown.addEventListener('change', () => {
   tagDiv.classList.add('selected-tag', 'center');
   tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
 
-  // Add a quantity slider and tag name to the div
+  // Add a quantity slider, tag name, and remove btn
   const slider = document.createElement('input');
   slider.type = 'range';
   slider.min = 2;
@@ -252,7 +250,12 @@ dropdown.addEventListener('change', () => {
   slider.value = 2;
   slider.classList.add('slider');
   const sliderValue = document.createElement('span');
+
   sliderValue.classList.add('sliderValue');
+  sliderValue.innerHTML = slider.value;
+  slider.oninput = () => {
+    sliderValue.innerHTML = slider.value;
+  };
 
   const tagName = document.createElement('span');
   tagName.classList.add('name', 'center');
@@ -262,9 +265,23 @@ dropdown.addEventListener('change', () => {
   removeBtn.type = 'button';
   removeBtn.classList.add('remove-btn', 'center'); 
   const icon = document.createElement('i');
-  icon.classList.add('fa-solid', 'fa-square-minus');
+  icon.classList.add('fa-solid', 'fa-trash-can');
   removeBtn.appendChild(icon);
 
+  removeBtn.addEventListener('click', () => {
+    const selectedTag = removeBtn.parentElement.dataset.tag;
+  
+    // Remove the tag from the selectedTags array
+    selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+  
+    // Remove the tag from the selected-tags-container
+    removeBtn.parentElement.remove();
+  
+    // Deselect the tag in the tags-list
+    const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+    tagSpan.classList.remove('selected');
+  });
+  
   // const qtyInput = document.createElement('input');
   // qtyInput.classList.add('qty', 'center');
   // qtyInput.type = 'number';
@@ -303,9 +320,10 @@ tagsList.addEventListener('click', (e) => {
       if (tagDiv) {
         tagDiv.remove();
       }
-
+      
       // Deselect the tag in the tags-list
       e.target.parentElement.classList.remove('selected');
+      return;
     }
 
     // Check if 4 tags have already been selected
@@ -320,7 +338,7 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.classList.add('selected-tag', 'center');
     tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
 
-    // Add a quantity slider and tag name to the div
+    // Add a quantity slider, tag name, and remove btn
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 2;
@@ -328,7 +346,12 @@ tagsList.addEventListener('click', (e) => {
     slider.value = 2;
     slider.classList.add('slider');
     const sliderValue = document.createElement('span');
+
     sliderValue.classList.add('sliderValue');
+    sliderValue.innerHTML = slider.value;
+    slider.oninput = () => {
+      sliderValue.innerHTML = slider.value;
+    };
 
     const tagName = document.createElement('span');
     tagName.classList.add('name', 'center');
@@ -338,9 +361,23 @@ tagsList.addEventListener('click', (e) => {
     removeBtn.type = 'button';
     removeBtn.classList.add('remove-btn', 'center'); 
     const icon = document.createElement('i');
-    icon.classList.add('fa-solid', 'fa-square-minus');
+    icon.classList.add('fa-solid', 'fa-trash-can');
     removeBtn.appendChild(icon);
   
+    removeBtn.addEventListener('click', () => {
+      const selectedTag = removeBtn.parentElement.dataset.tag;
+    
+      // Remove the tag from the selectedTags array
+      selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+    
+      // Remove the tag from the selected-tags-container
+      removeBtn.parentElement.remove();
+    
+      // Deselect the tag in the tags-list
+      const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+      tagSpan.classList.remove('selected');
+    });
+    
     // const qtyInput = document.createElement('input');
     // qtyInput.classList.add('qty', 'center');
     // qtyInput.type = 'number';
@@ -356,7 +393,7 @@ tagsList.addEventListener('click', (e) => {
     // tagDiv.appendChild(qtyInput);
 
     selectedTagsContainer.appendChild(tagDiv);
-    
+
   } else if (e.target.classList === 'remove-btn') {
     const selectedTag = e.target.parentElement.dataset.tag;
 
@@ -372,35 +409,6 @@ tagsList.addEventListener('click', (e) => {
       tagSpan.classList.remove('selected');
     }
   }
-});
-
-// // Select by tag
-// let selectedCount = 0;
-// const max = 4;
-
-// tagsSelected.forEach(tag => {
-//   tag.addEventListener('click', () => {
-//     tag.classList.toggle('selected');
-
-//     if (tag.classList.contains('selected')) {
-//       selectedCount++;
-//     } else {
-//       selectedCount--;
-//     }
-    
-//     if (selectedCount > max) {
-//       selectedCount = max;
-//       tag.classList.remove('selected');
-//     }
-//   });
-// });
-
-sliders.forEach((slider, index) => {
-  slider.oninput = () => {
-    sliderValues[index].innerHTML = slider.value;
-  };
-  
-  sliderValues[index].innerHTML = slider.value;
 });
 
 // Helper function to randomize array length based on user input
