@@ -197,9 +197,9 @@ const displayTags = async (accessToken) => {
     dropdown.add(option);
 
     const tagDiv = document.createElement('div');
-    tagDiv.classList.add('tag, center');
+    tagDiv.classList.add('tag', 'center');
     const tagName = document.createElement('span');
-    tagName.classList.add('name, center');
+    tagName.classList.add('name', 'center');
     tagName.innerText = tag;
     tagDiv.appendChild(tagName);  
     tagsList.appendChild(tagDiv);
@@ -252,7 +252,7 @@ dropdown.addEventListener('change', () => {
   sliderValue.classList.add('sliderValue');
 
   const tagName = document.createElement('span');
-  tagName.classList.add('name, center');
+  tagName.classList.add('name', 'center');
   tagName.textContent = selectedTag;
 
   // const qtyInput = document.createElement('input');
@@ -323,7 +323,7 @@ tagsList.addEventListener('click', (e) => {
     sliderValue.classList.add('sliderValue');
 
     const tagName = document.createElement('span');
-    tagName.classList.add('name, center');
+    tagName.classList.add('name', 'center');
     tagName.textContent = selectedTag;
 
     tagDiv.appendChild(slider);
