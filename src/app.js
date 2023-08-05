@@ -223,9 +223,10 @@ dropdown.addEventListener('change', () => {
       tagDiv.remove();
     }
 
-    // Deselect the tag in the tags-list
-    const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-    tagSpan.classList.remove('selected');
+    const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+    if (tagSpan) {
+      tagSpan.classList.remove('selected');
+    }
 
     return;
   }
@@ -282,24 +283,15 @@ dropdown.addEventListener('change', () => {
     tagSpan.classList.remove('selected');
   });
   
-  // const qtyInput = document.createElement('input');
-  // qtyInput.classList.add('qty', 'center');
-  // qtyInput.type = 'number';
-  // qtyInput.type = 'numeric';
-  // qtyInput.min = 1;
-  // qtyInput.max = 9;
-  // qtyInput.placeholder = 0;
-
   tagDiv.appendChild(slider);
   tagDiv.appendChild(sliderValue);
   tagDiv.appendChild(tagName);
   tagDiv.appendChild(removeBtn);
-  // tagDiv.appendChild(qtyInput);
 
   selectedTagsContainer.appendChild(tagDiv);
 
   // Highlight the tag in the tags-list
-  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+  const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
   if (tagSpan) {
     tagSpan.classList.add('selected');
   }
@@ -322,7 +314,7 @@ tagsList.addEventListener('click', (e) => {
       }
       
       // Deselect the tag in the tags-list
-      e.target.parentElement.classList.remove('selected');
+      e.target.classList.remove('selected');
       return;
     }
 
@@ -332,6 +324,9 @@ tagsList.addEventListener('click', (e) => {
     }
 
     selectedTags.push(selectedTag);
+
+    // Add 'selected' class to the tag
+    e.target.classList.add('selected');
 
     // Create a new div for the selected tag
     const tagDiv = document.createElement('div');
@@ -374,23 +369,14 @@ tagsList.addEventListener('click', (e) => {
       removeBtn.parentElement.remove();
     
       // Deselect the tag in the tags-list
-      const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-      tagSpan.classList.remove('selected');
+      e.target.classList.remove('selected');
+
     });
-    
-    // const qtyInput = document.createElement('input');
-    // qtyInput.classList.add('qty', 'center');
-    // qtyInput.type = 'number';
-    // qtyInput.type = 'numeric';
-    // qtyInput.min = 1;
-    // qtyInput.max = 9;
-    // qtyInput.placeholder = 0;
   
     tagDiv.appendChild(slider);
     tagDiv.appendChild(sliderValue);
     tagDiv.appendChild(tagName);
     tagDiv.appendChild(removeBtn);
-    // tagDiv.appendChild(qtyInput);
 
     selectedTagsContainer.appendChild(tagDiv);
 

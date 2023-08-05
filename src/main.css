@@ -162,15 +162,14 @@ footer p {
   top: 0;
   left: 0;
   bottom: 0;
-  /* width: 80%; */
   width: 41.4rem;
   padding: 0;
   margin: 0;
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--second-color);
-  border: .3rem solid var(--border-color);
-  /* border-right-color: var(--primary-color); */
+  /* border: .3rem solid var(--border-color); */
+  border-right: .3rem solid var(--border-color);
   overflow-x: hidden;
   transform: translateX(-100%); 
   transition: transform 0.6s; 
@@ -234,6 +233,16 @@ padding: .3rem 0 0 .5rem;
   border-bottom: .2rem solid var(--primary-color);
 }
 
+.selected-tag {
+  width: 90%;
+  padding: .75rem 0;
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  /* font-style: italic; */
+  justify-content: flex-start;
+}
+
 .slider {
   -webkit-appearance: none;
   width: 20%;
@@ -271,16 +280,6 @@ padding: .3rem 0 0 .5rem;
   padding: 0;
 }
 
-.selected-tag {
-  width: 90%;
-  padding: .75rem 0;
-  font-size: 2.25rem;
-  font-weight: 600;
-  letter-spacing: 0.1rem;
-  /* font-style: italic; */
-  justify-content: flex-start;
-}
-
 #selected-tags-container .name,
 #tags-list .name {
   width: auto;
@@ -295,7 +294,7 @@ padding: .3rem 0 0 .5rem;
 }
 
 #selected-tags-container .name,
-.selected {
+#tags-list .name.selected {
   color: var(--white);
   background-color: var(--third-color);
   border-color: var(--white);
@@ -324,39 +323,6 @@ padding: .3rem 0 0 .5rem;
   color: var(--primary-color);
   background-color: var(--second-color);
 }
-
-/* 
-.qty {
-  width: 2.2rem;
-  aspect-ratio: 1/1;
-  padding: 0.2rem;
-  margin: 0 2rem 0 6rem;
-  font-size: 2.2rem;
-  text-align: center;
-  color: var(--primary-color);
-  font-weight: 500;
-  border: 0.2rem solid var(--black);
-  background-color: var(--white);
-}
-
-.qty[type="number"] {
-  font-size: 2.5rem;
-}
-
-.qty::placeholder {
-  font-size: 2.5rem;
-}
-
-.qty::-webkit-outer-spin-button,
-.qty::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.qty::-moz-number-spin-box {
-  -moz-appearance: none;
-  margin: 0;
-} */
 
 #dropdown {
   width: 70%;
@@ -444,7 +410,7 @@ padding: .3rem 0 0 .5rem;
 #open-btn,
 #refresh-btn {
   position: fixed;
-  top: 3.3rem;
+  top: 3rem;
   left: 0;
   margin: 0;
   color: var(--primary-color);
@@ -471,10 +437,6 @@ padding: .3rem 0 0 .5rem;
 #refresh-btn {
   top: 13rem;
 }
-
-/* #open-btn.open {
-  left: calc(100% - 7rem);
-} */
 
 #refresh-btn:hover,
 #refresh-btn:active {
