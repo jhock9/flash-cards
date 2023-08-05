@@ -10,6 +10,15 @@ const signoutBtn = document.querySelector('#signout-btn');
 const openBtn = document.querySelector('#open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 const allImages = document.querySelector('.images-container');
+const selectedTagsContainer = document.querySelector('#selected-tags-container');
+
+function toggleBorders() {
+  if (selectedTags.length > 0) {
+    selectedTagsContainer.classList.remove('hide-borders');
+  } else {
+    selectedTagsContainer.classList.add('hide-borders');
+  }
+}
 
 let googleClientID;
 let accessToken;
@@ -211,6 +220,8 @@ submitBtn.addEventListener('click', async (e) => {
   const objectInputs = Array.from(document.getElementsByClassName('qty'));
   const selectedAlbums = [];
   const selectedQtys = [];
+
+  toggleBorders();
 
   objectInputs.forEach((input) => {
     if (input.value > 0) {
