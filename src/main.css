@@ -22,6 +22,11 @@
   overflow: hidden !important;
 }
 
+.hide-borders {
+  border-top: none;
+  border-bottom: none;
+}
+
 .center {
   display: flex;
   justify-content: center;
