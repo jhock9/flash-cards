@@ -233,6 +233,11 @@ padding: .3rem 0 0 .5rem;
   border-bottom: .2rem solid var(--primary-color);
 }
 
+.hide-borders {
+  border-top: none;
+  border-bottom: none;
+}
+
 .selected-tag {
   width: 90%;
   padding: .75rem 0;

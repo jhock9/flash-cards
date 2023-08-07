@@ -71,6 +71,7 @@ const handleCredentialResponse = (response) => {
 
   landingPage.classList.add('hide');
   openBtn.classList.add("open");
+  selectedTagsContainer.classList.add("hide-borders");
   sidePanel.classList.add('open');
   contentWrapper.classList.add('open');
   flashCardPage.classList.remove('hide');
@@ -295,6 +296,8 @@ dropdown.addEventListener('change', () => {
   if (tagSpan) {
     tagSpan.classList.add('selected');
   }
+  
+  toggleBorders();
 });
 
 // Select by tag
@@ -394,6 +397,7 @@ tagsList.addEventListener('click', (e) => {
     if (tagSpan) {
       tagSpan.classList.remove('selected');
     }
+    toggleBorders();
   }
 });
 
@@ -512,3 +516,11 @@ submitBtn.addEventListener('click', async (e) => {
   }
   displayPhotos(displayedPhotos);
 });
+
+const toggleBorders = () => {
+  if (selectedTags.length >= 1) {
+    selectedTagsContainer.classList.remove('hide-borders');
+  } else {
+    selectedTagsContainer.classList.add('hide-borders');
+  }
+}
