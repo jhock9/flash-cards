@@ -223,19 +223,14 @@ padding: .3rem 0 0 .5rem;
 
 #tags-wrapper,
 #selected-tags-container {
+  width: 100%;
   margin: 0;
   padding: 1.5rem 0;
 }
 
-#selected-tags-container {
-  width: 100%;
+.show-borders {
   border-top: .2rem solid var(--primary-color);
   border-bottom: .2rem solid var(--primary-color);
-}
-
-.hide-borders {
-  border-top: none;
-  border-bottom: none;
 }
 
 .selected-tag {

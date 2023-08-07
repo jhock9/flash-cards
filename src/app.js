@@ -71,7 +71,6 @@ const handleCredentialResponse = (response) => {
 
   landingPage.classList.add('hide');
   openBtn.classList.add("open");
-  selectedTagsContainer.classList.add("hide-borders");
   sidePanel.classList.add('open');
   contentWrapper.classList.add('open');
   flashCardPage.classList.remove('hide');
@@ -217,6 +216,7 @@ dropdown.addEventListener('change', () => {
   if (selectedTags.includes(selectedTag)) {
     // Remove the tag from the selectedTags array
     selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+    toggleBorders();
 
     // Remove the tag from the selected-tags-container
     const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
@@ -238,6 +238,8 @@ dropdown.addEventListener('change', () => {
   }
 
   selectedTags.push(selectedTag);
+  dropdown.selectedIndex = 0;
+  toggleBorders();
 
   // Create a new div for the selected tag
   const tagDiv = document.createElement('div');
@@ -275,7 +277,8 @@ dropdown.addEventListener('change', () => {
   
     // Remove the tag from the selectedTags array
     selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-  
+    toggleBorders();
+    
     // Remove the tag from the selected-tags-container
     removeBtn.parentElement.remove();
   
@@ -296,8 +299,6 @@ dropdown.addEventListener('change', () => {
   if (tagSpan) {
     tagSpan.classList.add('selected');
   }
-  
-  toggleBorders();
 });
 
 // Select by tag
@@ -309,6 +310,7 @@ tagsList.addEventListener('click', (e) => {
     if (selectedTags.includes(selectedTag)) {
       // Remove the tag from the selectedTags array
       selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+      toggleBorders();
 
       // Remove the tag from the selected-tags-container
       const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
@@ -327,6 +329,7 @@ tagsList.addEventListener('click', (e) => {
     }
 
     selectedTags.push(selectedTag);
+    toggleBorders();
 
     // Add 'selected' class to the tag
     e.target.classList.add('selected');
@@ -367,13 +370,13 @@ tagsList.addEventListener('click', (e) => {
     
       // Remove the tag from the selectedTags array
       selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+      toggleBorders();
     
       // Remove the tag from the selected-tags-container
       removeBtn.parentElement.remove();
     
       // Deselect the tag in the tags-list
       e.target.classList.remove('selected');
-
     });
   
     tagDiv.appendChild(slider);
@@ -388,6 +391,7 @@ tagsList.addEventListener('click', (e) => {
 
     // Remove the tag from the selectedTags array
     selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+    toggleBorders();
 
     // Remove the tag from the selected-tags-container
     e.target.parentElement.remove();
@@ -397,7 +401,6 @@ tagsList.addEventListener('click', (e) => {
     if (tagSpan) {
       tagSpan.classList.remove('selected');
     }
-    toggleBorders();
   }
 });
 
@@ -519,8 +522,8 @@ submitBtn.addEventListener('click', async (e) => {
 
 const toggleBorders = () => {
   if (selectedTags.length >= 1) {
-    selectedTagsContainer.classList.remove('hide-borders');
+    selectedTagsContainer.classList.add('show-borders');
   } else {
-    selectedTagsContainer.classList.add('hide-borders');
+    selectedTagsContainer.classList.remove('show-borders');
   }
 }
