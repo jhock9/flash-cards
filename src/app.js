@@ -14,7 +14,7 @@ const removeBtns = document.querySelectorAll(".remove-btn");
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
 const tagsSelected = tagsList.querySelectorAll('.name');
-const allImages = document.querySelector('#images-container');
+const displayedImages = document.querySelector('#images-container');
 
 let googleClientID;
 
@@ -119,8 +119,8 @@ const onSignInFailure = (error) => {
 };
 
 //* FETCH PHOTO DATA
-const fetchPhotos = (accessToken) => {
-  console.log('fetchPhotos CALLED.');
+const fetchPhotoData = (accessToken) => {
+  console.log('fetchPhotoData CALLED.');
   const promise = new Promise((resolve, reject) => {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:search');
@@ -153,14 +153,14 @@ const fetchPhotos = (accessToken) => {
   return promise;
 };
 
+//* FETCH PHOTO DESCRIPTIONS and DISPLAY TAGS
 const fetchDescriptions = async (accessToken) => {
-  const photos = await fetchPhotos(accessToken);
+  const photos = await fetchPhotoData(accessToken);
   const descriptions = photos.map(photo => photo.description).filter(description => description);
   console.log('Fetched descriptions:', descriptions);
   return descriptions;
 };
 
-//* DISPLAY TAGS
 const displayTags = async (accessToken) => {
   const descriptions = await fetchDescriptions(accessToken);
 
@@ -208,7 +208,7 @@ const displayTags = async (accessToken) => {
 //* SELECT TAGS AND QUANTITIES
 let selectedTags = [];
 
-// Select by dropdown
+// SELECT BY DROPDOWN
 dropdown.addEventListener('change', () => {
   const selectedTag = dropdown.value;
 
@@ -301,7 +301,7 @@ dropdown.addEventListener('change', () => {
   }
 });
 
-// Select by tag
+// SELECT BY TAG LIST
 tagsList.addEventListener('click', (e) => {
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
@@ -401,9 +401,10 @@ tagsList.addEventListener('click', (e) => {
     if (tagSpan) {
       tagSpan.classList.remove('selected');
     }
-  }
+  }6
 });
 
+//* HELPER FUNCTIONS
 // Helper function to randomize array length based on user input
 const shuffleArray = (array) => {
   console.log('Original Array:', array);
@@ -421,7 +422,7 @@ const shuffleArray = (array) => {
 // Helper function for displaying photos
 const displayPhotos = (photos) => {
   console.log('displayPhotos called with', photos);
-  allImages.innerHTML = '';
+  displayedImages.innerHTML = '';
   const numPhotos = photos.length;
   let flexBasis;
 
@@ -441,8 +442,17 @@ const displayPhotos = (photos) => {
     img.classList.add('image');
     img.style.flexBasis = flexBasis;
     console.log('Image URL:', img.src); 
-    allImages.appendChild(img);
+    displayedImages.appendChild(img);
   }
+};
+
+// Helper function for filtering photos
+const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
+  return photos.filter(photo => {
+    return selectedTagsAndQuantities.some(({ tag, quantity }) => {
+      return photo.description && photo.description.includes(tag) && photo.description.split(tag).length - 1 >= quantity;
+    });
+  });
 };
 
 //* BUTTONS
@@ -456,68 +466,108 @@ openBtn.addEventListener('click', toggleNav);
 
 refreshBtn.addEventListener('click', () => {
   if (lastSelectedAlbums !== null && lastSelectedQtys !== null) {
-    fetchPhotos(lastSelectedAlbums, lastSelectedQtys);
+    fetchPhotoData(lastSelectedAlbums, lastSelectedQtys);
   }
 });
 
 resetBtn.addEventListener('click', () => {
-  const tagQty = Array.from(document.getElementsByClassName('qty'));
-  tagQty.forEach((input) => {
-    input.value = '';
+  selectedTags = [];
+
+  // Remove all selected tags from selected-tags-container
+  const selectedTagDivs = document.querySelectorAll('.selected-tag');
+  selectedTagDivs.forEach((div) => {
+    div.remove();
   });
+
+  // Deselect selected tags in tags list
+  const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
+  selectedTagSpans.forEach((span) => {
+    span.classList.remove('selected');
+  });
+
+  // Update borders
+  toggleBorders();
 });
 
+
 randomBtn.addEventListener('click', () => {
-  const tagQty = Array.from(document.getElementsByClassName('qty'));
-  const numItems = Math.floor(Math.random() * 3) + 2; // Random number between 2 and 4
+  resetBtn.click();
 
-  // Reset all inputs
-  tagQty.forEach((input) => {
-    input.value = '';
-  });
+  // Get all available tags
+  const allTags = Array.from(document.querySelectorAll('.tag .name')).map(span => span.textContent);
 
-  // Randomly select items and set quantities
-  for (let i = 0; i < numItems; i++) {
-    const index = Math.floor(Math.random() * tagQty.length);
-    let maxQty;
-    switch(numItems) {
-      case 2:
-        maxQty = 6;
-        break;
-      case 3:
-        maxQty = 4;
-        break;
-      case 4:
-        maxQty = 3;
-        break;
-    }
-    const qty = Math.floor(Math.random() * maxQty) + 2; // Random number between 2 and maxQty
-    tagQty[index].value = qty;
+  const numTagsToSelect = Math.floor(Math.random() * 3) + 2;
+
+  // Randomly select tags and set random values for the sliders
+  for (let i = 0; i < numTagsToSelect; i++) {
+    const randomTagIndex = Math.floor(Math.random() * allTags.length);
+    const selectedTag = allTags[randomTagIndex];
+
+    // Remove selected tag from allTags array to avoid duplicates
+    allTags.splice(randomTagIndex, 1);
+
+    // Simulate selecting tag by setting dropdown value, triggering change event
+    dropdown.value = selectedTag;
+    dropdown.dispatchEvent(new Event('change'));
+
+    // Set random value for slider (2-6)
+    const slider = document.querySelector(`.selected-tag[data-tag="${selectedTag}"] .slider`);
+    slider.value = Math.floor(Math.random() * 5) + 2;
+
+    // Update slider value display
+    const sliderValue = document.querySelector(`.selected-tag[data-tag="${selectedTag}"] .sliderValue`);
+    sliderValue.innerHTML = slider.value;
   }
 
-  // Delay submitBtn click event trigger so it can finish executing 
+  // Delay submitBtn trigger so it can finish executing
   setTimeout(() => {
     submitBtn.click();
   }, 0);
 });
 
+// submitBtn.addEventListener('click', async (e) => {
+//   e.preventDefault();
+//   console.log('Submit button clicked');
+
+//   // Get the selected quantities from the input fields in the #selected-tags-container
+//   const selectedQtys = Array.from(document.querySelectorAll('.selected-tag input')).map(input => input.value);
+
+//   // Fetch and display the photos
+//   const photos = await fetchPhotoData();
+//   const displayedPhotos = [];
+//   for (let i = 0; i < selectedTags.length; i++) {
+//     const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTags[i]));
+//     shuffleArray(selectedPhotos);
+//     const photosToDisplay = selectedPhotos.slice(0, selectedQtys[i]);
+//     displayedPhotos.push(...photosToDisplay);
+//   }
+//   displayPhotos(displayedPhotos);
+// });
+
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
 
-  // Get the selected quantities from the input fields in the #selected-tags-container
-  const selectedQtys = Array.from(document.querySelectorAll('.selected-tag input')).map(input => input.value);
-
-  // Fetch and display the photos
-  const photos = await fetchPhotos();
-  const displayedPhotos = [];
-  for (let i = 0; i < selectedTags.length; i++) {
-    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTags[i]));
-    shuffleArray(selectedPhotos);
-    const photosToDisplay = selectedPhotos.slice(0, selectedQtys[i]);
-    displayedPhotos.push(...photosToDisplay);
+  if (!accessToken) {
+    console.error('Access token is not available');
+    return;
   }
-  displayPhotos(displayedPhotos);
+
+  // Get the selected tags and quantities from the selected-tags-container
+  const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-tag')).map(tagDiv => {
+    const tag = tagDiv.dataset.tag;
+    const quantity = tagDiv.querySelector('.slider').value;
+    return { tag, quantity };
+  });
+
+  // Fetch all the photos
+  const photos = await fetchPhotoData(accessToken);
+
+  // Filter the photos based on the selected tags and quantities
+  const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
+
+  // Display the filtered photos
+  displayPhotos(filteredPhotos);
 });
 
 const toggleBorders = () => {
