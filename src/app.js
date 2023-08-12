@@ -16,7 +16,8 @@ const tagsList = document.querySelector('#tags-list');
 const tagsSelected = tagsList.querySelectorAll('.name');
 const displayedImages = document.querySelector('#images-container');
 
-let googleClientID;
+let googleClientID; 
+let lastSelectedTagsAndQuantities;
 
 const fetchConfig = async () => {
   try {
@@ -70,10 +71,8 @@ const handleCredentialResponse = (response) => {
   getToken();
 
   landingPage.classList.add('hide');
-  openBtn.classList.add("open");
-  sidePanel.classList.add('open');
-  contentWrapper.classList.add('open');
   flashCardPage.classList.remove('hide');
+  toggleNav();
 };
 
 signoutBtn.addEventListener('click', (e) => {
@@ -461,7 +460,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   return filteredPhotos;
 };
 
-
 //* BUTTONS
 const toggleNav = () => {
   openBtn.classList.toggle('open');
@@ -471,11 +469,14 @@ const toggleNav = () => {
 
 openBtn.addEventListener('click', toggleNav);
 
-refreshBtn.addEventListener('click', () => {
-  if (lastSelectedAlbums !== null && lastSelectedQtys !== null) {
-    fetchPhotoData(lastSelectedAlbums, lastSelectedQtys);
+refreshBtn.addEventListener('click', async () => {
+  if (lastSelectedTagsAndQuantities !== null) {
+    const photos = await fetchPhotoData(accessToken);
+    const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
+    displayPhotos(filteredPhotos);
   }
 });
+
 
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked');
@@ -573,13 +574,12 @@ submitBtn.addEventListener('click', async (e) => {
     return { tag, quantity };
   });
 
+  lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
   const photos = await fetchPhotoData(accessToken);
   const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
   displayPhotos(filteredPhotos);
 
-  openBtn.classList.remove("open");
-  sidePanel.classList.remove('open');
-  contentWrapper.classList.remove('open');
+toggleNav();
 });
 
 const toggleBorders = () => {

@@ -521,7 +521,7 @@ main {
   }
   
   #open-btn.open {
-    transform: translateX(40.3rem);
+    transform: translateX(40rem);
   }
 }
 
