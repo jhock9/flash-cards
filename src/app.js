@@ -438,7 +438,7 @@ const displayPhotos = (photos) => {
 
   for (let i = 0; i < numPhotos; i++) {
     const img = document.createElement('img');
-    img.src = photos[i].image;
+    img.src = photos[i].baseUrl;
     img.classList.add('image');
     img.style.flexBasis = flexBasis;
     console.log('Image URL:', img.src); 
@@ -539,25 +539,6 @@ randomBtn.addEventListener('click', () => {
   }, 0);
 });
 
-// submitBtn.addEventListener('click', async (e) => {
-//   e.preventDefault();
-//   console.log('Submit button clicked');
-
-//   // Get the selected quantities from the input fields in the #selected-tags-container
-//   const selectedQtys = Array.from(document.querySelectorAll('.selected-tag input')).map(input => input.value);
-
-//   // Fetch and display the photos
-//   const photos = await fetchPhotoData();
-//   const displayedPhotos = [];
-//   for (let i = 0; i < selectedTags.length; i++) {
-//     const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(selectedTags[i]));
-//     shuffleArray(selectedPhotos);
-//     const photosToDisplay = selectedPhotos.slice(0, selectedQtys[i]);
-//     displayedPhotos.push(...photosToDisplay);
-//   }
-//   displayPhotos(displayedPhotos);
-// });
-
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
@@ -582,6 +563,10 @@ submitBtn.addEventListener('click', async (e) => {
 
   // Display the filtered photos
   displayPhotos(filteredPhotos);
+
+  openBtn.classList.remove("open");
+  sidePanel.classList.remove('open');
+  contentWrapper.classList.remove('open');
 });
 
 const toggleBorders = () => {
