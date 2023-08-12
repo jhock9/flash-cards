@@ -448,12 +448,24 @@ const displayPhotos = (photos) => {
 
 // Helper function for filtering photos
 const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
-  return photos.filter(photo => {
-    return selectedTagsAndQuantities.some(({ tag, quantity }) => {
-      return photo.description && photo.description.includes(tag) && photo.description.split(tag).length - 1 >= quantity;
-    });
-  });
+  let filteredPhotos = [];
+
+  for (const { tag, quantity } of selectedTagsAndQuantities) {
+    // Filter the photos based on the selected tag
+    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(tag));
+
+    shuffleArray(selectedPhotos);
+
+    // Slice the selected photos based on the selected quantity
+    const photosToDisplay = selectedPhotos.slice(0, quantity);
+
+    filteredPhotos.push(...photosToDisplay);
+  }
+
+  shuffleArray(filteredPhotos);
+  return filteredPhotos;
 };
+
 
 //* BUTTONS
 const toggleNav = () => {
@@ -471,6 +483,7 @@ refreshBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', () => {
+  console.log('Reset button clicked');
   selectedTags = [];
 
   // Remove all selected tags from selected-tags-container
@@ -491,6 +504,7 @@ resetBtn.addEventListener('click', () => {
 
 
 randomBtn.addEventListener('click', () => {
+  console.log('Random button clicked');
   resetBtn.click();
 
   // Get all available tags
