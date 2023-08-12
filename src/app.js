@@ -448,11 +448,16 @@ const displayPhotos = (photos) => {
 // Helper function for filtering photos
 const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   let filteredPhotos = [];
+  let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
 
   for (const { tag, quantity } of selectedTagsAndQuantities) {
-    const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(tag));
+    const selectedPhotos = photos.filter(photo => {
+      return photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id);
+    });
+
     shuffleArray(selectedPhotos);
     const photosToDisplay = selectedPhotos.slice(0, quantity);
+    photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
 
@@ -460,11 +465,13 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   return filteredPhotos;
 };
 
+
 //* BUTTONS
 const toggleNav = () => {
   openBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
   contentWrapper.classList.toggle('open');
+  resetBtn.click();
 }
 
 openBtn.addEventListener('click', toggleNav);
@@ -476,7 +483,6 @@ refreshBtn.addEventListener('click', async () => {
     displayPhotos(filteredPhotos);
   }
 });
-
 
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked');
@@ -579,7 +585,7 @@ submitBtn.addEventListener('click', async (e) => {
   const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
   displayPhotos(filteredPhotos);
 
-toggleNav();
+  toggleNav();
 });
 
 const toggleBorders = () => {
