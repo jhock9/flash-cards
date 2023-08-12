@@ -451,14 +451,9 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   let filteredPhotos = [];
 
   for (const { tag, quantity } of selectedTagsAndQuantities) {
-    // Filter the photos based on the selected tag
     const selectedPhotos = photos.filter(photo => photo.description && photo.description.includes(tag));
-
     shuffleArray(selectedPhotos);
-
-    // Slice the selected photos based on the selected quantity
     const photosToDisplay = selectedPhotos.slice(0, quantity);
-
     filteredPhotos.push(...photosToDisplay);
   }
 
@@ -502,7 +497,6 @@ resetBtn.addEventListener('click', () => {
   toggleBorders();
 });
 
-
 randomBtn.addEventListener('click', () => {
   console.log('Random button clicked');
   resetBtn.click();
@@ -512,25 +506,49 @@ randomBtn.addEventListener('click', () => {
 
   const numTagsToSelect = Math.floor(Math.random() * 3) + 2;
 
-  // Randomly select tags and set random values for the sliders
+  // Set max number of images per tag
+  let maxImagesPerTag;
+  switch (numTagsToSelect) {
+    case 2:
+      maxImagesPerTag = 6;
+      break;
+    case 3:
+      maxImagesPerTag = 4;
+      break;
+    case 4:
+      maxImagesPerTag = 3;
+      break;
+    default:
+      maxImagesPerTag = 3;
+  }
+
+  let totalImages = 0;
+
+  // Randomly select tags and set random slider values
   for (let i = 0; i < numTagsToSelect; i++) {
     const randomTagIndex = Math.floor(Math.random() * allTags.length);
     const selectedTag = allTags[randomTagIndex];
 
-    // Remove selected tag from allTags array to avoid duplicates
-    allTags.splice(randomTagIndex, 1);
+    allTags.splice(randomTagIndex, 1); // Removes duplicates
 
     // Simulate selecting tag by setting dropdown value, triggering change event
     dropdown.value = selectedTag;
     dropdown.dispatchEvent(new Event('change'));
 
-    // Set random value for slider (2-6)
+
+    // Set value for slider, considering totalImages
+    const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 2, 12 - totalImages);
+
+    // Set value for slider
     const slider = document.querySelector(`.selected-tag[data-tag="${selectedTag}"] .slider`);
-    slider.value = Math.floor(Math.random() * 5) + 2;
+    slider.value = sliderValue;
 
     // Update slider value display
-    const sliderValue = document.querySelector(`.selected-tag[data-tag="${selectedTag}"] .sliderValue`);
-    sliderValue.innerHTML = slider.value;
+    const sliderValueDisplay = document.querySelector(`.selected-tag[data-tag="${selectedTag}"] .sliderValue`);
+    sliderValueDisplay.innerHTML = slider.value;
+
+    // Update totalImages count
+    totalImages += sliderValue;
   }
 
   // Delay submitBtn trigger so it can finish executing
@@ -548,20 +566,15 @@ submitBtn.addEventListener('click', async (e) => {
     return;
   }
 
-  // Get the selected tags and quantities from the selected-tags-container
+  // Get selected tags and quantities from selected-tags-container
   const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-tag')).map(tagDiv => {
     const tag = tagDiv.dataset.tag;
     const quantity = tagDiv.querySelector('.slider').value;
     return { tag, quantity };
   });
 
-  // Fetch all the photos
   const photos = await fetchPhotoData(accessToken);
-
-  // Filter the photos based on the selected tags and quantities
   const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
-
-  // Display the filtered photos
   displayPhotos(filteredPhotos);
 
   openBtn.classList.remove("open");
