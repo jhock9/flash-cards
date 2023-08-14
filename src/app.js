@@ -107,18 +107,28 @@ const onSignInFailure = (error) => {
 
 const checkAuthentication = async () => {
   try {
+    console.log('Checking authentication...');
     const response = await fetch('/is-authenticated', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
     const data = await response.json();
+    console.log('Authentication check response:', data);
     if (data.isAuthenticated) {
+      console.log('User is authenticated.');
       // User is authenticated, update the UI accordingly
       landingPage.classList.add('hide');
       flashCardPage.classList.remove('hide');
       toggleNav();
+    } else {
+      console.log('User is not authenticated.');
     }
   } catch (error) {
-    // Handle error (e.g., user is not authenticated)
+    console.error('Error checking authentication:', error);
   }
 };
+
 
 checkAuthentication();
 

@@ -104,7 +104,7 @@ app.post('/oauth2callback', async (req, res) => {
     const userinfoResponse = await oauth2.userinfo.get();
     const userEmail = userinfoResponse.data.email;
 
-    res.cookie('access_token', tokens.access_token, { 
+    res.cookie('accessToken', tokens.access_token, { 
       httpOnly: true, 
       secure: process.env.NODE_ENV === 'production', 
     });
@@ -124,7 +124,6 @@ app.get('/is-authenticated', (req, res) => {
     res.status(200).json({ isAuthenticated: false });
   }
 });
-
 
 // Clear access token cookie
 app.post('/logout', (req, res) => {
