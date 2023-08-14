@@ -116,6 +116,11 @@ app.post('/oauth2callback', async (req, res) => {
   }
 });
 
+// Check if user is authenticated
+app.get('/is-authenticated', requireAccessToken, (req, res) => {
+  res.status(200).json({ isAuthenticated: true });
+});
+
 // Clear access token cookie
 app.post('/logout', (req, res) => {
   res.clearCookie('accessToken');

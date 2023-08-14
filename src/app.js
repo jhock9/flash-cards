@@ -75,25 +75,6 @@ const handleCredentialResponse = (response) => {
   toggleNav();
 };
 
-signoutBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
-  try {
-    // Call the server-side logout endpoint
-    const response = await fetch('/logout', { method: 'POST' });
-    if (!response.ok) {
-      throw new Error('Logout failed');
-    }
-    google.accounts.id.disableAutoSelect();
-    console.log('User signed out.');
-
-    landingPage.classList.remove('hide');
-    flashCardPage.classList.add('hide');
-    window.location.reload();
-  } catch (error) {
-    console.error('Error during logout:', error);
-  }
-});
-
 //* GOOGLE AUTHORIZATION
 let tokenClient;
 let accessToken;
@@ -123,6 +104,23 @@ const getToken = () => {
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
+
+const checkAuthentication = async () => {
+  try {
+    const response = await fetch('/is-authenticated');
+    const data = await response.json();
+    if (data.isAuthenticated) {
+      // User is authenticated, update the UI accordingly
+      landingPage.classList.add('hide');
+      flashCardPage.classList.remove('hide');
+      toggleNav();
+    }
+  } catch (error) {
+    // Handle error (e.g., user is not authenticated)
+  }
+};
+
+checkAuthentication();
 
 //* FETCH PHOTO DATA
 const fetchPhotoData = (accessToken) => {
@@ -593,6 +591,25 @@ submitBtn.addEventListener('click', async (e) => {
   displayPhotos(filteredPhotos);
 
   toggleNav();
+});
+
+signoutBtn.addEventListener('click', async (e) => {
+  e.preventDefault();
+  try {
+    // Call the server-side logout endpoint
+    const response = await fetch('/logout', { method: 'POST' });
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+    google.accounts.id.disableAutoSelect();
+    console.log('User signed out.');
+
+    landingPage.classList.remove('hide');
+    flashCardPage.classList.add('hide');
+    window.location.reload();
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
 });
 
 const toggleBorders = () => {
