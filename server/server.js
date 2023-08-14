@@ -104,10 +104,12 @@ app.post('/oauth2callback', async (req, res) => {
     const userinfoResponse = await oauth2.userinfo.get();
     const userEmail = userinfoResponse.data.email;
 
+    console.log('Received access token:', tokens.access_token);
     res.cookie('accessToken', tokens.access_token, { 
       httpOnly: true, 
       secure: process.env.NODE_ENV === 'production', 
     });
+    console.log('Cookie set with name "accessToken"');
 
     res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
   } catch (error) {
@@ -118,6 +120,7 @@ app.post('/oauth2callback', async (req, res) => {
 
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
+  console.log('Cookies:', req.cookies);
   if (req.cookies.accessToken) {
     res.status(200).json({ isAuthenticated: true });
   } else {

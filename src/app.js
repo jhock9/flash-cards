@@ -129,7 +129,6 @@ const checkAuthentication = async () => {
   }
 };
 
-
 checkAuthentication();
 
 //* FETCH PHOTO DATA
@@ -582,6 +581,7 @@ randomBtn.addEventListener('click', () => {
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
+  toggleNav();
 
   if (!accessToken) {
     console.error('Access token is not available');
@@ -599,8 +599,6 @@ submitBtn.addEventListener('click', async (e) => {
   const photos = await fetchPhotoData(accessToken);
   const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
   displayPhotos(filteredPhotos);
-
-  toggleNav();
 });
 
 signoutBtn.addEventListener('click', async (e) => {
