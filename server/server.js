@@ -89,39 +89,39 @@ const oauth2Client = new google.auth.OAuth2(
 console.log('OAuth2 client CREATED: ', oauth2Client);
 
 // Exchange authorization code for refresh and access tokens
-app.post('/oauth2callback', async (req, res) => {
-  try {
-    console.log('HANDLING OAuth 2.0 server response');
-    const code = req.body.code;
-    console.log('Received code:', code);
+// app.post('/oauth2callback', async (req, res) => {
+//   try {
+//     console.log('HANDLING OAuth 2.0 server response');
+//     const code = req.body.code;
+//     console.log('Received code:', code);
 
-    const { tokens } = await oauth2Client.getToken(code);
-    console.log('Received tokens:', tokens);
-    oauth2Client.setCredentials(tokens);
+//     const { tokens } = await oauth2Client.getToken(code);
+//     console.log('Received tokens:', tokens);
+//     oauth2Client.setCredentials(tokens);
 
-    // Get the user's email address
-    const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
-    const userinfoResponse = await oauth2.userinfo.get();
-    const userEmail = userinfoResponse.data.email;
+//     // Get the user's email address
+//     const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
+//     const userinfoResponse = await oauth2.userinfo.get();
+//     const userEmail = userinfoResponse.data.email;
 
-    console.log('Received access token:', tokens.access_token);
-    res.cookie('accessToken', tokens.access_token, { 
-      // httpOnly: true, 
-      // secure: process.env.NODE_ENV === 'production', 
-      SameSite: 'None',
-    });
-    console.log('Cookie set with name "accessToken"');
+//     console.log('Received access token:', tokens.access_token);
+//     res.cookie('accessToken', tokens.access_token, { 
+//       // httpOnly: true, 
+//       // secure: process.env.NODE_ENV === 'production', 
+//       SameSite: 'None',
+//     });
+//     console.log('Cookie set with name "accessToken"');
 
-    // Debugging lines:
-    console.log('Response headers after setting cookie:', res.getHeaders());
-    console.log('Response cookies after setting cookie:', res.cookies);
+//     // Debugging lines:
+//     console.log('Response headers after setting cookie:', res.getHeaders());
+//     console.log('Response cookies after setting cookie:', res.cookies);
 
-    res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
-  } catch (error) {
-    console.error('ERROR exchanging authorization code:', error);
-    res.status(500).json({ success: false, error: error.toString() });
-  }
-});
+//     res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
+//   } catch (error) {
+//     console.error('ERROR exchanging authorization code:', error);
+//     res.status(500).json({ success: false, error: error.toString() });
+//   }
+// });
 
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
