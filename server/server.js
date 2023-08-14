@@ -60,12 +60,12 @@ app.use(express.json());
 app.use(cookieParser());
 
 // 
-app.use((req, res, next) => {
+const requireAccessToken = (req, res, next) => {
   if (!req.cookies.accessToken) {
     return res.status(401).json({ error: 'Access token missing' });
   }
   next();
-});
+};
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -116,7 +116,7 @@ app.post('/oauth2callback', async (req, res) => {
   }
 });
 
-// Clear 
+// Clear access token cookie
 app.post('/logout', (req, res) => {
   res.clearCookie('accessToken');
   res.status(200).json({ success: true });
