@@ -1,6 +1,7 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.PORT || 3003;
 const {google} = require('googleapis');
@@ -54,8 +55,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Use the middleware for all routes
+// Add middleware 
 app.use(express.json());
+app.use(cookieParser());
+
+// 
+app.use((req, res, next) => {
+  if (!req.cookies.accessToken) {
+    return res.status(401).json({ error: 'Access token missing' });
+  }
+  next();
+});
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -94,11 +104,22 @@ app.post('/oauth2callback', async (req, res) => {
     const userinfoResponse = await oauth2.userinfo.get();
     const userEmail = userinfoResponse.data.email;
 
+    res.cookie('access_token', tokens.access_token, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+    });
+
     res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
   } catch (error) {
     console.error('ERROR exchanging authorization code:', error);
     res.status(500).json({ success: false, error: error.toString() });
   }
+});
+
+// Clear 
+app.post('/logout', (req, res) => {
+  res.clearCookie('accessToken');
+  res.status(200).json({ success: true });
 });
 
 // Start server

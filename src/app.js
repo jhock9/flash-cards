@@ -75,16 +75,23 @@ const handleCredentialResponse = (response) => {
   toggleNav();
 };
 
-signoutBtn.addEventListener('click', (e) => {
+signoutBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  google.accounts.id.disableAutoSelect();
-  
-  console.log('User signed out.');
-  localStorage.clear();
-  
-  landingPage.classList.remove('hide');
-  flashCardPage.classList.add('hide');
-  window.location.reload();
+  try {
+    // Call the server-side logout endpoint
+    const response = await fetch('/logout', { method: 'POST' });
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+    google.accounts.id.disableAutoSelect();
+    console.log('User signed out.');
+
+    landingPage.classList.remove('hide');
+    flashCardPage.classList.add('hide');
+    window.location.reload();
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
 });
 
 //* GOOGLE AUTHORIZATION
