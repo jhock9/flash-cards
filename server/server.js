@@ -108,8 +108,13 @@ app.post('/oauth2callback', async (req, res) => {
     res.cookie('accessToken', tokens.access_token, { 
       // httpOnly: true, 
       // secure: process.env.NODE_ENV === 'production', 
+      SameSite: 'None',
     });
     console.log('Cookie set with name "accessToken"');
+
+    // Debugging lines:
+    console.log('Response headers after setting cookie:', res.getHeaders());
+    console.log('Response cookies after setting cookie:', res.cookies);
 
     res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
   } catch (error) {
@@ -120,7 +125,10 @@ app.post('/oauth2callback', async (req, res) => {
 
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
-  console.log('Cookies:', req.cookies);
+  // Debugging lines:
+  console.log('Cookies in /is-authenticated:', req.cookies);
+  console.log('Cookie header in /is-authenticated:', req.headers.cookie);
+
   if (req.cookies.accessToken) {
     res.status(200).json({ isAuthenticated: true });
   } else {
