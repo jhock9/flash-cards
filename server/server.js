@@ -106,8 +106,8 @@ app.post('/oauth2callback', async (req, res) => {
 
     console.log('Received access token:', tokens.access_token);
     res.cookie('accessToken', tokens.access_token, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
+      // httpOnly: true, 
+      // secure: process.env.NODE_ENV === 'production', 
     });
     console.log('Cookie set with name "accessToken"');
 
