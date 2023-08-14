@@ -107,7 +107,7 @@ const onSignInFailure = (error) => {
 
 const checkAuthentication = async () => {
   try {
-    const response = await fetch('/is-authenticated');
+    const response = await fetch('/is-authenticated', { credentials: 'include' });
     const data = await response.json();
     if (data.isAuthenticated) {
       // User is authenticated, update the UI accordingly
