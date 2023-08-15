@@ -124,47 +124,57 @@ app.get('/login', (req, res) => {
 // Handle the OAuth 2.0 server response
 app.get('/oauth2callback', async (req, res) => {
   try {
+    console.log('Received request for /oauth2callback');
     const q = url.parse(req.url, true).query;
+    console.log('Parsed query parameters:', q);
     if (q.error) {
-      console.error('Error:', q.error);
+      console.error('Error in query parameters:', q.error);
       res.status(400).send('Authentication failed');
       return;
     }
     // Get access and refresh tokens
+    console.log('Attempting to get tokens with code:', q.code);
     const { tokens } = await oauth2Client.getToken(q.code);
-    oauth2Client.setCredentials(tokens);
     console.log('Received tokens:', tokens);
 
+    oauth2Client.setCredentials(tokens);
+    console.log('Credentials set in OAuth2 client');
+
     // using sessions to store tokens
+    console.log('Session before storing tokens:', req.session);
     req.session.accessToken = tokens.access_token;
     req.session.refreshToken = tokens.refresh_token;
-    console.log('Tokens stored in session:', tokens);
-
-    // using .env variables to store tokens
-    if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
-      ACCESS_TOKEN = tokens.access_token;
-      console.log('Updated access token:', ACCESS_TOKEN);
-    }
-
-    if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-      REFRESH_TOKEN = tokens.refresh_token;
-      console.log('Updated refresh token:', REFRESH_TOKEN);
-    }
-    console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
-
-    res.cookie('accessToken', ACCESS_TOKEN, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
-      sameSite: 'None',
+    console.log('Tokens stored in session:', {
+      accessToken: req.session.accessToken,
+      refreshToken: req.session.refreshToken,
     });
-    console.log('Cookie set with name "accessToken"');
-    console.log('Response headers after setting cookie:', res.getHeaders());
-    console.log('Response cookies after setting cookie:', res.cookies);
+    console.log('Session after storing tokens:', req.session);
+
+    // //!! using .env variables to store tokens
+    // if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
+    //   ACCESS_TOKEN = tokens.access_token;
+    //   console.log('Updated access token:', ACCESS_TOKEN);
+    // }
+
+    // if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
+    //   REFRESH_TOKEN = tokens.refresh_token;
+    //   console.log('Updated refresh token:', REFRESH_TOKEN);
+    // }
+    // console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
+
+    // res.cookie('accessToken', ACCESS_TOKEN, { 
+    //   httpOnly: true, 
+    //   secure: process.env.NODE_ENV === 'production', 
+    //   sameSite: 'None',
+    // });
+    // console.log('Cookie set with name "accessToken"');
+    // console.log('Response headers after setting cookie:', res.getHeaders());
+    // console.log('Response cookies after setting cookie:', res.cookies);
 
     // Redirect back to the main page
     res.redirect('/');
   } catch (error) {
-    console.error('ERROR exchanging authorization code:', error);
+    console.error('ERROR in /oauth2callback:', error);
     res.status(500).send('Something went wrong!');  
   }
 });
@@ -176,10 +186,10 @@ app.get('/getPhotos', async (req, res) => {
   const refreshToken = req.session.refreshToken;
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
   
-  if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET' || REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-    console.error('Tokens not assigned. ACCESS_TOKEN:', ACCESS_TOKEN, 'REFRESH_TOKEN:', REFRESH_TOKEN);
-    return res.status(500).send('Tokens not assigned');
-  }
+  // if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET' || REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
+  //   console.error('Tokens not assigned. ACCESS_TOKEN:', ACCESS_TOKEN, 'REFRESH_TOKEN:', REFRESH_TOKEN);
+  //   return res.status(500).send('Tokens not assigned');
+  // }
   
   try {
     console.log('Trying request for /getPhotos');
@@ -211,18 +221,18 @@ app.get('/getPhotos', async (req, res) => {
   }
 });
 
-// Check if user is authenticated
-app.get('/is-authenticated', (req, res) => {
-  // Debugging lines:
-  console.log('Cookies in /is-authenticated:', req.cookies);
-  console.log('Cookie header in /is-authenticated:', req.headers.cookie);
+// //!! Check if user is authenticated
+// app.get('/is-authenticated', (req, res) => {
+//   // Debugging lines:
+//   console.log('Cookies in /is-authenticated:', req.cookies);
+//   console.log('Cookie header in /is-authenticated:', req.headers.cookie);
 
-  if (req.cookies.accessToken) {
-    res.status(200).json({ isAuthenticated: true });
-  } else {
-    res.status(200).json({ isAuthenticated: false });
-  }
-});
+//   if (req.cookies.accessToken) {
+//     res.status(200).json({ isAuthenticated: true });
+//   } else {
+//     res.status(200).json({ isAuthenticated: false });
+//   }
+// });
 
 // Clear access token cookie 
 app.post('/logout', (req, res) => {

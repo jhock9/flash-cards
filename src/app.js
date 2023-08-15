@@ -85,31 +85,31 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-// Cookie authentication check
-const checkAuthentication = async () => {
-  try {
-    console.log('Checking authentication...');
-    const response = await fetch('/is-authenticated', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log('Authentication check response:', data);
-    if (data.isAuthenticated) {
-      console.log('User is authenticated.');
-      // User is authenticated, update the UI accordingly
-      landingPage.classList.add('hide');
-      flashCardPage.classList.remove('hide');
-      toggleNav();
-    } else {
-      console.log('User is not authenticated.');
-    }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-  }
-};
-checkAuthentication();
+// //!! Cookie authentication check 
+// const checkAuthentication = async () => {
+//   try {
+//     console.log('Checking authentication...');
+//     const response = await fetch('/is-authenticated', { credentials: 'include' });
+//     if (!response.ok) {
+//       console.error(`Server responded with status: ${response.status}`);
+//       throw new Error(`Server responded with status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     console.log('Authentication check response:', data);
+//     if (data.isAuthenticated) {
+//       console.log('User is authenticated.');
+//       // User is authenticated, update the UI accordingly
+//       landingPage.classList.add('hide');
+//       flashCardPage.classList.remove('hide');
+//       toggleNav();
+//     } else {
+//       console.log('User is not authenticated.');
+//     }
+//   } catch (error) {
+//     console.error('Error checking authentication:', error);
+//   }
+// };
+// checkAuthentication();
 
 //* FETCH PHOTO DATA
 const fetchPhotoData = async () => {
