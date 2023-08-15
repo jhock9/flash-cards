@@ -48,7 +48,8 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
-  login();
+  getAuthCode();
+  // login();
 };
 
 // Redirect user to Google's authentication page
