@@ -45,10 +45,10 @@ const initGoogleSignIn = () => {
   
   google.accounts.id.renderButton(
     document.getElementById('google-signin'),
-    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left', click_listener: getAuthCode }
+    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
-  // login();
+  login();
 };
 
 // Redirect user to Google's authentication page
