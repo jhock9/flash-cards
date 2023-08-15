@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const port = process.env.PORT || 3003;
 const {google} = require('googleapis');
+const url = require('url');
+
+// const {OAuth2Client} = require('google-auth-library');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -57,15 +60,7 @@ app.use((req, res, next) => {
 
 // Add middleware 
 app.use(express.json());
-app.use(cookieParser());
-
-// 
-const requireAccessToken = (req, res, next) => {
-  if (!req.cookies.accessToken) {
-    return res.status(401).json({ error: 'Access token missing' });
-  }
-  next();
-};
+app.use(cookieParser()); //? still needed?
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -86,10 +81,60 @@ const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_SECRET,
   REDIRECT_URL,
 );
+// const oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+
 console.log('OAuth2 client CREATED: ', oauth2Client);
 
-// Exchange authorization code for refresh and access tokens
-// app.post('/oauth2callback', async (req, res) => {
+const authUrl = oauth2Client.generateAuthUrl({
+  access_type: 'offline', // Gets refresh token
+  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  include_granted_scopes: true,
+  // response_type: 'code',
+  // redirect_uri: REDIRECT_URL,
+  // client_id: GOOGLE_CLIENT_ID,
+});
+
+let userCredential = null;
+
+res.writeHead(301, { "Location": authUrl });
+
+// Receive the callback from Google's OAuth 2.0 server.
+if (req.url.startsWith('/oauth2callback')) {
+  // Handle the OAuth 2.0 server response
+  const q = url.parse(req.url, true).query;
+
+  if (q.error) {
+    console.error('Error:', q.error);
+  } else { 
+    // Get access and refresh tokens
+    const { tokens } = await oauth2Client.getToken(q.code);
+    oauth2Client.setCredentials(tokens);
+
+    userCredential = tokens;
+
+    const getPhotos = await google.photoslibrary.mediaItems.list({
+      auth: oauth2Client,
+      pageSize: 100,
+    // });
+    }, (err1, res1) => {
+      if (err1) return console.log('The API returned an error: ' + err1);
+      const mediaItems = res1.data.mediaItems;
+      if (mediaItems.length) {
+        console.log('mediaItems:');
+        mediaItems.map((item) => {
+          console.log(`${item.name} (${item.id})`);
+        });
+      } else {
+        console.log('No files found.');
+      }
+    });
+    console.log('Photos:', getPhotos);
+  }
+};
+
+// //!! dont need this anymore I dont think
+// // Exchange authorization code for refresh and access tokens
+// app.get('/oauth2callback', async (req, res) => {
 //   try {
 //     console.log('HANDLING OAuth 2.0 server response');
 //     const code = req.body.code;
@@ -99,12 +144,15 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 //     console.log('Received tokens:', tokens);
 //     oauth2Client.setCredentials(tokens);
 
+//     console.log('Received access token:', tokens.access_token);
+
 //     // Get the user's email address
+//     //? still needed?
 //     const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
 //     const userinfoResponse = await oauth2.userinfo.get();
 //     const userEmail = userinfoResponse.data.email;
-
-//     console.log('Received access token:', tokens.access_token);
+    
+//     //? still needed?
 //     res.cookie('accessToken', tokens.access_token, { 
 //       // httpOnly: true, 
 //       // secure: process.env.NODE_ENV === 'production', 
@@ -113,6 +161,7 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 //     console.log('Cookie set with name "accessToken"');
 
 //     // Debugging lines:
+//     //? still needed?
 //     console.log('Response headers after setting cookie:', res.getHeaders());
 //     console.log('Response cookies after setting cookie:', res.cookies);
 
@@ -123,24 +172,26 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 //   }
 // });
 
-// Check if user is authenticated
-app.get('/is-authenticated', (req, res) => {
-  // Debugging lines:
-  console.log('Cookies in /is-authenticated:', req.cookies);
-  console.log('Cookie header in /is-authenticated:', req.headers.cookie);
+// // Check if user is authenticated
+// //? still needed?
+// app.get('/is-authenticated', (req, res) => {
+//   // Debugging lines:
+//   console.log('Cookies in /is-authenticated:', req.cookies);
+//   console.log('Cookie header in /is-authenticated:', req.headers.cookie);
 
-  if (req.cookies.accessToken) {
-    res.status(200).json({ isAuthenticated: true });
-  } else {
-    res.status(200).json({ isAuthenticated: false });
-  }
-});
+//   if (req.cookies.accessToken) {
+//     res.status(200).json({ isAuthenticated: true });
+//   } else {
+//     res.status(200).json({ isAuthenticated: false });
+//   }
+// });
 
-// Clear access token cookie
-app.post('/logout', (req, res) => {
-  res.clearCookie('accessToken');
-  res.status(200).json({ success: true });
-});
+// // Clear access token cookie 
+// //? still needed?
+// app.post('/logout', (req, res) => {
+//   res.clearCookie('accessToken');
+//   res.status(200).json({ success: true });
+// });
 
 // Start server
 app.listen(port, () => {

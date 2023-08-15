@@ -45,7 +45,7 @@ const initGoogleSignIn = () => {
   
   google.accounts.id.renderButton(
     document.getElementById('google-signin'),
-    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
+    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left', click_listener: getAuthCode }
   );
 
   // google.accounts.id.prompt();
@@ -67,8 +67,10 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  initTokenClient();
-  getToken();
+  // initTokenClient();
+  // getToken();
+  initCodeClient();
+  getAuth(); // ? do I call this here?
 
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
@@ -76,60 +78,102 @@ const handleCredentialResponse = (response) => {
 };
 
 //* GOOGLE AUTHORIZATION
-let tokenClient;
-let accessToken;
+let codeClient;
+// let accessToken; //? is this a thing anymore? -- displayTags() needs it
 
-const initTokenClient = () => {
-  console.log('initTokenClient CALLED.');
-  tokenClient = google.accounts.oauth2.initTokenClient({
+const initCodeClient = () => {
+  console.log('initCodeClient CALLED.');
+  codeClient = google.accounts.oauth2.initCodeClient({
     client_id: googleClientID,
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-    callback: (tokenResponse) => {
-      console.log('Callback executed', tokenResponse);
-      accessToken = tokenResponse.access_token;
-      console.log('Access token in initTokenClient callback: ', accessToken);
-      
-      displayTags(accessToken);
-    }
-  })
-  console.log('tokenClient: ', tokenClient);
+    ux_mode: 'popup',
+    callback: (response) => {
+
+      console.log('Callback executed', response);
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'oauth2callback', true);
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      // Set custom header for CRSF
+      xhr.setRequestHeader('X-Requested-With', 'XmlHttpRequest');
+      xhr.onload = function() {
+        console.log('Signed in as: ' + xhr.responseText);
+      };
+      xhr.send('code=' + response.code);
+      // After receipt, the code is exchanged for an access token and
+      // refresh token, and the platform then updates this web app
+      // running in user's browser with the requested calendar info.
+
+      // displayTags(accessToken); !need this from the backend??
+    },
+    console.log('codeClient: ', codeClient);
+  });
 };
 
-const getToken = () => {
-  console.log('getToken CALLED.');
-  tokenClient.requestAccessToken();
-}
+const getAuthCode = () => {
+  console.log('getAuth CALLED.');
+  codeClient.requestCode();
+};
+
+// const exchangeCode = () => {
+//   console.log('exchangeCode CALLED.');
+//   codeClient.requestAccessToken({
+//     code: '4/P7q7W91a-oMsCeLvIa1GmR-gko8yD-3s1Pgn7vtcC4'
+//   });
+// };
+
+// let tokenClient;
+// const initTokenClient = () => {
+//   console.log('initTokenClient CALLED.');
+//   tokenClient = google.accounts.oauth2.initTokenClient({
+//     client_id: googleClientID,
+//     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+//     callback: (tokenResponse) => {
+//       console.log('Callback executed', tokenResponse);
+//       accessToken = tokenResponse.access_token;
+//       console.log('Access token in initTokenClient callback: ', accessToken);
+      
+//       displayTags(accessToken);
+//     }
+//   })
+//   console.log('tokenClient: ', tokenClient);
+// };
+
+// const getToken = () => {
+//   console.log('getToken CALLED.');
+//   tokenClient.requestAccessToken();
+// }
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-const checkAuthentication = async () => {
-  try {
-    console.log('Checking authentication...');
-    const response = await fetch('/is-authenticated', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log('Authentication check response:', data);
-    if (data.isAuthenticated) {
-      console.log('User is authenticated.');
-      // User is authenticated, update the UI accordingly
-      landingPage.classList.add('hide');
-      flashCardPage.classList.remove('hide');
-      toggleNav();
-    } else {
-      console.log('User is not authenticated.');
-    }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-  }
-};
+// // ? do I still need this??
+// const checkAuthentication = async () => {
+//   try {
+//     console.log('Checking authentication...');
+//     const response = await fetch('/is-authenticated', { credentials: 'include' });
+//     if (!response.ok) {
+//       console.error(`Server responded with status: ${response.status}`);
+//       throw new Error(`Server responded with status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     console.log('Authentication check response:', data);
+//     if (data.isAuthenticated) {
+//       console.log('User is authenticated.');
+//       // User is authenticated, update the UI accordingly
+//       landingPage.classList.add('hide');
+//       flashCardPage.classList.remove('hide');
+//       toggleNav();
+//     } else {
+//       console.log('User is not authenticated.');
+//     }
+//   } catch (error) {
+//     console.error('Error checking authentication:', error);
+//   }
+// };
 
-checkAuthentication();
+// checkAuthentication();
 
 //* FETCH PHOTO DATA
 const fetchPhotoData = (accessToken) => {
