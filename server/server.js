@@ -2,6 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3003;
@@ -12,8 +13,12 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 let ACCESS_TOKEN = process.env.GOOGLE_ACCESS_TOKEN;
 let REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
+
+console.log('Initial ACCESS_TOKEN:', ACCESS_TOKEN);
+console.log('Initial REFRESH_TOKEN:', REFRESH_TOKEN);
 
 console.log(`Redirect URL is: ${REDIRECT_URL}`);
 
@@ -65,6 +70,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
+app.use(session({
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+}));
+
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
@@ -110,8 +121,8 @@ app.get('/login', (req, res) => {
 //     // Get access and refresh tokens
 //     const { tokens } = await oauth2Client.getToken(authCode);
 
+// Handle the OAuth 2.0 server response
 app.get('/oauth2callback', async (req, res) => {
-  // Handle the OAuth 2.0 server response
   try {
     const q = url.parse(req.url, true).query;
     if (q.error) {
@@ -124,6 +135,12 @@ app.get('/oauth2callback', async (req, res) => {
     oauth2Client.setCredentials(tokens);
     console.log('Received tokens:', tokens);
 
+    // using sessions to store tokens
+    req.session.accessToken = tokens.access_token;
+    req.session.refreshToken = tokens.refresh_token;
+    console.log('Tokens stored in session:', tokens);
+
+    // using .env variables to store tokens
     if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
       ACCESS_TOKEN = tokens.access_token;
       console.log('Updated access token:', ACCESS_TOKEN);
@@ -133,6 +150,7 @@ app.get('/oauth2callback', async (req, res) => {
       REFRESH_TOKEN = tokens.refresh_token;
       console.log('Updated refresh token:', REFRESH_TOKEN);
     }
+    console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
 
     res.cookie('accessToken', ACCESS_TOKEN, { 
       httpOnly: true, 
@@ -153,29 +171,40 @@ app.get('/oauth2callback', async (req, res) => {
 
 // Get photos from Google Photos
 app.get('/getPhotos', async (req, res) => {
+  console.log('Received request for /getPhotos.');
+  const accessToken = req.session.accessToken;
+  const refreshToken = req.session.refreshToken;
+  console.log('Retrieved tokens from session:', { accessToken, refreshToken });
+  
   if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET' || REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-    console.error('Tokens not assigned');
+    console.error('Tokens not assigned. ACCESS_TOKEN:', ACCESS_TOKEN, 'REFRESH_TOKEN:', REFRESH_TOKEN);
     return res.status(500).send('Tokens not assigned');
   }
   
   try {
-    console.log('Received request for /getPhotos');
+    console.log('Trying request for /getPhotos');
 
     // Use the stored tokens to authenticate
     oauth2Client.setCredentials({
-      access_token: ACCESS_TOKEN,
-      refresh_token: REFRESH_TOKEN
+      // access_token: ACCESS_TOKEN,
+      // refresh_token: REFRESH_TOKEN
+      access_token: accessToken,
+      refresh_token: refreshToken,
     });
 
     // Make the API request to Google Photos
-    const getPhotos = await google.photos.mediaItems.search({
-      version: 'v1',
+    const photoslibrary = google.photoslibrary('v1');
+    const getPhotos = await photoslibrary.mediaItems.search({
+          version: 'v1',
       auth: oauth2Client,
-      pageSize: 100,
+      resource:  {
+        pageSize: 100,
+      },
     });
 
     console.log('Sending photos:', getPhotos.data);
     res.json(getPhotos.data);
+
   } catch (err) {
     console.error('ERROR getting photos:', err);
     res.status(500).send(`Something went wrong! Error: ${err.message}`);
