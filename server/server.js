@@ -153,10 +153,13 @@ app.post('/sendAuthCode', async (req, res) => {
 
 // Get photos from Google Photos
 app.get('/getPhotos', async (req, res) => {
+  if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET' || REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
+    console.error('Tokens not assigned');
+    return res.status(500).send('Tokens not assigned');
+  }
+  
   try {
     console.log('Received request for /getPhotos');
-    console.log('Using access token:', ACCESS_TOKEN);
-    console.log('Using refresh token:', REFRESH_TOKEN);
 
     // Use the stored tokens to authenticate
     oauth2Client.setCredentials({
