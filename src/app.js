@@ -48,7 +48,7 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
 
-  getAuthCode();
+  // getAuthCode();
   // login();
 };
 
@@ -105,11 +105,16 @@ const initCodeClient = () => {
     }
   });
   console.log('codeClient: ', codeClient);
+  getAuthCode();
 };
 
 const getAuthCode = () => {
   console.log('getAuth CALLED.');
-  codeClient.requestCode();
+  if (codeClient) {
+    codeClient.requestCode();
+  } else {
+    console.error('codeClient is not defined');
+  }
 };
 
 const sendAuthCodeToServer = async (authCode) => {
