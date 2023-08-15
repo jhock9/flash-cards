@@ -7,12 +7,13 @@ const port = process.env.PORT || 3003;
 const {google} = require('googleapis');
 const url = require('url');
 
-// const {OAuth2Client} = require('google-auth-library');
-
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
+let ACCESS_TOKEN = process.env.GOOGLE_ACCESS_TOKEN;
+let REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
+
 console.log(`Redirect URL is: ${REDIRECT_URL}`);
 
 // Enforce HTTPS redirection in production
@@ -60,7 +61,7 @@ app.use((req, res, next) => {
 
 // Add middleware 
 app.use(express.json());
-app.use(cookieParser()); //? still needed?
+app.use(cookieParser());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -81,125 +82,123 @@ const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_SECRET,
   REDIRECT_URL,
 );
-// const oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
 console.log('OAuth2 client CREATED: ', oauth2Client);
 
+// Redirect to Google's OAuth 2.0 server
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
   include_granted_scopes: true,
-  // response_type: 'code',
-  // redirect_uri: REDIRECT_URL,
-  // client_id: GOOGLE_CLIENT_ID,
+  // response_type: 'code', // ? is this needed?
+  // redirect_uri: REDIRECT_URL, // ? is this needed?
+  // client_id: GOOGLE_CLIENT_ID, // ? is this needed?
 });
 
-let userCredential = null;
+app.get('/login', (req, res) => {
+  res.redirect(authUrl);
+});
 
-res.writeHead(301, { "Location": authUrl });
+// Exchange authorization code for access and refresh tokens
+app.post('/sendAuthCode', async (req, res) => {
+  // Extract the authorization code from the request body
+  const authCode = req.body.authCode;
 
-// Receive the callback from Google's OAuth 2.0 server.
-if (req.url.startsWith('/oauth2callback')) {
-  // Handle the OAuth 2.0 server response
-  const q = url.parse(req.url, true).query;
-
-  if (q.error) {
-    console.error('Error:', q.error);
-  } else { 
+  try {
     // Get access and refresh tokens
-    const { tokens } = await oauth2Client.getToken(q.code);
+    const { tokens } = await oauth2Client.getToken(authCode);
+
+// app.get('/oauth2callback', async (req, res) => {
+//   // Handle the OAuth 2.0 server response
+//   try {
+//     const q = url.parse(req.url, true).query;
+//     if (q.error) {
+//       console.error('Error:', q.error);
+//       res.status(400).send('Authentication failed');
+//       return;
+//     }
+//     // Get access and refresh tokens
+//     const { tokens } = await oauth2Client.getToken(q.code);
     oauth2Client.setCredentials(tokens);
+    console.log('Received tokens:', tokens);
 
-    userCredential = tokens;
+    if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
+      ACCESS_TOKEN = tokens.access_token;
+      console.log('Updated access token:', ACCESS_TOKEN);
+    }
 
-    const getPhotos = await google.photoslibrary.mediaItems.list({
+    if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
+      REFRESH_TOKEN = tokens.refresh_token;
+      console.log('Updated refresh token:', REFRESH_TOKEN);
+    }
+
+    res.cookie('accessToken', ACCESS_TOKEN, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'None',
+    });
+    console.log('Cookie set with name "accessToken"');
+    console.log('Response headers after setting cookie:', res.getHeaders());
+    console.log('Response cookies after setting cookie:', res.cookies);
+
+    // Redirect back to the main page
+    res.redirect('/');
+  } catch (error) {
+    console.error('ERROR exchanging authorization code:', error);
+    res.status(500).send('Something went wrong!');  
+  }
+});
+
+// Get photos from Google Photos
+app.get('/getPhotos', async (req, res) => {
+  try {
+    console.log('Received request for /getPhotos');
+    // Use the stored tokens to authenticate
+    oauth2Client.setCredentials({
+      access_token: ACCESS_TOKEN,
+      refresh_token: REFRESH_TOKEN
+    });
+
+    // Make the API request to Google Photos
+    const getPhotos = await google.photoslibrary.mediaItems.search({
       auth: oauth2Client,
       pageSize: 100,
-    // });
-    }, (err1, res1) => {
-      if (err1) return console.log('The API returned an error: ' + err1);
-      const mediaItems = res1.data.mediaItems;
-      if (mediaItems.length) {
-        console.log('mediaItems:');
-        mediaItems.map((item) => {
-          console.log(`${item.name} (${item.id})`);
-        });
-      } else {
-        console.log('No files found.');
-      }
     });
-    console.log('Photos:', getPhotos);
+
+    console.log('Sending photos:', getPhotos.data);
+    res.json(getPhotos.data);
+  } catch (err) {
+    console.error('ERROR getting photos:', err);
+    res.status(500).send('Something went wrong!');
   }
-};
+});
 
-// //!! dont need this anymore I dont think
-// // Exchange authorization code for refresh and access tokens
-// app.get('/oauth2callback', async (req, res) => {
-//   try {
-//     console.log('HANDLING OAuth 2.0 server response');
-//     const code = req.body.code;
-//     console.log('Received code:', code);
+// Check if user is authenticated
+app.get('/is-authenticated', (req, res) => {
+  // Debugging lines:
+  console.log('Cookies in /is-authenticated:', req.cookies);
+  console.log('Cookie header in /is-authenticated:', req.headers.cookie);
 
-//     const { tokens } = await oauth2Client.getToken(code);
-//     console.log('Received tokens:', tokens);
-//     oauth2Client.setCredentials(tokens);
+  if (req.cookies.accessToken) {
+    res.status(200).json({ isAuthenticated: true });
+  } else {
+    res.status(200).json({ isAuthenticated: false });
+  }
+});
 
-//     console.log('Received access token:', tokens.access_token);
-
-//     // Get the user's email address
-//     //? still needed?
-//     const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
-//     const userinfoResponse = await oauth2.userinfo.get();
-//     const userEmail = userinfoResponse.data.email;
-    
-//     //? still needed?
-//     res.cookie('accessToken', tokens.access_token, { 
-//       // httpOnly: true, 
-//       // secure: process.env.NODE_ENV === 'production', 
-//       SameSite: 'None',
-//     });
-//     console.log('Cookie set with name "accessToken"');
-
-//     // Debugging lines:
-//     //? still needed?
-//     console.log('Response headers after setting cookie:', res.getHeaders());
-//     console.log('Response cookies after setting cookie:', res.cookies);
-
-//     res.status(200).json({ success: true, user_email: userEmail, access_token: tokens.access_token });
-//   } catch (error) {
-//     console.error('ERROR exchanging authorization code:', error);
-//     res.status(500).json({ success: false, error: error.toString() });
-//   }
-// });
-
-// // Check if user is authenticated
-// //? still needed?
-// app.get('/is-authenticated', (req, res) => {
-//   // Debugging lines:
-//   console.log('Cookies in /is-authenticated:', req.cookies);
-//   console.log('Cookie header in /is-authenticated:', req.headers.cookie);
-
-//   if (req.cookies.accessToken) {
-//     res.status(200).json({ isAuthenticated: true });
-//   } else {
-//     res.status(200).json({ isAuthenticated: false });
-//   }
-// });
-
-// // Clear access token cookie 
-// //? still needed?
-// app.post('/logout', (req, res) => {
-//   res.clearCookie('accessToken');
-//   res.status(200).json({ success: true });
-// });
-
-// Start server
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// Clear access token cookie 
+app.post('/logout', (req, res) => {
+  res.clearCookie('accessToken');
+  res.status(200).json({ success: true });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).send('Something went wrong!');
+});
+
+// Start server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });

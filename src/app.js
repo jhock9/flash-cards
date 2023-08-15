@@ -27,7 +27,7 @@ const fetchConfig = async () => {
     googleClientID = config.GOOGLE_CLIENT_ID;
     console.log('googleClientID LOADED.'); 
     
-    initGoogleSignIn(); // Initialize Google Sign-In
+    initGoogleSignIn();
   } catch (error) {
     console.error('Error fetching configuration:', error);
   }
@@ -35,7 +35,7 @@ const fetchConfig = async () => {
 fetchConfig();
 
 //* GOOGLE AUTHENTICATION
-
+// Initialize Google Sign-In
 const initGoogleSignIn = () => {
   google.accounts.id.initialize({
     client_id: googleClientID,
@@ -48,9 +48,24 @@ const initGoogleSignIn = () => {
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left', click_listener: getAuthCode }
   );
 
-  // google.accounts.id.prompt();
+  // login();
 };
 
+// Redirect user to Google's authentication page
+const login = async () => {
+  try {
+    const response = await fetch('/login');
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Login response:', data);
+  } catch (error) {
+    console.error('Error logging in:', error);
+  }
+}
+
+// Get the user's authorization code
 const handleCredentialResponse = (response) => {
   console.log('handleCredentialResponse CALLED.');
   let decodedUserInfo;
@@ -67,20 +82,15 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  // initTokenClient();
-  // getToken();
   initCodeClient();
-  getAuth(); // ? do I call this here?
-
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   toggleNav();
+  displayTags();
 };
 
 //* GOOGLE AUTHORIZATION
 let codeClient;
-// let accessToken; //? is this a thing anymore? -- displayTags() needs it
-
 const initCodeClient = () => {
   console.log('initCodeClient CALLED.');
   codeClient = google.accounts.oauth2.initCodeClient({
@@ -88,25 +98,12 @@ const initCodeClient = () => {
     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
     ux_mode: 'popup',
     callback: (response) => {
-
       console.log('Callback executed', response);
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'oauth2callback', true);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      // Set custom header for CRSF
-      xhr.setRequestHeader('X-Requested-With', 'XmlHttpRequest');
-      xhr.onload = function() {
-        console.log('Signed in as: ' + xhr.responseText);
-      };
-      xhr.send('code=' + response.code);
-      // After receipt, the code is exchanged for an access token and
-      // refresh token, and the platform then updates this web app
-      // running in user's browser with the requested calendar info.
-
-      // displayTags(accessToken); !need this from the backend??
-    },
-    console.log('codeClient: ', codeClient);
+      sendAuthCodeToServer(response.code); // Send the authorization code to the server
+      // displayTags(); // ? moved to handleCredentialResponse
+    }
   });
+  console.log('codeClient: ', codeClient);
 };
 
 const getAuthCode = () => {
@@ -114,112 +111,82 @@ const getAuthCode = () => {
   codeClient.requestCode();
 };
 
-// const exchangeCode = () => {
-//   console.log('exchangeCode CALLED.');
-//   codeClient.requestAccessToken({
-//     code: '4/P7q7W91a-oMsCeLvIa1GmR-gko8yD-3s1Pgn7vtcC4'
-//   });
-// };
-
-// let tokenClient;
-// const initTokenClient = () => {
-//   console.log('initTokenClient CALLED.');
-//   tokenClient = google.accounts.oauth2.initTokenClient({
-//     client_id: googleClientID,
-//     scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-//     callback: (tokenResponse) => {
-//       console.log('Callback executed', tokenResponse);
-//       accessToken = tokenResponse.access_token;
-//       console.log('Access token in initTokenClient callback: ', accessToken);
-      
-//       displayTags(accessToken);
-//     }
-//   })
-//   console.log('tokenClient: ', tokenClient);
-// };
-
-// const getToken = () => {
-//   console.log('getToken CALLED.');
-//   tokenClient.requestAccessToken();
-// }
+const sendAuthCodeToServer = async (authCode) => {
+  try {
+    const response = await fetch('/sendAuthCode', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ authCode }),
+    });
+    if (data.success) {
+      console.log('Authorization code sent successfully');
+    } else {
+      console.error('Failed to send authorization code');
+    }
+  } catch (error) {
+    console.error('Error sending authorization code:', error);
+  }
+};
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-// // ? do I still need this??
-// const checkAuthentication = async () => {
-//   try {
-//     console.log('Checking authentication...');
-//     const response = await fetch('/is-authenticated', { credentials: 'include' });
-//     if (!response.ok) {
-//       console.error(`Server responded with status: ${response.status}`);
-//       throw new Error(`Server responded with status: ${response.status}`);
-//     }
-//     const data = await response.json();
-//     console.log('Authentication check response:', data);
-//     if (data.isAuthenticated) {
-//       console.log('User is authenticated.');
-//       // User is authenticated, update the UI accordingly
-//       landingPage.classList.add('hide');
-//       flashCardPage.classList.remove('hide');
-//       toggleNav();
-//     } else {
-//       console.log('User is not authenticated.');
-//     }
-//   } catch (error) {
-//     console.error('Error checking authentication:', error);
-//   }
-// };
+const checkAuthentication = async () => {
+  try {
+    console.log('Checking authentication...');
+    const response = await fetch('/is-authenticated', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Authentication check response:', data);
+    if (data.isAuthenticated) {
+      console.log('User is authenticated.');
+      // User is authenticated, update the UI accordingly
+      landingPage.classList.add('hide');
+      flashCardPage.classList.remove('hide');
+      toggleNav();
+    } else {
+      console.log('User is not authenticated.');
+    }
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+  }
+};
 
-// checkAuthentication();
+checkAuthentication();
 
 //* FETCH PHOTO DATA
-const fetchPhotoData = (accessToken) => {
-  console.log('fetchPhotoData CALLED.');
-  const promise = new Promise((resolve, reject) => {
-    let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:search');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+const fetchPhotoData = async () => {
+  try {
+    const response = await fetch('/getPhotos');
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const photos = await response.json();
+    console.log('Received photos:', photos.mediaItems);
 
-    xhr.onreadystatechange = () => {
-      console.log(`XHR state: ${xhr.readyState}, status: ${xhr.status}`);
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        const jsonResponse = JSON.parse(xhr.responseText);
-        console.log('Received response for all photos:', jsonResponse);
-        const mediaItems = jsonResponse.mediaItems;
-        resolve(mediaItems);
-      } else if (xhr.readyState === 4) {
-        reject('Error in XMLHttpRequest:', xhr.statusText);
-      }
-    };
-
-    xhr.onerror = () => {
-      reject(new Error('Network Error'));
-    };
-    
-    const body = JSON.stringify({
-      pageSize: 100, // Fetch as many photos as possible
-    });
-
-    xhr.send(body);
-  });
-
-  return promise;
+    return photos.mediaItems;
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+  }
 };
 
 //* FETCH PHOTO DESCRIPTIONS and DISPLAY TAGS
-const fetchDescriptions = async (accessToken) => {
-  const photos = await fetchPhotoData(accessToken);
+const fetchDescriptions = async () => {
+  const photos = await fetchPhotoData();
   const descriptions = photos.map(photo => photo.description).filter(description => description);
   console.log('Fetched descriptions:', descriptions);
   return descriptions;
 };
 
-const displayTags = async (accessToken) => {
-  const descriptions = await fetchDescriptions(accessToken);
+const displayTags = async () => {
+  const descriptions = await fetchDescriptions();
 
   // Count tags
   const tagCounts = {};
@@ -458,7 +425,7 @@ tagsList.addEventListener('click', (e) => {
     if (tagSpan) {
       tagSpan.classList.remove('selected');
     }
-  }6
+  }
 });
 
 //* HELPER FUNCTIONS
@@ -558,7 +525,6 @@ resetBtn.addEventListener('click', () => {
     span.classList.remove('selected');
   });
 
-  // Update borders
   toggleBorders();
 });
 
