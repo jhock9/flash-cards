@@ -2,6 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3003;
 const {google} = require('googleapis');
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
 // Add middleware 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
@@ -160,7 +162,8 @@ app.get('/getPhotos', async (req, res) => {
     });
 
     // Make the API request to Google Photos
-    const getPhotos = await google.photoslibrary.mediaItems.search({
+    const getPhotos = await google.photos.mediaItems.search({
+      version: 'v1',
       auth: oauth2Client,
       pageSize: 100,
     });
