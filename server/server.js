@@ -155,6 +155,9 @@ app.post('/sendAuthCode', async (req, res) => {
 app.get('/getPhotos', async (req, res) => {
   try {
     console.log('Received request for /getPhotos');
+    console.log('Using access token:', ACCESS_TOKEN);
+    console.log('Using refresh token:', REFRESH_TOKEN);
+
     // Use the stored tokens to authenticate
     oauth2Client.setCredentials({
       access_token: ACCESS_TOKEN,
@@ -172,7 +175,7 @@ app.get('/getPhotos', async (req, res) => {
     res.json(getPhotos.data);
   } catch (err) {
     console.error('ERROR getting photos:', err);
-    res.status(500).send('Something went wrong!');
+    res.status(500).send(`Something went wrong! Error: ${err.message}`);
   }
 });
 
