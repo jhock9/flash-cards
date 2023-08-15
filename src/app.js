@@ -1,4 +1,5 @@
 const landingPage = document.querySelector('#landing-page');
+const googleSignInBtn = document.querySelector('#google-signin');
 const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const openBtn = document.querySelector('#open-btn');
@@ -34,7 +35,14 @@ const fetchConfig = async () => {
 };
 fetchConfig();
 
-//* GOOGLE AUTHENTICATION
+//* GOOGLE AUTHENTICATION & AUTHORIZATION
+// Redirect user to Google's authentication page
+const loginWithGoogle = () => {
+  window.location.href = '/login';
+};
+
+googleSignInBtn.addEventListener('click', loginWithGoogle);
+
 // Initialize Google Sign-In
 const initGoogleSignIn = () => {
   google.accounts.id.initialize({
@@ -47,26 +55,9 @@ const initGoogleSignIn = () => {
     document.getElementById('google-signin'),
     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
   );
-
-  // getAuthCode();
-  // login();
 };
 
-// Redirect user to Google's authentication page
-const login = async () => {
-  try {
-    const response = await fetch('/login');
-    if (!response.ok) {
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log('Login response:', data);
-  } catch (error) {
-    console.error('Error logging in:', error);
-  }
-}
-
-// Get the user's authorization code
+// Sign in success callback
 const handleCredentialResponse = (response) => {
   console.log('handleCredentialResponse CALLED.');
   let decodedUserInfo;
@@ -83,57 +74,10 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  initCodeClient();
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   toggleNav();
   displayTags();
-};
-
-//* GOOGLE AUTHORIZATION
-let codeClient;
-const initCodeClient = () => {
-  console.log('initCodeClient CALLED.');
-  codeClient = google.accounts.oauth2.initCodeClient({
-    client_id: googleClientID,
-    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-    ux_mode: 'popup',
-    callback: (response) => {
-      console.log('Callback executed', response);
-      sendAuthCodeToServer(response.code); // Send the authorization code to the server
-      // displayTags(); // ? moved to handleCredentialResponse
-    }
-  });
-  console.log('codeClient: ', codeClient);
-  getAuthCode();
-};
-
-const getAuthCode = () => {
-  console.log('getAuth CALLED.');
-  if (codeClient) {
-    codeClient.requestCode();
-  } else {
-    console.error('codeClient is not defined');
-  }
-};
-
-const sendAuthCodeToServer = async (authCode) => {
-  try {
-    const response = await fetch('/sendAuthCode', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ authCode }),
-    });
-    if (data.success) {
-      console.log('Authorization code sent successfully');
-    } else {
-      console.error('Failed to send authorization code');
-    }
-  } catch (error) {
-    console.error('Error sending authorization code:', error);
-  }
 };
 
 // Sign in failure callback
@@ -141,6 +85,7 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
+// Cookie authentication check
 const checkAuthentication = async () => {
   try {
     console.log('Checking authentication...');
@@ -164,7 +109,6 @@ const checkAuthentication = async () => {
     console.error('Error checking authentication:', error);
   }
 };
-
 checkAuthentication();
 
 //* FETCH PHOTO DATA

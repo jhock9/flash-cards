@@ -102,25 +102,25 @@ app.get('/login', (req, res) => {
 });
 
 // Exchange authorization code for access and refresh tokens
-app.post('/sendAuthCode', async (req, res) => {
-  // Extract the authorization code from the request body
-  const authCode = req.body.authCode;
+// app.post('/sendAuthCode', async (req, res) => {
+//   // Extract the authorization code from the request body
+//   const authCode = req.body.authCode;
 
-  try {
-    // Get access and refresh tokens
-    const { tokens } = await oauth2Client.getToken(authCode);
-
-// app.get('/oauth2callback', async (req, res) => {
-//   // Handle the OAuth 2.0 server response
 //   try {
-//     const q = url.parse(req.url, true).query;
-//     if (q.error) {
-//       console.error('Error:', q.error);
-//       res.status(400).send('Authentication failed');
-//       return;
-//     }
 //     // Get access and refresh tokens
-//     const { tokens } = await oauth2Client.getToken(q.code);
+//     const { tokens } = await oauth2Client.getToken(authCode);
+
+app.get('/oauth2callback', async (req, res) => {
+  // Handle the OAuth 2.0 server response
+  try {
+    const q = url.parse(req.url, true).query;
+    if (q.error) {
+      console.error('Error:', q.error);
+      res.status(400).send('Authentication failed');
+      return;
+    }
+    // Get access and refresh tokens
+    const { tokens } = await oauth2Client.getToken(q.code);
     oauth2Client.setCredentials(tokens);
     console.log('Received tokens:', tokens);
 
