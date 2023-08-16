@@ -101,7 +101,7 @@ const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
   include_granted_scopes: true,
-  // response_type: 'code', // ? is this needed?
+  response_type: 'code',
   // redirect_uri: REDIRECT_URL, // ? is this needed?
   // client_id: GOOGLE_CLIENT_ID, // ? is this needed?
 });
@@ -111,15 +111,6 @@ app.get('/authorize', (req, res) => {
 });
 
 // Exchange authorization code for access and refresh tokens
-// app.post('/sendAuthCode', async (req, res) => {
-//   // Extract the authorization code from the request body
-//   const authCode = req.body.authCode;
-
-//   try {
-//     // Get access and refresh tokens
-//     const { tokens } = await oauth2Client.getToken(authCode);
-
-// Handle the OAuth 2.0 server response
 app.get('/oauth2callback', async (req, res) => {
   try {
     console.log('Received request for /oauth2callback');
@@ -148,26 +139,26 @@ app.get('/oauth2callback', async (req, res) => {
     });
     console.log('Session after storing tokens:', req.session);
 
-    // //!! using .env variables to store tokens
-    // if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
-    //   ACCESS_TOKEN = tokens.access_token;
-    //   console.log('Updated access token:', ACCESS_TOKEN);
-    // }
+    // using .env variables to store tokens
+    if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
+      ACCESS_TOKEN = tokens.access_token;
+      console.log('Updated access token:', ACCESS_TOKEN);
+    }
 
-    // if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-    //   REFRESH_TOKEN = tokens.refresh_token;
-    //   console.log('Updated refresh token:', REFRESH_TOKEN);
-    // }
-    // console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
+    if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
+      REFRESH_TOKEN = tokens.refresh_token;
+      console.log('Updated refresh token:', REFRESH_TOKEN);
+    }
+    console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
 
-    // res.cookie('accessToken', ACCESS_TOKEN, { 
-    //   httpOnly: true, 
-    //   secure: process.env.NODE_ENV === 'production', 
-    //   sameSite: 'None',
-    // });
-    // console.log('Cookie set with name "accessToken"');
-    // console.log('Response headers after setting cookie:', res.getHeaders());
-    // console.log('Response cookies after setting cookie:', res.cookies);
+    res.cookie('accessToken', ACCESS_TOKEN, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'None',
+    });
+    console.log('Cookie set with name "accessToken"');
+    console.log('Response headers after setting cookie:', res.getHeaders());
+    console.log('Response cookies after setting cookie:', res.cookies);
 
     // Redirect back to the main page
     res.redirect('/');
@@ -219,18 +210,18 @@ app.get('/photos', async (req, res) => {
   }
 });
 
-// //!! Check if user is authenticated
-// app.get('/is-authenticated', (req, res) => {
-//   // Debugging lines:
-//   console.log('Cookies in /is-authenticated:', req.cookies);
-//   console.log('Cookie header in /is-authenticated:', req.headers.cookie);
+// Check if user is authenticated
+app.get('/is-authenticated', (req, res) => {
+  // Debugging lines:
+  console.log('Cookies in /is-authenticated:', req.cookies);
+  console.log('Cookie header in /is-authenticated:', req.headers.cookie);
 
-//   if (req.cookies.accessToken) {
-//     res.status(200).json({ isAuthenticated: true });
-//   } else {
-//     res.status(200).json({ isAuthenticated: false });
-//   }
-// });
+  if (req.cookies.accessToken) {
+    res.status(200).json({ isAuthenticated: true });
+  } else {
+    res.status(200).json({ isAuthenticated: false });
+  }
+});
 
 // Clear access token cookie 
 app.post('/logout', (req, res) => {
