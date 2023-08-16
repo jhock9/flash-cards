@@ -6,7 +6,7 @@ const session = require('express-session');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3003;
-const {google} = require('googleapis');
+const { google } = require('googleapis');
 const url = require('url');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -109,6 +109,35 @@ const authUrl = oauth2Client.generateAuthUrl({
 app.get('/authorize', (req, res) => {
   res.redirect(authUrl);
 });
+
+// app.post('/verifyToken', async (req, res) => {
+//   console.log('Received request for /verifyToken');
+//   try {
+//     const token = req.body.token;
+//     console.log('Received token:', token);
+
+//     // Verify the JWT ID token using the existing OAuth2 client
+//     const ticket = await oauth2Client.verifyIdToken({
+//       idToken: token,
+//       audience: GOOGLE_CLIENT_ID,
+//     });
+//     const payload = ticket.getPayload();
+//     const userId = payload['sub'];
+//     console.log('Verified user ID:', userId);
+
+//     // Store user information in the session or database as needed
+//     req.session.userId = userId;
+//     console.log('User ID stored in session:', req.session.userId);
+
+//     // Respond with success
+//     res.status(200).send('Token verified');
+//     console.log('Token verification successful');
+//   } catch (error) {
+//     console.error('Error verifying token:', error);
+//     res.status(400).send('Authentication failed');
+//   }
+// });
+
 
 // Exchange authorization code for access and refresh tokens
 app.get('/oauth2callback', async (req, res) => {

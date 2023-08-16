@@ -65,18 +65,20 @@ const handleCredentialResponse = (response) => {
     console.log('Decoded User Info LOADED: ', decodedUserInfo);
 
   //   // Send the JWT ID token to the server
-  //   const res = await fetch('/authorize', {
+  //   const res = await fetch('/verifyToken', {
   //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
+  //     headers: { 'Content-Type': 'application/json' },
   //     body: JSON.stringify({ token: response.credential }),
   //   });
 
   //   if (res.ok) {
   //     googleAuth();
+  //     landingPage.classList.add('hide');
+  //     flashCardPage.classList.remove('hide');
+  //     toggleNav();
+  //     displayTags();
   //   } else {
-  //     console.error('Authorization failed on the server side');
+  //     console.error('Server verification failed');
   //   }
   // } catch (error) {
   //   console.error('Error decoding user credential:', error);
@@ -86,6 +88,7 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
+  googleAuth();
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   toggleNav();
