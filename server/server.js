@@ -86,8 +86,6 @@ app.get('/config', (req, res) => {
 });
 
 //* Obtaining OAuth 2.0 access tokens
-// Import the Google Auth APIs libraries
-
 // Set up your OAuth2 client for the API
 console.log(`Creating OAuth2 client with Redirect URL: ${REDIRECT_URL}`);
 const oauth2Client = new google.auth.OAuth2(
@@ -108,7 +106,7 @@ const authUrl = oauth2Client.generateAuthUrl({
   // client_id: GOOGLE_CLIENT_ID, // ? is this needed?
 });
 
-app.get('/login', (req, res) => {
+app.get('/authorize', (req, res) => {
   res.redirect(authUrl);
 });
 
@@ -179,9 +177,9 @@ app.get('/oauth2callback', async (req, res) => {
   }
 });
 
-// Get photos from Google Photos
-app.get('/getPhotos', async (req, res) => {
-  console.log('Received request for /getPhotos.');
+// Fetch photos from Google Photos
+app.get('/photos', async (req, res) => {
+  console.log('Received request for /photos.');
   const accessToken = req.session.accessToken;
   const refreshToken = req.session.refreshToken;
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
@@ -192,7 +190,7 @@ app.get('/getPhotos', async (req, res) => {
   // }
   
   try {
-    console.log('Trying request for /getPhotos');
+    console.log('Trying request for /photos');
 
     // Use the stored tokens to authenticate
     oauth2Client.setCredentials({
@@ -204,7 +202,7 @@ app.get('/getPhotos', async (req, res) => {
 
     // Make the API request to Google Photos
     const photoslibrary = google.photoslibrary('v1');
-    const getPhotos = await photoslibrary.mediaItems.search({
+    const photos = await photoslibrary.mediaItems.search({
           version: 'v1',
       auth: oauth2Client,
       resource:  {
@@ -212,8 +210,8 @@ app.get('/getPhotos', async (req, res) => {
       },
     });
 
-    console.log('Sending photos:', getPhotos.data);
-    res.json(getPhotos.data);
+    console.log('Sending photos:', photos.data);
+    res.json(photos.data);
 
   } catch (err) {
     console.error('ERROR getting photos:', err);

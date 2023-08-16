@@ -37,11 +37,9 @@ fetchConfig();
 
 //* GOOGLE AUTHENTICATION & AUTHORIZATION
 // Redirect user to Google's authentication page
-const loginWithGoogle = () => {
-  window.location.href = '/login';
+const googleAuth = () => {
+  window.location.href = '/authorize';
 };
-
-googleSignInBtn.addEventListener('click', loginWithGoogle);
 
 // Initialize Google Sign-In
 const initGoogleSignIn = () => {
@@ -74,6 +72,7 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
+  googleAuth();
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
   toggleNav();
@@ -114,7 +113,7 @@ const onSignInFailure = (error) => {
 //* FETCH PHOTO DATA
 const fetchPhotoData = async () => {
   try {
-    const response = await fetch('/getPhotos');
+    const response = await fetch('/photos');
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
