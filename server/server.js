@@ -16,6 +16,7 @@ const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 let ACCESS_TOKEN = process.env.GOOGLE_ACCESS_TOKEN;
 let REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
+const scope = "https://www.googleapis.com/auth/photoslibrary.readonly"
 
 console.log('Initial ACCESS_TOKEN:', ACCESS_TOKEN);
 console.log('Initial REFRESH_TOKEN:', REFRESH_TOKEN);
@@ -99,7 +100,7 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Redirect to Google's OAuth 2.0 server
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  scope: scope,
   include_granted_scopes: true,
   response_type: 'code',
   // redirect_uri: REDIRECT_URL, // ? is this needed?
@@ -158,28 +159,42 @@ app.get('/oauth2callback', async (req, res) => {
     oauth2Client.setCredentials(tokens);
     console.log('Credentials set in OAuth2 client');
 
-    // using sessions to store tokens
+    // Check if tokens are already assigned, update .env variables
+    if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
+      ACCESS_TOKEN = tokens.access_token;
+      process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
+      console.log('Updated access token:', ACCESS_TOKEN);
+    }
+    
+    if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
+      REFRESH_TOKEN = tokens.refresh_token;
+      process.env.GOOGLE_REFRESH_TOKEN = REFRESH_TOKEN; 
+      console.log('Updated refresh token:', REFRESH_TOKEN);
+    }
+    console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
+
+    // Check if the access token is expired and refresh it if necessary
+    if (oauth2Client.isTokenExpiring()) {
+      const refreshedTokens = await oauth2Client.getAccessToken();
+      if (refreshedTokens) {
+        console.log('Access token refreshed:', refreshedTokens.token);
+        ACCESS_TOKEN = refreshedTokens.token;
+        process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
+      }
+    }
+
+    // Update session tokens (only if not already assigned)
     console.log('Session before storing tokens:', req.session);
-    req.session.accessToken = tokens.access_token;
-    req.session.refreshToken = tokens.refresh_token;
+    if (!req.session.accessToken) {
+      req.session.accessToken = ACCESS_TOKEN;
+      req.session.refreshToken = REFRESH_TOKEN;
+    }
     console.log('Tokens stored in session:', {
       accessToken: req.session.accessToken,
       refreshToken: req.session.refreshToken,
     });
     console.log('Session after storing tokens:', req.session);
-
-    // using .env variables to store tokens
-    if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
-      ACCESS_TOKEN = tokens.access_token;
-      console.log('Updated access token:', ACCESS_TOKEN);
-    }
-
-    if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-      REFRESH_TOKEN = tokens.refresh_token;
-      console.log('Updated refresh token:', REFRESH_TOKEN);
-    }
-    console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
-
+  
     res.cookie('accessToken', ACCESS_TOKEN, { 
       httpOnly: true, 
       secure: process.env.NODE_ENV === 'production', 
@@ -221,8 +236,8 @@ app.get('/photos', async (req, res) => {
     });
 
     // Make the API request to Google Photos
-    const photoslibrary = google.photoslibrary('v1');
-    const photos = await photoslibrary.mediaItems.search({
+    // const photoslibrary = google.photoslibrary.readonly('v1');
+    const photos = await scope.mediaItems.search({
           version: 'v1',
       auth: oauth2Client,
       resource:  {
