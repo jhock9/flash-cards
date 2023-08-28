@@ -16,7 +16,6 @@ const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 let ACCESS_TOKEN = process.env.GOOGLE_ACCESS_TOKEN;
 let REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
-const scope = "https://www.googleapis.com/auth/photoslibrary.readonly"
 
 console.log('Initial ACCESS_TOKEN:', ACCESS_TOKEN);
 console.log('Initial REFRESH_TOKEN:', REFRESH_TOKEN);
@@ -100,7 +99,7 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Redirect to Google's OAuth 2.0 server
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  scope: scope,
+  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
   include_granted_scopes: true,
   response_type: 'code',
   // redirect_uri: REDIRECT_URL, // ? is this needed?
@@ -222,7 +221,7 @@ app.get('/photos', async (req, res) => {
   // if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET' || REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
   //   console.error('Tokens not assigned. ACCESS_TOKEN:', ACCESS_TOKEN, 'REFRESH_TOKEN:', REFRESH_TOKEN);
   //   return res.status(500).send('Tokens not assigned');
-  // }
+  // } 
   
   try {
     console.log('Trying request for /photos');
@@ -236,10 +235,10 @@ app.get('/photos', async (req, res) => {
     });
 
     // Make the API request to Google Photos
-    // const photoslibrary = google.photoslibrary.readonly('v1');
-    const photos = await scope.mediaItems.search({
-          version: 'v1',
-      auth: oauth2Client,
+    const photoslibrary = google.photoslibrary('v1');
+    const photos = await photoslibrary.mediaItems.search({
+      version: 'v1',     
+      auth: oauth2Client, // ? do I need to use my API key here instead?
       resource:  {
         pageSize: 100,
       },
