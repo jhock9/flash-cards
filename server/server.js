@@ -214,22 +214,24 @@ app.get('/oauth2callback', async (req, res) => {
 // Fetch photos from Google Photos
 app.get('/photos', async (req, res) => {
   console.log('Received request for /photos.');
+
+  // Check if access token is available in the session
+  if (!req.session.accessToken) {
+    console.error('Access token is missing. Authentication is required.');
+    res.status(401).send('Authentication is required.');
+    return;
+  }
+
+  // Access token is available, proceed with the API request
   const accessToken = req.session.accessToken;
   const refreshToken = req.session.refreshToken;
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
-  
-  // if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET' || REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-  //   console.error('Tokens not assigned. ACCESS_TOKEN:', ACCESS_TOKEN, 'REFRESH_TOKEN:', REFRESH_TOKEN);
-  //   return res.status(500).send('Tokens not assigned');
-  // } 
   
   try {
     console.log('Trying request for /photos');
 
     // Use the stored tokens to authenticate
     oauth2Client.setCredentials({
-      // access_token: ACCESS_TOKEN,
-      // refresh_token: REFRESH_TOKEN
       access_token: accessToken,
       refresh_token: refreshToken,
     });
