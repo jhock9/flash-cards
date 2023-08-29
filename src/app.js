@@ -71,18 +71,13 @@ const handleCredentialResponse = async (response) => {
     landingPage.classList.add('hide');
     flashCardPage.classList.remove('hide');
     toggleNav();
-
-    window.location.reload();
+    fetchAndDisplayPhotos();
 };
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
-
-window.addEventListener('load', () => {
-  checkAuthentication();
-});
 
 //* COOKIE AUTHENTICATION CHECK 
 const checkAuthentication = async () => {
@@ -109,6 +104,7 @@ const checkAuthentication = async () => {
     console.error('Error checking authentication:', error);
   }
 };
+checkAuthentication();
 
 //* FETCH AND DISPLAY PHOTOS
 const fetchAndDisplayPhotos = async () => {
