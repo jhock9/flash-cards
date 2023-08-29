@@ -174,8 +174,8 @@ app.get('/oauth2callback', async (req, res) => {
     console.log('Response headers after setting cookie:', res.getHeaders());
     console.log('Response cookies after setting cookie:', res.cookies);
 
-    // Redirect back to the main page
-    res.redirect('/');
+    // Redirect to /photos endpoint
+    res.redirect('/photos');
   } catch (error) {
     console.error('ERROR in /oauth2callback:', error);
     res.status(500).send('Something went wrong!');  

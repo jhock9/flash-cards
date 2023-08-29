@@ -67,29 +67,26 @@ const handleCredentialResponse = async (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  try {
     await googleAuth();
-
-    handlePostAuthentication();
-  } catch (error) {
-    console.error('Error during Google authentication:', error);
-  }
+    fetchAndDisplayPhotos();
+    landingPage.classList.add('hide');
+    flashCardPage.classList.remove('hide');
+    toggleNav();
+    // handlePostAuthentication();
 };
 
-const handlePostAuthentication = () => {
-  displayTags();
-  landingPage.classList.add('hide');
-  flashCardPage.classList.remove('hide');
-  toggleNav();
-};
+// const handlePostAuthentication = () => {
+//   // displayTags();
+
+// };
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-//* FETCH PHOTO DATA
-const fetchPhotoData = async () => {
+//* FETCH AND DISPLAY PHOTOS
+const fetchAndDisplayPhotos = async () => {
   try {
     const response = await fetch('/photos');
     if (!response.ok) {
@@ -98,23 +95,24 @@ const fetchPhotoData = async () => {
     const photos = await response.json();
     console.log('Received photos:', photos.mediaItems);
 
-    return photos.mediaItems;
+    displayTags(photos.mediaItems);
+
   } catch (error) {
     console.error('Error fetching photos:', error);
   }
 };
 
 //* FETCH PHOTO DESCRIPTIONS
-const fetchDescriptions = async () => {
-  const photos = await fetchPhotoData();
-  const descriptions = photos.map(photo => photo.description).filter(description => description);
+const fetchDescriptions = (photoData) => {
+  const descriptions = photoData.map(photo => photo.description).filter(description => description);
   console.log('Fetched descriptions:', descriptions);
   return descriptions;
 };
 
+
 //* DISPLAY TAGS
-const displayTags = async () => {
-  const descriptions = await fetchDescriptions();
+const displayTags = async (photoData) => {
+  const descriptions = await fetchDescriptions(photoData);
 
   // Count tags
   const tagCounts = {};
@@ -156,6 +154,75 @@ const displayTags = async () => {
     tagsList.appendChild(tagDiv);
   }
 }
+
+// //* FETCH PHOTO DATA
+// const fetchPhotoData = async () => {
+//   try {
+//     const response = await fetch('/photos');
+//     if (!response.ok) {
+//       throw new Error(`Server responded with status: ${response.status}`);
+//     }
+//     const photos = await response.json();
+//     console.log('Received photos:', photos.mediaItems);
+
+//     return photos.mediaItems;
+//   } catch (error) {
+//     console.error('Error fetching photos:', error);
+//   }
+// };
+
+// //* FETCH PHOTO DESCRIPTIONS
+// const fetchDescriptions = async () => {
+//   const photos = await fetchPhotoData();
+//   const descriptions = photos.map(photo => photo.description).filter(description => description);
+//   console.log('Fetched descriptions:', descriptions);
+//   return descriptions;
+// };
+
+// //* DISPLAY TAGS
+// const displayTags = async () => {
+//   const descriptions = await fetchDescriptions();
+
+//   // Count tags
+//   const tagCounts = {};
+//   for (const description of descriptions) {
+//     const tags = description.split(' ');
+//     for (const tag of tags) {
+//       if (tag in tagCounts) {
+//         tagCounts[tag]++;
+//       } else {
+//         tagCounts[tag] = 1;
+//       }
+//     }
+//   }
+
+//   // Filter tags
+//   const filteredTags = [];
+//   for (const tag in tagCounts) {
+//     if (tagCounts[tag] >= 5) {
+//       filteredTags.push(tag);
+//     }
+//   }
+
+//   // Sort tags
+//   filteredTags.sort();
+
+//   // Display tags in dropdown and as selectable tags
+//   for (const tag of filteredTags) {
+//     const option = document.createElement('option');
+//     option.value = tag;
+//     option.text = tag;
+//     dropdown.add(option);
+
+//     const tagDiv = document.createElement('div');
+//     tagDiv.classList.add('tag', 'center');
+//     const tagName = document.createElement('span');
+//     tagName.classList.add('name', 'center');
+//     tagName.innerText = tag;
+//     tagDiv.appendChild(tagName);  
+//     tagsList.appendChild(tagDiv);
+//   }
+// }
 
 //* COOKIE AUTHENTICATION CHECK 
 const checkAuthentication = async () => {
