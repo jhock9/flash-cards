@@ -56,7 +56,7 @@ const initGoogleSignIn = () => {
 };
 
 // Sign in success callback
-const handleCredentialResponse = (response) => {
+const handleCredentialResponse = async (response) => {
   console.log('handleCredentialResponse CALLED.');
   let decodedUserInfo;
   try {
@@ -67,11 +67,20 @@ const handleCredentialResponse = (response) => {
     console.error('Error decoding user credential:', error);
   }
 
-  googleAuth();
-  toggleNav();
+  try {
+    await googleAuth();
+
+    handlePostAuthentication();
+  } catch (error) {
+    console.error('Error during Google authentication:', error);
+  }
+};
+
+const handlePostAuthentication = () => {
   displayTags();
   landingPage.classList.add('hide');
   flashCardPage.classList.remove('hide');
+  toggleNav();
 };
 
 // Sign in failure callback
