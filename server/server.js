@@ -208,7 +208,7 @@ app.get('/photos', async (req, res) => {
     });
 
     // Make the API request to Google Photos
-    const photoslibrary = google.photoslibrary('v1');
+    const photoslibrary = google.photoslibrary;
     const photos = await photoslibrary.mediaItems.search({
       version: 'v1',     
       auth: oauth2Client, // ? do I need to use my API key here instead?
