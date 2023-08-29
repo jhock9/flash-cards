@@ -63,68 +63,21 @@ const handleCredentialResponse = (response) => {
     console.log('Encoded JWT ID token RETRIEVED')
     decodedUserInfo = jwt_decode(response.credential);
     console.log('Decoded User Info LOADED: ', decodedUserInfo);
-
-  //   // Send the JWT ID token to the server
-  //   const res = await fetch('/verifyToken', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ token: response.credential }),
-  //   });
-
-  //   if (res.ok) {
-  //     googleAuth();
-  //     landingPage.classList.add('hide');
-  //     flashCardPage.classList.remove('hide');
-  //     toggleNav();
-  //     displayTags();
-  //   } else {
-  //     console.error('Server verification failed');
-  //   }
-  // } catch (error) {
-  //   console.error('Error decoding user credential:', error);
-  // }
-  
   } catch (error) {
     console.error('Error decoding user credential:', error);
   }
 
   googleAuth();
-  landingPage.classList.add('hide');
-  flashCardPage.classList.remove('hide');
   toggleNav();
   displayTags();
+  landingPage.classList.add('hide');
+  flashCardPage.classList.remove('hide');
 };
 
 // Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
-
-// Cookie authentication check 
-const checkAuthentication = async () => {
-  try {
-    console.log('Checking authentication...');
-    const response = await fetch('/is-authenticated', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log('Authentication check response:', data);
-    if (data.isAuthenticated) {
-      console.log('User is authenticated.');
-      // User is authenticated, update the UI accordingly
-      landingPage.classList.add('hide');
-      flashCardPage.classList.remove('hide');
-      toggleNav();
-    } else {
-      console.log('User is not authenticated.');
-    }
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-  }
-};
-checkAuthentication();
 
 //* FETCH PHOTO DATA
 const fetchPhotoData = async () => {
@@ -142,7 +95,7 @@ const fetchPhotoData = async () => {
   }
 };
 
-//* FETCH PHOTO DESCRIPTIONS and DISPLAY TAGS
+//* FETCH PHOTO DESCRIPTIONS
 const fetchDescriptions = async () => {
   const photos = await fetchPhotoData();
   const descriptions = photos.map(photo => photo.description).filter(description => description);
@@ -150,6 +103,7 @@ const fetchDescriptions = async () => {
   return descriptions;
 };
 
+//* DISPLAY TAGS
 const displayTags = async () => {
   const descriptions = await fetchDescriptions();
 
@@ -194,10 +148,36 @@ const displayTags = async () => {
   }
 }
 
-//* SELECT TAGS AND QUANTITIES
+//* COOKIE AUTHENTICATION CHECK 
+const checkAuthentication = async () => {
+  try {
+    console.log('Checking authentication...');
+    const response = await fetch('/is-authenticated', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Authentication check response:', data);
+    if (data.isAuthenticated) {
+      console.log('User is authenticated.');
+      // User is authenticated, update the UI accordingly
+      landingPage.classList.add('hide');
+      flashCardPage.classList.remove('hide');
+      toggleNav();
+    } else {
+      console.log('User is not authenticated.');
+    }
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+  }
+};
+checkAuthentication();
+
+
+//* SELECT BY DROPDOWN
 let selectedTags = [];
 
-// SELECT BY DROPDOWN
 dropdown.addEventListener('change', () => {
   const selectedTag = dropdown.value;
 
@@ -290,7 +270,7 @@ dropdown.addEventListener('change', () => {
   }
 });
 
-// SELECT BY TAG LIST
+//* SELECT BY TAG LIST
 tagsList.addEventListener('click', (e) => {
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
