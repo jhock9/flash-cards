@@ -124,7 +124,7 @@ app.get('/oauth2callback', async (req, res) => {
     // Get access and refresh tokens
     console.log('Attempting to get tokens with code:', q.code);
     const { tokens } = await oauth2Client.getToken(q.code);
-    console.log('Received tokens:', tokens);
+    // console.log('Received tokens:', tokens);
 
     oauth2Client.setCredentials(tokens);
     console.log('Credentials set in OAuth2 client');
@@ -133,13 +133,11 @@ app.get('/oauth2callback', async (req, res) => {
     if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
       ACCESS_TOKEN = tokens.access_token;
       process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
-      console.log('Updated access token:', ACCESS_TOKEN);
     }
     
     if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
       REFRESH_TOKEN = tokens.refresh_token;
       process.env.GOOGLE_REFRESH_TOKEN = REFRESH_TOKEN; 
-      console.log('Updated refresh token:', REFRESH_TOKEN);
     }
     console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
 
@@ -154,7 +152,6 @@ app.get('/oauth2callback', async (req, res) => {
     }
 
     // Update session tokens (only if not already assigned)
-    console.log('Session before storing tokens:', req.session);
     if (!req.session.accessToken) {
       req.session.accessToken = ACCESS_TOKEN;
       req.session.refreshToken = REFRESH_TOKEN;
@@ -163,7 +160,6 @@ app.get('/oauth2callback', async (req, res) => {
       accessToken: req.session.accessToken,
       refreshToken: req.session.refreshToken,
     });
-    console.log('Session after storing tokens:', req.session);
   
     res.cookie('accessToken', ACCESS_TOKEN, { 
       httpOnly: true, 
@@ -171,8 +167,6 @@ app.get('/oauth2callback', async (req, res) => {
       sameSite: 'None',
     });
     console.log('Cookie set with name "accessToken"');
-    console.log('Response headers after setting cookie:', res.getHeaders());
-    console.log('Response cookies after setting cookie:', res.cookies);
 
     // Redirect to home page
     res.redirect('/');
@@ -185,13 +179,6 @@ app.get('/oauth2callback', async (req, res) => {
 // Fetch photos from Google Photos
 app.get('/photos', async (req, res) => {
   console.log('Received request for /photos.');
-
-  // // Check if access token is available in the session
-  // if (!req.session.accessToken) {
-  //   console.error('Access token is missing. Authentication is required.');
-  //   res.status(401).send('Authentication is required.');
-  //   return;
-  // }
 
   // Access token is available, proceed with the API request
   const accessToken = req.session.accessToken;
