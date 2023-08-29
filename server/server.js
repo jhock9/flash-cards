@@ -7,6 +7,7 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
+const Photos = require('googlephotos');
 const url = require('url');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -99,7 +100,8 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Redirect to Google's OAuth 2.0 server
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  // scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  scope: Photos.Scopes.READ_ONLY,
   include_granted_scopes: true,
   response_type: 'code',
 });
@@ -172,7 +174,7 @@ app.get('/oauth2callback', async (req, res) => {
     console.log('Response headers after setting cookie:', res.getHeaders());
     console.log('Response cookies after setting cookie:', res.cookies);
 
-    // Redirect to /photos endpoint
+    // Redirect to home page
     res.redirect('/');
   } catch (error) {
     console.error('ERROR in /oauth2callback:', error);
@@ -206,17 +208,17 @@ app.get('/photos', async (req, res) => {
     });
 
     // Make the API request to Google Photos
-    const photoslibrary = google.photoslibrary;
-    const photos = await photoslibrary.mediaItems.search({
+    // const photoslibrary = google.photoslibrary;
+    const response = await Photos.mediaItems.search({
       version: 'v1',     
-      auth: oauth2Client, // ? do I need to use my API key here instead?
+      auth: oauth2Client,
       resource:  {
         pageSize: 100,
       },
     });
 
-    console.log('Sending photos:', photos.data);
-    res.json(photos.data);
+    console.log('Sending photos:', response.data);
+    res.json(response.data);
 
   } catch (err) {
     console.error('ERROR getting photos:', err);
