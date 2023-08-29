@@ -124,8 +124,8 @@ const fetchAndDisplayPhotos = async () => {
 };
 
 //* FETCH PHOTO DESCRIPTIONS
-const fetchDescriptions = (photoData) => {
-  const descriptions = photoData.map(photo => photo.description).filter(description => description);
+const fetchDescriptions = async (photoData) => {
+  const descriptions = await photoData.map(photo => photo.description).filter(description => description);
   console.log('Fetched descriptions:', descriptions);
   return descriptions;
 };
