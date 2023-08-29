@@ -186,12 +186,12 @@ app.get('/oauth2callback', async (req, res) => {
 app.get('/photos', async (req, res) => {
   console.log('Received request for /photos.');
 
-  // Check if access token is available in the session
-  if (!req.session.accessToken) {
-    console.error('Access token is missing. Authentication is required.');
-    res.status(401).send('Authentication is required.');
-    return;
-  }
+  // // Check if access token is available in the session
+  // if (!req.session.accessToken) {
+  //   console.error('Access token is missing. Authentication is required.');
+  //   res.status(401).send('Authentication is required.');
+  //   return;
+  // }
 
   // Access token is available, proceed with the API request
   const accessToken = req.session.accessToken;
