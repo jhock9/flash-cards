@@ -102,8 +102,6 @@ const authUrl = oauth2Client.generateAuthUrl({
   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
   include_granted_scopes: true,
   response_type: 'code',
-  // redirect_uri: REDIRECT_URL, // ? is this needed?
-  // client_id: GOOGLE_CLIENT_ID, // ? is this needed?
 });
 
 app.get('/authorize', (req, res) => {
