@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 
 // Add middleware 
 app.use(express.json());
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(cors());
 
 app.use(session({
@@ -164,12 +164,12 @@ app.get('/oauth2callback', async (req, res) => {
       refreshToken: req.session.refreshToken,
     });
   
-    // res.cookie('accessToken', ACCESS_TOKEN, { 
-    //   httpOnly: true, 
-    //   secure: process.env.NODE_ENV === 'production', 
-    //   sameSite: 'None',
-    // });
-    // console.log('Cookie set with name "accessToken"');
+    res.cookie('accessToken', ACCESS_TOKEN, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'None',
+    });
+    console.log('Cookie set with name "accessToken"');
 
     // Redirect to home page
     res.redirect('/');
@@ -216,23 +216,23 @@ app.get('/photos', async (req, res) => {
   }
 });
 
-// // Check if user is authenticated
-// app.get('/is-authenticated', (req, res) => {
-//   console.log('Cookies in /is-authenticated:', req.cookies);
-//   console.log('Cookie header in /is-authenticated:', req.headers.cookie);
+// Check if user is authenticated
+app.get('/is-authenticated', (req, res) => {
+  console.log('Cookies in /is-authenticated:', req.cookies);
+  console.log('Cookie header in /is-authenticated:', req.headers.cookie);
 
-//   if (req.cookies.accessToken) {
-//     res.status(200).json({ isAuthenticated: true });
-//   } else {
-//     res.status(200).json({ isAuthenticated: false });
-//   }
-// });
+  if (req.cookies.accessToken) {
+    res.status(200).json({ isAuthenticated: true });
+  } else {
+    res.status(200).json({ isAuthenticated: false });
+  }
+});
 
-// // Clear access token cookie 
-// app.post('/logout', (req, res) => {
-//   res.clearCookie('accessToken');
-//   res.status(200).json({ success: true });
-// });
+// Clear access token cookie 
+app.post('/logout', (req, res) => {
+  res.clearCookie('accessToken');
+  res.status(200).json({ success: true });
+});
 
 // Error handler
 app.use((err, req, res, next) => {

@@ -79,32 +79,32 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-// //* COOKIE AUTHENTICATION CHECK 
-// const checkAuthentication = async () => {
-//   try {
-//     console.log('Checking authentication...');
-//     const response = await fetch('/is-authenticated', { credentials: 'include' });
-//     if (!response.ok) {
-//       console.error(`Server responded with status: ${response.status}`);
-//       throw new Error(`Server responded with status: ${response.status}`);
-//     }
-//     const data = await response.json();
-//     console.log('Authentication check response:', data);
-//     if (data.isAuthenticated) {
-//       console.log('User is authenticated.');
-//       // User is authenticated, update the UI accordingly
-//       fetchAndDisplayPhotos();
-//       landingPage.classList.add('hide');
-//       flashCardPage.classList.remove('hide');
-//       toggleNav();
-//     } else {
-//       console.log('User is not authenticated.');
-//     }
-//   } catch (error) {
-//     console.error('Error checking authentication:', error);
-//   }
-// };
-// checkAuthentication();
+//* COOKIE AUTHENTICATION CHECK 
+const checkAuthentication = async () => {
+  try {
+    console.log('Checking authentication...');
+    const response = await fetch('/is-authenticated', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Authentication check response:', data);
+    if (data.isAuthenticated) {
+      console.log('User is authenticated.');
+      // User is authenticated, update the UI accordingly
+      fetchAndDisplayPhotos();
+      landingPage.classList.add('hide');
+      flashCardPage.classList.remove('hide');
+      toggleNav();
+    } else {
+      console.log('User is not authenticated.');
+    }
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+  }
+};
+checkAuthentication();
 
 //* FETCH AND DISPLAY PHOTOS
 const fetchAndDisplayPhotos = async () => {
