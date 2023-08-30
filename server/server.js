@@ -207,8 +207,16 @@ app.get('/photos', async (req, res) => {
       },
     });
 
-    console.log('Sending photos:', response.data);
-    res.json(response.data);
+    // console.log('Sending photos:', response.data);
+    // res.json(response.data);
+
+    if (response.data && response.data.mediaItems) {
+      console.log('Received photos:', response.data.mediaItems);
+      res.json(response.data.mediaItems);
+    } else {
+      console.error('Error: Unexpected API response structure', response);
+      res.status(500).send('Unexpected API response structure');
+    }
 
   } catch (err) {
     console.error('ERROR getting photos:', err);
