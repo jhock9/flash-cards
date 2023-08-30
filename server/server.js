@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
-const Photos = require('googlephotos');
+// const Photos = require('googlephotos');
 const url = require('url');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -100,14 +100,17 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Redirect to Google's OAuth 2.0 server
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  // scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  scope: Photos.Scopes.READ_ONLY,
+  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  // scope: Photos.Scopes.READ_ONLY,
   include_granted_scopes: true,
   response_type: 'code',
 });
 
+// Redirect to Google's OAuth 2.0 server
 app.get('/authorize', (req, res) => {
   res.redirect(authUrl);
+  // This response will be sent back to the specified redirect URL 
+  // with endpoint /oauth2callback
 });
 
 // Exchange authorization code for access and refresh tokens
@@ -195,7 +198,7 @@ app.get('/photos', async (req, res) => {
     });
 
     // Make the API request to Google Photos
-    // const photoslibrary = google.photoslibrary;
+    const Photos = google.photoslibrary;
     const response = await Photos.mediaItems.search({
       version: 'v1',     
       auth: oauth2Client,
