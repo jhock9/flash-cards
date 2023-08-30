@@ -207,8 +207,8 @@ app.get('/photos', async (req, res) => {
       },
     });
 
-    // console.log('Sending photos:', response.data);
-    // res.json(response.data);
+    console.log('Received API response:', response.data);
+    res.json(response.data);
 
     if (response.data && response.data.mediaItems) {
       console.log('Received photos:', response.data.mediaItems);
