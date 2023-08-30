@@ -179,50 +179,97 @@ app.get('/oauth2callback', async (req, res) => {
   }
 });
 
-// Fetch photos from Google Photos
+//* Fetch photos from Google Photos
+// Initialize the Google Photos API client
+const photosLibrary = google.photoslibrary({
+  version: 'v1',     
+  auth: oauth2Client,
+});
+
+const fetchPhotos = async (accessToken, refreshToken) => {
+  try {
+    // Check if the access token has expired and refresh it if necessary
+    const currentTimestamp = Date.now();
+    if (accessToken.expires_at < currentTimestamp) {
+      const { tokens } = await oauth2Client.refreshToken(refreshToken);
+      oauth2Client.setCredentials(tokens);
+      req.session.accessToken = tokens.access_token;
+    }
+
+    const response = await photosLibrary.mediaItems.search({
+      auth: accessToken, 
+      requestBody: {
+        pageSize: 100,
+      },
+    });
+
+    // Handle the API response here
+    const mediaItems = response.data.mediaItems;
+    console.log('Received photos:', mediaItems);
+    return mediaItems;
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+    throw error;
+  }
+}
+
 app.get('/photos', async (req, res) => {
   console.log('Received request for /photos.');
 
-  // Access token is available, proceed with the API request
   const accessToken = req.session.accessToken;
   const refreshToken = req.session.refreshToken;
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
   
   try {
     console.log('Trying request for /photos');
-
-    // Use the stored tokens to authenticate
-    oauth2Client.setCredentials({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    });
-
-    // Make the API request to Google Photos
-    const Photos = google.photoslibrary;
-    const response = await Photos.mediaItems.search({
-      version: 'v1',     
-      auth: oauth2Client,
-      resource:  {
-        pageSize: 100,
-      },
-    });
-
-    console.log('Received API response:', response.data);
-    res.json(response.data);
-
-    if (response.data && response.data.mediaItems) {
-      console.log('Received photos:', response.data.mediaItems);
-      res.json(response.data.mediaItems);
-    } else {
-      console.error('Error: Unexpected API response structure', response);
-      res.status(500).send('Unexpected API response structure');
-    }
-
-  } catch (err) {
-    console.error('ERROR getting photos:', err);
-    res.status(500).send(`Something went wrong! Error: ${err.message}`);
+    const mediaItems = await fetchPhotos(accessToken, refreshToken);
+    res.json(mediaItems);
+  } catch (error) {
+    res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
+
+// app.get('/photos', async (req, res) => {
+//   console.log('Received request for /photos.');
+
+//   // Access token is available, proceed with the API request
+//   const accessToken = req.session.accessToken;
+//   const refreshToken = req.session.refreshToken;
+//   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
+  
+//   try {
+//     console.log('Trying request for /photos');
+
+//     // Use the stored tokens to authenticate
+//     oauth2Client.setCredentials({
+//       access_token: accessToken,
+//       refresh_token: refreshToken,
+//     });
+
+//     const response = await Photos.mediaItems.search({
+//       version: 'v1',     
+//       auth: oauth2Client,
+//       resource:  {
+//         pageSize: 100,
+//       },
+//     });
+
+//     console.log('Received API response:', response.data);
+//     res.json(response.data);
+
+//     if (response.data && response.data.mediaItems) {
+//       console.log('Received photos:', response.data.mediaItems);
+//       res.json(response.data.mediaItems);
+//     } else {
+//       console.error('Error: Unexpected API response structure', response);
+//       res.status(500).send('Unexpected API response structure');
+//     }
+
+//   } catch (err) {
+//     console.error('ERROR getting photos:', err);
+//     res.status(500).send(`Something went wrong! Error: ${err.message}`);
+//   }
+// });
 
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
