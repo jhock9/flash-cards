@@ -69,9 +69,9 @@ const handleCredentialResponse = async (response) => {
 
     await googleAuth();
     // await fetchAndDisplayPhotos();
-    landingPage.classList.add('hide');
-    flashCardPage.classList.remove('hide');
-    toggleNav();
+    // landingPage.classList.add('hide');
+    // flashCardPage.classList.remove('hide');
+    // toggleNav();
 };
 
 // Sign in failure callback
