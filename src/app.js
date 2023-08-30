@@ -68,7 +68,7 @@ const handleCredentialResponse = async (response) => {
   }
 
     await googleAuth();
-    await fetchAndDisplayPhotos();
+    // await fetchAndDisplayPhotos();
     landingPage.classList.add('hide');
     flashCardPage.classList.remove('hide');
     toggleNav();
@@ -93,7 +93,7 @@ const checkAuthentication = async () => {
     if (data.isAuthenticated) {
       console.log('User is authenticated.');
       // User is authenticated, update the UI accordingly
-      fetchAndDisplayPhotos();
+      await fetchAndDisplayPhotos();
       landingPage.classList.add('hide');
       flashCardPage.classList.remove('hide');
       toggleNav();
