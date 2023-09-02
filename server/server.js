@@ -188,7 +188,7 @@ app.get('/oauth2callback', async (req, res) => {
 // });
 
 // Initialize the Google Photos client
-const Photos = new GooglePhotos({
+const photos = new Photos({
   token: {
     access_token: ACCESS_TOKEN,
     refresh_token: REFRESH_TOKEN,
@@ -214,7 +214,7 @@ const fetchPhotos = async (accessToken, refreshToken) => {
     // });
 
     // Handle the API response here
-    const mediaItems = await Photos.mediaItems.list({ pageSize: 100 });
+    const mediaItems = await photos.mediaItems.list({ pageSize: 100 });
     console.log('Received photos:', mediaItems);
     return mediaItems;
   } catch (error) {
