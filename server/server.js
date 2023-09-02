@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
-// const Photos = require('googlephotos');
+const Photos = require('googlephotos');
 const url = require('url');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -100,14 +100,15 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Redirect to Google's OAuth 2.0 server
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  // scope: Photos.Scopes.READ_ONLY,
+  // scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  scope: Photos.Scopes.READ_ONLY,
   include_granted_scopes: true,
   response_type: 'code',
 });
 
 // Redirect to Google's OAuth 2.0 server
 app.get('/authorize', (req, res) => {
+  console.log('Received request for /authorize');
   res.redirect(authUrl);
   // This response will be sent back to the specified redirect URL 
   // with endpoint /oauth2callback
@@ -127,6 +128,7 @@ app.get('/oauth2callback', async (req, res) => {
     // Get access and refresh tokens
     console.log('Attempting to get tokens with code:', q.code);
     const { tokens } = await oauth2Client.getToken(q.code);
+    console.log('Received tokens:', tokens);
     // console.log('Received tokens:', tokens);
 
     oauth2Client.setCredentials(tokens);
@@ -175,9 +177,51 @@ app.get('/oauth2callback', async (req, res) => {
     res.redirect('/');
   } catch (error) {
     console.error('ERROR in /oauth2callback:', error);
-    res.status(500).send('Something went wrong!');  
+    res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
+
+//  // Initialize the Google Photos API client
+// const photosLibrary = google.photoslibrary({
+//   version: 'v1',     
+//   auth: oauth2Client,
+// });
+
+// Initialize the Google Photos client
+const Photos = new GooglePhotos({
+  token: {
+    access_token: ACCESS_TOKEN,
+    refresh_token: REFRESH_TOKEN,
+  },
+});
+
+const fetchPhotos = async (accessToken, refreshToken) => {
+  try {
+    // Check if the access token has expired and refresh it if necessary
+    const currentTimestamp = Date.now();
+    if (accessToken.expires_at < currentTimestamp) {
+      const { tokens } = await oauth2Client.refreshToken(refreshToken);
+      oauth2Client.setCredentials(tokens);
+      req.session.accessToken = tokens.access_token;
+      ACCESS_TOKEN = tokens.access_token;
+    }
+
+    // const response = await photosLibrary.mediaItems.search({
+    //   auth: accessToken, 
+    //   requestBody: {
+    //     pageSize: 100,
+    //   },
+    // });
+
+    // Handle the API response here
+    const mediaItems = await Photos.mediaItems.list({ pageSize: 100 });
+    console.log('Received photos:', mediaItems);
+    return mediaItems;
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+    throw error;
+  }
+}
 
 //* Fetch photos from Google Photos
 app.get('/photos', async (req, res) => {
@@ -187,42 +231,10 @@ app.get('/photos', async (req, res) => {
   const refreshToken = req.session.refreshToken;
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
   
-  // Initialize the Google Photos API client
-  const photosLibrary = google.photoslibrary({
-    version: 'v1',     
-    auth: oauth2Client,
-  });
-
-  const fetchPhotos = async (accessToken, refreshToken) => {
-    try {
-      // Check if the access token has expired and refresh it if necessary
-      const currentTimestamp = Date.now();
-      if (accessToken.expires_at < currentTimestamp) {
-        const { tokens } = await oauth2Client.refreshToken(refreshToken);
-        oauth2Client.setCredentials(tokens);
-        req.session.accessToken = tokens.access_token;
-      }
-
-      const response = await photosLibrary.mediaItems.search({
-        auth: accessToken, 
-        requestBody: {
-          pageSize: 100,
-        },
-      });
-
-      // Handle the API response here
-      const mediaItems = response.data.mediaItems;
-      console.log('Received photos:', mediaItems);
-      return mediaItems;
-    } catch (error) {
-      console.error('Error fetching photos:', error);
-      throw error;
-    }
-  }
-
   try {
     console.log('Trying request for /photos');
     const mediaItems = await fetchPhotos(accessToken, refreshToken);
+    console.log('Media items fetched successfully:', mediaItems);
     res.json(mediaItems);
   } catch (error) {
     console.error('Error in /photos route:', error);
