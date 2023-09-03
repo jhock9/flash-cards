@@ -220,7 +220,10 @@ app.get('/getPhotos', async (req, res) => {
 
   try {
     console.log('Trying request for /getPhotos');
-    const mediaItems = await fetchPhotos(accessToken, refreshToken);
+    const mediaItems = await photos.mediaItems.list({
+      pageSize: 100
+    });
+    // const mediaItems = await fetchPhotos(accessToken, refreshToken);
     console.log('Media items fetched successfully:', mediaItems);
     res.json(mediaItems);
   } catch (error) {
@@ -228,34 +231,6 @@ app.get('/getPhotos', async (req, res) => {
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
-
-const fetchPhotos = async (accessToken, refreshToken) => {
-  try {
-    // Check if the access token has expired and refresh it if necessary
-    const currentTimestamp = Date.now();
-    if (accessToken.expires_at < currentTimestamp) {
-      const { tokens } = await oauth2Client.refreshToken(refreshToken);
-      oauth2Client.setCredentials(tokens);
-      req.session.accessToken = tokens.access_token;
-      // ACCESS_TOKEN = tokens.access_token;
-    }
-
-    // const response = await photosLibrary.mediaItems.search({
-    //   auth: accessToken, 
-    //   requestBody: {
-    //     pageSize: 100,
-    //   },
-    // });
-
-    // Handle the API response here
-    const mediaItems = await photos.mediaItems.list({ pageSize: 100 });
-    console.log('Received photos:', mediaItems);
-    return mediaItems;
-  } catch (error) {
-    console.error('Error fetching photos:', error);
-    throw error;
-  }
-}
 
 // app.get('/getPhotos', async (req, res) => {
 //   console.log('Received request for /getPhotos.');
