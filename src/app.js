@@ -1,6 +1,3 @@
-const landingPage = document.querySelector('#landing-page');
-const googleSignInBtn = document.querySelector('#google-signin');
-const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const openBtn = document.querySelector('#open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
