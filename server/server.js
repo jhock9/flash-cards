@@ -62,12 +62,12 @@ app.use(express.static(path.join(__dirname, '../src/')));
 
 // Serve landing.html
 app.get('/landing', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'landing.html'));
+  res.sendFile(path.join(__dirname, '../src/', 'landing.html'));
 });
 
 // Serve flashcards.html
 app.get('/flashcards', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'flashcards.html'));
+  res.sendFile(path.join(__dirname, '../src/', 'flashcards.html'));
 });
 
 app.get('/config', (req, res) => {
