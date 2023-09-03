@@ -196,18 +196,37 @@ app.get('/oauth2callback', async (req, res) => {
   }
 });
 
-//  // Initialize the Google Photos API client
-// const photosLibrary = google.photoslibrary({
-//   version: 'v1',     
-//   auth: oauth2Client,
-// });
+//* Fetch photos from Google Photos
+app.get('/getPhotos', async (req, res) => {
+  console.log('Received request for /getPhotos.');
 
-// Initialize the Google Photos client
-const photos = new Photos({
-  token: {
-    access_token: req.session.accessToken,
-    refresh_token: req.session.refreshToken,
-  },
+  const accessToken = req.session.accessToken;
+  const refreshToken = req.session.refreshToken;
+  console.log('Retrieved tokens from session:', { accessToken, refreshToken });
+
+  // // Initialize the Google Photos API client
+  // const photosLibrary = google.photoslibrary({
+  //   version: 'v1',     
+  //   auth: oauth2Client,
+  // });
+
+  // Initialize the Google Photos client
+  const photos = new Photos({
+    token: {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    },
+  });
+
+  try {
+    console.log('Trying request for /getPhotos');
+    const mediaItems = await fetchPhotos(accessToken, refreshToken);
+    console.log('Media items fetched successfully:', mediaItems);
+    res.json(mediaItems);
+  } catch (error) {
+    console.error('Error in /getPhotos route:', error);
+    res.status(500).send(`Something went wrong! Error: ${error.message}`);
+  }
 });
 
 const fetchPhotos = async (accessToken, refreshToken) => {
@@ -238,27 +257,8 @@ const fetchPhotos = async (accessToken, refreshToken) => {
   }
 }
 
-//* Fetch photos from Google Photos
-app.get('/photos', async (req, res) => {
-  console.log('Received request for /photos.');
-
-  const accessToken = req.session.accessToken;
-  const refreshToken = req.session.refreshToken;
-  console.log('Retrieved tokens from session:', { accessToken, refreshToken });
-  
-  try {
-    console.log('Trying request for /photos');
-    const mediaItems = await fetchPhotos(accessToken, refreshToken);
-    console.log('Media items fetched successfully:', mediaItems);
-    res.json(mediaItems);
-  } catch (error) {
-    console.error('Error in /photos route:', error);
-    res.status(500).send(`Something went wrong! Error: ${error.message}`);
-  }
-});
-
-// app.get('/photos', async (req, res) => {
-//   console.log('Received request for /photos.');
+// app.get('/getPhotos', async (req, res) => {
+//   console.log('Received request for /getPhotos.');
 
 //   // Access token is available, proceed with the API request
 //   const accessToken = req.session.accessToken;
@@ -266,7 +266,7 @@ app.get('/photos', async (req, res) => {
 //   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
   
 //   try {
-//     console.log('Trying request for /photos');
+//     console.log('Trying request for /getPhotos');
 
 //     // Use the stored tokens to authenticate
 //     oauth2Client.setCredentials({

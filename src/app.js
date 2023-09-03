@@ -109,7 +109,7 @@ checkAuthentication();
 //* FETCH AND DISPLAY PHOTOS
 const fetchAndDisplayPhotos = async () => {
   try {
-    const response = await fetch('/photos');
+    const response = await fetch('/getPhotos');
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
@@ -179,7 +179,7 @@ const displayTags = async (photoData) => {
 // //* FETCH PHOTO DATA
 // const fetchPhotoData = async () => {
 //   try {
-//     const response = await fetch('/photos');
+//     const response = await fetch('/getPhotos');
 //     if (!response.ok) {
 //       throw new Error(`Server responded with status: ${response.status}`);
 //     }
