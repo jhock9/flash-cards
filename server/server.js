@@ -15,13 +15,11 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
-let ACCESS_TOKEN = process.env.GOOGLE_ACCESS_TOKEN;
-let REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
+// let ACCESS_TOKEN = process.env.GOOGLE_ACCESS_TOKEN;
+// let REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
 
-console.log('Initial ACCESS_TOKEN:', ACCESS_TOKEN);
-console.log('Initial REFRESH_TOKEN:', REFRESH_TOKEN);
-
-console.log(`Redirect URL is: ${REDIRECT_URL}`);
+// console.log('Initial ACCESS_TOKEN:', ACCESS_TOKEN);
+// console.log('Initial REFRESH_TOKEN:', REFRESH_TOKEN);
 
 // Enforce HTTPS redirection in production
 if (NODE_ENV === 'production') {
@@ -88,7 +86,6 @@ app.get('/config', (req, res) => {
 
 //* Obtaining OAuth 2.0 access tokens
 // Set up your OAuth2 client for the API
-console.log(`Creating OAuth2 client with Redirect URL: ${REDIRECT_URL}`);
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -106,10 +103,13 @@ const authUrl = oauth2Client.generateAuthUrl({
   response_type: 'code',
 });
 
+console.log('Authorize this app by visiting this URL:', authUrl);
+
 // Redirect to Google's OAuth 2.0 server
 app.get('/authorize', (req, res) => {
   console.log('Received request for /authorize');
   res.redirect(authUrl);
+  console.log("Redirected to Google's OAuth 2.0 server");
   // This response will be sent back to the specified redirect URL 
   // with endpoint /oauth2callback
 });
@@ -132,41 +132,56 @@ app.get('/oauth2callback', async (req, res) => {
     // console.log('Received tokens:', tokens);
 
     oauth2Client.setCredentials(tokens);
-    console.log('Credentials set in OAuth2 client');
+    console.log('Credentials set in OAuth2 client:,', oauth2Client);
 
-    // Check if tokens are already assigned, update .env variables
-    if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
-      ACCESS_TOKEN = tokens.access_token;
-      process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
-    }
+    // // Check if tokens are already assigned, update .env variables
+    // if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
+    //   ACCESS_TOKEN = tokens.access_token;
+    //   process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
+    // }
     
-    if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-      REFRESH_TOKEN = tokens.refresh_token;
-      process.env.GOOGLE_REFRESH_TOKEN = REFRESH_TOKEN; 
-    }
-    console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
+    // if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
+    //   REFRESH_TOKEN = tokens.refresh_token;
+    //   process.env.GOOGLE_REFRESH_TOKEN = REFRESH_TOKEN; 
+    // }
+    // console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
 
     // Check if the access token is expired and refresh it if necessary
     if (oauth2Client.isTokenExpiring()) {
       const refreshedTokens = await oauth2Client.getAccessToken();
       if (refreshedTokens) {
         console.log('Access token refreshed:', refreshedTokens.token);
-        ACCESS_TOKEN = refreshedTokens.token;
-        process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
+        req.session.accessToken = refreshedTokens.token;
+        // ACCESS_TOKEN = refreshedTokens.token; 
+        // process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
+      } else {
+        console.error('Error refreshing access token:', refreshedTokens);
       }
     }
 
+    // Authentication middleware
     // Update session tokens (only if not already assigned)
     if (!req.session.accessToken) {
-      req.session.accessToken = ACCESS_TOKEN;
-      req.session.refreshToken = REFRESH_TOKEN;
+      req.session.accessToken = tokens.access_token;
+      req.session.refreshToken = tokens.refresh_token;
+      // req.session.accessToken = ACCESS_TOKEN;
+      // req.session.refreshToken = REFRESH_TOKEN;
+      // Redirect to landing page
+      res.redirect('/');
+    } else {
+      // Send user back to client app
+      res.json({
+        accessToken: tokens.access_token,
+        refreshToken: tokens.refresh_token
+      });
     }
+    
     console.log('Tokens stored in session:', {
       accessToken: req.session.accessToken,
       refreshToken: req.session.refreshToken,
     });
   
-    res.cookie('accessToken', ACCESS_TOKEN, { 
+    res.cookie('accessToken', req.session.accessToken, { 
       httpOnly: true, 
       secure: process.env.NODE_ENV === 'production', 
       sameSite: 'None',
@@ -190,8 +205,8 @@ app.get('/oauth2callback', async (req, res) => {
 // Initialize the Google Photos client
 const photos = new Photos({
   token: {
-    access_token: ACCESS_TOKEN,
-    refresh_token: REFRESH_TOKEN,
+    access_token: req.session.accessToken,
+    refresh_token: req.session.refreshToken,
   },
 });
 
@@ -203,7 +218,7 @@ const fetchPhotos = async (accessToken, refreshToken) => {
       const { tokens } = await oauth2Client.refreshToken(refreshToken);
       oauth2Client.setCredentials(tokens);
       req.session.accessToken = tokens.access_token;
-      ACCESS_TOKEN = tokens.access_token;
+      // ACCESS_TOKEN = tokens.access_token;
     }
 
     // const response = await photosLibrary.mediaItems.search({
