@@ -31,8 +31,15 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       hash: true,
-      template: './src/index.html',
-      filename: 'index.html',
+      template: './src/landing.html',
+      filename: 'landing.html',
+      inject: 'body',
+      favicon: path.resolve(__dirname, 'src/favicon.ico'),
+    }),
+    new HtmlWebpackPlugin({
+      hash: true,
+      template: './src/flashcards.html',
+      filename: 'flashcards.html',
       inject: 'body',
       favicon: path.resolve(__dirname, 'src/favicon.ico'),
     }),

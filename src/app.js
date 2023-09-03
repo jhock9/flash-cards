@@ -1,5 +1,3 @@
-const landingPage = document.querySelector('#landing-page');
-const flashCardPage = document.querySelector('#flashcards-page');
 const contentWrapper = document.querySelector('#flash-content-wrapper');
 const openBtn = document.querySelector('#open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
@@ -70,8 +68,7 @@ const handleCredentialResponse = (response) => {
   initTokenClient();
   getToken();
 
-  landingPage.classList.add('hide');
-  flashCardPage.classList.remove('hide');
+  window.location.href = 'flashcards.html';
   toggleNav();
 };
 
@@ -82,8 +79,7 @@ signoutBtn.addEventListener('click', (e) => {
   console.log('User signed out.');
   localStorage.clear();
   
-  landingPage.classList.remove('hide');
-  flashCardPage.classList.add('hide');
+  window.location.href = 'landing.html';
   window.location.reload();
 });
 
