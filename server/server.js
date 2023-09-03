@@ -167,7 +167,7 @@ app.get('/oauth2callback', async (req, res) => {
       // req.session.accessToken = ACCESS_TOKEN;
       // req.session.refreshToken = REFRESH_TOKEN;
       // Redirect to landing page
-      res.redirect('/');
+      // res.redirect('/');
     } else {
       // Send user back to client app
       res.json({
