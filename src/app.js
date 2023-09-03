@@ -11,7 +11,7 @@ const selectedTagsContainer = document.querySelector('#selected-tags-container')
 const removeBtns = document.querySelectorAll(".remove-btn");
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
-const tagsSelected = tagsList.querySelectorAll('.name');
+// const tagsSelected = tagsList.querySelectorAll('.name');
 const displayedImages = document.querySelector('#images-container');
 
 let googleClientID; 
