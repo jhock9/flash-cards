@@ -1,7 +1,7 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const cors = require('cors');
 const app = express();
@@ -15,11 +15,6 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
-// let ACCESS_TOKEN = process.env.GOOGLE_ACCESS_TOKEN;
-// let REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN;
-
-// console.log('Initial ACCESS_TOKEN:', ACCESS_TOKEN);
-// console.log('Initial REFRESH_TOKEN:', REFRESH_TOKEN);
 
 // Enforce HTTPS redirection in production
 if (NODE_ENV === 'production') {
@@ -66,7 +61,7 @@ app.use((req, res, next) => {
 
 // Add middleware 
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(cors());
 
 app.use(session({
@@ -144,26 +139,12 @@ app.get('/oauth2callback', async (req, res) => {
     oauth2Client.setCredentials(tokens);
     console.log('Credentials set in OAuth2 client:,', oauth2Client);
 
-    // // Check if tokens are already assigned, update .env variables
-    // if (ACCESS_TOKEN === 'NOT_ASSIGNED_YET') {
-    //   ACCESS_TOKEN = tokens.access_token;
-    //   process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
-    // }
-    
-    // if (REFRESH_TOKEN === 'NOT_ASSIGNED_YET') {
-    //   REFRESH_TOKEN = tokens.refresh_token;
-    //   process.env.GOOGLE_REFRESH_TOKEN = REFRESH_TOKEN; 
-    // }
-    // console.log('Tokens assigned to .env variables:', { ACCESS_TOKEN, REFRESH_TOKEN });
-
     // Check if the access token is expired and refresh it if necessary
     if (oauth2Client.isTokenExpiring()) {
       const refreshedTokens = await oauth2Client.getAccessToken();
       if (refreshedTokens) {
         console.log('Access token refreshed:', refreshedTokens.token);
         req.session.accessToken = refreshedTokens.token;
-        // ACCESS_TOKEN = refreshedTokens.token; 
-        // process.env.GOOGLE_ACCESS_TOKEN = ACCESS_TOKEN;
       } else {
         console.error('Error refreshing access token:', refreshedTokens);
       }
@@ -174,10 +155,6 @@ app.get('/oauth2callback', async (req, res) => {
     if (!req.session.accessToken) {
       req.session.accessToken = tokens.access_token;
       req.session.refreshToken = tokens.refresh_token;
-      // req.session.accessToken = ACCESS_TOKEN;
-      // req.session.refreshToken = REFRESH_TOKEN;
-      // Redirect to landing page
-      // res.redirect('/');
     } else {
       // Send user back to client app
       res.json({
@@ -191,14 +168,15 @@ app.get('/oauth2callback', async (req, res) => {
       refreshToken: req.session.refreshToken,
     });
   
-    res.cookie('accessToken', req.session.accessToken, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
-      sameSite: 'None',
-    });
-    console.log('Cookie set with name "accessToken"');
+    // res.cookie('accessToken', req.session.accessToken, { 
+    //   httpOnly: true, 
+    //   secure: process.env.NODE_ENV === 'production', 
+    //   sameSite: 'None',
+    // });
+    // console.log('Cookie set with name "accessToken"');
 
-    // Redirect to home page
+    req.session.isAuthenticated = true;
+    
     res.redirect('/flashcards');
   } catch (error) {
     console.error('ERROR in /oauth2callback:', error);
@@ -213,12 +191,6 @@ app.get('/getPhotos', async (req, res) => {
   const accessToken = req.session.accessToken;
   const refreshToken = req.session.refreshToken;
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
-
-  // // Initialize the Google Photos API client
-  // const photosLibrary = google.photoslibrary({
-  //   version: 'v1',     
-  //   auth: oauth2Client,
-  // });
 
   // Initialize the Google Photos client
   const photos = new Photos({
@@ -312,10 +284,12 @@ app.get('/getPhotos', async (req, res) => {
 
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
-  console.log('Cookies in /is-authenticated:', req.cookies);
-  console.log('Cookie header in /is-authenticated:', req.headers.cookie);
+  // console.log('Cookies in /is-authenticated:', req.cookies);
+  // console.log('Cookie header in /is-authenticated:', req.headers.cookie);
+  // if (req.cookies.accessToken) {
 
-  if (req.cookies.accessToken) {
+  console.log('Session in /is-authenticated:', req.session);
+  if (req.session && req.session.isAuthenticated) {
     res.status(200).json({ isAuthenticated: true });
   } else {
     res.status(200).json({ isAuthenticated: false });
