@@ -199,7 +199,7 @@ app.get('/oauth2callback', async (req, res) => {
     console.log('Cookie set with name "accessToken"');
 
     // Redirect to home page
-    res.redirect('/');
+    res.redirect('/flashcards');
   } catch (error) {
     console.error('ERROR in /oauth2callback:', error);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
@@ -233,12 +233,38 @@ app.get('/getPhotos', async (req, res) => {
     const mediaItems = await photos.mediaItems.list({
       pageSize: 100
     });
-    // const mediaItems = await fetchPhotos(accessToken, refreshToken);
     console.log('Media items fetched successfully:', mediaItems);
     res.json(mediaItems);
   } catch (error) {
     console.error('Error in /getPhotos route:', error);
-    res.status(500).send(`Something went wrong! Error: ${error.message}`);
+
+    // Check if the error is due to an expired token
+    if (error.response && error.response.status === 401) {
+      console.log('Access token expired. Attempting to refresh.');
+
+      // Use the refresh token to obtain a new access token
+      try {
+        const refreshedTokens = await oauth2Client.refreshToken(refreshToken);
+        if (refreshedTokens) {
+          req.session.accessToken = refreshedTokens.access_token;
+          console.log('Access token refreshed:', refreshedTokens.access_token);
+          // Retry the request with the new access token
+          const mediaItems = await photos.mediaItems.list({
+            pageSize: 100
+          });
+          console.log('Media items fetched successfully after token refresh:', mediaItems);
+          res.json(mediaItems);
+        } else {
+          console.error('Error refreshing access token:', refreshedTokens);
+          res.status(500).send('Error refreshing access token');
+        }
+      } catch (refreshError) {
+        console.error('Error refreshing access token:', refreshError);
+        res.status(500).send('Error refreshing access token');
+      }
+    } else {
+      res.status(500).send(`Something went wrong! Error: ${error.message}`);
+    }
   }
 });
 
