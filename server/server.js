@@ -188,21 +188,26 @@ app.get('/oauth2callback', async (req, res) => {
 app.get('/getPhotos', async (req, res) => {
   console.log('Received request for /getPhotos.');
 
+  console.log('Retrieving access token from session...');
   const accessToken = req.session.accessToken;
   const refreshToken = req.session.refreshToken;
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
+  console.log('Retrieved access token:', accessToken);
 
   // Initialize the Google Photos client
+  console.log('Initializing Google Photos client...');
   const photos = new Photos({
     token: {
       access_token: accessToken,
       refresh_token: refreshToken,
     },
   });
+  console.log('Google Photos client CREATED:', photos);
+  console.log('Google Photos client CREATED:', photos.token);
 
   try {
-    console.log('Trying request for /getPhotos');
-    const mediaItems = await photos.mediaItems.list({
+    console.log('Trying request for /getPhotos and fetching media items');
+    const mediaItems = await photos.mediaItems.list({   //! Error in /getPhotos route: HTTPError: Unauthorized
       pageSize: 100
     });
     console.log('Media items fetched successfully:', mediaItems);
@@ -217,21 +222,22 @@ app.get('/getPhotos', async (req, res) => {
       // Use the refresh token to obtain a new access token
       try {
         const refreshedTokens = await oauth2Client.refreshToken(refreshToken);
+        console.log('Received refreshed tokens:', refreshedTokens);
         if (refreshedTokens) {
           req.session.accessToken = refreshedTokens.access_token;
           console.log('Access token refreshed:', refreshedTokens.access_token);
           // Retry the request with the new access token
-          const mediaItems = await photos.mediaItems.list({
+          const mediaItems = await photos.mediaItems.list({ //! Error in /getPhotos route: HTTPError: Unauthorized
             pageSize: 100
           });
-          console.log('Media items fetched successfully after token refresh:', mediaItems);
+          console.log('Media items fetched successfully after token refresh:', mediaItems); 
           res.json(mediaItems);
-        } else {
-          console.error('Error refreshing access token:', refreshedTokens);
+        } else {          
+          console.error('Error refreshing access token (refreshedTokens):', refreshedTokens);
           res.status(500).send('Error refreshing access token');
         }
       } catch (refreshError) {
-        console.error('Error refreshing access token:', refreshError);
+        console.error('Error refreshing access token (refreshError):', refreshError);
         res.status(500).send('Error refreshing access token');
       }
     } else {
