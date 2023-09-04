@@ -95,7 +95,6 @@ const checkAuthentication = async () => {
       toggleNav();
     } else {
       console.log('User is not authenticated.');
-      window.location.href = '/landing.html';
     }
   } catch (error) {
     console.error('Error checking authentication:', error);
