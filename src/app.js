@@ -76,7 +76,7 @@ const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-//* COOKIE AUTHENTICATION CHECK 
+//* CHECK AUTHENTICATION & LOAD PHOTOS
 const checkAuthentication = async () => {
   try {
     console.log('Checking authentication...');
@@ -89,18 +89,33 @@ const checkAuthentication = async () => {
     console.log('Authentication check response:', data);
     if (data.isAuthenticated) {
       console.log('User is authenticated.');
+      sessionStorage.setItem('authenticationChecked', 'true');
+
       // User is authenticated, update the UI accordingly
       await fetchAndDisplayPhotos();
-      window.location.href = '/flashcards.html';
+
+      if (window.location.pathname === '/landing.html') {
+        window.location.href = '/flashcards.html';
+      }
       toggleNav();
     } else {
       console.log('User is not authenticated.');
-    }
+
+      if (window.location.pathname === '/flashcards.html') {
+        window.location.href = '/landing.html';
+      }
+    } 
   } catch (error) {
     console.error('Error checking authentication:', error);
   }
 };
-checkAuthentication();
+
+// Call checkAuthentication when the page initially loads
+window.addEventListener('load', checkAuthentication);
+// Call checkAuthentication when the page refreshes
+window.addEventListener('beforeunload', () => {
+  sessionStorage.removeItem('authenticationChecked');
+});
 
 //* FETCH AND DISPLAY PHOTOS
 const fetchAndDisplayPhotos = async () => {
