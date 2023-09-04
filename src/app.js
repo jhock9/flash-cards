@@ -91,11 +91,11 @@ const checkAuthentication = async () => {
       console.log('User is authenticated.');
       // User is authenticated, update the UI accordingly
       await fetchAndDisplayPhotos();
-      landingPage.classList.add('hide');
-      flashCardPage.classList.remove('hide');
+      window.location.href = '/flashcards.html';
       toggleNav();
     } else {
       console.log('User is not authenticated.');
+      window.location.href = '/landing.html';
     }
   } catch (error) {
     console.error('Error checking authentication:', error);
@@ -635,9 +635,7 @@ signoutBtn.addEventListener('click', async (e) => {
     google.accounts.id.disableAutoSelect();
     console.log('User signed out.');
 
-    landingPage.classList.remove('hide');
-    flashCardPage.classList.add('hide');
-    window.location.reload();
+    window.location.href = '/landing.html';
   } catch (error) {
     console.error('Error during logout:', error);
   }
