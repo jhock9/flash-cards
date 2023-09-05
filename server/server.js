@@ -194,30 +194,33 @@ app.get('/getPhotos', async (req, res) => {
   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
   console.log('Retrieved access token:', accessToken);
 
-  // Initialize the Google Photos client
-  console.log('Initializing Google Photos client...');
-  const photos = new Photos({
-    token: {
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    },
-  });
-
-  // Logging the Google Photos client for debugging
-  console.log('Google Photos client CREATED (photos):', photos);  
-  console.log('Google Photos client mediaItems:', photos.mediaItems);
-  for (const mediaItem of photos.mediaItems) {
-    console.log('Media Item:', mediaItem);
-  }
-  console.log('Google Photos client CREATED (photos.token):', photos.token);
-
   try {
-    console.log('Trying request for /getPhotos and fetching media items');
-    const mediaItems = await photos.mediaItems.list({   //! Error in /getPhotos route: HTTPError: Unauthorized
-      pageSize: 100
+    // Initialize the Google Photos client
+    console.log('Initializing Google Photos client...');
+    const photos = new Photos({
+      token: {
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      },
     });
+    console.log('Google Photos client CREATED (photos):', photos); 
+
+    // console.log('Trying request for /getPhotos and fetching albums');
+    // const albums = await photos.albums.list();
+    // console.log('Albums fetched successfully:', albums);
+
+    // // Extract album names
+    // const albumNames = albums.map((album) => album.title);
+    // console.log('Album names extracted:', albumNames);
+    // res.json(albumNames);
+    // res.json({ albums: albumNames });
+
+    console.log('Trying request for /getPhotos and fetching media items');
+    //! Error in /getPhotos route: HTTPError: Unauthorized
+    const mediaItems = await photos.mediaItems.search({ pageSize: 100 });
     console.log('Media items fetched successfully:', mediaItems);
     res.json(mediaItems);
+    res.json({ mediaItems: mediaItems });
   } catch (error) {
     console.error('Error in /getPhotos route:', error);
 
@@ -232,8 +235,17 @@ app.get('/getPhotos', async (req, res) => {
         if (refreshedTokens) {
           req.session.accessToken = refreshedTokens.access_token;
           console.log('Access token refreshed:', refreshedTokens.access_token);
+          
           // Retry the request with the new access token
-          const mediaItems = await photos.mediaItems.list({ //! Error in /getPhotos route: HTTPError: Unauthorized
+          // Re-initialize the Google Photos client with the new access token
+          const photos = new Photos({
+            token: {
+              access_token: refreshedTokens.access_token,
+              refresh_token: refreshToken,
+            },
+          });
+          //! Error in /getPhotos route: HTTPError: Unauthorized
+          const mediaItems = await photos.mediaItems.search({
             pageSize: 100
           });
           console.log('Media items fetched successfully after token refresh:', mediaItems); 
