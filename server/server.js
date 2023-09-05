@@ -202,8 +202,13 @@ app.get('/getPhotos', async (req, res) => {
       refresh_token: refreshToken,
     },
   });
+
+  // Logging the Google Photos client for debugging
   console.log('Google Photos client CREATED (photos):', photos);  
   console.log('Google Photos client mediaItems:', photos.mediaItems);
+  for (const mediaItem of photos.mediaItems) {
+    console.log('Media Item:', mediaItem);
+  }
   console.log('Google Photos client CREATED (photos.token):', photos.token);
 
   try {
