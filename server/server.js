@@ -217,7 +217,7 @@ app.get('/getPhotos', async (req, res) => {
 
     console.log('Trying request for /getPhotos and fetching media items');
     //! Error in /getPhotos route: HTTPError: Unauthorized
-    const mediaItems = await photos.mediaItems.search({ pageSize: 100 });
+    const mediaItems = await photos.mediaItems;
     console.log('Media items fetched successfully:', mediaItems);
     res.json(mediaItems);
     res.json({ mediaItems: mediaItems });
@@ -245,9 +245,7 @@ app.get('/getPhotos', async (req, res) => {
             },
           });
           //! Error in /getPhotos route: HTTPError: Unauthorized
-          const mediaItems = await photos.mediaItems.search({
-            pageSize: 100
-          });
+          const mediaItems = await photos.mediaItems;
           console.log('Media items fetched successfully after token refresh:', mediaItems); 
           res.json(mediaItems);
         } else {          
