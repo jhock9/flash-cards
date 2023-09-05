@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
-const Photos = require('googlephotos');
+// const Photos = require('googlephotos');
 const url = require('url');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -102,8 +102,8 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Redirect to Google's OAuth 2.0 server
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  // scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  scope: Photos.Scopes.READ_ONLY,
+  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  // scope: Photos.Scopes.READ_ONLY,
   include_granted_scopes: true,
   response_type: 'code',
 });
@@ -184,7 +184,14 @@ app.get('/oauth2callback', async (req, res) => {
   }
 });
 
-//* Fetch photos from Google Photos
+//* Photos Library API
+// Load the Photos Library API
+const photos = google.photoslibrary({
+  version: 'v1',
+  auth: oAuth2Client,
+});
+
+// Fetch photos
 app.get('/getPhotos', async (req, res) => {
   console.log('Received request for /getPhotos.');
 
@@ -197,14 +204,16 @@ app.get('/getPhotos', async (req, res) => {
   try {
     // Initialize the Google Photos client
     console.log('Initializing Google Photos client...');
-    const photos = new Photos({
-      token: {
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      },
-    });
-    console.log('Google Photos client CREATED (photos):', photos); 
+    // !! dont think I need this?
+    // const photos = new Photos({
+    //   token: {
+    //     access_token: accessToken,
+    //     refresh_token: refreshToken,
+    //   },
+    // });
+    // console.log('Google Photos client CREATED (photos):', photos); 
 
+    // !! testing albums
     // console.log('Trying request for /getPhotos and fetching albums');
     // const albums = await photos.albums.list();
     // console.log('Albums fetched successfully:', albums);
@@ -217,48 +226,55 @@ app.get('/getPhotos', async (req, res) => {
 
     console.log('Trying request for /getPhotos and fetching media items');
     //! Error in /getPhotos route: HTTPError: Unauthorized
-    const mediaItems = await photos.mediaItems;
-    console.log('Media items fetched successfully:', mediaItems);
-    res.json(mediaItems);
-    res.json({ mediaItems: mediaItems });
+    const response = await photos.mediaItems.list({
+      pageSize: 100
+    });
+
+    console.log('Media items fetched successfully:', response);
+    console.log('Media items fetched successfully:', response.data.mediaItems);
+
+    res.json(response.data.mediaItems);
   } catch (error) {
     console.error('Error in /getPhotos route:', error);
 
-    // Check if the error is due to an expired token
-    if (error.response && error.response.status === 401) {
-      console.log('Access token expired. Attempting to refresh.');
+    // !! remove this extra code too
+    // // Check if the error is due to an expired token
+    // if (error.response && error.response.status === 401) {
+    //   console.log('Access token expired. Attempting to refresh.');
 
-      // Use the refresh token to obtain a new access token
-      try {
-        const refreshedTokens = await oauth2Client.refreshToken(refreshToken);
-        console.log('Received refreshed tokens:', refreshedTokens);
-        if (refreshedTokens) {
-          req.session.accessToken = refreshedTokens.access_token;
-          console.log('Access token refreshed:', refreshedTokens.access_token);
+    //   // Use the refresh token to obtain a new access token
+    //   try {
+    //     const refreshedTokens = await oauth2Client.refreshToken(refreshToken);
+    //     console.log('Received refreshed tokens:', refreshedTokens);
+    //     if (refreshedTokens) {
+    //       req.session.accessToken = refreshedTokens.access_token;
+    //       console.log('Access token refreshed:', refreshedTokens.access_token);
           
-          // Retry the request with the new access token
-          // Re-initialize the Google Photos client with the new access token
-          const photos = new Photos({
-            token: {
-              access_token: refreshedTokens.access_token,
-              refresh_token: refreshToken,
-            },
-          });
-          //! Error in /getPhotos route: HTTPError: Unauthorized
-          const mediaItems = await photos.mediaItems;
-          console.log('Media items fetched successfully after token refresh:', mediaItems); 
-          res.json(mediaItems);
-        } else {          
-          console.error('Error refreshing access token (refreshedTokens):', refreshedTokens);
-          res.status(500).send('Error refreshing access token');
-        }
-      } catch (refreshError) {
-        console.error('Error refreshing access token (refreshError):', refreshError);
-        res.status(500).send('Error refreshing access token');
-      }
-    } else {
-      res.status(500).send(`Something went wrong! Error: ${error.message}`);
-    }
+    //       // Retry the request with the new access token
+    //       // Re-initialize the Google Photos client with the new access token
+    //       const photos = new Photos({
+    //         token: {
+    //           access_token: refreshedTokens.access_token,
+    //           refresh_token: refreshToken,
+    //         },
+    //       });
+    //       //! Error in /getPhotos route: HTTPError: Unauthorized
+    //       const newMediaItems = await photos.mediaItems.list({
+    //         pageSize: 100
+    //       });
+    //       console.log('Media items fetched successfully after token refresh:', mediaItems); 
+    //       res.json({ newMediaItems: newMediaItems });
+    //     } else {          
+    //       console.error('Error refreshing access token (refreshedTokens):', refreshedTokens);
+    //       res.status(500).send('Error refreshing access token');
+    //     }
+    //   } catch (refreshError) {
+    //     console.error('Error refreshing access token (refreshError):', refreshError);
+    //     res.status(500).send('Error refreshing access token');
+    //   }
+    // } else {
+    //   res.status(500).send(`Something went wrong! Error: ${error.message}`);
+    // }
   }
 });
 
