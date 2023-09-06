@@ -146,19 +146,18 @@ app.get('/oauth2callback', async (req, res) => {
 });
 
 //* Photos Library API
-// Load the Photos Library API
-const photos = google.photoslibrary({
-  version: 'v1',
-  auth: oAuth2Client,
-});
-
-// Fetch photos
 app.get('/getPhotos', async (req, res) => {
   console.log('Received request for /getPhotos.');
 
   try {
     // Initialize the Google Photos client
     console.log('Initializing Google Photos client...');
+    
+    const photos = google.photoslibrary({
+      version: 'v1',
+      auth: oAuth2Client,
+    });
+    console.log('Photos Library API request prepared:', photos);
 
     console.log('Trying request for /getPhotos and fetching media items');
     const response = await photos.mediaItems.list({
