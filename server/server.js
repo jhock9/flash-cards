@@ -155,7 +155,7 @@ app.get('/getPhotos', async (req, res) => {
     
     const photos = google.photoslibrary({
       version: 'v1',
-      auth: oAuth2Client,
+      auth: oauth2Client,
     });
     console.log('Photos Library API request prepared:', photos);
 
