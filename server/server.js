@@ -1,14 +1,13 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-// const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const cors = require('cors');
 const app = express();
+const cors = require('cors');
+const url = require('url');
 const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
+const session = require('express-session');
 // const Photos = require('googlephotos');
-const url = require('url');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -61,9 +60,7 @@ app.use((req, res, next) => {
 
 // Add middleware 
 app.use(express.json());
-// app.use(cookieParser());
 app.use(cors());
-
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
@@ -89,17 +86,16 @@ app.get('/config', (req, res) => {
   });
 });
 
-//* Obtaining OAuth 2.0 access tokens
+//* OAuth 2.0
 // Set up your OAuth2 client for the API
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   REDIRECT_URL,
 );
-
 console.log('OAuth2 client CREATED: ', oauth2Client);
 
-// Redirect to Google's OAuth 2.0 server
+// Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
@@ -107,7 +103,6 @@ const authUrl = oauth2Client.generateAuthUrl({
   include_granted_scopes: true,
   response_type: 'code',
 });
-
 console.log('Authorize this app by visiting this URL:', authUrl);
 
 // Redirect to Google's OAuth 2.0 server
@@ -119,12 +114,14 @@ app.get('/authorize', (req, res) => {
   // with endpoint /oauth2callback
 });
 
+//* Handling the OAuth 2.0 server response
 // Exchange authorization code for access and refresh tokens
 app.get('/oauth2callback', async (req, res) => {
   try {
     console.log('Received request for /oauth2callback');
     const q = url.parse(req.url, true).query;
     console.log('Parsed query parameters:', q);
+    
     if (q.error) {
       console.error('Error in query parameters:', q.error);
       res.status(400).send('Authentication failed');
@@ -132,48 +129,12 @@ app.get('/oauth2callback', async (req, res) => {
     }
     // Get access and refresh tokens
     console.log('Attempting to get tokens with code:', q.code);
+
     const { tokens } = await oauth2Client.getToken(q.code);
     console.log('Received tokens:', tokens);
-    // console.log('Received tokens:', tokens);
 
     oauth2Client.setCredentials(tokens);
     console.log('Credentials set in OAuth2 client:,', oauth2Client);
-
-    // Check if the access token is expired and refresh it if necessary
-    if (oauth2Client.isTokenExpiring()) {
-      const refreshedTokens = await oauth2Client.getAccessToken();
-      if (refreshedTokens) {
-        console.log('Access token refreshed:', refreshedTokens.token);
-        req.session.accessToken = refreshedTokens.token;
-      } else {
-        console.error('Error refreshing access token:', refreshedTokens);
-      }
-    }
-
-    // Authentication middleware
-    // Update session tokens (only if not already assigned)
-    if (!req.session.accessToken) {
-      req.session.accessToken = tokens.access_token;
-      req.session.refreshToken = tokens.refresh_token;
-    } else {
-      // Send user back to client app
-      res.json({
-        accessToken: tokens.access_token,
-        refreshToken: tokens.refresh_token
-      });
-    }
-    
-    console.log('Tokens stored in session:', {
-      accessToken: req.session.accessToken,
-      refreshToken: req.session.refreshToken,
-    });
-  
-    // res.cookie('accessToken', req.session.accessToken, { 
-    //   httpOnly: true, 
-    //   secure: process.env.NODE_ENV === 'production', 
-    //   sameSite: 'None',
-    // });
-    // console.log('Cookie set with name "accessToken"');
 
     req.session.isAuthenticated = true;
     
@@ -195,137 +156,26 @@ const photos = google.photoslibrary({
 app.get('/getPhotos', async (req, res) => {
   console.log('Received request for /getPhotos.');
 
-  console.log('Retrieving access token from session...');
-  const accessToken = req.session.accessToken;
-  const refreshToken = req.session.refreshToken;
-  console.log('Retrieved tokens from session:', { accessToken, refreshToken });
-  console.log('Retrieved access token:', accessToken);
-
   try {
     // Initialize the Google Photos client
     console.log('Initializing Google Photos client...');
-    // !! dont think I need this?
-    // const photos = new Photos({
-    //   token: {
-    //     access_token: accessToken,
-    //     refresh_token: refreshToken,
-    //   },
-    // });
-    // console.log('Google Photos client CREATED (photos):', photos); 
-
-    // !! testing albums
-    // console.log('Trying request for /getPhotos and fetching albums');
-    // const albums = await photos.albums.list();
-    // console.log('Albums fetched successfully:', albums);
-
-    // // Extract album names
-    // const albumNames = albums.map((album) => album.title);
-    // console.log('Album names extracted:', albumNames);
-    // res.json(albumNames);
-    // res.json({ albums: albumNames });
 
     console.log('Trying request for /getPhotos and fetching media items');
-    //! Error in /getPhotos route: HTTPError: Unauthorized
     const response = await photos.mediaItems.list({
       pageSize: 100
     });
 
-    console.log('Media items fetched successfully:', response);
+    console.log('Media items fetched successfully (response):', response);
     console.log('Media items fetched successfully:', response.data.mediaItems);
 
     res.json(response.data.mediaItems);
   } catch (error) {
-    console.error('Error in /getPhotos route:', error);
-
-    // !! remove this extra code too
-    // // Check if the error is due to an expired token
-    // if (error.response && error.response.status === 401) {
-    //   console.log('Access token expired. Attempting to refresh.');
-
-    //   // Use the refresh token to obtain a new access token
-    //   try {
-    //     const refreshedTokens = await oauth2Client.refreshToken(refreshToken);
-    //     console.log('Received refreshed tokens:', refreshedTokens);
-    //     if (refreshedTokens) {
-    //       req.session.accessToken = refreshedTokens.access_token;
-    //       console.log('Access token refreshed:', refreshedTokens.access_token);
-          
-    //       // Retry the request with the new access token
-    //       // Re-initialize the Google Photos client with the new access token
-    //       const photos = new Photos({
-    //         token: {
-    //           access_token: refreshedTokens.access_token,
-    //           refresh_token: refreshToken,
-    //         },
-    //       });
-    //       //! Error in /getPhotos route: HTTPError: Unauthorized
-    //       const newMediaItems = await photos.mediaItems.list({
-    //         pageSize: 100
-    //       });
-    //       console.log('Media items fetched successfully after token refresh:', mediaItems); 
-    //       res.json({ newMediaItems: newMediaItems });
-    //     } else {          
-    //       console.error('Error refreshing access token (refreshedTokens):', refreshedTokens);
-    //       res.status(500).send('Error refreshing access token');
-    //     }
-    //   } catch (refreshError) {
-    //     console.error('Error refreshing access token (refreshError):', refreshError);
-    //     res.status(500).send('Error refreshing access token');
-    //   }
-    // } else {
-    //   res.status(500).send(`Something went wrong! Error: ${error.message}`);
-    // }
+    console.error('Error in /getPhotos fetching media items:', error);
   }
 });
 
-// app.get('/getPhotos', async (req, res) => {
-//   console.log('Received request for /getPhotos.');
-
-//   // Access token is available, proceed with the API request
-//   const accessToken = req.session.accessToken;
-//   const refreshToken = req.session.refreshToken;
-//   console.log('Retrieved tokens from session:', { accessToken, refreshToken });
-  
-//   try {
-//     console.log('Trying request for /getPhotos');
-
-//     // Use the stored tokens to authenticate
-//     oauth2Client.setCredentials({
-//       access_token: accessToken,
-//       refresh_token: refreshToken,
-//     });
-
-//     const response = await Photos.mediaItems.search({
-//       version: 'v1',     
-//       auth: oauth2Client,
-//       resource:  {
-//         pageSize: 100,
-//       },
-//     });
-
-//     console.log('Received API response:', response.data);
-//     res.json(response.data);
-
-//     if (response.data && response.data.mediaItems) {
-//       console.log('Received photos:', response.data.mediaItems);
-//       res.json(response.data.mediaItems);
-//     } else {
-//       console.error('Error: Unexpected API response structure', response);
-//       res.status(500).send('Unexpected API response structure');
-//     }
-
-//   } catch (err) {
-//     console.error('ERROR getting photos:', err);
-//     res.status(500).send(`Something went wrong! Error: ${err.message}`);
-//   }
-// });
-
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
-  // console.log('Cookies in /is-authenticated:', req.cookies);
-  // console.log('Cookie header in /is-authenticated:', req.headers.cookie);
-  // if (req.cookies.accessToken) {
-
   console.log('Session in /is-authenticated:', req.session);
   if (req.session && req.session.isAuthenticated) {
     res.status(200).json({ isAuthenticated: true });
@@ -334,10 +184,17 @@ app.get('/is-authenticated', (req, res) => {
   }
 });
 
-// Clear access token cookie 
+// Clear session on logout
 app.post('/logout', (req, res) => {
-  res.clearCookie('accessToken');
-  res.status(200).json({ success: true });
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error: Failed to destroy session', isAuthenticated: true });
+    } else {
+      console.log('Session destroyed successfully');
+      res.status(200).json({ message: 'Logout successful', isAuthenticated: false });
+    }
+  });
 });
 
 // Error handler
