@@ -126,7 +126,6 @@ const fetchAndDisplayPhotos = async () => {
     }
 
     const responseText = await response.text();
-    console.log('Raw response content:', responseText);
 
     const photos = JSON.parse(responseText);
     console.log('Received photos:', photos);
@@ -621,11 +620,6 @@ randomBtn.addEventListener('click', () => {
 submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked');
-
-  if (!accessToken) {
-    console.error('Access token is not available');
-    return;
-  }
 
   // Get selected tags and quantities from selected-tags-container
   const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-tag')).map(tagDiv => {
