@@ -23,7 +23,7 @@ const fetchConfig = async () => {
     const config = await response.json();
   
     googleClientID = config.GOOGLE_CLIENT_ID;
-    console.log('googleClientID LOADED.'); 
+    console.log('googleClientID LOADED...'); 
     
     initGoogleSignIn();
   } catch (error) {
@@ -54,21 +54,17 @@ const initGoogleSignIn = () => {
 
 // Sign in success callback
 const handleCredentialResponse = async (response) => {
-  console.log('handleCredentialResponse CALLED.');
+  console.log('handleCredentialResponse CALLED...');
   let decodedUserInfo;
   try {
-    console.log('Encoded JWT ID token RETRIEVED')
+    console.log('Encoded JWT ID token RETRIEVED...')
     decodedUserInfo = jwt_decode(response.credential);
-    console.log('Decoded User Info LOADED: ', decodedUserInfo);
+    console.log('Decoded User Info LOADED...');
   } catch (error) {
     console.error('Error decoding user credential:', error);
   }
 
     await googleAuth();
-    // await fetchAndDisplayPhotos();
-    // landingPage.classList.add('hide');
-    // flashCardPage.classList.remove('hide');
-    // toggleNav();
 };
 
 // Sign in failure callback
@@ -86,7 +82,7 @@ const checkAuthentication = async () => {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const data = await response.json();
-    console.log('Authentication check response:', data);
+    
     if (data.isAuthenticated) {
       console.log('User is authenticated.');
       sessionStorage.setItem('authenticationChecked', 'true');
@@ -128,7 +124,7 @@ const fetchAndDisplayPhotos = async () => {
     const responseText = await response.text();
 
     const photos = JSON.parse(responseText);
-    console.log('Received photos:', photos);
+    console.log('Photos data received from server.', photos);
 
     displayTags(photos);
 
@@ -140,7 +136,7 @@ const fetchAndDisplayPhotos = async () => {
 //* FETCH PHOTO DESCRIPTIONS
 const fetchDescriptions = async (photoData) => {
   const descriptions = await photoData.map(photo => photo.description).filter(description => description);
-  console.log('Fetched descriptions:', descriptions);
+  console.log('Photo descriptions parsed.');
   return descriptions;
 };
 
@@ -210,7 +206,7 @@ const displayTags = async (photoData) => {
 // const fetchDescriptions = async () => {
 //   const photos = await fetchPhotoData();
 //   const descriptions = photos.map(photo => photo.description).filter(description => description);
-//   console.log('Fetched descriptions:', descriptions);
+//   console.log('Photos data received from server.');
 //   return descriptions;
 // };
 
@@ -460,43 +456,17 @@ tagsList.addEventListener('click', (e) => {
 //* HELPER FUNCTIONS
 // Helper function to randomize array length based on user input
 const shuffleArray = (array) => {
+  console.log('Shuffling array...');
   console.log('Original Array:', array);
   
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    console.log(`Swapping elements at index ${i} and ${j}`);
+    // console.log(`Swapping elements at index ${i} and ${j}`); //todo can be deleted
     [array[i], array[j]] = [array[j], array[i]];
   }
 
   console.log('Shuffled Array:', array);
   return array;
-};
-
-// Helper function for displaying photos
-const displayPhotos = (photos) => {
-  console.log('displayPhotos called with', photos);
-  displayedImages.innerHTML = '';
-  const numPhotos = photos.length;
-  let flexBasis;
-
-  if (numPhotos > 6) {
-    flexBasis = `calc((100% / 5) - 2rem)`;
-  } else if (numPhotos > 4) {
-    flexBasis = `calc((100% / 4) - 2rem)`;
-  } else if (numPhotos > 1) {
-    flexBasis = `calc((100% / 3) - 2rem)`;
-  } else {
-    flexBasis = `calc(80% - 2rem)`;
-  }
-
-  for (let i = 0; i < numPhotos; i++) {
-    const img = document.createElement('img');
-    img.src = photos[i].baseUrl;
-    img.classList.add('image');
-    img.style.flexBasis = flexBasis;
-    console.log('Image URL:', img.src); 
-    displayedImages.appendChild(img);
-  }
 };
 
 // Helper function for filtering photos
@@ -519,6 +489,32 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   return filteredPhotos;
 };
 
+// Helper function for displaying photos
+const displayPhotos = (photos) => {
+  console.log('displayPhotos called...');
+  displayedImages.innerHTML = '';
+  const numPhotos = photos.length;
+  let flexBasis;
+
+  if (numPhotos > 6) {
+    flexBasis = `calc((100% / 5) - 2rem)`;
+  } else if (numPhotos > 4) {
+    flexBasis = `calc((100% / 4) - 2rem)`;
+  } else if (numPhotos > 1) {
+    flexBasis = `calc((100% / 3) - 2rem)`;
+  } else {
+    flexBasis = `calc(80% - 2rem)`;
+  }
+
+  for (let i = 0; i < numPhotos; i++) {
+    const img = document.createElement('img');
+    img.src = photos[i].baseUrl;
+    img.classList.add('image');
+    img.style.flexBasis = flexBasis;
+    // console.log('Image URL:', img.src);  //todo can be deleted
+    displayedImages.appendChild(img);
+  }
+};
 
 //* BUTTONS
 const toggleNav = () => {
@@ -628,7 +624,6 @@ submitBtn.addEventListener('click', async (e) => {
     return { tag, quantity };
   });
 
-  lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
   const photos = await fetchAndDisplayPhotos();
   const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
   displayPhotos(filteredPhotos);
@@ -637,6 +632,7 @@ submitBtn.addEventListener('click', async (e) => {
 });
 
 signoutBtn.addEventListener('click', async (e) => {
+  console.log('Sign out button clicked');
   e.preventDefault();
   try {
     // Call the server-side logout endpoint
