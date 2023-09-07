@@ -99,8 +99,8 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  // scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  scope: Photos.Scopes.READ_ONLY,
+  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  // scope: Photos.Scopes.READ_ONLY,
   include_granted_scopes: true,
   response_type: 'code',
 });
