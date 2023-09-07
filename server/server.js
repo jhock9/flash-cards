@@ -132,8 +132,8 @@ app.get('/oauth2callback', async (req, res) => {
     console.log('Attempting to get tokens with code...');
 
     const { tokens } = await oauth2Client.getToken(q.code);
-    console.log('Access Token:', tokens.access_token);
-    console.log('Refresh Token:', tokens.refresh_token);
+    // console.log('Access Token:', tokens.access_token);
+    // console.log('Refresh Token:', tokens.refresh_token);
 
     oauth2Client.setCredentials(tokens);
     console.log('Access Token set in OAuth2 client:', oauth2Client.credentials.access_token);
@@ -163,16 +163,10 @@ app.get('/getPhotos', async (req, res) => {
     //   auth: oauth2Client,
     // });
     
-    console.log('Tokens in photos oauth2client-C1:', photos.transport);
-    console.log('Tokens in photos oauth2client-C2:', photos.transport.authToken);
-    console.log('Tokens in photos oauth2client-C3:', photos.transport.authToken.credentials);
-    console.log('Tokens in photos oauth2client-C4:', photos.transport.authToken.credentials.access_token);
-    console.log('Tokens in photos oauth2client-C5:', photos.transport.authToken.credentials.refresh_token);
+    console.log('Tokens in photos oauth2client:', photos.transport.authToken.credentials);
 
     console.log('Trying request for /getPhotos and fetching media items');
-    const response = await photos.mediaItems.list({
-      pageSize: 100
-    });
+    const response = await photos.mediaItems.search();    
 
     console.log('Media items fetched successfully (response):', response);
     console.log('Media items fetched successfully:', response.data.mediaItems);
