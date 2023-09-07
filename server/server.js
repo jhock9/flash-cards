@@ -173,7 +173,7 @@ app.get('/getPhotos', async (req, res) => {
     console.log('Media items fetched successfully (response):', response);
     // console.log('Media items fetched successfully:', response.data.mediaItems);
 
-    res.json(response.data);
+    res.json(response);
   } catch (error) {
     console.error('Error in /getPhotos fetching media items:', error);
   }
