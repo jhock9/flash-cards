@@ -168,7 +168,7 @@ app.get('/getPhotos', async (req, res) => {
     });
 
     const mediaItems = response.data.mediaItems;
-    console.log('Received media items:', mediaItems);
+    console.log('Received media items...');
     res.json(response.data.mediaItems);
 
     // const photos = new Photos(oauth2Client);

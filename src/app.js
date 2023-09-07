@@ -337,7 +337,7 @@ dropdown.addEventListener('change', () => {
   
     // Deselect the tag in the tags-list
     const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-    tagSpan.classList.remove('selected');
+    tagSpan.classList.remove('selected'); 
   });
   
   tagDiv.appendChild(slider);
@@ -532,7 +532,7 @@ openBtn.addEventListener('click', toggleNav);
 
 refreshBtn.addEventListener('click', async () => {
   if (lastSelectedTagsAndQuantities !== null) {
-    const photos = await fetchPhotoData(accessToken);
+    const photos = await fetchAndDisplayPhotos();
     const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
     displayPhotos(filteredPhotos);
   }
@@ -629,7 +629,7 @@ submitBtn.addEventListener('click', async (e) => {
   });
 
   lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
-  const photos = await fetchPhotoData(accessToken);
+  const photos = await fetchAndDisplayPhotos();
   const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
   displayPhotos(filteredPhotos);
 

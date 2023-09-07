@@ -294,7 +294,7 @@ padding: .3rem 0 0 .5rem;
 }
 
 #selected-tags-container .name,
-#tags-list .name.selected {
+#tags-list .name .selected {
   color: var(--white);
   background-color: var(--third-color);
   border-color: var(--white);
