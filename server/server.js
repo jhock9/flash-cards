@@ -129,15 +129,16 @@ app.get('/oauth2callback', async (req, res) => {
       return;
     }
     // Get access and refresh tokens
-    console.log('Attempting to get tokens with code:', q.code);
+    console.log('Attempting to get tokens with code...');
 
     const { tokens } = await oauth2Client.getToken(q.code);
-    console.log('Tokens received:', tokens.access_token, tokens.refresh_token);
+    console.log('Access Token:', tokens.access_token);
+    console.log('Refresh Token:', tokens.refresh_token);
 
     oauth2Client.setCredentials(tokens);
-    console.log('Credentials set in OAuth2 client:,', oauth2Client);
-    console.log('Tokens set in OAuth2 client:', oauth2Client.credentials.access_token, oauth2Client.credentials.refresh_token);
-
+    console.log('Access Token set in OAuth2 client:', oauth2Client.credentials.access_token);
+    console.log('Refresh Token set in OAuth2 client:', oauth2Client.credentials.refresh_token);
+    
     req.session.isAuthenticated = true;
     
     res.redirect('/flashcards');
@@ -162,23 +163,11 @@ app.get('/getPhotos', async (req, res) => {
     //   auth: oauth2Client,
     // });
     
-    // console.log('Photos Library API request prepared:', photos);
-    console.log('Tokens in photos oauth2client-A1:', photos.authToken);
-    console.log('Tokens in photos oauth2client-A2:', photos.authToken.credentials);
-    console.log('Tokens in photos oauth2client-A3:', photos.authToken.credentials.access_token);
-    console.log('Tokens in photos oauth2client-A4:', photos.authToken.credentials.refresh_token);
-
-    console.log('Tokens in photos oauth2client-B1:', photos.authToken.oauth2Client);
-    console.log('Tokens in photos oauth2client-B2:', photos.authToken.oauth2Client.credentials);
-    console.log('Tokens in photos oauth2client-B3:', photos.authToken.oauth2Client.credentials.access_token)
-    console.log('Tokens in photos oauth2client-B4:', photos.authToken.oauth2Client.credentials.refresh_token);
-
     console.log('Tokens in photos oauth2client-C1:', photos.transport);
     console.log('Tokens in photos oauth2client-C2:', photos.transport.authToken);
     console.log('Tokens in photos oauth2client-C3:', photos.transport.authToken.credentials);
     console.log('Tokens in photos oauth2client-C4:', photos.transport.authToken.credentials.access_token);
     console.log('Tokens in photos oauth2client-C5:', photos.transport.authToken.credentials.refresh_token);
-  
 
     console.log('Trying request for /getPhotos and fetching media items');
     const response = await photos.mediaItems.list({
