@@ -157,16 +157,18 @@ app.get('/getPhotos', async (req, res) => {
     console.log('Initializing Google Photos client...');
     
     const photos = new Photos(oauth2Client);
+    console.log('photos:', photos);
 
     // const photos = google.photoslibrary({
     //   version: 'v1',
     //   auth: oauth2Client,
     // });
     
-    console.log('Tokens in photos oauth2client:', photos.transport.authToken.credentials);
+    console.log('Access token in photos oauth2client:', photos.transport.authToken.credentials.access_token);
+    console.log('Refresh token in photos oauth2client:', photos.transport.authToken.credentials.refresh_token);
 
     console.log('Trying request for /getPhotos and fetching media items');
-    const response = await photos.mediaItems.search();    
+    const response = await photos.mediaItems;    
 
     console.log('Media items fetched successfully (response):', response);
     console.log('Media items fetched successfully:', response.data.mediaItems);
