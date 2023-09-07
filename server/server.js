@@ -1,13 +1,14 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-const app = express();
 const cors = require('cors');
-const url = require('url');
-const port = process.env.PORT || 3003;
-const { google } = require('googleapis');
 const session = require('express-session');
-// const Photos = require('googlephotos');
+const { google } = require('googleapis');
+const Photos = require('googlephotos');
+const url = require('url');
+
+const app = express();
+const port = process.env.PORT || 3003;
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -98,8 +99,8 @@ console.log('OAuth2 client CREATED: ', oauth2Client);
 // Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
-  scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  // scope: Photos.Scopes.READ_ONLY,
+  // scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  scope: Photos.Scopes.READ_ONLY,
   include_granted_scopes: true,
   response_type: 'code',
 });
@@ -153,10 +154,12 @@ app.get('/getPhotos', async (req, res) => {
     // Initialize the Google Photos client
     console.log('Initializing Google Photos client...');
     
-    const photos = google.photoslibrary({
-      version: 'v1',
-      auth: oauth2Client,
-    });
+    const photos = new Photos(oauth2Client);
+
+    // const photos = google.photoslibrary({
+    //   version: 'v1',
+    //   auth: oauth2Client,
+    // });
     console.log('Photos Library API request prepared:', photos);
 
     console.log('Trying request for /getPhotos and fetching media items');
