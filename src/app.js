@@ -471,6 +471,9 @@ const shuffleArray = (array) => {
 
 // Helper function for filtering photos
 const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
+  console.log('filterPhotosByTags called...');
+  console.log('Received photos:', photos);
+
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
 
