@@ -99,7 +99,6 @@ console.log('OAuth2 client CREATED...');
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline', // Gets refresh token
   scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-  // scope: Photos.Scopes.READ_ONLY,
   include_granted_scopes: true,
   response_type: 'code',
 });
@@ -131,8 +130,6 @@ app.get('/oauth2callback', async (req, res) => {
     console.log('Attempting to get tokens with code...');
 
     const { tokens } = await oauth2Client.getToken(q.code);
-    // console.log('Access Token:', tokens.access_token);
-    // console.log('Refresh Token:', tokens.refresh_token);
 
     oauth2Client.setCredentials(tokens);
     console.log('Tokens set in OAuth2 client.');
