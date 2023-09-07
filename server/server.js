@@ -148,7 +148,6 @@ app.get('/getPhotos', async (req, res) => {
   console.log('Received request for /getPhotos...');
 
   try {
-    // Initialize the Google Photos client
     console.log('Initializing Google Photos client...');
     
     const params = {
