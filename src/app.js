@@ -128,7 +128,7 @@ const fetchAndDisplayPhotos = async () => {
     const responseText = await response.text();
     console.log('Raw response content:', responseText);
 
-    const photos = await response.json();
+    const photos = JSON.parse(responseText);
     console.log('Received photos:', photos);
 
     displayTags(photos);
