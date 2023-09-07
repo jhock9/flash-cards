@@ -7,6 +7,7 @@ const url = require('url');
 const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
 const session = require('express-session');
+const axios = require('axios');
 // const Photos = require('googlephotos');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -155,38 +156,27 @@ app.get('/getPhotos', async (req, res) => {
     // Initialize the Google Photos client
     console.log('Initializing Google Photos client...');
     
+    const params = {
+      pageSize: 100,
+    };
+  
+    const response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
+      headers: {
+        'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const mediaItems = response.data.mediaItems;
+    console.log('Received media items:', mediaItems);
+    res.json(response.data.mediaItems);
+
     // const photos = new Photos(oauth2Client);
 
-    const photos = google.photoslibrary({
-      version: 'v1',
-      auth: oauth2Client,
-    });
-    
-    console.log('photos:', photos);
+    // console.log('photos:', photos);
     
     // console.log('Access token in photos oauth2client:', photos.transport.authToken.credentials.access_token);
     // console.log('Refresh token in photos oauth2client:', photos.transport.authToken.credentials.refresh_token);
-
-    // Define your parameters
-    const params = {
-      pageSize: 100, // Adjust this value as needed
-    };
-
-    // Make the request to fetch media items
-    photos.mediaItems.search(params, (err, response) => {
-      if (err) {
-        console.error('Error fetching media items:', err);
-        res.status(500).json({ error: 'Internal server error' });
-        return;
-      }
-
-      // Extract the media items from the response
-      const mediaItems = response.data.mediaItems;
-      console.log('Received media items:', mediaItems);
-
-      // Send the media items as a JSON response
-      res.json(mediaItems);
-    });
 
     // console.log('Trying request for /getPhotos and fetching media items');
     // const response = await photos.mediaItems;    
