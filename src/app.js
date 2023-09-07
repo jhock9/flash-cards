@@ -128,6 +128,7 @@ const fetchAndDisplayPhotos = async () => {
 
     displayTags(photos);
 
+    return photos;
   } catch (error) {
     console.error('Error fetching photos:', error);
   }
