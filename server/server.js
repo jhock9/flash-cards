@@ -96,22 +96,18 @@ const oauth2Client = new google.auth.OAuth2(
 console.log('OAuth2 client CREATED: ', oauth2Client);
 
 // Generate the URL that will be used for the consent dialog
-const generateAuthUrl = () => {
-  return oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
-    // scope: Photos.Scopes.READ_ONLY,
-    include_granted_scopes: true,
-    response_type: 'code',
-  });
-};
+const authUrl = oauth2Client.generateAuthUrl({
+  access_type: 'offline', // Gets refresh token
+  // scope: 'https://www.googleapis.com/auth/photoslibrary.readonly',
+  scope: Photos.Scopes.READ_ONLY,
+  include_granted_scopes: true,
+  response_type: 'code',
+});
+console.log('Authorize this app by visiting this URL:', authUrl);
 
 // Redirect to Google's OAuth 2.0 server
 app.get('/authorize', (req, res) => {
   console.log('Received request for /authorize');
-  const authUrl = generateAuthUrl();
-  console.log('Authorize this app by visiting this URL:', authUrl);
-
   res.redirect(authUrl);
   console.log("Redirected to Google's OAuth 2.0 server");
   // This response will be sent back to the specified redirect URL 
@@ -125,23 +121,25 @@ app.get('/oauth2callback', async (req, res) => {
     console.log('Received request for /oauth2callback');
     const q = url.parse(req.url, true).query;
     console.log('Parsed query parameters:', q);
-
+    
     if (q.error) {
       console.error('Error in query parameters:', q.error);
       res.status(400).send('Authentication failed');
       return;
     }
     // Get access and refresh tokens
-    console.log('Attempting to get tokens with code:', q.code);
+    console.log('Attempting to get tokens with code...');
 
     const { tokens } = await oauth2Client.getToken(q.code);
-    console.log('Received tokens:', tokens);
+    // console.log('Access Token:', tokens.access_token);
+    // console.log('Refresh Token:', tokens.refresh_token);
 
     oauth2Client.setCredentials(tokens);
-    console.log('Credentials set in OAuth2 client:', oauth2Client);
-
+    console.log('Access Token set in OAuth2 client:', oauth2Client.credentials.access_token);
+    console.log('Refresh Token set in OAuth2 client:', oauth2Client.credentials.refresh_token);
+    
     req.session.isAuthenticated = true;
-
+    
     res.redirect('/flashcards');
   } catch (error) {
     console.error('ERROR in /oauth2callback:', error);
@@ -150,42 +148,56 @@ app.get('/oauth2callback', async (req, res) => {
 });
 
 //* Photos Library API
-// Prepare the Photos Library API request
-const photos = google.photoslibrary({
-  version: 'v1',
-  auth: oauth2Client,
-});
-console.log('Photos Library API request prepared:', photos);
-
-const fetchPhotos = async () => {
-  try {
-    console.log('Trying request for /getPhotos and fetching media items');
-    const response = await photos.mediaItems.list({
-      pageSize: 100,
-    });
-
-    console.log('Media items fetched successfully (response):', response);
-    console.log('Media items fetched successfully:', response.data.mediaItems);
-    
-    return response.data.mediaItems;
-  } catch (error) {
-    console.error('Error fetching media items:', error);
-    throw error;
-  }
-};
-
-// Fetch photos from Google Photos API
 app.get('/getPhotos', async (req, res) => {
   console.log('Received request for /getPhotos.');
 
   try {
-    const mediaItems = await fetchPhotos();
+    // Initialize the Google Photos client
+    console.log('Initializing Google Photos client...');
+    
+    // const photos = new Photos(oauth2Client);
 
-    res.json(mediaItems);
+    const photos = google.photoslibrary({
+      version: 'v1',
+      auth: oauth2Client,
+    });
+    
+    console.log('photos:', photos);
+    
+    // console.log('Access token in photos oauth2client:', photos.transport.authToken.credentials.access_token);
+    // console.log('Refresh token in photos oauth2client:', photos.transport.authToken.credentials.refresh_token);
+
+    // Define your parameters
+    const params = {
+      pageSize: 100, // Adjust this value as needed
+    };
+
+    // Make the request to fetch media items
+    photos.mediaItems.search(params, (err, response) => {
+      if (err) {
+        console.error('Error fetching media items:', err);
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+      }
+
+      // Extract the media items from the response
+      const mediaItems = response.data.mediaItems;
+      console.log('Received media items:', mediaItems);
+
+      // Send the media items as a JSON response
+      res.json(mediaItems);
+    });
+
+    // console.log('Trying request for /getPhotos and fetching media items');
+    // const response = await photos.mediaItems;    
+
+    // console.log('Media items fetched successfully (response):', response);
+    // // console.log('Media items fetched successfully:', response.data.mediaItems);
+
+    // res.json(response);
   } catch (error) {
-    //add console message
     console.error('Error in /getPhotos route:', error);
-    res.status(500).send(`Something went wrong! Error: ${error.message}`);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
