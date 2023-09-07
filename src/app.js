@@ -125,9 +125,9 @@ const fetchAndDisplayPhotos = async () => {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const photos = await response.json();
-    console.log('Received photos:', photos.mediaItems);
+    console.log('Received photos:', photos);
 
-    displayTags(photos.mediaItems);
+    displayTags(photos);
 
   } catch (error) {
     console.error('Error fetching photos:', error);
