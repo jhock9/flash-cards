@@ -8,7 +8,6 @@ const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
 const session = require('express-session');
 const axios = require('axios');
-// const Photos = require('googlephotos');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -94,7 +93,7 @@ const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_SECRET,
   REDIRECT_URL,
 );
-console.log('OAuth2 client CREATED: ', oauth2Client);
+console.log('OAuth2 client CREATED...');
 
 // Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({
@@ -104,13 +103,13 @@ const authUrl = oauth2Client.generateAuthUrl({
   include_granted_scopes: true,
   response_type: 'code',
 });
-console.log('Authorize this app by visiting this URL:', authUrl);
+console.log('OAuth2 client AUTH URL generated...');
 
 // Redirect to Google's OAuth 2.0 server
 app.get('/authorize', (req, res) => {
-  console.log('Received request for /authorize');
+  console.log('Received request for /authorize...');
   res.redirect(authUrl);
-  console.log("Redirected to Google's OAuth 2.0 server");
+  console.log("Redirected to Google's OAuth 2.0 server...");
   // This response will be sent back to the specified redirect URL 
   // with endpoint /oauth2callback
 });
@@ -119,9 +118,9 @@ app.get('/authorize', (req, res) => {
 // Exchange authorization code for access and refresh tokens
 app.get('/oauth2callback', async (req, res) => {
   try {
-    console.log('Received request for /oauth2callback');
+    console.log('Received request for /oauth2callback...');
     const q = url.parse(req.url, true).query;
-    console.log('Parsed query parameters:', q);
+    console.log('Query parameters parsed...');
     
     if (q.error) {
       console.error('Error in query parameters:', q.error);
@@ -136,8 +135,7 @@ app.get('/oauth2callback', async (req, res) => {
     // console.log('Refresh Token:', tokens.refresh_token);
 
     oauth2Client.setCredentials(tokens);
-    console.log('Access Token set in OAuth2 client:', oauth2Client.credentials.access_token);
-    console.log('Refresh Token set in OAuth2 client:', oauth2Client.credentials.refresh_token);
+    console.log('Tokens set in OAuth2 client.');
     
     req.session.isAuthenticated = true;
     
@@ -150,7 +148,7 @@ app.get('/oauth2callback', async (req, res) => {
 
 //* Photos Library API
 app.get('/getPhotos', async (req, res) => {
-  console.log('Received request for /getPhotos.');
+  console.log('Received request for /getPhotos...');
 
   try {
     // Initialize the Google Photos client
@@ -166,25 +164,9 @@ app.get('/getPhotos', async (req, res) => {
         'Content-Type': 'application/json',
       },
     });
-
-    const mediaItems = response.data.mediaItems;
     console.log('Received media items...');
+
     res.json(response.data.mediaItems);
-
-    // const photos = new Photos(oauth2Client);
-
-    // console.log('photos:', photos);
-    
-    // console.log('Access token in photos oauth2client:', photos.transport.authToken.credentials.access_token);
-    // console.log('Refresh token in photos oauth2client:', photos.transport.authToken.credentials.refresh_token);
-
-    // console.log('Trying request for /getPhotos and fetching media items');
-    // const response = await photos.mediaItems;    
-
-    // console.log('Media items fetched successfully (response):', response);
-    // // console.log('Media items fetched successfully:', response.data.mediaItems);
-
-    // res.json(response);
   } catch (error) {
     console.error('Error in /getPhotos route:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -193,7 +175,7 @@ app.get('/getPhotos', async (req, res) => {
 
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
-  console.log('Session in /is-authenticated:', req.session);
+  console.log('Received request for /is-authenticated...');
   if (req.session && req.session.isAuthenticated) {
     res.status(200).json({ isAuthenticated: true });
   } else {
@@ -208,7 +190,7 @@ app.post('/logout', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'Server error: Failed to destroy session', isAuthenticated: true });
     } else {
-      console.log('Session destroyed successfully');
+      console.log('Session destroyed successfully. User logged out.');
       res.status(200).json({ message: 'Logout successful', isAuthenticated: false });
     }
   });
