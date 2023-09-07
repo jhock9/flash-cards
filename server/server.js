@@ -105,12 +105,13 @@ const generateAuthUrl = () => {
     response_type: 'code',
   });
 };
-console.log('Authorize this app by visiting this URL:', authUrl);
 
 // Redirect to Google's OAuth 2.0 server
 app.get('/authorize', (req, res) => {
   console.log('Received request for /authorize');
   const authUrl = generateAuthUrl();
+  console.log('Authorize this app by visiting this URL:', authUrl);
+
   res.redirect(authUrl);
   console.log("Redirected to Google's OAuth 2.0 server");
   // This response will be sent back to the specified redirect URL 
