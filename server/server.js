@@ -86,7 +86,7 @@ app.get('/config', (req, res) => {
   });
 });
 
-//* OAuth 2.0
+//* OAUTH 2.0
 // Set up your OAuth2 client for the API
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
@@ -113,7 +113,7 @@ app.get('/authorize', (req, res) => {
   // with endpoint /oauth2callback
 });
 
-//* Handling the OAuth 2.0 server response
+//* HANDLING THE OAUTH 2.0 SERVER RESPONSE
 // Exchange authorization code for access and refresh tokens
 app.get('/oauth2callback', async (req, res) => {
   try {
@@ -143,7 +143,7 @@ app.get('/oauth2callback', async (req, res) => {
   }
 });
 
-//* Photos Library API
+//* PHOTOS LIBRARY API
 app.get('/getPhotos', async (req, res) => {
   console.log('Received request for /getPhotos...');
 
