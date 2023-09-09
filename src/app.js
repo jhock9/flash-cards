@@ -461,7 +461,7 @@ refreshBtn.addEventListener('click', async () => {
   console.log('Refresh button clicked...');
   if (lastSelectedTagsAndQuantities !== null) {
     if (photos) {
-      const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
+      const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
       displayPhotos(filteredPhotos);
     } else {
       console.error('Photos data is not available. Fetch it first.');
