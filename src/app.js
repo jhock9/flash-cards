@@ -382,7 +382,7 @@ tagsList.addEventListener('click', (e) => {
 });
 
 //* HELPER FUNCTIONS
-const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
+const filterPhotosByTags = (selectedTagsAndQuantities) => {
   console.log('filterPhotosByTags called...');
   console.log('Received photos:', photos);
   
@@ -451,11 +451,13 @@ const toggleNav = () => {
 
 //* BUTTONS
 openBtn.addEventListener('click', async () => {
+  console.log('Open button clicked...');
   await fetchPhotosData();
   toggleNav();
 });
 
 refreshBtn.addEventListener('click', async () => {
+  console.log('Refresh button clicked...');
   if (lastSelectedTagsAndQuantities !== null) {
     const photos = await fetchPhotosData();
     const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
@@ -464,7 +466,7 @@ refreshBtn.addEventListener('click', async () => {
 });
 
 resetBtn.addEventListener('click', () => {
-  console.log('Reset button clicked');
+  console.log('Reset button clicked...');
   selectedTags = [];
   
   // Remove all selected tags from selected-tags-container
@@ -483,7 +485,7 @@ resetBtn.addEventListener('click', () => {
 });
 
 randomBtn.addEventListener('click', () => {
-  console.log('Random button clicked');
+  console.log('Random button clicked...');
   resetBtn.click();
   
   // Get all available tags
@@ -541,9 +543,9 @@ randomBtn.addEventListener('click', () => {
   }, 0);
 });
 
-submitBtn.addEventListener('click', async (e, photos) => {
+submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
-  console.log('Submit button clicked');
+  console.log('Submit button clicked...');
   
   // Get selected tags and quantities from selected-tags-container
   const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-tag')).map(tagDiv => {
@@ -565,7 +567,7 @@ submitBtn.addEventListener('click', async (e, photos) => {
 });
 
 signoutBtn.addEventListener('click', async (e) => {
-  console.log('Sign out button clicked');
+  console.log('Sign out button clicked...');
   e.preventDefault();
   try {
     // Call the server-side logout endpoint
