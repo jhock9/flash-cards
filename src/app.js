@@ -112,6 +112,7 @@ window.addEventListener('beforeunload', () => {
 
 //* FETCH PHOTOS DATA AND DISPLAY TAGS
 const fetchPhotosData = async () => {
+  console.log('Fetching photos data...');
   try {
     const response = await fetch('/getPhotos');
     if (!response.ok) {
@@ -133,6 +134,7 @@ const fetchPhotosData = async () => {
 
 // Display tags
 const displayTags = async (photoData) => {
+  console.log('Displaying tags...');
   const descriptions = await fetchDescriptions(photoData);
   
   // Count tags
@@ -179,7 +181,7 @@ const displayTags = async (photoData) => {
 // Fetch descriptions
 const fetchDescriptions = async (photoData) => {
   const descriptions = await photoData.map(photo => photo.description).filter(description => description);
-  console.log('Photo descriptions parsed.');
+  console.log('Photo descriptions parsed...');
   return descriptions;
 };
   
@@ -459,7 +461,7 @@ openBtn.addEventListener('click', async () => {
 refreshBtn.addEventListener('click', async () => {
   console.log('Refresh button clicked...');
   if (lastSelectedTagsAndQuantities !== null) {
-    const photos = await fetchPhotosData();
+    photos = await fetchPhotosData();
     const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
     displayPhotos(filteredPhotos);
   }
