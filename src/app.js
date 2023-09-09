@@ -382,7 +382,7 @@ tagsList.addEventListener('click', (e) => {
 });
 
 //* HELPER FUNCTIONS
-const filterPhotosByTags = (selectedTagsAndQuantities) => {
+const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   console.log('filterPhotosByTags called...');
   console.log('Received photos:', photos);
   
@@ -452,8 +452,8 @@ const toggleNav = () => {
 //* BUTTONS
 openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
-  await fetchPhotosData();
   toggleNav();
+  await fetchPhotosData();
 });
 
 refreshBtn.addEventListener('click', async () => {
