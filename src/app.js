@@ -219,7 +219,7 @@ dropdown.addEventListener('change', () => {
   
   selectedTags.push(selectedTag);
   dropdown.selectedIndex = 0;
-    toggleBorders
+  toggleBorders();
   // Create a new div for the selected tag
   const tagDiv = document.createElement('div');
   tagDiv.classList.add('selected-tag', 'center');
