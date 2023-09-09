@@ -121,7 +121,6 @@ const fetchPhotosData = async () => {
     
     const responseText = await response.text();
     
-    photos = null;
     photos = JSON.parse(responseText);
     console.log('Photos data received from server.', photos);
     
@@ -454,16 +453,19 @@ const toggleNav = () => {
 //* BUTTONS
 openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
-  toggleNav();
   await fetchPhotosData();
+  toggleNav();
 });
 
 refreshBtn.addEventListener('click', async () => {
   console.log('Refresh button clicked...');
   if (lastSelectedTagsAndQuantities !== null) {
-    photos = await fetchPhotosData();
-    const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
-    displayPhotos(filteredPhotos);
+    if (photos) {
+      const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
+      displayPhotos(filteredPhotos);
+    } else {
+      console.error('Photos data is not available. Fetch it first.');
+    }
   }
 });
 
@@ -559,7 +561,7 @@ submitBtn.addEventListener('click', async (e) => {
   lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
 
   if (photos) {
-    const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities);
+    const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
     displayPhotos(filteredPhotos);
   } else {
     console.error('Photos data is not available. Fetch it first.');
