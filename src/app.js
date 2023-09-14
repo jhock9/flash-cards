@@ -11,12 +11,11 @@ const selectedTagsContainer = document.querySelector('#selected-tags-container')
 const removeBtns = document.querySelectorAll(".remove-btn");
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
-// const tagsSelected = tagsList.querySelectorAll('.name');
 const displayedImages = document.querySelector('#images-container');
 
 let googleClientID; 
 let lastSelectedTagsAndQuantities;
-let photos = null;
+let photos;
 
 const fetchConfig = async () => {
   try {
@@ -281,6 +280,8 @@ dropdown.addEventListener('change', () => {
 
 // Select tags from tags-list
 tagsList.addEventListener('click', (e) => {
+  tagsList.innerHTML = '';
+  
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
     
