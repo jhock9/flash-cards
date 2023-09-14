@@ -177,9 +177,12 @@ footer p {
 #item-selection-form {
   width: 100%;
   max-width: 38rem;
+  height: 100%;
   margin: 2rem 0;
   background-color: var(--second-color);
   overflow: hidden;
+  flex-direction: column;
+  flex: 1;
 }
 
 #reset-btn,
@@ -209,13 +212,14 @@ padding: .3rem 0 0 .5rem;
 }
 
 #tags-wrapper {
-  flex-direction: column;
   width: 100%;
-  margin: 1.5rem 0;
-  padding: 0;
+  margin: 0;
+  padding-top: 1.5rem;
+  overflow: hidden;
+  flex: 1;
+  flex-direction: column;
 }
 
-#tags-wrapper,
 #selected-tags-container {
   width: 100%;
   margin: 0;
@@ -320,9 +324,12 @@ padding: .3rem 0 0 .5rem;
 
 #tags-list {
   align-content: flex-start; 
-  width: 80%;
-  padding-bottom: 2rem;
-  transition: max-height 0.2s ease-out;
+  height: calc(100% - 4rem);
+  width: 85%;
+  padding: 0;
+  margin-top: 1rem;
+  transition: 0.2s ease-out;
+  flex: 1;
   overflow-y: auto;
 }
 
@@ -366,7 +373,7 @@ padding: .3rem 0 0 .5rem;
   position: sticky;
   bottom: 0;
   width: 100%;
-  margin-top: auto;
+  margin-bottom: 1rem; 
   z-index: 2;
   align-items: flex-end;
 }
@@ -457,7 +464,6 @@ main {
   border-radius: .5rem;
 }
 
-
 /*=====================================================================================
   Media Queries for Responsive Design     
 =====================================================================================*/
@@ -485,7 +491,7 @@ main {
     display: none;
   }
 
-  footer {
+  footer {dfs
     padding: 1.5rem 0;
   }
 
