@@ -132,6 +132,8 @@ const fetchPhotosData = async () => {
 
 // Display tags
 const displayTags = async (photoData) => {
+  tagsList.innerHTML = '';
+
   console.log('Displaying tags...');
   const descriptions = await fetchDescriptions(photoData);
   
@@ -279,9 +281,7 @@ dropdown.addEventListener('change', () => {
 });
 
 // Select tags from tags-list
-tagsList.addEventListener('click', (e) => {
-  tagsList.innerHTML = '';
-  
+tagsList.addEventListener('click', (e) => {  
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
     
