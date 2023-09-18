@@ -8,12 +8,12 @@ const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
 const session = require('express-session');
 const axios = require('axios');
-const morgan = require('morgan');
-const winston = require('winston');
-const { combine, timestamp, colorize, errors, json } = winston.format;
+// const morgan = require('morgan');
+// const winston = require('winston');
+// const { combine, timestamp, colorize, errors, json } = winston.format;
 
-// const morganMiddleware = require('./morgan.js');
-// const logger = require('./winston.js');
+const morganMiddleware = require('./morgan.js');
+const logger = require('./winston.js');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -73,28 +73,26 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-// app.use(morganMiddleware);
+app.use(morganMiddleware);
 
-app.use(morgan('combined'));
+// app.use(morgan('combined'));
 
-const logger = winston.createLogger({
-  level: 'debug',
-  format: combine(
-    timestamp({
-      format: 'YYYY-MM-DD hh:mm:ss:ms A',
-    }),
-    colorize({ all: true }),
-    errors({ stack: true }),
-    json()
-  ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error', }),
-    new winston.transports.File({ filename: 'logs/all.log' }),
-  ],
-});
-
-
+// const logger = winston.createLogger({
+//   level: 'debug',
+//   format: combine(
+//     timestamp({
+//       format: 'YYYY-MM-DD hh:mm:ss:ms A',
+//     }),
+//     colorize({ all: true }),
+//     errors({ stack: true }),
+//     json()
+//   ),
+//   transports: [
+//     new winston.transports.Console(),
+//     new winston.transports.File({ filename: 'logs/error.log', level: 'error', }),
+//     new winston.transports.File({ filename: 'logs/all.log' }),
+//   ],
+// });
 
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
