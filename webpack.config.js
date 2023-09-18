@@ -48,7 +48,7 @@ module.exports = {
         { from: 'src/assets', to: 'assets' },
         { from: 'src/main.css', to: './' },
         { from: 'src/favicon.ico', to: './' },
-        { from: 'src/support', to: 'support' }, 
+        // { from: 'src/support', to: 'support' }, 
       ],
     }),
     new Dotenv({
