@@ -8,6 +8,12 @@ const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
 const session = require('express-session');
 const axios = require('axios');
+const morgan = require('morgan');
+const winston = require('winston');
+const { combine, timestamp, colorize, errors, json } = winston.format;
+
+// const morganMiddleware = require('./morgan.js');
+// const logger = require('./winston.js');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -15,20 +21,20 @@ const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
-// // Enforce HTTPS redirection in production
-// if (NODE_ENV === 'production') {
-//   app.use((req, res, next) => {
-//     if (req.header('x-forwarded-proto') !== 'https') {
-//       res.redirect(`https://${req.header('host')}${req.url}`);
-//     } else {
-//       next();
-//     }
-//   });
-// }
+// Enforce HTTPS redirection in production
+if (NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`);
+    } else {
+      next();
+    }
+  });
+}
 
 // Log serving file
 app.use((req, res, next) => {
-  console.log(`Serving file at path: ${req.path}`);
+  logger.info(`Serving file at path: ${req.path}`);
   next();
 });
 
@@ -67,6 +73,29 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+// app.use(morganMiddleware);
+
+app.use(morgan('combined'));
+
+const logger = winston.createLogger({
+  level: 'debug',
+  format: combine(
+    timestamp({
+      format: 'YYYY-MM-DD hh:mm:ss:ms A',
+    }),
+    colorize({ all: true }),
+    errors({ stack: true }),
+    json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error', }),
+    new winston.transports.File({ filename: 'logs/all.log' }),
+  ],
+});
+
+
+
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
@@ -93,7 +122,7 @@ const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_SECRET,
   REDIRECT_URL,
 );
-console.log('OAuth2 client CREATED...');
+logger.info('OAuth2 client CREATED...');
 
 // Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({
@@ -102,13 +131,13 @@ const authUrl = oauth2Client.generateAuthUrl({
   include_granted_scopes: true,
   response_type: 'code',
 });
-console.log('OAuth2 client AUTH URL generated...');
+logger.info('OAuth2 client AUTH URL generated...');
 
 // Redirect to Google's OAuth 2.0 server
 app.get('/authorize', (req, res) => {
-  console.log('Received request for /authorize...');
+  logger.info('Received request for /authorize...');
   res.redirect(authUrl);
-  console.log("Redirected to Google's OAuth 2.0 server...");
+  logger.info("Redirected to Google's OAuth 2.0 server...");
   // This response will be sent back to the specified redirect URL 
   // with endpoint /oauth2callback
 });
@@ -117,38 +146,38 @@ app.get('/authorize', (req, res) => {
 // Exchange authorization code for access and refresh tokens
 app.get('/oauth2callback', async (req, res) => {
   try {
-    console.log('Received request for /oauth2callback...');
+    logger.info('Received request for /oauth2callback...');
     const q = url.parse(req.url, true).query;
-    console.log('Query parameters parsed...');
+    logger.info('Query parameters parsed...');
     
     if (q.error) {
-      console.error('Error in query parameters:', q.error);
+      logger.error('Error in query parameters:', q.error);
       res.status(400).send('Authentication failed');
       return;
     }
     // Get access and refresh tokens
-    console.log('Attempting to get tokens with code...');
+    logger.info('Attempting to get tokens with code...');
 
     const { tokens } = await oauth2Client.getToken(q.code);
 
     oauth2Client.setCredentials(tokens);
-    console.log('Tokens set in OAuth2 client.');
+    logger.info('Tokens set in OAuth2 client.');
     
     req.session.isAuthenticated = true;
     
     res.redirect('/flashcards');
   } catch (error) {
-    console.error('ERROR in /oauth2callback:', error);
+    logger.error('ERROR in /oauth2callback:', error);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
 
 //* PHOTOS LIBRARY API
 app.get('/getPhotos', async (req, res) => {
-  console.log('Received request for /getPhotos...');
+  logger.info('Received request for /getPhotos...');
 
   try {
-    console.log('Initializing Google Photos client...');
+    logger.info('Initializing Google Photos client...');
     
     const params = {
       pageSize: 100,
@@ -160,18 +189,18 @@ app.get('/getPhotos', async (req, res) => {
         'Content-Type': 'application/json',
       },
     });
-    console.log('Received media items...');
+    logger.info('Received media items...');
 
     res.json(response.data.mediaItems);
   } catch (error) {
-    console.error('Error in /getPhotos route:', error);
+    logger.error('Error in /getPhotos route:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 // Check if user is authenticated
 app.get('/is-authenticated', (req, res) => {
-  console.log('Received request for /is-authenticated...');
+  logger.info('Received request for /is-authenticated...');
   if (req.session && req.session.isAuthenticated) {
     res.status(200).json({ isAuthenticated: true });
   } else {
@@ -183,10 +212,10 @@ app.get('/is-authenticated', (req, res) => {
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      console.error(err);
+      logger.error(err);
       res.status(500).json({ message: 'Server error: Failed to destroy session', isAuthenticated: true });
     } else {
-      console.log('Session destroyed successfully. User logged out.');
+      logger.info('Session destroyed successfully. User logged out.');
       res.status(200).json({ message: 'Logout successful', isAuthenticated: false });
     }
   });
@@ -194,7 +223,7 @@ app.post('/logout', (req, res) => {
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.error(err);
+  logger.error(err);
   res.status(500).send('Something went wrong!');
 });
 

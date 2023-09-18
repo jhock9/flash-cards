@@ -6,6 +6,7 @@ Thumbs.db
 # Ignore folders 
 /node_modules/
 /zsh-syntax-highlighting/
+/server/logs/
 
 # Ignore files with private information
 .env
