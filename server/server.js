@@ -15,16 +15,16 @@ const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
-// Enforce HTTPS redirection in production
-if (NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https') {
-      res.redirect(`https://${req.header('host')}${req.url}`);
-    } else {
-      next();
-    }
-  });
-}
+// // Enforce HTTPS redirection in production
+// if (NODE_ENV === 'production') {
+//   app.use((req, res, next) => {
+//     if (req.header('x-forwarded-proto') !== 'https') {
+//       res.redirect(`https://${req.header('host')}${req.url}`);
+//     } else {
+//       next();
+//     }
+//   });
+// }
 
 // Log serving file
 app.use((req, res, next) => {
