@@ -8,9 +8,6 @@ const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
 const session = require('express-session');
 const axios = require('axios');
-// const morgan = require('morgan');
-// const winston = require('winston');
-// const { combine, timestamp, colorize, errors, json } = winston.format;
 
 const morganMiddleware = require('./morgan.js');
 const logger = require('./winston.js');
@@ -75,30 +72,11 @@ app.use(session({
 
 app.use(morganMiddleware);
 
-// app.use(morgan('combined'));
-
-// const logger = winston.createLogger({
-//   level: 'debug',
-//   format: combine(
-//     timestamp({
-//       format: 'YYYY-MM-DD hh:mm:ss:ms A',
-//     }),
-//     colorize({ all: true }),
-//     errors({ stack: true }),
-//     json()
-//   ),
-//   transports: [
-//     new winston.transports.Console(),
-//     new winston.transports.File({ filename: 'logs/error.log', level: 'error', }),
-//     new winston.transports.File({ filename: 'logs/all.log' }),
-//   ],
-// });
-
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
 // Serve landing.html
-app.get('/landing', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/', 'landing.html'));
 });
 
