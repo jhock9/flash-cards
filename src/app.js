@@ -132,6 +132,7 @@ const fetchPhotosData = async () => {
 
 // Display tags
 const displayTags = async (photoData) => {
+  dropdown.innerHTML = '';
   tagsList.innerHTML = '';
 
   console.log('Displaying tags...');
@@ -228,9 +229,9 @@ dropdown.addEventListener('change', () => {
   // Add a quantity slider, tag name, and remove btn
   const slider = document.createElement('input');
   slider.type = 'range';
-  slider.min = 2;
-  slider.max = 6; 
-  slider.value = 2;
+  slider.min = 1;
+  slider.max = 10; 
+  slider.value = 1;
   slider.classList.add('slider');
   const sliderValue = document.createElement('span');
   
@@ -321,9 +322,9 @@ tagsList.addEventListener('click', (e) => {
     // Add a quantity slider, tag name, and remove btn
     const slider = document.createElement('input');
     slider.type = 'range';
-    slider.min = 2;
-    slider.max = 6; 
-    slider.value = 2;
+    slider.min = 1;
+    slider.max = 10; 
+    slider.value = 1;
     slider.classList.add('slider');
     const sliderValue = document.createElement('span');
     
