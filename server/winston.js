@@ -13,7 +13,7 @@ const levels = {
 const level = () => {
   const env = process.env.NODE_ENV || 'development'
   const isDevelopment = env === 'development'
-  return isDevelopment ? 'debug' : 'info'
+  return isDevelopment ? 'debug' : 'warn'
 }
 
 // Define different colors for each level.
