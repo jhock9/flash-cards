@@ -18,11 +18,14 @@ const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
+logger.info(`Environment variables: REDIRECT_URL = ${REDIRECT_URL}, NODE_ENV = ${NODE_ENV}`);
+
 // Enforce HTTPS redirection in production
 if (NODE_ENV === 'production') {
   app.use((req, res, next) => {
     if (req.header('x-forwarded-proto') !== 'https') {
-      res.redirect(`https://${req.header('host')}${req.url}`);
+      res.redirect(`https://${req.header('host')}${req.url}`)
+      logger.info('Redirecting to HTTPS.');
     } else {
       next();
     }
@@ -121,6 +124,7 @@ app.get('/authorize', (req, res) => {
 //* HANDLING THE OAUTH 2.0 SERVER RESPONSE
 // Exchange authorization code for access and refresh tokens
 app.get('/oauth2callback', async (req, res) => {
+  logger.info(`Received OAuth2 callback with URL: ${req.url}`);
   try {
     logger.info('Received request for /oauth2callback...');
     const q = url.parse(req.url, true).query;
@@ -135,6 +139,7 @@ app.get('/oauth2callback', async (req, res) => {
     logger.info('Attempting to get tokens with code...');
 
     const { tokens } = await oauth2Client.getToken(q.code);
+    logger.info(`Received tokens of type: ${typeof tokens}`);
 
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
