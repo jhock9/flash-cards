@@ -400,7 +400,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
-  
+
   // Calculate total number of photos that would be selected based on slider values
   let totalPhotos = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
 
@@ -411,17 +411,8 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
       return { tag, quantity: Math.round(percentage) };
     });
   }
-  
-  if (useRemainder && totalPhotos !== 0) {
-    const remainingPhotos = totalPhotos - filteredPhotos.length;
-    if (remainingPhotos > 0) {
-      const fillerPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
-      shuffleArray(fillerPhotos);
-      const photosToAdd = fillerPhotos.slice(0, remainingPhotos);
-      filteredPhotos.push(...photosToAdd);
-    }
-  }
 
+  // Loop through each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
     const selectedPhotos = photos.filter(photo => {
       return photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id);
@@ -432,10 +423,22 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
     photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
-  
-  if (totalPhotos !== 0) {
-    return filteredPhotos.slice(0, totalPhotos);
+
+  // If "auto-fill" is checked, add additional photos
+  if (useRemainder && totalPhotos !== 0) {
+    const remainingPhotos = totalPhotos - filteredPhotos.length;
+    if (remainingPhotos > 0) {
+      const fillerPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
+      shuffleArray(fillerPhotos);
+      const photosToAdd = fillerPhotos.slice(0, remainingPhotos);
+      filteredPhotos.push(...photosToAdd);
+    }
   }
+  
+  //   // If total photos is not 0, then slice the array to conform to the total
+  // if (totalPhotos !== 0) {
+  //   return filteredPhotos.slice(0, totalPhotos);
+  // }
 
   shuffleArray(filteredPhotos);
   return filteredPhotos;
@@ -508,8 +511,10 @@ totalSlider.addEventListener('input', () => {
     remainder.disabled = true;
     remainder.checked = false;
     useRemainder = false;
+    totalSliderValue.classList.add('gray-out');
   } else {
     remainder.disabled = false;
+    totalSliderValue.classList.remove('gray-out');
   }
 });
 

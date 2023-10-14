@@ -311,6 +311,11 @@ letter-spacing: 0.1rem;
   background-color: var(--primary-color);
 }
 
+.gray-out {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 #tags-wrapper {
   width: 100%;
   margin: 0;
