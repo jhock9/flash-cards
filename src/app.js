@@ -7,15 +7,21 @@ const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const tagsWrapper = document.querySelector('#tags-wrapper');
-const selectedTagsContainer = document.querySelector('#selected-tags-container');
+const selectedTagsContainer = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll(".remove-btn");
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
 
+const totalSlider = document.querySelector('#total-slider');
+const totalSliderValue = document.querySelector('#total-slider-value');
+const remainder = document.querySelector('#remainder-checkbox');
+
 let googleClientID; 
 let lastSelectedTagsAndQuantities;
 let photos;
+let totalPhotos = 0;
+let useRemainder = false;
 
 const fetchConfig = async () => {
   try {
@@ -152,9 +158,10 @@ const displayTags = async (photoData) => {
   }
   
   // Filter tags
+  // Determines which tags to display based on the number of photos they appear in
   const filteredTags = [];
   for (const tag in tagCounts) {
-    if (tagCounts[tag] >= 5) {
+    if (tagCounts[tag] >= 6) {
       filteredTags.push(tag);
     }
   }
@@ -230,12 +237,12 @@ dropdown.addEventListener('change', () => {
   const slider = document.createElement('input');
   slider.type = 'range';
   slider.min = 1;
-  slider.max = 10; 
+  slider.max = 6; 
   slider.value = 1;
   slider.classList.add('slider');
   const sliderValue = document.createElement('span');
   
-  sliderValue.classList.add('sliderValue');
+  sliderValue.classList.add('slider-value');
   sliderValue.innerHTML = slider.value;
   slider.oninput = () => {
     sliderValue.innerHTML = slider.value;
@@ -323,12 +330,12 @@ tagsList.addEventListener('click', (e) => {
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 1;
-    slider.max = 10; 
+    slider.max = 6; 
     slider.value = 1;
     slider.classList.add('slider');
     const sliderValue = document.createElement('span');
     
-    sliderValue.classList.add('sliderValue');
+    sliderValue.classList.add('slider-value');
     sliderValue.innerHTML = slider.value;
     slider.oninput = () => {
       sliderValue.innerHTML = slider.value;
@@ -338,6 +345,8 @@ tagsList.addEventListener('click', (e) => {
     tagName.classList.add('name', 'center');
     tagName.textContent = selectedTag;
     
+//!! insert "lock selection" toggle here
+
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.classList.add('remove-btn', 'center'); 
@@ -392,6 +401,27 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
+  // Calculate total number of photos that would be selected based on slider values
+  let totalPhotos = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
+
+  // If total photos selected are greater than 10, calculate percentage for each tag
+  if (totalPhotos > 10) {
+    selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
+      const percentage = (quantity / totalPhotos) * 10; // 10 is the limit
+      return { tag, quantity: Math.round(percentage) };
+    });
+  }
+  
+  if (useRemainder && totalPhotos !== 0) {
+    const remainingPhotos = totalPhotos - filteredPhotos.length;
+    if (remainingPhotos > 0) {
+      const fillerPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
+      shuffleArray(fillerPhotos);
+      const photosToAdd = fillerPhotos.slice(0, remainingPhotos);
+      filteredPhotos.push(...photosToAdd);
+    }
+  }
+
   for (const { tag, quantity } of selectedTagsAndQuantities) {
     const selectedPhotos = photos.filter(photo => {
       return photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id);
@@ -403,6 +433,10 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
     filteredPhotos.push(...photosToDisplay);
   }
   
+  if (totalPhotos !== 0) {
+    return filteredPhotos.slice(0, totalPhotos);
+  }
+
   shuffleArray(filteredPhotos);
   return filteredPhotos;
 };
@@ -445,6 +479,7 @@ const displayPhotos = (photos) => {
   }
 };
 
+//* TOGGLES & BUTTONS
 const toggleNav = () => {
   openBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
@@ -452,7 +487,36 @@ const toggleNav = () => {
   resetBtn.click();
 }
 
-//* BUTTONS
+const toggleBorders = () => {
+  if (selectedTags.length >= 1) {
+    selectedTagsContainer.classList.add('show-borders');
+    selectedTagsContainer.classList.remove('hide');
+  } else {
+    selectedTagsContainer.classList.remove('show-borders');
+    selectedTagsContainer.classList.add('hide');
+  }
+}
+
+totalSlider.addEventListener('input', () => {
+  totalPhotos = parseInt(totalSlider.value, 10);
+
+  // Display 'N/A' when slider value is 0
+  totalSliderValue.textContent = totalPhotos === 0 ? 'N/A' : totalPhotos;
+
+  // Disable and uncheck filler tags checkbox if total slider value is 'N/A'
+  if (totalPhotos === 0) {
+    remainder.disabled = true;
+    remainder.checked = false;
+    useRemainder = false;
+  } else {
+    remainder.disabled = false;
+  }
+});
+
+remainder.addEventListener('change', () => {
+  useRemainder = remainder.checked;
+});
+
 openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   await fetchPhotosData();
@@ -589,11 +653,3 @@ signoutBtn.addEventListener('click', async (e) => {
     console.error('Error during logout:', error);
   }
 });
-
-const toggleBorders = () => {
-  if (selectedTags.length >= 1) {
-    selectedTagsContainer.classList.add('show-borders');
-  } else {
-    selectedTagsContainer.classList.remove('show-borders');
-  }
-}
