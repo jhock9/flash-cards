@@ -394,23 +394,20 @@ tagsList.addEventListener('click', (e) => {
 });
 
 //* HELPER FUNCTIONS
-const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
+
+//ORIGINAL FUNCTION
+const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
   console.log('Received photos:', photos);
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
+  
+  // Sum of all photos that are intended to be selected (based on slider values)
+  let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
 
-  // Calculate total number of photos that would be selected based on slider values
-  let totalPhotos = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
-
-  // If total photos selected are greater than 10, calculate percentage for each tag
-  if (totalPhotos > 10) {
-    selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
-      const percentage = (quantity / totalPhotos) * 10; // 10 is the limit
-      return { tag, quantity: Math.round(percentage) };
-    });
-  }
+  // Calculate how many more photos are needed to meet the total
+  let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
 
   // Loop through each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
@@ -423,6 +420,62 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
     photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
+  
+  // If 'useRemainder' is checked and there are remaining photos to be filled
+  if (useRemainder && remainingPhotos > 0) {
+    const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
+    shuffleArray(additionalPhotos);
+    filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
+  }
+
+  // Finally, slice the array based on 'totalPhotos'
+  if (totalPhotos > 0) {
+    filteredPhotos = filteredPhotos.slice(0, totalPhotos);
+  }
+
+  // Final shuffle before displaying
+  shuffleArray(filteredPhotos);
+
+  return filteredPhotos;
+};
+
+
+const fPBT = (photos, selectedTagsAndQuantities) => {
+  // console.log('filterPhotosByTags called...');
+  // console.log('Received photos:', photos);
+  
+  // let filteredPhotos = [];
+  // let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
+
+  // Calculate total number of photos that would be selected based on slider values
+  // let totalPhotos = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
+
+  // If total photos selected are greater than 10, calculate percentage for each tag
+  if (totalPhotos > 10) {
+    selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
+      const percentage = (quantity / totalPhotos) * 10; // 10 is the limit
+      return { tag, quantity: Math.round(percentage) };
+    });
+  } else if (totalPhotos < 10) {
+    const remainder = 10 - totalPhotos;
+    selectedTagsAndQuantities.push({ tag: 'filler', quantity: remainder });
+  } else {
+    selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
+      return { tag, quantity: quantity };
+    });
+  }
+
+  // // Loop through each tag and quantity
+  // for (const { tag, quantity } of selectedTagsAndQuantities) {
+  //   const selectedPhotos = photos.filter(photo => {
+  //     return photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id);
+  //   });
+    
+  //   shuffleArray(selectedPhotos);
+  //   const photosToDisplay = selectedPhotos.slice(0, quantity);
+  //   photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
+  //   filteredPhotos.push(...photosToDisplay);
+  // }
 
   // If "auto-fill" is checked, add additional photos
   if (useRemainder && totalPhotos !== 0) {
@@ -440,8 +493,8 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities) => {
   //   return filteredPhotos.slice(0, totalPhotos);
   // }
 
-  shuffleArray(filteredPhotos);
-  return filteredPhotos;
+  // shuffleArray(filteredPhotos);
+  // return filteredPhotos;
 };
 
 const shuffleArray = (array) => {
@@ -555,7 +608,15 @@ resetBtn.addEventListener('click', () => {
   selectedTagSpans.forEach((span) => {
     span.classList.remove('selected');
   });
-  
+
+  // Reset totalSlider value and remainder checkbox
+  totalSlider.value = 0;
+  totalSliderValue.textContent = 0;
+  remainder.disabled = true;
+  remainder.checked = false;
+  useRemainder = false;
+  totalSliderValue.classList.add('gray-out');
+
   toggleBorders();
 });
 
@@ -632,7 +693,7 @@ submitBtn.addEventListener('click', async (e) => {
   lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
 
   if (photos) {
-    const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
+    const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, totalPhotos, useRemainder);
     displayPhotos(filteredPhotos);
   } else {
     console.error('Photos data is not available. Fetch it first.');
