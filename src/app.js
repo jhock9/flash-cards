@@ -8,7 +8,7 @@ const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsContainer = document.querySelector('#selected-tags-wrapper');
-const removeBtns = document.querySelectorAll(".remove-btn");
+const removeBtn = document.querySelector('.remove-btn');
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
@@ -374,23 +374,7 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.appendChild(removeBtn);
     
     selectedTagsContainer.appendChild(tagDiv);
-    
-  } else if (e.target.classList === 'remove-btn') {
-    const selectedTag = e.target.parentElement.dataset.tag;
-    
-    // Remove the tag from the selectedTags array
-    selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-    toggleBorders();
-    
-    // Remove the tag from the selected-tags-container
-    e.target.parentElement.remove();
-    
-    // Deselect the tag in the tags-list
-    const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-    if (tagSpan) {
-      tagSpan.classList.remove('selected');
-    }
-  }
+  } 
 });
 
 //* HELPER FUNCTIONS
@@ -565,15 +549,33 @@ totalSlider.addEventListener('input', () => {
     remainder.checked = false;
     useRemainder = false;
     totalSliderValue.classList.add('gray-out');
-  } else {
+    remainder.classList.add('gray-out');
+      } else {
     remainder.disabled = false;
     totalSliderValue.classList.remove('gray-out');
+    remainder.classList.add('gray-out');
   }
 });
 
 remainder.addEventListener('change', () => {
   useRemainder = remainder.checked;
 });
+
+removeBtn.addEventListener('click', (e) => {
+  const selectedTag = e.target.parentElement.dataset.tag;
+   // Remove the tag from the selectedTags array
+  selectedTags = selectedTags.filter(tag => tag!== selectedTag);
+  toggleBorders();
+  
+ // Remove the tag from the selected-tags-container
+  e.target.parentElement.remove();
+  
+  // Deselect the tag in the tags-list
+  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+  if (tagSpan) {
+    tagSpan.classList.remove('selected');
+  }
+};
 
 openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
@@ -611,11 +613,12 @@ resetBtn.addEventListener('click', () => {
 
   // Reset totalSlider value and remainder checkbox
   totalSlider.value = 0;
-  totalSliderValue.textContent = 0;
+  totalSliderValue.textContent = totalPhotos === 0 ? 'N/A' : totalPhotos;
   remainder.disabled = true;
   remainder.checked = false;
   useRemainder = false;
   totalSliderValue.classList.add('gray-out');
+  remainder.classList.add('gray-out');
 
   toggleBorders();
 });
