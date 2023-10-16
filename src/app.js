@@ -198,25 +198,30 @@ const fetchDescriptions = async (photoData) => {
 dropdown.addEventListener('change', () => {
   const selectedTag = dropdown.value;
   
-  // Check if the tag is already selected
+
   if (selectedTags.includes(selectedTag)) {
-    // Remove the tag from the selectedTags array
-    selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-    toggleBorders();
-    
-    // Remove the tag from the selected-tags-container
-    const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-    if (tagDiv) {
-      tagDiv.remove();
-    }
-    
-    const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-    if (tagSpan) {
-      tagSpan.classList.remove('selected');
-    }
-    
+    removeBtn.click();
     return;
   }
+  // // Check if the tag is already selected
+  // if (selectedTags.includes(selectedTag)) {
+  //   // Remove the tag from the selectedTags array
+  //   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+  //   toggleBorders();
+    
+  //   // Remove the tag from the selected-tags-container
+  //   const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+  //   if (tagDiv) {
+  //     tagDiv.remove();
+  //   }
+    
+  //   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+  //   if (tagSpan) {
+  //     tagSpan.classList.remove('selected');
+  //   }
+    
+  //   return;
+  // }
   
   // Check if 4 tags have already been selected
   if (selectedTags.length >= 4) {
@@ -257,21 +262,6 @@ dropdown.addEventListener('change', () => {
   icon.classList.add('fa-solid', 'fa-trash-can');
   removeBtn.appendChild(icon);
   
-  removeBtn.addEventListener('click', () => {
-    const selectedTag = removeBtn.parentElement.dataset.tag;
-    
-    // Remove the tag from the selectedTags array
-    selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-    toggleBorders();
-    
-    // Remove the tag from the selected-tags-container
-    removeBtn.parentElement.remove();
-    
-    // Deselect the tag in the tags-list
-    const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-    tagSpan.classList.remove('selected'); 
-  });
-  
   tagDiv.appendChild(slider);
   tagDiv.appendChild(sliderValue);
   tagDiv.appendChild(tagName);
@@ -279,15 +269,10 @@ dropdown.addEventListener('change', () => {
   
   selectedTagsContainer.appendChild(tagDiv);
   
-  // Highlight the tag in the tags-list
+  // Select the tag in the tags-list
   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
   if (tagSpan) {
     tagSpan.classList.add('selected');
-  }
-
-  if (selectedTags.includes(selectedTag)) {
-    removeTag(selectedTag);
-    return;
   }
 });
 
@@ -379,8 +364,7 @@ tagsList.addEventListener('click', (e) => {
     selectedTagsContainer.appendChild(tagDiv);
     
   } else if (e.target.classList.contains('remove-btn')) {
-    const selectedTag = e.target.parentElement.dataset.tag;
-    removeTag(selectedTag);
+    removeBtn.click();
   }
 });
 
@@ -526,23 +510,23 @@ const displayPhotos = (photos) => {
   }
 };
 
-function removeTag(selectedTag) {
-  // Remove the tag from the selectedTags array
-  selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-  toggleBorders();
+// function removeTag(selectedTag) {
+//   // Remove the tag from the selectedTags array
+//   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+//   toggleBorders();
 
-  // Remove the tag from the selected-tags-container
-  const tagDiv = selectedTagsContainer.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-  if (tagDiv) {
-    tagDiv.remove();
-  }
+//   // Remove the tag from the selected-tags-container
+//   const tagDiv = selectedTagsContainer.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+//   if (tagDiv) {
+//     tagDiv.remove();
+//   }
 
-  // Deselect the tag in the tags-list
-  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-  if (tagSpan) {
-    tagSpan.classList.remove('selected');
-  }
-}
+//   // Deselect the tag in the tags-list
+//   const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+//   if (tagSpan) {
+//     tagSpan.classList.remove('selected');
+//   }
+// }
 
 //* TOGGLES & BUTTONS
 const toggleNav = () => {
@@ -601,6 +585,23 @@ refreshBtn.addEventListener('click', async () => {
     } else {
       console.error('Photos data is not available. Fetch it first.');
     }
+  }
+});
+
+removeBtn.addEventListener('click', () => {
+  const selectedTag = removeBtn.parentElement.dataset.tag;
+  
+  // Remove the tag from the selectedTags array
+  selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+  toggleBorders();
+  
+  // Remove the tag from the selected-tags-container
+  removeBtn.parentElement.remove();
+  
+  // Deselect the tag in the tags-list
+  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+  if (tagSpan) {
+    tagSpan.classList.remove('selected');
   }
 });
 
