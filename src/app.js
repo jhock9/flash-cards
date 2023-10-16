@@ -7,7 +7,7 @@ const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const tagsWrapper = document.querySelector('#tags-wrapper');
-const selectedTagsContainer = document.querySelector('#selected-tags-wrapper');
+const selectedTagsWrapper = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll('.remove-btn');
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
@@ -202,6 +202,10 @@ dropdown.addEventListener('change', () => {
 
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
+    const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+    if (tagSpan) {
+      tagSpan.classList.remove('selected');
+    }
     return;
   }
   
@@ -213,6 +217,7 @@ dropdown.addEventListener('change', () => {
   selectedTags.push(selectedTag);
   dropdown.selectedIndex = 0;
   toggleBorders();
+
   // Create a new div for the selected tag
   const tagDiv = document.createElement('div');
   tagDiv.classList.add('selected-tag', 'center');
@@ -244,12 +249,17 @@ dropdown.addEventListener('change', () => {
   icon.classList.add('fa-solid', 'fa-trash-can');
   removeBtn.appendChild(icon);
   
+  removeBtn.addEventListener('click', () => {
+    const selectedTag = removeBtn.parentElement.dataset.tag;
+    removeTag(selectedTag);
+  });
+
   tagDiv.appendChild(slider);
   tagDiv.appendChild(sliderValue);
   tagDiv.appendChild(tagName);
   tagDiv.appendChild(removeBtn);
   
-  selectedTagsContainer.appendChild(tagDiv);
+  selectedTagsWrapper.appendChild(tagDiv);
   
   // Select the tag in the tags-list
   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
@@ -265,7 +275,11 @@ tagsList.addEventListener('click', (e) => {
     
     // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
-      removeTag(selectedTag); // Call the removeTag function
+      removeTag(selectedTag);
+      const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+      if (tagSpan) {
+        tagSpan.classList.remove('selected');
+      }
       return;
     }
         
@@ -315,16 +329,17 @@ tagsList.addEventListener('click', (e) => {
     
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
+      removeTag(selectedTag);
       
-      // Remove the tag from the selectedTags array
-      selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-      toggleBorders();
+      // // Remove the tag from the selectedTags array
+      // selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+      // toggleBorders();
       
-      // Remove the tag from the selected-tags-container
-      removeBtn.parentElement.remove();
+      // // Remove the tag from the selected-tags-wrapper
+      // removeBtn.parentElement.remove();
       
-      // Deselect the tag in the tags-list
-      e.target.classList.remove('selected');
+      // // Deselect the tag in the tags-list
+      // e.target.classList.remove('selected');
     });
     
     tagDiv.appendChild(slider);
@@ -332,10 +347,7 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.appendChild(tagName);
     tagDiv.appendChild(removeBtn);
     
-    selectedTagsContainer.appendChild(tagDiv);
-    
-  } else if (e.target.classList.contains('remove-btn')) {
-    removeTag(selectedTag);
+    selectedTagsWrapper.appendChild(tagDiv);
   }
 });
 
@@ -486,9 +498,10 @@ function removeTag(selectedTag) {
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   toggleBorders();
 
-  // Remove the tag from the selected-tags-container
-  const tagDiv = selectedTagsContainer.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+  // Remove the tag from the selected-tags-wrapper
+  const tagDiv = selectedTagsWrapper.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
   if (tagDiv) {
+    console.log('Selected tag to remove:', selectedTag);
     tagDiv.remove();
   }
 
@@ -509,11 +522,11 @@ const toggleNav = () => {
 
 const toggleBorders = () => {
   if (selectedTags.length >= 1) {
-    selectedTagsContainer.classList.add('show-borders');
-    selectedTagsContainer.classList.remove('hide');
+    selectedTagsWrapper.classList.add('show-borders');
+    selectedTagsWrapper.classList.remove('hide');
   } else {
-    selectedTagsContainer.classList.remove('show-borders');
-    selectedTagsContainer.classList.add('hide');
+    selectedTagsWrapper.classList.remove('show-borders');
+    selectedTagsWrapper.classList.add('hide');
   }
 }
 
@@ -562,7 +575,9 @@ refreshBtn.addEventListener('click', async () => {
 // Attach click event listeners to each remove button
 removeBtns.forEach(removeBtn => {
   removeBtn.addEventListener('click', () => {
+    console.log('Remove button clicked.');
     const selectedTag = removeBtn.parentElement.dataset.tag;
+    console.log('Selected tag to remove:', selectedTag);
     removeTag(selectedTag);
   });
 });
@@ -571,7 +586,7 @@ resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
   selectedTags = [];
   
-  // Remove all selected tags from selected-tags-container
+  // Remove all selected tags from selected-tags-wrapper
   const selectedTagDivs = document.querySelectorAll('.selected-tag');
   selectedTagDivs.forEach((div) => {
     div.remove();
@@ -658,7 +673,7 @@ submitBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   console.log('Submit button clicked...');
   
-  // Get selected tags and quantities from selected-tags-container
+  // Get selected tags and quantities from selected-tags-wrapper
   const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-tag')).map(tagDiv => {
     const tag = tagDiv.dataset.tag;
     const quantity = tagDiv.querySelector('.slider').value;
