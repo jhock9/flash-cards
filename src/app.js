@@ -252,6 +252,10 @@ dropdown.addEventListener('change', () => {
   removeBtn.addEventListener('click', () => {
     const selectedTag = removeBtn.parentElement.dataset.tag;
     removeTag(selectedTag);
+    const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+    if (tagSpan) {
+      tagSpan.classList.remove('selected');
+    }
   });
 
   tagDiv.appendChild(slider);
@@ -330,16 +334,6 @@ tagsList.addEventListener('click', (e) => {
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
       removeTag(selectedTag);
-      
-      // // Remove the tag from the selectedTags array
-      // selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-      // toggleBorders();
-      
-      // // Remove the tag from the selected-tags-wrapper
-      // removeBtn.parentElement.remove();
-      
-      // // Deselect the tag in the tags-list
-      // e.target.classList.remove('selected');
     });
     
     tagDiv.appendChild(slider);
