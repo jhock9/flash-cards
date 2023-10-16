@@ -8,6 +8,7 @@ const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsContainer = document.querySelector('#selected-tags-wrapper');
+const removeBtns = document.querySelectorAll('.remove-btn');
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
@@ -200,7 +201,7 @@ dropdown.addEventListener('change', () => {
   
 
   if (selectedTags.includes(selectedTag)) {
-    removeBtn.click();
+    removeBtns.click();
     return;
   }
   // // Check if the tag is already selected
@@ -364,7 +365,7 @@ tagsList.addEventListener('click', (e) => {
     selectedTagsContainer.appendChild(tagDiv);
     
   } else if (e.target.classList.contains('remove-btn')) {
-    removeBtn.click();
+    removeBtns.click();
   }
 });
 
@@ -588,7 +589,7 @@ refreshBtn.addEventListener('click', async () => {
   }
 });
 
-removeBtn.addEventListener('click', () => {
+removeBtns.addEventListener('click', () => {
   const selectedTag = removeBtn.parentElement.dataset.tag;
   
   // Remove the tag from the selectedTags array
