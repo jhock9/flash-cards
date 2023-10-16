@@ -8,7 +8,6 @@ const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
 const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsContainer = document.querySelector('#selected-tags-wrapper');
-const removeBtn = document.querySelector('.remove-btn');
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
@@ -19,6 +18,7 @@ const remainder = document.querySelector('#remainder-checkbox');
 
 let googleClientID; 
 let lastSelectedTagsAndQuantities;
+let selectedTags = [];
 let photos;
 let totalPhotos = 0;
 let useRemainder = false;
@@ -194,8 +194,6 @@ const fetchDescriptions = async (photoData) => {
 };
   
 //* SELECT TAGS TO DISPLAY
-let selectedTags = [];
-
 // Select tags from dropdown
 dropdown.addEventListener('change', () => {
   const selectedTag = dropdown.value;
@@ -286,6 +284,11 @@ dropdown.addEventListener('change', () => {
   if (tagSpan) {
     tagSpan.classList.add('selected');
   }
+
+  if (selectedTags.includes(selectedTag)) {
+    removeTag(selectedTag);
+    return;
+  }
 });
 
 // Select tags from tags-list
@@ -374,7 +377,11 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.appendChild(removeBtn);
     
     selectedTagsContainer.appendChild(tagDiv);
-  } 
+    
+  } else if (e.target.classList.contains('remove-btn')) {
+    const selectedTag = e.target.parentElement.dataset.tag;
+    removeTag(selectedTag);
+  }
 });
 
 //* HELPER FUNCTIONS
@@ -519,6 +526,24 @@ const displayPhotos = (photos) => {
   }
 };
 
+function removeTag(selectedTag) {
+  // Remove the tag from the selectedTags array
+  selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+  toggleBorders();
+
+  // Remove the tag from the selected-tags-container
+  const tagDiv = selectedTagsContainer.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+  if (tagDiv) {
+    tagDiv.remove();
+  }
+
+  // Deselect the tag in the tags-list
+  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+  if (tagSpan) {
+    tagSpan.classList.remove('selected');
+  }
+}
+
 //* TOGGLES & BUTTONS
 const toggleNav = () => {
   openBtn.classList.toggle('open');
@@ -559,22 +584,6 @@ totalSlider.addEventListener('input', () => {
 
 remainder.addEventListener('change', () => {
   useRemainder = remainder.checked;
-});
-
-removeBtn.addEventListener('click', (e) => {
-  const selectedTag = e.target.parentElement.dataset.tag;
-   // Remove the tag from the selectedTags array
-  selectedTags = selectedTags.filter(tag => tag!== selectedTag);
-  toggleBorders();
-  
- // Remove the tag from the selected-tags-container
-  e.target.parentElement.remove();
-  
-  // Deselect the tag in the tags-list
-  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-  if (tagSpan) {
-    tagSpan.classList.remove('selected');
-  }
 });
 
 openBtn.addEventListener('click', async () => {
