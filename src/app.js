@@ -201,28 +201,9 @@ dropdown.addEventListener('change', () => {
   
 
   if (selectedTags.includes(selectedTag)) {
-    removeBtns.click();
+    removeTag(selectedTag);
     return;
   }
-  // // Check if the tag is already selected
-  // if (selectedTags.includes(selectedTag)) {
-  //   // Remove the tag from the selectedTags array
-  //   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-  //   toggleBorders();
-    
-  //   // Remove the tag from the selected-tags-container
-  //   const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-  //   if (tagDiv) {
-  //     tagDiv.remove();
-  //   }
-    
-  //   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-  //   if (tagSpan) {
-  //     tagSpan.classList.remove('selected');
-  //   }
-    
-  //   return;
-  // }
   
   // Check if 4 tags have already been selected
   if (selectedTags.length >= 4) {
@@ -284,21 +265,10 @@ tagsList.addEventListener('click', (e) => {
     
     // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
-      // Remove the tag from the selectedTags array
-      selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-      toggleBorders();
-      
-      // Remove the tag from the selected-tags-container
-      const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-      if (tagDiv) {
-        tagDiv.remove();
-      }
-      
-      // Deselect the tag in the tags-list
-      e.target.classList.remove('selected');
+      removeTag(selectedTag); // Call the removeTag function
       return;
     }
-    
+        
     // Check if 4 tags have already been selected
     if (selectedTags.length >= 4) {
       return;
@@ -365,7 +335,7 @@ tagsList.addEventListener('click', (e) => {
     selectedTagsContainer.appendChild(tagDiv);
     
   } else if (e.target.classList.contains('remove-btn')) {
-    removeBtns.click();
+    removeTag(selectedTag);
   }
 });
 
@@ -511,23 +481,23 @@ const displayPhotos = (photos) => {
   }
 };
 
-// function removeTag(selectedTag) {
-//   // Remove the tag from the selectedTags array
-//   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-//   toggleBorders();
+function removeTag(selectedTag) {
+  // Remove the tag from the selectedTags array
+  selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+  toggleBorders();
 
-//   // Remove the tag from the selected-tags-container
-//   const tagDiv = selectedTagsContainer.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-//   if (tagDiv) {
-//     tagDiv.remove();
-//   }
+  // Remove the tag from the selected-tags-container
+  const tagDiv = selectedTagsContainer.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+  if (tagDiv) {
+    tagDiv.remove();
+  }
 
-//   // Deselect the tag in the tags-list
-//   const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-//   if (tagSpan) {
-//     tagSpan.classList.remove('selected');
-//   }
-// }
+  // Deselect the tag in the tags-list
+  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+  if (tagSpan) {
+    tagSpan.classList.remove('selected');
+  }
+}
 
 //* TOGGLES & BUTTONS
 const toggleNav = () => {
@@ -589,21 +559,12 @@ refreshBtn.addEventListener('click', async () => {
   }
 });
 
-removeBtns.addEventListener('click', () => {
-  const selectedTag = removeBtn.parentElement.dataset.tag;
-  
-  // Remove the tag from the selectedTags array
-  selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-  toggleBorders();
-  
-  // Remove the tag from the selected-tags-container
-  removeBtn.parentElement.remove();
-  
-  // Deselect the tag in the tags-list
-  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
-  if (tagSpan) {
-    tagSpan.classList.remove('selected');
-  }
+// Attach click event listeners to each remove button
+removeBtns.forEach(removeBtn => {
+  removeBtn.addEventListener('click', () => {
+    const selectedTag = removeBtn.parentElement.dataset.tag;
+    removeTag(selectedTag);
+  });
 });
 
 resetBtn.addEventListener('click', () => {
