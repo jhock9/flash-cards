@@ -575,7 +575,7 @@ removeBtn.addEventListener('click', (e) => {
   if (tagSpan) {
     tagSpan.classList.remove('selected');
   }
-};
+});
 
 openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
