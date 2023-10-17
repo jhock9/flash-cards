@@ -197,14 +197,17 @@ const fetchDescriptions = async (photoData) => {
 //* SELECT TAGS TO DISPLAY
 // Select tags from dropdown
 dropdown.addEventListener('change', () => {
+  console.log('Dropdown changed...');
   const selectedTag = dropdown.value;
   
-
   if (selectedTags.includes(selectedTag)) {
+    console.log('Dropdown tag already selected...');
     removeTag(selectedTag);
+    console.log('Dropdown tag removed:', selectedTag);
     const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
     if (tagSpan) {
       tagSpan.classList.remove('selected');
+      console.log('Dropdown Tag span removed:', tagSpan);
     }
     return;
   }
@@ -252,9 +255,11 @@ dropdown.addEventListener('change', () => {
   removeBtn.addEventListener('click', () => {
     const selectedTag = removeBtn.parentElement.dataset.tag;
     removeTag(selectedTag);
+    console.log('Dropdown removeBtn tag removed:', selectedTag);
     const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
     if (tagSpan) {
       tagSpan.classList.remove('selected');
+      console.log('Dropdown removeBtn tag span removed:', tagSpan);
     }
   });
 
@@ -274,15 +279,19 @@ dropdown.addEventListener('change', () => {
 
 // Select tags from tags-list
 tagsList.addEventListener('click', (e) => {  
+  console.log('Tags-list clicked...');
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
     
     // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
+      console.log('Tags-list tag already selected...');
       removeTag(selectedTag);
+      console.log('Tags-list tag removed:', selectedTag);
       const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
       if (tagSpan) {
         tagSpan.classList.remove('selected');
+        console.log('Tags-list tag span removed:', tagSpan);
       }
       return;
     }
@@ -334,6 +343,12 @@ tagsList.addEventListener('click', (e) => {
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
       removeTag(selectedTag);
+      console.log('Tags-list removeBtn tag removed:', selectedTag);
+      const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+      if (tagSpan) {
+        tagSpan.classList.remove('selected');
+        console.log('Tags-list removeBtn tag span removed:', tagSpan);
+      }
     });
     
     tagDiv.appendChild(slider);
@@ -488,6 +503,7 @@ const displayPhotos = (photos) => {
 };
 
 const removeTag = (selectedTag) => {
+  console.log('removeTag called...');
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   toggleBorders();
@@ -495,7 +511,7 @@ const removeTag = (selectedTag) => {
   // Remove the tag from the selected-tags-wrapper
   const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
   if (tagDiv) {
-    console.log('Selected tag to remove:', selectedTag);
+    console.log('removeTag selected tag to remove:', selectedTag);
     tagDiv.remove();
   }
 
@@ -503,6 +519,7 @@ const removeTag = (selectedTag) => {
   const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
   if (tagSpan) {
     tagSpan.classList.remove('selected');
+    console.log('removeTag tag span to remove:', tagSpan);
   }
 }
 
