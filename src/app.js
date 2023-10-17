@@ -487,13 +487,13 @@ const displayPhotos = (photos) => {
   }
 };
 
-function removeTag(selectedTag) {
+const removeTag = (selectedTag) => {
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   toggleBorders();
 
   // Remove the tag from the selected-tags-wrapper
-  const tagDiv = selectedTagsWrapper.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
+  const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
   if (tagDiv) {
     console.log('Selected tag to remove:', selectedTag);
     tagDiv.remove();
