@@ -203,11 +203,11 @@ dropdown.addEventListener('change', () => {
   if (selectedTags.includes(selectedTag)) {
     console.log('DD tag already selected, removeTag CALLED...');
     removeTag(selectedTag);
-    const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-    if (tagSpan) {
-      tagSpan.classList.remove('selected');
-      console.log('DD already selected tag span removed');
-    }
+    // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+    // if (tagSpan) {
+    //   tagSpan.classList.remove('selected');
+    //   console.log('DD already selected tag span removed');
+    // }
     return;
   }
   
@@ -255,11 +255,11 @@ dropdown.addEventListener('change', () => {
     const selectedTag = removeBtn.parentElement.dataset.tag;
     console.log('DD removeBtn clicked, removeTag called...');
     removeTag(selectedTag);
-    const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-    if (tagSpan) {
-      tagSpan.classList.remove('selected');
-      console.log('DD removeBtn tag span removed');
-    }
+    // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+    // if (tagSpan) {
+    //   tagSpan.classList.remove('selected');
+    //   console.log('DD removeBtn tag span removed');
+    // }
   });
 
   tagDiv.appendChild(slider);
@@ -286,11 +286,11 @@ tagsList.addEventListener('click', (e) => {
     if (selectedTags.includes(selectedTag)) {
       console.log('TL tag already selected, removeTag CALLED...');
       removeTag(selectedTag);
-      const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-      if (tagSpan) {
-        tagSpan.classList.remove('selected');
-        console.log('TL already selected tag span removed');
-      }
+      // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+      // if (tagSpan) {
+      //   tagSpan.classList.remove('selected');
+      //   console.log('TL already selected tag span removed');
+      // }
       return;
     }
         
@@ -342,11 +342,11 @@ tagsList.addEventListener('click', (e) => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
       console.log('TL removeBtn clicked, removeTag called...');
       removeTag(selectedTag);
-      const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-      if (tagSpan) {
-        tagSpan.classList.remove('selected');
-        console.log('TL removeBtn tag span removed');
-      }
+      // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+      // if (tagSpan) {
+      //   tagSpan.classList.remove('selected');
+      //   console.log('TL removeBtn tag span removed');
+      // }
     });
     
 
