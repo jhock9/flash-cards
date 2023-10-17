@@ -201,13 +201,12 @@ dropdown.addEventListener('change', () => {
   const selectedTag = dropdown.value;
   
   if (selectedTags.includes(selectedTag)) {
-    console.log('Dropdown tag already selected...');
+    console.log('DD tag already selected, removeTag CALLED...');
     removeTag(selectedTag);
-    console.log('Dropdown tag removed:', selectedTag);
     const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
     if (tagSpan) {
       tagSpan.classList.remove('selected');
-      console.log('Dropdown Tag span removed:', tagSpan);
+      console.log('DD already selected tag span removed');
     }
     return;
   }
@@ -254,12 +253,12 @@ dropdown.addEventListener('change', () => {
   
   removeBtn.addEventListener('click', () => {
     const selectedTag = removeBtn.parentElement.dataset.tag;
+    console.log('DD removeBtn clicked, removeTag called...');
     removeTag(selectedTag);
-    console.log('Dropdown removeBtn tag removed:', selectedTag);
     const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
     if (tagSpan) {
       tagSpan.classList.remove('selected');
-      console.log('Dropdown removeBtn tag span removed:', tagSpan);
+      console.log('DD removeBtn tag span removed');
     }
   });
 
@@ -285,13 +284,12 @@ tagsList.addEventListener('click', (e) => {
     
     // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
-      console.log('Tags-list tag already selected...');
+      console.log('TL tag already selected, removeTag CALLED...');
       removeTag(selectedTag);
-      console.log('Tags-list tag removed:', selectedTag);
-      const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+      const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
       if (tagSpan) {
         tagSpan.classList.remove('selected');
-        console.log('Tags-list tag span removed:', tagSpan);
+        console.log('TL already selected tag span removed');
       }
       return;
     }
@@ -342,14 +340,16 @@ tagsList.addEventListener('click', (e) => {
     
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
+      console.log('TL removeBtn clicked, removeTag called...');
       removeTag(selectedTag);
-      console.log('Tags-list removeBtn tag removed:', selectedTag);
-      const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+      const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
       if (tagSpan) {
         tagSpan.classList.remove('selected');
-        console.log('Tags-list removeBtn tag span removed:', tagSpan);
+        console.log('TL removeBtn tag span removed');
       }
     });
+    
+
     
     tagDiv.appendChild(slider);
     tagDiv.appendChild(sliderValue);
@@ -503,7 +503,7 @@ const displayPhotos = (photos) => {
 };
 
 const removeTag = (selectedTag) => {
-  console.log('removeTag called...');
+  console.log('trashcan called...');
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   toggleBorders();
@@ -511,15 +511,15 @@ const removeTag = (selectedTag) => {
   // Remove the tag from the selected-tags-wrapper
   const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
   if (tagDiv) {
-    console.log('removeTag selected tag to remove:', selectedTag);
+    console.log('trash can tag removed');
     tagDiv.remove();
   }
 
   // Deselect the tag in the tags-list
-  const tagSpan = document.querySelector(`.tag[data-tag="${selectedTag}"] span`);
+  const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
   if (tagSpan) {
     tagSpan.classList.remove('selected');
-    console.log('removeTag tag span to remove:', tagSpan);
+    console.log('trash can tag span remove');
   }
 }
 
