@@ -361,6 +361,8 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
 
   // Loop through each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
+    console.log(`Processing tag: ${tag}, quantity: ${quantity}`);
+
     const selectedPhotos = photos.filter(photo => 
       photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id));
     
@@ -371,11 +373,12 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
-  console.log('filteredPhotos so far:', filteredPhotos);
-  console.log(`Filtered photos so far: ${filteredPhotos.length}`);
+  console.log('filteredPhotos after processing tags:', filteredPhotos);
+  console.log(`Filtered photos after processing tags: ${filteredPhotos.length}`);
 
   // If 'useRemainder' is checked and there are remaining photos to be filled
   if (useRemainder && remainingPhotos > 0) {
+    console.log("Filling in remaining photos...");
     const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
     shuffleArray(additionalPhotos);
     filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
@@ -385,71 +388,14 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
 
   // Finally, slice the array based on 'totalPhotos'
   if (totalPhotos > 0) {
+    console.log(`Slicing filtered photos to match total: ${totalPhotos}`);
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
   }
-  console.log('filteredPhotos with total:', filteredPhotos);
-  console.log(`Final number of filtered photos: ${filteredPhotos.length}`);
+  console.log('filteredPhotos final:', filteredPhotos);
+  console.log(`Final filtered photos count: ${filteredPhotos.length}`);
 
   shuffleArray(filteredPhotos);
   return filteredPhotos;
-};
-
-
-const fPBT = (photos, selectedTagsAndQuantities) => {
-  // console.log('filterPhotosByTags called...');
-  // console.log('Received photos:', photos);
-  
-  // let filteredPhotos = [];
-  // let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
-
-  // Calculate total number of photos that would be selected based on slider values
-  // let totalPhotos = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
-
-  // If total photos selected are greater than 10, calculate percentage for each tag
-  if (totalPhotos > 10) {
-    selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
-      const percentage = (quantity / totalPhotos) * 10; // 10 is the limit
-      return { tag, quantity: Math.round(percentage) };
-    });
-  } else if (totalPhotos < 10) {
-    const remainder = 10 - totalPhotos;
-    selectedTagsAndQuantities.push({ tag: 'filler', quantity: remainder });
-  } else {
-    selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
-      return { tag, quantity: quantity };
-    });
-  }
-
-  // // Loop through each tag and quantity
-  // for (const { tag, quantity } of selectedTagsAndQuantities) {
-  //   const selectedPhotos = photos.filter(photo => {
-  //     return photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id);
-  //   });
-    
-  //   shuffleArray(selectedPhotos);
-  //   const photosToDisplay = selectedPhotos.slice(0, quantity);
-  //   photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
-  //   filteredPhotos.push(...photosToDisplay);
-  // }
-
-  // If "auto-fill" is checked, add additional photos
-  if (useRemainder && totalPhotos !== 0) {
-    const remainingPhotos = totalPhotos - filteredPhotos.length;
-    if (remainingPhotos > 0) {
-      const fillerPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
-      shuffleArray(fillerPhotos);
-      const photosToAdd = fillerPhotos.slice(0, remainingPhotos);
-      filteredPhotos.push(...photosToAdd);
-    }
-  }
-  
-  //   // If total photos is not 0, then slice the array to conform to the total
-  // if (totalPhotos !== 0) {
-  //   return filteredPhotos.slice(0, totalPhotos);
-  // }
-
-  // shuffleArray(filteredPhotos);
-  // return filteredPhotos;
 };
 
 const shuffleArray = (array) => {
