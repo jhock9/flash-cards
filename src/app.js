@@ -139,8 +139,12 @@ const fetchPhotosData = async () => {
 
 // Display tags
 const displayTags = async (photoData) => {
-  // dropdown.innerHTML = '';
-  // tagsList.innerHTML = '';
+  const defaultOption = dropdown.querySelector('option[value=""]');
+  dropdown.innerHTML = '';
+  if (defaultOption) {
+    dropdown.appendChild(defaultOption);
+  }
+  tagsList.innerHTML = '';
 
   console.log('Displaying tags...');
   const descriptions = await fetchDescriptions(photoData);
