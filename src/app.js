@@ -139,8 +139,8 @@ const fetchPhotosData = async () => {
 
 // Display tags
 const displayTags = async (photoData) => {
-  dropdown.innerHTML = '';
-  tagsList.innerHTML = '';
+  // dropdown.innerHTML = '';
+  // tagsList.innerHTML = '';
 
   console.log('Displaying tags...');
   const descriptions = await fetchDescriptions(photoData);
