@@ -201,13 +201,7 @@ dropdown.addEventListener('change', () => {
   const selectedTag = dropdown.value;
   
   if (selectedTags.includes(selectedTag)) {
-    console.log('DD tag already selected, removeTag CALLED...');
     removeTag(selectedTag);
-    // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-    // if (tagSpan) {
-    //   tagSpan.classList.remove('selected');
-    //   console.log('DD already selected tag span removed');
-    // }
     return;
   }
   
@@ -253,13 +247,7 @@ dropdown.addEventListener('change', () => {
   
   removeBtn.addEventListener('click', () => {
     const selectedTag = removeBtn.parentElement.dataset.tag;
-    console.log('DD removeBtn clicked, removeTag called...');
     removeTag(selectedTag);
-    // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-    // if (tagSpan) {
-    //   tagSpan.classList.remove('selected');
-    //   console.log('DD removeBtn tag span removed');
-    // }
   });
 
   tagDiv.appendChild(slider);
@@ -284,13 +272,7 @@ tagsList.addEventListener('click', (e) => {
     
     // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
-      console.log('TL tag already selected, removeTag CALLED...');
       removeTag(selectedTag);
-      // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-      // if (tagSpan) {
-      //   tagSpan.classList.remove('selected');
-      //   console.log('TL already selected tag span removed');
-      // }
       return;
     }
         
@@ -340,17 +322,9 @@ tagsList.addEventListener('click', (e) => {
     
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
-      console.log('TL removeBtn clicked, removeTag called...');
       removeTag(selectedTag);
-      // const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-      // if (tagSpan) {
-      //   tagSpan.classList.remove('selected');
-      //   console.log('TL removeBtn tag span removed');
-      // }
     });
-    
-
-    
+      
     tagDiv.appendChild(slider);
     tagDiv.appendChild(sliderValue);
     tagDiv.appendChild(tagName);
@@ -503,7 +477,6 @@ const displayPhotos = (photos) => {
 };
 
 const removeTag = (selectedTag) => {
-  console.log('trashcan called...');
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   toggleBorders();
@@ -511,7 +484,6 @@ const removeTag = (selectedTag) => {
   // Remove the tag from the selected-tags-wrapper
   const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
   if (tagDiv) {
-    console.log('trash can tag removed');
     tagDiv.remove();
   }
 
@@ -519,7 +491,6 @@ const removeTag = (selectedTag) => {
   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
   if (tagSpan) {
     tagSpan.classList.remove('selected');
-    console.log('trash can tag span remove');
   }
 }
 
@@ -557,7 +528,7 @@ totalSlider.addEventListener('input', () => {
       } else {
     remainder.disabled = false;
     totalSliderValue.classList.remove('gray-out');
-    remainder.classList.add('gray-out');
+    remainder.classList.remove('gray-out');
   }
 });
 
@@ -611,7 +582,7 @@ resetBtn.addEventListener('click', () => {
 
   // Reset totalSlider value and remainder checkbox
   totalSlider.value = 0;
-  totalSliderValue.textContent = totalPhotos === 0 ? 'N/A' : totalPhotos;
+  totalSliderValue.textContent = totalSlider.value === 0 ? 'N/A' : totalSlider.value;
   remainder.disabled = true;
   remainder.checked = false;
   useRemainder = false;
