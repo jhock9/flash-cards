@@ -344,43 +344,53 @@ tagsList.addEventListener('click', (e) => {
 const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
   console.log('Received photos:', photos);
-  
+  console.log('Received selectedTagsAndQuantities:', selectedTagsAndQuantities);
+  console.log('Received totalPhotos:', totalPhotos);
+  console.log('Received useRemainder:', useRemainder);
+
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
+  console.log('intendedTotal:', intendedTotal);
 
   // Calculate how many more photos are needed to meet the total
   let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
+  console.log('remainingPhotos:', remainingPhotos);
 
   // Loop through each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
-    const selectedPhotos = photos.filter(photo => {
-      return photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id);
-    });
+    const selectedPhotos = photos.filter(photo => 
+      photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id));
     
     shuffleArray(selectedPhotos);
     const photosToDisplay = selectedPhotos.slice(0, quantity);
+    console.log(`Adding ${photosToDisplay.length} photos for tag: ${tag}`);
+    
     photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
-  
+  console.log('filteredPhotos so far:', filteredPhotos);
+  console.log(`Filtered photos so far: ${filteredPhotos.length}`);
+
   // If 'useRemainder' is checked and there are remaining photos to be filled
   if (useRemainder && remainingPhotos > 0) {
     const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
     shuffleArray(additionalPhotos);
     filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
   }
+  console.log('filteredPhotos with remainder:', filteredPhotos);
+  console.log(`Filtered photos with remainder: ${filteredPhotos.length}`); 
 
   // Finally, slice the array based on 'totalPhotos'
   if (totalPhotos > 0) {
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
   }
+  console.log('filteredPhotos with total:', filteredPhotos);
+  console.log(`Final number of filtered photos: ${filteredPhotos.length}`);
 
-  // Final shuffle before displaying
   shuffleArray(filteredPhotos);
-
   return filteredPhotos;
 };
 
