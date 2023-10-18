@@ -243,18 +243,35 @@ dropdown.addEventListener('change', () => {
   const tagName = document.createElement('span');
   tagName.classList.add('name', 'center');
   tagName.textContent = selectedTag;
-  
-  const removeBtn = document.createElement('button');
-  removeBtn.type = 'button';
-  removeBtn.classList.add('remove-btn', 'center'); 
-  const icon = document.createElement('i');
-  icon.classList.add('fa-solid', 'fa-trash-can');
-  removeBtn.appendChild(icon);
-  
-  removeBtn.addEventListener('click', () => {
-    const selectedTag = removeBtn.parentElement.dataset.tag;
-    removeTag(selectedTag);
+
+  const lockToggle = document.createElement('button');
+  lockToggle.type = 'button';
+  lockToggle.classList.add('lock-toggle', 'center');
+  const lockIcon = document.createElement('i');
+  lockIcon.classList.add('fa-solid', 'fa-lock');
+  lockToggle.appendChild(lockIcon);
+  lockToggle.addEventListener('click', () => {
+    const isLocked = tagDiv.dataset.locked === 'true';
+    tagDiv.dataset.locked = isLocked ? 'false' : 'true';
+    if (isLocked) {
+      lockIcon.classList.remove('fa-lock');
+      lockIcon.classList.add('fa-unlock');
+    } else {
+      lockIcon.classList.remove('fa-unlock');
+      lockIcon.classList.add('fa-lock');
+    }
   });
+
+  const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.classList.add('remove-btn', 'center'); 
+    const removeIcon = document.createElement('i');
+    removeIcon.classList.add('fa-solid', 'fa-trash-can');
+    removeBtn.appendChild(removeIcon);
+    removeBtn.addEventListener('click', () => {
+      const selectedTag = removeBtn.parentElement.dataset.tag;
+      removeTag(selectedTag);
+    });
 
   tagDiv.appendChild(slider);
   tagDiv.appendChild(sliderValue);
@@ -298,7 +315,7 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.classList.add('selected-tag', 'center');
     tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
     
-    // Add a quantity slider, tag name, and remove btn
+    // Add a quantity slider, tag name, lock toggle, and remove btn
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 1;
@@ -317,15 +334,37 @@ tagsList.addEventListener('click', (e) => {
     tagName.classList.add('name', 'center');
     tagName.textContent = selectedTag;
     
-//!! insert "lock selection" toggle here
+    // const lockToggle = document.createElement('input');
+    // lockToggle.type = 'checkbox';
+    // lockToggle.classList.add('lock-toggle', 'center');
+    // lockToggle.addEventListener('change', function() {
+    //   tagDiv.dataset.locked = this.checked ? 'true' : 'false';
+    // });
+
+    const lockToggle = document.createElement('button');
+    lockToggle.type = 'button';
+    lockToggle.classList.add('lock-toggle', 'center');
+    const lockIcon = document.createElement('i');
+    lockIcon.classList.add('fa-solid', 'fa-lock');
+    lockToggle.appendChild(lockIcon);
+    lockToggle.addEventListener('click', () => {
+      const isLocked = tagDiv.dataset.locked === 'true';
+      tagDiv.dataset.locked = isLocked ? 'false' : 'true';
+      if (isLocked) {
+        lockIcon.classList.remove('fa-lock');
+        lockIcon.classList.add('fa-unlock');
+      } else {
+        lockIcon.classList.remove('fa-unlock');
+        lockIcon.classList.add('fa-lock');
+      }
+    });
 
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.classList.add('remove-btn', 'center'); 
-    const icon = document.createElement('i');
-    icon.classList.add('fa-solid', 'fa-trash-can');
-    removeBtn.appendChild(icon);
-    
+    const removeIcon = document.createElement('i');
+    removeIcon.classList.add('fa-solid', 'fa-trash-can');
+    removeBtn.appendChild(removeIcon);
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
       removeTag(selectedTag);
@@ -334,6 +373,7 @@ tagsList.addEventListener('click', (e) => {
     tagDiv.appendChild(slider);
     tagDiv.appendChild(sliderValue);
     tagDiv.appendChild(tagName);
+    tagDiv.appendChild(lockToggle);
     tagDiv.appendChild(removeBtn);
     
     selectedTagsWrapper.appendChild(tagDiv);
@@ -343,38 +383,28 @@ tagsList.addEventListener('click', (e) => {
 //* HELPER FUNCTIONS
 const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
-  console.log('Received photos:', photos);
-  console.log('Received selectedTagsAndQuantities:', selectedTagsAndQuantities);
-  console.log('Received totalPhotos:', totalPhotos);
-  console.log('Received useRemainder:', useRemainder);
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
-  console.log('intendedTotal:', intendedTotal);
   
   // Calculate how many more photos are needed to meet the total
   let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
-  // console.log('remainingPhotos:', remainingPhotos);
   
   // Loop through each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
-    // console.log(`Processing tag: ${tag}, quantity: ${quantity}`);
     
     const selectedPhotos = photos.filter(photo => 
       photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id));
     
     shuffleArray(selectedPhotos);
     const photosToDisplay = selectedPhotos.slice(0, quantity);
-    // console.log(`Adding ${photosToDisplay.length} photos for tag: ${tag}`);
     
     photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
-  // console.log('filteredPhotos after processing tags:', filteredPhotos);
-  // console.log(`Filtered photos after processing tags: ${filteredPhotos.length}`);
   
   // If 'useRemainder' is checked and there are remaining photos to be filled
   if (useRemainder && remainingPhotos > 0) {
@@ -383,16 +413,11 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     shuffleArray(additionalPhotos);
     filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
   }
-  // console.log('filteredPhotos with remainder:', filteredPhotos);
-  // console.log(`Filtered photos with remainder: ${filteredPhotos.length}`); 
   
   // Finally, slice the array based on 'totalPhotos'
   if (totalPhotos > 0) {
-    // console.log(`Slicing filtered photos to match total: ${totalPhotos}`);
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
   }
-  // console.log('filteredPhotos final:', filteredPhotos);
-  // console.log(`Final filtered photos count: ${filteredPhotos.length}`);
   
   shuffleArray(filteredPhotos);
   return filteredPhotos;
@@ -498,6 +523,15 @@ remainder.addEventListener('change', () => {
   lastUseRemainder = useRemainder;
 });
 
+removeBtns.forEach(removeBtn => {
+  removeBtn.addEventListener('click', () => {
+    console.log('Remove button clicked.');
+    const selectedTag = removeBtn.parentElement.dataset.tag;
+    console.log('Selected tag to remove:', selectedTag);
+    removeTag(selectedTag);
+  });
+});
+
 openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   await fetchPhotosData();
@@ -516,30 +550,25 @@ refreshBtn.addEventListener('click', async () => {
   }
 });
 
-// Attach click event listeners to each remove button
-removeBtns.forEach(removeBtn => {
-  removeBtn.addEventListener('click', () => {
-    console.log('Remove button clicked.');
-    const selectedTag = removeBtn.parentElement.dataset.tag;
-    console.log('Selected tag to remove:', selectedTag);
-    removeTag(selectedTag);
-  });
-});
-
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
   selectedTags = [];
   
-  // Remove all selected tags from selected-tags-wrapper
+  // Remove all selected tags from selected-tags-wrapper that are not locked
   const selectedTagDivs = document.querySelectorAll('.selected-tag');
   selectedTagDivs.forEach((div) => {
-    div.remove();
+    if (div.dataset.locked !== 'true') {
+      div.remove();
+    }
   });
   
-  // Deselect selected tags in tags list
+  // Deselect selected tags in tags list that are not locked
   const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
   selectedTagSpans.forEach((span) => {
-    span.classList.remove('selected');
+    const tagName = span.textContent;
+    if (!Array.from(selectedTagDivs).some(div => div.dataset.tag === tagName && div.dataset.locked === 'true')) {
+      span.classList.remove('selected');
+    }
   });
 
   // Reset totalSlider value and remainder checkbox
