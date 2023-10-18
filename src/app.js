@@ -6,16 +6,15 @@ const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
 const signoutBtn = document.querySelector('#signout-btn');
+const totalSlider = document.querySelector('#total-slider');
+const totalSliderValue = document.querySelector('#total-slider-value');
+const remainder = document.querySelector('#remainder-checkbox');
 const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsWrapper = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll('.remove-btn');
 const dropdown = document.getElementById('dropdown');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
-
-const totalSlider = document.querySelector('#total-slider');
-const totalSliderValue = document.querySelector('#total-slider-value');
-const remainder = document.querySelector('#remainder-checkbox');
 
 let googleClientID; 
 let lastSelectedTagsAndQuantities;
@@ -219,21 +218,21 @@ dropdown.addEventListener('change', () => {
   selectedTags.push(selectedTag);
   dropdown.selectedIndex = 0;
   toggleBorders();
-
+  
   // Create a new div for the selected tag
   const tagDiv = document.createElement('div');
   tagDiv.classList.add('selected-tag', 'center');
   tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
   
-  // Add a quantity slider, tag name, and remove btn
+  // Add a quantity slider, tag name, lock toggle, and remove btn
   const slider = document.createElement('input');
   slider.type = 'range';
   slider.min = 1;
   slider.max = 6; 
   slider.value = 1;
   slider.classList.add('slider');
-  const sliderValue = document.createElement('span');
   
+  const sliderValue = document.createElement('span');
   sliderValue.classList.add('slider-value');
   sliderValue.innerHTML = slider.value;
   slider.oninput = () => {
@@ -243,36 +242,43 @@ dropdown.addEventListener('change', () => {
   const tagName = document.createElement('span');
   tagName.classList.add('name', 'center');
   tagName.textContent = selectedTag;
-
+  
   const lockToggle = document.createElement('button');
   lockToggle.type = 'button';
   lockToggle.classList.add('lock-toggle', 'center');
+  
   const lockIcon = document.createElement('i');
   lockIcon.classList.add('fa-solid', 'fa-unlock');
   lockToggle.appendChild(lockIcon);
+  
   lockToggle.addEventListener('click', () => {
     const isLocked = tagDiv.dataset.locked === 'true';
     tagDiv.dataset.locked = isLocked ? 'false' : 'true';
     if (isLocked) {
       lockIcon.classList.remove('fa-lock');
       lockIcon.classList.add('fa-unlock');
+      lockIcon.classList.add('locked-tag');
     } else {
-      lockIcon.classList.remove('fa-unlock');
       lockIcon.classList.add('fa-lock');
+      lockIcon.classList.remove('fa-unlock');
+      lockIcon.classList.remove('locked-tag');
+      saveLockedTags();
     }
   });
-
+  
   const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.classList.add('remove-btn', 'center'); 
     const removeIcon = document.createElement('i');
+    
     removeIcon.classList.add('fa-solid', 'fa-trash-can');
     removeBtn.appendChild(removeIcon);
+    
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
       removeTag(selectedTag);
     });
-
+    
   tagDiv.appendChild(slider);
   tagDiv.appendChild(sliderValue);
   tagDiv.appendChild(tagName);
@@ -323,8 +329,8 @@ tagsList.addEventListener('click', (e) => {
     slider.max = 6; 
     slider.value = 1;
     slider.classList.add('slider');
-    const sliderValue = document.createElement('span');
     
+    const sliderValue = document.createElement('span');
     sliderValue.classList.add('slider-value');
     sliderValue.innerHTML = slider.value;
     slider.oninput = () => {
@@ -335,37 +341,37 @@ tagsList.addEventListener('click', (e) => {
     tagName.classList.add('name', 'center');
     tagName.textContent = selectedTag;
     
-    // const lockToggle = document.createElement('input');
-    // lockToggle.type = 'checkbox';
-    // lockToggle.classList.add('lock-toggle', 'center');
-    // lockToggle.addEventListener('change', function() {
-    //   tagDiv.dataset.locked = this.checked ? 'true' : 'false';
-    // });
-
     const lockToggle = document.createElement('button');
     lockToggle.type = 'button';
     lockToggle.classList.add('lock-toggle', 'center');
+    
     const lockIcon = document.createElement('i');
     lockIcon.classList.add('fa-solid', 'fa-unlock');
     lockToggle.appendChild(lockIcon);
+    
     lockToggle.addEventListener('click', () => {
       const isLocked = tagDiv.dataset.locked === 'true';
       tagDiv.dataset.locked = isLocked ? 'false' : 'true';
       if (isLocked) {
         lockIcon.classList.remove('fa-lock');
         lockIcon.classList.add('fa-unlock');
+        lockIcon.classList.add('locked-tag');
       } else {
-        lockIcon.classList.remove('fa-unlock');
         lockIcon.classList.add('fa-lock');
+        lockIcon.classList.remove('fa-unlock');
+        lockIcon.classList.remove('locked-tag');
+        saveLockedTags();
       }
     });
-
+    
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.classList.add('remove-btn', 'center'); 
+    
     const removeIcon = document.createElement('i');
     removeIcon.classList.add('fa-solid', 'fa-trash-can');
     removeBtn.appendChild(removeIcon);
+    
     removeBtn.addEventListener('click', () => {
       const selectedTag = removeBtn.parentElement.dataset.tag;
       removeTag(selectedTag);
@@ -482,31 +488,140 @@ const removeTag = (selectedTag) => {
 
 // Clears selected tags based on clearLocked
 const clearSelectedTags = (clearLocked = false) => {
+  console.log('clearSelectedTags called with clearLocked:', clearLocked);
   const selectedTagDivs = document.querySelectorAll('.selected-tag');
-
+  
+  // Logging the initial state
+  console.log('Initial selectedTags:', selectedTags);
+  console.log('Initial selectedTags:', Array.from(selectedTagDivs).map(div => div.dataset.tag));
+  console.log('Initial selectedTags.length:', selectedTags.length);
+  
   // Remove selected tags from selected-tags-wrapper that are not locked or when clearLocked is true
   selectedTagDivs.forEach((div) => {
+    console.log ('Evaluating div for tag:', div.dataset.tag, 'and locked:', div.dataset.locked);
     if (clearLocked || div.dataset.locked !== 'true') {
+      console.log('Removing div for tag:', div.dataset.tag);
       div.remove();
     }
   });
   
+  console.log('Final selectedTags:', selectedTags);
+  console.log('Final selectedTags:', Array.from(selectedTagDivs).map(div => div.dataset.tag));
+  console.log('Final selectedTags.length:', selectedTags.length);
+  
   const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
+  console.log('Initial seletec tags in tags-list:', Array.from(selectedTagSpans).map(span => span.textContent));
   
   // Remove selected tags in tags-list that are not locked
   selectedTagSpans.forEach((span) => {
     const tagName = span.textContent;
+    console.log ('Evaluating span for tag:', tagName, 'and locked:', span.dataset.locked);
     if (clearLocked || !Array.from(selectedTagDivs).some(div => div.dataset.tag === tagName && div.dataset.locked === 'true')) {
       span.classList.remove('selected');
     } else {
+      console.log('Adding "selected" class for tag:', tagName);
       span.classList.add('selected'); // Ensure locked tags remain highlighted
     }
   });
   
-    // Update selectedTags array to only contain locked tags if ignoreLocked is false
-    selectedTags = clearLocked ? [] : selectedTags.filter(tag => tag.locked);
-
+  // Update selectedTags array to only contain locked tags if ignoreLocked is false
+  selectedTags = clearLocked ? [] : selectedTags.filter(tag => tag.locked);
+  
   // selectedTags = selectedTags.filter(tag => (clearLocked ? false : tag.locked));
+};
+
+// Save locked tags
+const saveLockedTags = () => {
+  const lockedTags = Array.from(document.querySelectorAll('.selected-tag'))
+    .filter(tagDiv => tagDiv.dataset.locked === 'true')
+    .map(tagDiv => {
+      return { tag: tagDiv.dataset.tag, quantity: tagDiv.querySelector('.slider').value };
+    });
+    
+  localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
+};
+
+// Load and render locked tags
+const loadLockedTags = () => {
+  const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
+  renderLockedTags(loadedLockedTags);
+};
+
+// Render locked tags
+const renderLockedTags = (lockedTags) => {
+  selectedTagsWrapper.innerHTML = '';
+  
+  lockedTags.forEach(tagInfo => {
+    const { tag, quantity } = tagInfo;
+    
+    const tagDiv = document.createElement('div');
+    tagDiv.classList.add('selected-tag', 'center');
+    tagDiv.dataset.tag = tag;
+    
+    // Add a quantity slider, tag name, lock toggle, and remove btn
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 1;
+    slider.max = 6; 
+    slider.value = quantity;
+    slider.classList.add('slider');
+    
+    const sliderValue = document.createElement('span');
+    sliderValue.classList.add('slider-value');
+    sliderValue.innerHTML = quantity;
+    slider.oninput = () => {
+      sliderValue.innerHTML = slider.value;
+    };
+    
+    const tagName = document.createElement('span');
+    tagName.classList.add('name', 'center');
+    tagName.textContent = tag;
+    
+    const lockToggle = document.createElement('button');
+    lockToggle.type = 'button';
+    lockToggle.classList.add('lock-toggle', 'center');
+    
+    const lockIcon = document.createElement('i');
+    lockIcon.classList.add('fa-solid', 'fa-lock', 'locked-tag');
+    lockToggle.appendChild(lockIcon);
+    tagDiv.dataset.locked = 'true';
+
+    lockToggle.addEventListener('click', () => {
+      const isLocked = tagDiv.dataset.locked === 'true';
+      tagDiv.dataset.locked = isLocked ? 'false' : 'true';
+      if (isLocked) {
+        lockIcon.classList.remove('fa-lock');
+        lockIcon.classList.add('fa-unlock');
+        lockIcon.classList.add('locked-tag');
+      } else {
+        lockIcon.classList.add('fa-lock');
+        lockIcon.classList.remove('fa-unlock');
+        lockIcon.classList.remove('locked-tag');
+        saveLockedTags();
+      }
+    });
+    
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.classList.add('remove-btn', 'center'); 
+    
+    const removeIcon = document.createElement('i');
+    removeIcon.classList.add('fa-solid', 'fa-trash-can');
+    removeBtn.appendChild(removeIcon);
+    
+    removeBtn.addEventListener('click', () => {
+      const selectedTag = removeBtn.parentElement.dataset.tag;
+      removeTag(selectedTag);
+    });
+      
+    tagDiv.appendChild(slider);
+    tagDiv.appendChild(sliderValue);
+    tagDiv.appendChild(tagName);
+    tagDiv.appendChild(lockToggle);
+    tagDiv.appendChild(removeBtn);
+      
+    selectedTagsWrapper.appendChild(tagDiv);
+  });
 };
 
 //* TOGGLES & BUTTONS
@@ -698,4 +813,8 @@ signoutBtn.addEventListener('click', async (e) => {
   } catch (error) {
     console.error('Error during logout:', error);
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadAndRenderLockedTags();
 });
