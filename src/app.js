@@ -510,7 +510,7 @@ const clearSelectedTags = (clearLocked = false) => {
   console.log('Final selectedTags.length:', selectedTags.length);
   
   const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
-  console.log('Initial seletec tags in tags-list:', Array.from(selectedTagSpans).map(span => span.textContent));
+  console.log('Initial selected tags in tags-list:', Array.from(selectedTagSpans).map(span => span.textContent));
   
   // Remove selected tags in tags-list that are not locked
   selectedTagSpans.forEach((span) => {
@@ -526,8 +526,6 @@ const clearSelectedTags = (clearLocked = false) => {
   
   // Update selectedTags array to only contain locked tags if ignoreLocked is false
   selectedTags = clearLocked ? [] : selectedTags.filter(tag => tag.locked);
-  
-  // selectedTags = selectedTags.filter(tag => (clearLocked ? false : tag.locked));
 };
 
 // Save locked tags
@@ -537,13 +535,14 @@ const saveLockedTags = () => {
     .map(tagDiv => {
       return { tag: tagDiv.dataset.tag, quantity: tagDiv.querySelector('.slider').value };
     });
-    
+  console.log('Saving locked tags:', lockedTags);
   localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
 };
 
 // Load and render locked tags
 const loadLockedTags = () => {
   const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
+  console.log('Loaded locked tags:', loadedLockedTags);
   renderLockedTags(loadedLockedTags);
 };
 
@@ -816,5 +815,6 @@ signoutBtn.addEventListener('click', async (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadAndRenderLockedTags();
+  console.log('DOMContentLoaded event fired...');
+  loadLockedTags();
 });
