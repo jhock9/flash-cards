@@ -23,6 +23,8 @@ let selectedTags = [];
 let photos;
 let totalPhotos = 0;
 let useRemainder = false;
+let lastTotalPhotos; 
+let lastUseRemainder;
 
 const fetchConfig = async () => {
   try {
@@ -339,75 +341,73 @@ tagsList.addEventListener('click', (e) => {
 });
 
 //* HELPER FUNCTIONS
-
-//ORIGINAL FUNCTION
 const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
   console.log('Received photos:', photos);
   console.log('Received selectedTagsAndQuantities:', selectedTagsAndQuantities);
   console.log('Received totalPhotos:', totalPhotos);
   console.log('Received useRemainder:', useRemainder);
-
+  
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   console.log('intendedTotal:', intendedTotal);
-
+  
   // Calculate how many more photos are needed to meet the total
   let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
-  console.log('remainingPhotos:', remainingPhotos);
-
+  // console.log('remainingPhotos:', remainingPhotos);
+  
   // Loop through each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
-    console.log(`Processing tag: ${tag}, quantity: ${quantity}`);
-
+    // console.log(`Processing tag: ${tag}, quantity: ${quantity}`);
+    
     const selectedPhotos = photos.filter(photo => 
       photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id));
     
     shuffleArray(selectedPhotos);
     const photosToDisplay = selectedPhotos.slice(0, quantity);
-    console.log(`Adding ${photosToDisplay.length} photos for tag: ${tag}`);
+    // console.log(`Adding ${photosToDisplay.length} photos for tag: ${tag}`);
     
     photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
-  console.log('filteredPhotos after processing tags:', filteredPhotos);
-  console.log(`Filtered photos after processing tags: ${filteredPhotos.length}`);
-
+  // console.log('filteredPhotos after processing tags:', filteredPhotos);
+  // console.log(`Filtered photos after processing tags: ${filteredPhotos.length}`);
+  
   // If 'useRemainder' is checked and there are remaining photos to be filled
   if (useRemainder && remainingPhotos > 0) {
-    console.log("Filling in remaining photos...");
+    // console.log("Filling in remaining photos...");
     const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
     shuffleArray(additionalPhotos);
     filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
   }
-  console.log('filteredPhotos with remainder:', filteredPhotos);
-  console.log(`Filtered photos with remainder: ${filteredPhotos.length}`); 
-
+  // console.log('filteredPhotos with remainder:', filteredPhotos);
+  // console.log(`Filtered photos with remainder: ${filteredPhotos.length}`); 
+  
   // Finally, slice the array based on 'totalPhotos'
   if (totalPhotos > 0) {
-    console.log(`Slicing filtered photos to match total: ${totalPhotos}`);
+    // console.log(`Slicing filtered photos to match total: ${totalPhotos}`);
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
   }
-  console.log('filteredPhotos final:', filteredPhotos);
-  console.log(`Final filtered photos count: ${filteredPhotos.length}`);
-
+  // console.log('filteredPhotos final:', filteredPhotos);
+  // console.log(`Final filtered photos count: ${filteredPhotos.length}`);
+  
   shuffleArray(filteredPhotos);
   return filteredPhotos;
 };
 
 const shuffleArray = (array) => {
   console.log('Shuffling array...');
-  console.log('Original Array:', array);
+  // console.log('Original Array:', array);
   
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
   
-  console.log('Shuffled Array:', array);
+  // console.log('Shuffled Array:', array);
   return array;
 };
 
@@ -474,6 +474,7 @@ const toggleBorders = () => {
 
 totalSlider.addEventListener('input', () => {
   totalPhotos = parseInt(totalSlider.value, 10);
+  lastTotalPhotos = totalPhotos;
 
   // Display 'N/A' when slider value is 0
   totalSliderValue.textContent = totalPhotos === 0 ? 'N/A' : totalPhotos;
@@ -494,6 +495,7 @@ totalSlider.addEventListener('input', () => {
 
 remainder.addEventListener('change', () => {
   useRemainder = remainder.checked;
+  lastUseRemainder = useRemainder;
 });
 
 openBtn.addEventListener('click', async () => {
@@ -504,9 +506,9 @@ openBtn.addEventListener('click', async () => {
 
 refreshBtn.addEventListener('click', async () => {
   console.log('Refresh button clicked...');
-  if (lastSelectedTagsAndQuantities !== null) {
+  if (lastSelectedTagsAndQuantities !== null && lastTotalPhotos !== null && lastUseRemainder !== null) {
     if (photos) {
-      const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities);
+      const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, lastTotalPhotos, lastUseRemainder);
       displayPhotos(filteredPhotos);
     } else {
       console.error('Photos data is not available. Fetch it first.');
