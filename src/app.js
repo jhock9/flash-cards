@@ -452,7 +452,7 @@ const displayPhotos = (photos) => {
   } else {
     flexBasis = `calc(80% - 2rem)`;
   }
-
+  
   for (let i = 0; i < numPhotos; i++) {
     const img = document.createElement('img');
     img.src = photos[i].baseUrl;
@@ -466,19 +466,48 @@ const removeTag = (selectedTag) => {
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   toggleBorders();
-
+  
   // Remove the tag from the selected-tags-wrapper
   const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
   if (tagDiv) {
     tagDiv.remove();
   }
-
+  
   // Deselect the tag in the tags-list
   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
   if (tagSpan) {
     tagSpan.classList.remove('selected');
   }
 }
+
+// Clears selected tags based on clearLocked
+const clearSelectedTags = (clearLocked = false) => {
+  const selectedTagDivs = document.querySelectorAll('.selected-tag');
+
+  // Remove selected tags from selected-tags-wrapper that are not locked or when clearLocked is true
+  selectedTagDivs.forEach((div) => {
+    if (clearLocked || div.dataset.locked !== 'true') {
+      div.remove();
+    }
+  });
+  
+  const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
+  
+  // Remove selected tags in tags-list that are not locked
+  selectedTagSpans.forEach((span) => {
+    const tagName = span.textContent;
+    if (clearLocked || !Array.from(selectedTagDivs).some(div => div.dataset.tag === tagName && div.dataset.locked === 'true')) {
+      span.classList.remove('selected');
+    } else {
+      span.classList.add('selected'); // Ensure locked tags remain highlighted
+    }
+  });
+  
+    // Update selectedTags array to only contain locked tags if ignoreLocked is false
+    selectedTags = clearLocked ? [] : selectedTags.filter(tag => tag.locked);
+
+  // selectedTags = selectedTags.filter(tag => (clearLocked ? false : tag.locked));
+};
 
 //* TOGGLES & BUTTONS
 const toggleNav = () => {
@@ -489,7 +518,8 @@ const toggleNav = () => {
 }
 
 const toggleBorders = () => {
-  if (selectedTags.length >= 1) {
+  const visibleTags = selectedTags.filter (tag => !tag.locked).length;
+  if (visibleTags >= 1) {
     selectedTagsWrapper.classList.add('show-borders');
     selectedTagsWrapper.classList.remove('hide');
   } else {
@@ -554,22 +584,7 @@ refreshBtn.addEventListener('click', async () => {
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
   
-  // Remove all selected tags from selected-tags-wrapper that are not locked
-  const selectedTagDivs = document.querySelectorAll('.selected-tag');
-  selectedTagDivs.forEach((div) => {
-    if (div.dataset.locked !== 'true') {
-      div.remove();
-    }
-  });
-  
-  // Deselect selected tags in tags list that are not locked
-  const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
-  selectedTagSpans.forEach((span) => {
-    const tagName = span.textContent;
-    if (!Array.from(selectedTagDivs).some(div => div.dataset.tag === tagName && div.dataset.locked === 'true')) {
-      span.classList.remove('selected');
-    }
-  });
+  clearSelectedTags();
 
   // Reset totalSlider value and remainder checkbox
   totalSlider.value = 0;
@@ -580,13 +595,15 @@ resetBtn.addEventListener('click', () => {
   totalSliderValue.classList.add('gray-out');
   remainder.classList.add('gray-out');
 
+  dropdown.value = 'select a tag';
   toggleBorders();
 });
 
 randomBtn.addEventListener('click', () => {
   console.log('Random button clicked...');
-  resetBtn.click();
   
+  clearSelectedTags(true);
+
   // Get all available tags
   const allTags = Array.from(document.querySelectorAll('.tag .name')).map(span => span.textContent);
   
