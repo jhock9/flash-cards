@@ -553,7 +553,6 @@ refreshBtn.addEventListener('click', async () => {
 
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
-  selectedTags = [];
   
   // Remove all selected tags from selected-tags-wrapper that are not locked
   const selectedTagDivs = document.querySelectorAll('.selected-tag');
