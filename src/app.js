@@ -352,7 +352,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
   // Sum of all photos that are intended to be selected (based on slider values)
-  let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + quantity, 0);
+  let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   console.log('intendedTotal:', intendedTotal);
 
   // Calculate how many more photos are needed to meet the total
