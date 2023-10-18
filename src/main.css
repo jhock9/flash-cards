@@ -94,7 +94,7 @@ body {
   text-align: center;
   color: var(--primary-color);
   font-weight: 700;
-  margin: 0 3rem 0 1rem;
+  margin: 0 2rem 0 1rem;
   padding: 0;
 }
 
@@ -325,9 +325,10 @@ letter-spacing: 0.1rem;
 }
 
 #selected-tags-wrapper {
-  width: 90%;
+  width: 100%;
   margin: 1.5rem 0;
   padding: 1.5rem 0;
+  justify-content: flex-start;
 }
 
 .show-borders {
@@ -364,9 +365,10 @@ letter-spacing: 0.1rem;
   border-color: var(--white);
 }
 
+.lock-toggle,
 .remove-btn {
   position: absolute;
-  right: 0;
+  right: 4rem;
   width: auto;
   margin: 0 4.5rem 0 1rem;
   padding: 0;
@@ -376,6 +378,12 @@ letter-spacing: 0.1rem;
   border: none;
 }
 
+.remove-btn {
+  right: 0;
+}
+
+.lock-toggle:hover,
+.lock-toggle:active,
 .remove-btn:hover,
 .remove-btn:active {
   color: var(--primary-color);
@@ -560,7 +568,7 @@ main {
     display: none;
   }
 
-  footer {dfs
+  footer {
     padding: 1.5rem 0;
   }
 

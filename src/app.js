@@ -248,7 +248,7 @@ dropdown.addEventListener('change', () => {
   lockToggle.type = 'button';
   lockToggle.classList.add('lock-toggle', 'center');
   const lockIcon = document.createElement('i');
-  lockIcon.classList.add('fa-solid', 'fa-lock');
+  lockIcon.classList.add('fa-solid', 'fa-unlock');
   lockToggle.appendChild(lockIcon);
   lockToggle.addEventListener('click', () => {
     const isLocked = tagDiv.dataset.locked === 'true';
@@ -276,6 +276,7 @@ dropdown.addEventListener('change', () => {
   tagDiv.appendChild(slider);
   tagDiv.appendChild(sliderValue);
   tagDiv.appendChild(tagName);
+  tagDiv.appendChild(lockToggle);
   tagDiv.appendChild(removeBtn);
   
   selectedTagsWrapper.appendChild(tagDiv);
@@ -345,7 +346,7 @@ tagsList.addEventListener('click', (e) => {
     lockToggle.type = 'button';
     lockToggle.classList.add('lock-toggle', 'center');
     const lockIcon = document.createElement('i');
-    lockIcon.classList.add('fa-solid', 'fa-lock');
+    lockIcon.classList.add('fa-solid', 'fa-unlock');
     lockToggle.appendChild(lockIcon);
     lockToggle.addEventListener('click', () => {
       const isLocked = tagDiv.dataset.locked === 'true';
