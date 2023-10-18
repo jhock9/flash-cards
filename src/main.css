@@ -390,6 +390,11 @@ letter-spacing: 0.1rem;
   background-color: var(--second-color);
 }
 
+.locked {
+  color: var(--primary-color);
+  background-color: var(--second-color);
+}
+
 #dropdown {
   width: 70%;
   height: 4rem;
