@@ -98,6 +98,8 @@ const checkAuthentication = async () => {
       if (window.location.pathname === '/landing.html') {
         window.location.href = '/flashcards.html';
       }
+
+      loadLockedTags();
     } else {
       console.log('User is not authenticated.');
       
@@ -204,6 +206,7 @@ const fetchDescriptions = async (photoData) => {
 dropdown.addEventListener('change', () => {
   console.log('Dropdown changed...');
   const selectedTag = dropdown.value;
+  loadLockedTags();
   
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
@@ -299,6 +302,7 @@ tagsList.addEventListener('click', (e) => {
   console.log('Tags-list clicked...');
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
+    loadLockedTags();
     
     // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
@@ -542,6 +546,7 @@ const loadLockedTags = () => {
   const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
   console.log('Locked tags loaded:', JSON.parse(localStorage.getItem('lockedTags')));
   renderLockedTags(loadedLockedTags);
+  toggleBorders();
 };
 
 // Render locked tags
@@ -623,7 +628,7 @@ const renderLockedTags = (lockedTags) => {
     
     selectedTagsWrapper.appendChild(tagDiv);
   });
-  
+
   console.log('Final selectedTagsWrapper:', selectedTagsWrapper.innerHTML);
 };
 
@@ -685,6 +690,7 @@ openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   await fetchPhotosData();
   toggleNav();
+  loadLockedTags();
 });
 
 refreshBtn.addEventListener('click', async () => {
@@ -813,6 +819,7 @@ signoutBtn.addEventListener('click', async (e) => {
     console.log('User signed out.');
     
     window.location.href = '/landing.html';
+    loadLockedTags();
   } catch (error) {
     console.error('Error during logout:', error);
   }
