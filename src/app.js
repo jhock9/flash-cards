@@ -491,23 +491,20 @@ const clearSelectedTags = (clearLocked = false) => {
   console.log('clearSelectedTags called with clearLocked:', clearLocked);
   const selectedTagDivs = document.querySelectorAll('.selected-tag');
   
-  // Logging the initial state
   console.log('Initial selectedTags:', selectedTags);
   console.log('Initial selectedTags:', Array.from(selectedTagDivs).map(div => div.dataset.tag));
-  console.log('Initial selectedTags.length:', selectedTags.length);
   
   // Remove selected tags from selected-tags-wrapper that are not locked or when clearLocked is true
   selectedTagDivs.forEach((div) => {
     console.log ('Evaluating div for tag:', div.dataset.tag, 'and locked:', div.dataset.locked);
     if (clearLocked || div.dataset.locked !== 'true') {
       console.log('Removing div for tag:', div.dataset.tag);
-      div.remove();
+      removeTag(div.dataset.tag); 
     }
   });
   
   console.log('Final selectedTags:', selectedTags);
   console.log('Final selectedTags:', Array.from(selectedTagDivs).map(div => div.dataset.tag));
-  console.log('Final selectedTags.length:', selectedTags.length);
   
   const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
   console.log('Initial selected tags in tags-list:', Array.from(selectedTagSpans).map(span => span.textContent));
@@ -537,20 +534,23 @@ const saveLockedTags = () => {
     });
   console.log('Saving locked tags:', lockedTags);
   localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
+  console.log('Locked tags saved:', JSON.parse(localStorage.getItem('lockedTags')));
 };
 
 // Load and render locked tags
 const loadLockedTags = () => {
   const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
-  console.log('Loaded locked tags:', loadedLockedTags);
+  console.log('Locked tags loaded:', JSON.parse(localStorage.getItem('lockedTags')));
   renderLockedTags(loadedLockedTags);
 };
 
 // Render locked tags
 const renderLockedTags = (lockedTags) => {
+  console.log('Rendering locked tags...');
   selectedTagsWrapper.innerHTML = '';
   
   lockedTags.forEach(tagInfo => {
+    console.log('Rendering tag:', tagInfo);
     const { tag, quantity } = tagInfo;
     
     const tagDiv = document.createElement('div');
@@ -584,7 +584,7 @@ const renderLockedTags = (lockedTags) => {
     lockIcon.classList.add('fa-solid', 'fa-lock', 'locked-tag');
     lockToggle.appendChild(lockIcon);
     tagDiv.dataset.locked = 'true';
-
+    
     lockToggle.addEventListener('click', () => {
       const isLocked = tagDiv.dataset.locked === 'true';
       tagDiv.dataset.locked = isLocked ? 'false' : 'true';
@@ -618,9 +618,13 @@ const renderLockedTags = (lockedTags) => {
     tagDiv.appendChild(tagName);
     tagDiv.appendChild(lockToggle);
     tagDiv.appendChild(removeBtn);
-      
+    
+    console.log('Tag Div:', tagDiv);
+    
     selectedTagsWrapper.appendChild(tagDiv);
   });
+  
+  console.log('Final selectedTagsWrapper:', selectedTagsWrapper.innerHTML);
 };
 
 //* TOGGLES & BUTTONS
