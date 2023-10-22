@@ -99,7 +99,7 @@ const checkAuthentication = async () => {
         window.location.href = '/flashcards.html';
       }
 
-      loadLockedTags();
+      loadRenderLockedTags();
     } else {
       console.log('User is not authenticated.');
       
@@ -206,7 +206,6 @@ const fetchDescriptions = async (photoData) => {
 dropdown.addEventListener('change', () => {
   console.log('Dropdown changed...');
   const selectedTag = dropdown.value;
-  loadLockedTags();
   
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
@@ -223,9 +222,9 @@ dropdown.addEventListener('change', () => {
   toggleBorders();
   
   // Create a new div for the selected tag
-  const tagDiv = document.createElement('div');
-  tagDiv.classList.add('selected-tag', 'center');
-  tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
+  const selectedDiv = document.createElement('div');
+  selectedDiv.classList.add('selected-div', 'center');
+  selectedDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
   
   // Add a quantity slider, tag name, lock toggle, and remove btn
   const slider = document.createElement('input');
@@ -255,17 +254,16 @@ dropdown.addEventListener('change', () => {
   lockToggle.appendChild(lockIcon);
   
   lockToggle.addEventListener('click', () => {
-    const isLocked = tagDiv.dataset.locked === 'true';
-    tagDiv.dataset.locked = isLocked ? 'false' : 'true';
+    const isLocked = selectedDiv.dataset.locked === 'true';
+    selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
     if (isLocked) {
       lockIcon.classList.remove('fa-lock');
       lockIcon.classList.add('fa-unlock');
-      lockIcon.classList.add('locked-tag');
+      saveLockedTags(false);
     } else {
       lockIcon.classList.add('fa-lock');
       lockIcon.classList.remove('fa-unlock');
-      lockIcon.classList.remove('locked-tag');
-      saveLockedTags();
+      saveLockedTags(true);
     }
   });
   
@@ -282,13 +280,13 @@ dropdown.addEventListener('change', () => {
       removeTag(selectedTag);
     });
     
-  tagDiv.appendChild(slider);
-  tagDiv.appendChild(sliderValue);
-  tagDiv.appendChild(tagName);
-  tagDiv.appendChild(lockToggle);
-  tagDiv.appendChild(removeBtn);
+  selectedDiv.appendChild(slider);
+  selectedDiv.appendChild(sliderValue);
+  selectedDiv.appendChild(tagName);
+  selectedDiv.appendChild(lockToggle);
+  selectedDiv.appendChild(removeBtn);
   
-  selectedTagsWrapper.appendChild(tagDiv);
+  selectedTagsWrapper.appendChild(selectedDiv);
   
   // Select the tag in the tags-list
   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
@@ -302,7 +300,6 @@ tagsList.addEventListener('click', (e) => {
   console.log('Tags-list clicked...');
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
-    loadLockedTags();
     
     // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
@@ -322,9 +319,9 @@ tagsList.addEventListener('click', (e) => {
     e.target.classList.add('selected');
     
     // Create a new div for the selected tag
-    const tagDiv = document.createElement('div');
-    tagDiv.classList.add('selected-tag', 'center');
-    tagDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
+    const selectedDiv = document.createElement('div');
+    selectedDiv.classList.add('selected-div', 'center');
+    selectedDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
     
     // Add a quantity slider, tag name, lock toggle, and remove btn
     const slider = document.createElement('input');
@@ -354,17 +351,16 @@ tagsList.addEventListener('click', (e) => {
     lockToggle.appendChild(lockIcon);
     
     lockToggle.addEventListener('click', () => {
-      const isLocked = tagDiv.dataset.locked === 'true';
-      tagDiv.dataset.locked = isLocked ? 'false' : 'true';
+      const isLocked = selectedDiv.dataset.locked === 'true';
+      selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
       if (isLocked) {
         lockIcon.classList.remove('fa-lock');
         lockIcon.classList.add('fa-unlock');
-        lockIcon.classList.add('locked-tag');
+        saveLockedTags(false);
       } else {
         lockIcon.classList.add('fa-lock');
         lockIcon.classList.remove('fa-unlock');
-        lockIcon.classList.remove('locked-tag');
-        saveLockedTags();
+        saveLockedTags(true);
       }
     });
     
@@ -381,13 +377,13 @@ tagsList.addEventListener('click', (e) => {
       removeTag(selectedTag);
     });
       
-    tagDiv.appendChild(slider);
-    tagDiv.appendChild(sliderValue);
-    tagDiv.appendChild(tagName);
-    tagDiv.appendChild(lockToggle);
-    tagDiv.appendChild(removeBtn);
+    selectedDiv.appendChild(slider);
+    selectedDiv.appendChild(sliderValue);
+    selectedDiv.appendChild(tagName);
+    selectedDiv.appendChild(lockToggle);
+    selectedDiv.appendChild(removeBtn);
     
-    selectedTagsWrapper.appendChild(tagDiv);
+    selectedTagsWrapper.appendChild(selectedDiv);
   }
 });
 
@@ -475,12 +471,12 @@ const displayPhotos = (photos) => {
 const removeTag = (selectedTag) => {
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-  toggleBorders();
   
   // Remove the tag from the selected-tags-wrapper
-  const tagDiv = document.querySelector(`.selected-tag[data-tag="${selectedTag}"]`);
-  if (tagDiv) {
-    tagDiv.remove();
+  const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
+  if (selectedDiv) {
+    selectedDiv.remove();
+    saveLockedTags(false);
   }
   
   // Deselect the tag in the tags-list
@@ -490,77 +486,92 @@ const removeTag = (selectedTag) => {
   }
 }
 
-// Clears selected tags based on clearLocked
-const clearSelectedTags = (clearLocked = false) => {
-  console.log('clearSelectedTags called with clearLocked:', clearLocked);
-  const selectedTagDivs = document.querySelectorAll('.selected-tag');
+// Clears selected tags based on removeLockedTags
+const clearSelectedTags = (removeLockedTags = false) => {
+  console.log('clearSelectedTags called with:', removeLockedTags);
+  let selectedDivs = document.querySelectorAll('.selected-div');
   
-  console.log('Initial selectedTags:', selectedTags);
-  console.log('Initial selectedTags:', Array.from(selectedTagDivs).map(div => div.dataset.tag));
-  
-  // Remove selected tags from selected-tags-wrapper that are not locked or when clearLocked is true
-  selectedTagDivs.forEach((div) => {
-    console.log ('Evaluating div for tag:', div.dataset.tag, 'and locked:', div.dataset.locked);
-    if (clearLocked || div.dataset.locked !== 'true') {
-      console.log('Removing div for tag:', div.dataset.tag);
+  // console.log('Initial selectedTags:', selectedTags);
+  // console.log('Initial selectedDivs:', Array.from(selectedDivs).map(div => div.dataset.tag));
+
+  // Remove selected tags from selected-tags-wrapper that are not locked, or when removeLockedTags is true
+  selectedDivs.forEach((div) => {
+    // console.log ('Evaluating if selected-div:', div.dataset.tag, 'is locked:', div.dataset.locked);
+    if (removeLockedTags || div.dataset.locked !== 'true') {
+      // console.log('Div:', div.dataset.tag, 'is not locked. Removing it...');
       removeTag(div.dataset.tag); 
     }
   });
   
-  console.log('Final selectedTags:', selectedTags);
-  console.log('Final selectedTags:', Array.from(selectedTagDivs).map(div => div.dataset.tag));
+  // console.log('selectedTags after removing unlocked tags:', selectedTags);
+  // console.log('selectedDivs after removing unlocked tags:', Array.from(selectedDivs).map(div => div.dataset.tag));
   
-  const selectedTagSpans = document.querySelectorAll('.tag .name.selected');
-  console.log('Initial selected tags in tags-list:', Array.from(selectedTagSpans).map(span => span.textContent));
-  
-  // Remove selected tags in tags-list that are not locked
-  selectedTagSpans.forEach((span) => {
-    const tagName = span.textContent;
-    console.log ('Evaluating span for tag:', tagName, 'and locked:', span.dataset.locked);
-    if (clearLocked || !Array.from(selectedTagDivs).some(div => div.dataset.tag === tagName && div.dataset.locked === 'true')) {
-      span.classList.remove('selected');
-    } else {
-      console.log('Adding "selected" class for tag:', tagName);
-      span.classList.add('selected'); // Ensure locked tags remain highlighted
-    }
-  });
-  
-  // Update selectedTags array to only contain locked tags if ignoreLocked is false
-  selectedTags = clearLocked ? [] : selectedTags.filter(tag => tag.locked);
+  // Update selectedTags array to only contain locked tags if removeLockedTags is true
+  selectedTags = removeLockedTags ? selectedTags.filter(tag => tag.locked) : selectedTags;
+
+  // Update selectedDivs to only contain locked tags if removeLockedTags is true
+  selectedDivs = removeLockedTags ? selectedDivs.filter(div => div.dataset.locked === 'true') : selectedDivs;
+
+  // Clear locked tags from local storage if removeLockedTags is true
+  if (removeLockedTags) {
+    saveLockedTags(false);
+  } else {
+    saveLockedTags(true);
+  };
+
+  toggleBorders();
+  // console.log('selectedTags after removing unlocked tags and clearing locked tags:', selectedTags);
+  // console.log('selectedDivs after removing unlocked tags and clearing locked tags:', selectedDivs); 
 };
 
-// Save locked tags
-const saveLockedTags = () => {
-  const lockedTags = Array.from(document.querySelectorAll('.selected-tag'))
-    .filter(tagDiv => tagDiv.dataset.locked === 'true')
-    .map(tagDiv => {
-      return { tag: tagDiv.dataset.tag, quantity: tagDiv.querySelector('.slider').value };
-    });
-  console.log('Saving locked tags:', lockedTags);
-  localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
-  console.log('Locked tags saved:', JSON.parse(localStorage.getItem('lockedTags')));
+// Save or remove locked tags from local storage
+const saveLockedTags = (save = true) => {
+  if (save) {
+    // Save locked tags to local storage
+    const lockedTags = Array.from(document.querySelectorAll('.selected-div'))
+      .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
+      .map(selectedDiv => {
+        return { tag: selectedDiv.dataset.tag, quantity: selectedDiv.querySelector('.slider').value };
+      });
+    console.log('Saving locked tags:', lockedTags);
+    localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
+    console.log('Locked tags saved:', JSON.parse(localStorage.getItem('lockedTags')));
+  } else {
+    // Remove locked tags from local storage
+    localStorage.removeItem('lockedTags');
+    console.log('Locked tags removed:', JSON.parse(localStorage.getItem('lockedTags')));
+  }
 };
 
 // Load and render locked tags
-const loadLockedTags = () => {
+const loadRenderLockedTags = () => {
   const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
-  console.log('Locked tags loaded:', JSON.parse(localStorage.getItem('lockedTags')));
-  renderLockedTags(loadedLockedTags);
-  toggleBorders();
-};
-
-// Render locked tags
-const renderLockedTags = (lockedTags) => {
-  console.log('Rendering locked tags...');
+  console.log('Locked tags loaded:', JSON.parse(localStorage.getItem('lockedTags')), 'rendering...');
+  
   selectedTagsWrapper.innerHTML = '';
   
-  lockedTags.forEach(tagInfo => {
+  loadedLockedTags.forEach(tagInfo => {
     console.log('Rendering tag:', tagInfo);
     const { tag, quantity } = tagInfo;
     
-    const tagDiv = document.createElement('div');
-    tagDiv.classList.add('selected-tag', 'center');
-    tagDiv.dataset.tag = tag;
+    // if (selectedTags.includes(tag)) {
+    //   removeTag(tag);
+    //   return;
+    // }
+    
+    // Check if 4 tags have already been selected
+    if (selectedTags.length >= 4) {
+      return;
+    }
+    
+    selectedTags.push(tag);
+    dropdown.selectedIndex = 0;
+    toggleBorders();
+    
+    // Create a new div for the selected tag
+    const selectedDiv = document.createElement('div');
+    selectedDiv.classList.add('selected-div', 'center');
+    selectedDiv.dataset.tag = tag;
     
     // Add a quantity slider, tag name, lock toggle, and remove btn
     const slider = document.createElement('input');
@@ -584,24 +595,23 @@ const renderLockedTags = (lockedTags) => {
     const lockToggle = document.createElement('button');
     lockToggle.type = 'button';
     lockToggle.classList.add('lock-toggle', 'center');
+    selectedDiv.dataset.locked = 'true';
     
     const lockIcon = document.createElement('i');
-    lockIcon.classList.add('fa-solid', 'fa-lock', 'locked-tag');
+    lockIcon.classList.add('fa-solid', 'fa-lock');
     lockToggle.appendChild(lockIcon);
-    tagDiv.dataset.locked = 'true';
     
     lockToggle.addEventListener('click', () => {
-      const isLocked = tagDiv.dataset.locked === 'true';
-      tagDiv.dataset.locked = isLocked ? 'false' : 'true';
+      const isLocked = selectedDiv.dataset.locked === 'true';
+      selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
       if (isLocked) {
         lockIcon.classList.remove('fa-lock');
         lockIcon.classList.add('fa-unlock');
-        lockIcon.classList.add('locked-tag');
+        saveLockedTags(false);
       } else {
         lockIcon.classList.add('fa-lock');
         lockIcon.classList.remove('fa-unlock');
-        lockIcon.classList.remove('locked-tag');
-        saveLockedTags();
+        saveLockedTags(true);
       }
     });
     
@@ -618,31 +628,34 @@ const renderLockedTags = (lockedTags) => {
       removeTag(selectedTag);
     });
       
-    tagDiv.appendChild(slider);
-    tagDiv.appendChild(sliderValue);
-    tagDiv.appendChild(tagName);
-    tagDiv.appendChild(lockToggle);
-    tagDiv.appendChild(removeBtn);
+    selectedDiv.appendChild(slider);
+    selectedDiv.appendChild(sliderValue);
+    selectedDiv.appendChild(tagName);
+    selectedDiv.appendChild(lockToggle);
+    selectedDiv.appendChild(removeBtn);
     
-    console.log('Tag Div:', tagDiv);
+    console.log('Tag Div:', selectedDiv);
     
-    selectedTagsWrapper.appendChild(tagDiv);
+    selectedTagsWrapper.appendChild(selectedDiv);
+    toggleBorders();
   });
-
-  console.log('Final selectedTagsWrapper:', selectedTagsWrapper.innerHTML);
+  
+  console.log('Rendered selected tags:', selectedTagsWrapper.innerHTML);
 };
 
 //* TOGGLES & BUTTONS
 const toggleNav = () => {
   openBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
-  contentWrapper.classList.toggle('open');
-  resetBtn.click();
+  clearSelectedTags();
+  // toggleBorders();
 }
 
 const toggleBorders = () => {
-  const visibleTags = selectedTags.filter (tag => !tag.locked).length;
-  if (visibleTags >= 1) {
+  console.log('Toggling borders...');
+  const visibleTags = selectedTags.filter (tag => !tag.locked);
+  console.log('Visible tags:', visibleTags);
+  if (visibleTags.length >= 1) {
     selectedTagsWrapper.classList.add('show-borders');
     selectedTagsWrapper.classList.remove('hide');
   } else {
@@ -690,7 +703,7 @@ openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   await fetchPhotosData();
   toggleNav();
-  loadLockedTags();
+  loadRenderLockedTags();
 });
 
 refreshBtn.addEventListener('click', async () => {
@@ -707,9 +720,8 @@ refreshBtn.addEventListener('click', async () => {
 
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
+  clearSelectedTags(true);    
   
-  clearSelectedTags();
-
   // Reset totalSlider value and remainder checkbox
   totalSlider.value = 0;
   totalSliderValue.textContent = totalSlider.value === 0 ? 'N/A' : totalSlider.value;
@@ -718,16 +730,15 @@ resetBtn.addEventListener('click', () => {
   useRemainder = false;
   totalSliderValue.classList.add('gray-out');
   remainder.classList.add('gray-out');
-
+  
   dropdown.value = 'select a tag';
   toggleBorders();
 });
 
 randomBtn.addEventListener('click', () => {
   console.log('Random button clicked...');
-  
   clearSelectedTags(true);
-
+  
   // Get all available tags
   const allTags = Array.from(document.querySelectorAll('.tag .name')).map(span => span.textContent);
   
@@ -766,11 +777,11 @@ randomBtn.addEventListener('click', () => {
     const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 2, 12 - totalImages);
     
     // Set value for slider
-    const slider = document.querySelector(`.selected-tag[data-tag="${selectedTag}"] .slider`);
+    const slider = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`);
     slider.value = sliderValue;
     
     // Update slider value display
-    const sliderValueDisplay = document.querySelector(`.selected-tag[data-tag="${selectedTag}"] .sliderValue`);
+    const sliderValueDisplay = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .sliderValue`);
     sliderValueDisplay.innerHTML = slider.value;
     
     // Update totalImages count
@@ -788,9 +799,9 @@ submitBtn.addEventListener('click', async (e) => {
   console.log('Submit button clicked...');
   
   // Get selected tags and quantities from selected-tags-wrapper
-  const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-tag')).map(tagDiv => {
-    const tag = tagDiv.dataset.tag;
-    const quantity = tagDiv.querySelector('.slider').value;
+  const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-div')).map(selectedDiv => {
+    const tag = selectedDiv.dataset.tag;
+    const quantity = selectedDiv.querySelector('.slider').value;
     return { tag, quantity };
   });
   
@@ -819,13 +830,20 @@ signoutBtn.addEventListener('click', async (e) => {
     console.log('User signed out.');
     
     window.location.href = '/landing.html';
-    loadLockedTags();
+    loadRenderLockedTags();
   } catch (error) {
     console.error('Error during logout:', error);
   }
 });
 
+//!! for live testing
+let isFirstLoad = true;
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log('DOMContentLoaded event fired...');
-  loadLockedTags();
+  
+  if (isFirstLoad) {
+    loadRenderLockedTags();
+    isFirstLoad = false;
+  }
 });
