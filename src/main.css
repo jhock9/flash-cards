@@ -336,29 +336,27 @@ letter-spacing: 0.1rem;
   border-bottom: .2rem solid var(--primary-color);
 }
 
-.selected-tag {
+.selected-div {
   width: 90%;
   padding: .75rem 0;
-  font-size: 2.25rem;
-  font-weight: 600;
-  letter-spacing: 0.1rem;
   justify-content: flex-start;
 }
 
-#selected-tags-wrapper .name,
+.selected-div .name,
 #tags-list .name {
   width: auto;
   height: 3rem;
   padding: 0.3rem 1rem;
   font-size: 2rem;
   font-weight: 400;
+  letter-spacing: 0.1rem;
   text-align: center;
   background-color: var(--white);
   border: .1rem solid var(--border-color);
   border-radius: 0.8rem;
 }
 
-#selected-tags-wrapper .name,
+.selected-div .name,
 #tags-list .name.selected {
   color: var(--white);
   background-color: var(--third-color);
