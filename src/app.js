@@ -469,6 +469,7 @@ const displayPhotos = (photos) => {
 };
 
 const removeTag = (selectedTag) => {
+  console.log('removeTag called with:', selectedTag);
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   
@@ -514,8 +515,10 @@ const clearSelectedTags = (removeLockedTags = false) => {
 
   // Clear locked tags from local storage if removeLockedTags is true
   if (removeLockedTags) {
+    console.log('Clearing locked tags from local storage...');
     saveLockedTags(false);
   } else {
+    console.log('Saving locked tags to local storage...');
     saveLockedTags(true);
   };
 
@@ -526,6 +529,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
 
 // Save or remove locked tags from local storage
 const saveLockedTags = (save = true) => {
+  console.log('saving locked tags:', save, 'removing locked tags:', !save);
   if (save) {
     // Save locked tags to local storage
     const lockedTags = Array.from(document.querySelectorAll('.selected-div'))
@@ -533,7 +537,6 @@ const saveLockedTags = (save = true) => {
       .map(selectedDiv => {
         return { tag: selectedDiv.dataset.tag, quantity: selectedDiv.querySelector('.slider').value };
       });
-    console.log('Saving locked tags:', lockedTags);
     localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
     console.log('Locked tags saved:', JSON.parse(localStorage.getItem('lockedTags')));
   } else {
@@ -545,6 +548,7 @@ const saveLockedTags = (save = true) => {
 
 // Load and render locked tags
 const loadRenderLockedTags = () => {
+  console.log('Loading locked tags...');
   const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
   console.log('Locked tags loaded:', JSON.parse(localStorage.getItem('lockedTags')), 'rendering...');
   
@@ -645,6 +649,7 @@ const loadRenderLockedTags = () => {
 
 //* TOGGLES & BUTTONS
 const toggleNav = () => {
+  console.log('Toggling nav...');
   openBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
   clearSelectedTags();
@@ -652,9 +657,8 @@ const toggleNav = () => {
 }
 
 const toggleBorders = () => {
-  console.log('Toggling borders...');
   const visibleTags = selectedTags.filter (tag => !tag.locked);
-  console.log('Visible tags:', visibleTags);
+  console.log('Toggling borders. Visible tags:', visibleTags);
   if (visibleTags.length >= 1) {
     selectedTagsWrapper.classList.add('show-borders');
     selectedTagsWrapper.classList.remove('hide');
@@ -692,7 +696,7 @@ remainder.addEventListener('change', () => {
 
 removeBtns.forEach(removeBtn => {
   removeBtn.addEventListener('click', () => {
-    console.log('Remove button clicked.');
+    console.log('Remove button clicked..');
     const selectedTag = removeBtn.parentElement.dataset.tag;
     console.log('Selected tag to remove:', selectedTag);
     removeTag(selectedTag);
