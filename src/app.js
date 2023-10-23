@@ -485,6 +485,7 @@ const removeTag = (selectedTag) => {
   if (tagSpan) {
     tagSpan.classList.remove('selected');
   }
+  toggleBorders();
 }
 
 // Clears selected tags based on removeLockedTags
@@ -515,10 +516,10 @@ const clearSelectedTags = (removeLockedTags = false) => {
 
   // Clear locked tags from local storage if removeLockedTags is true
   if (removeLockedTags) {
-    console.log('Clearing locked tags from local storage...');
+    console.log('Run saveLockedTags(false)..clearing locked tags from local storage...')
     saveLockedTags(false);
   } else {
-    console.log('Saving locked tags to local storage...');
+    console.log('Run saveLockedTags(true)...saving locked tags to local storage...')
     saveLockedTags(true);
   };
 
@@ -548,11 +549,11 @@ const saveLockedTags = (save = true) => {
 
 // Load and render locked tags
 const loadRenderLockedTags = () => {
-  console.log('Loading locked tags...');
   const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
   console.log('Locked tags loaded:', JSON.parse(localStorage.getItem('lockedTags')), 'rendering...');
   
   selectedTagsWrapper.innerHTML = '';
+  selectedTags = [];
   
   loadedLockedTags.forEach(tagInfo => {
     console.log('Rendering tag:', tagInfo);
@@ -571,6 +572,7 @@ const loadRenderLockedTags = () => {
     selectedTags.push(tag);
     dropdown.selectedIndex = 0;
     toggleBorders();
+    console.log('lRT-toggleBorder 1 called...');
     
     // Create a new div for the selected tag
     const selectedDiv = document.createElement('div');
@@ -642,6 +644,7 @@ const loadRenderLockedTags = () => {
     
     selectedTagsWrapper.appendChild(selectedDiv);
     toggleBorders();
+    console.log('lRT-toggleBorder 2 called...');
   });
   
   console.log('Rendered selected tags:', selectedTagsWrapper.innerHTML);
@@ -652,9 +655,15 @@ const toggleNav = () => {
   console.log('Toggling nav...');
   openBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
-  clearSelectedTags();
+  // clearSelectedTags();
   // toggleBorders();
-}
+
+  if (sidePanel.classList.contains('open')) {
+    loadRenderLockedTags();
+  } else {
+    clearSelectedTags();  
+  }
+};
 
 const toggleBorders = () => {
   const visibleTags = selectedTags.filter (tag => !tag.locked);
@@ -707,7 +716,7 @@ openBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   await fetchPhotosData();
   toggleNav();
-  loadRenderLockedTags();
+  // loadRenderLockedTags();
 });
 
 refreshBtn.addEventListener('click', async () => {
@@ -841,13 +850,13 @@ signoutBtn.addEventListener('click', async (e) => {
 });
 
 //!! for live testing
-let isFirstLoad = true;
+// let isFirstLoad = true;
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log('DOMContentLoaded event fired...');
+// document.addEventListener("DOMContentLoaded", () => {
+//   console.log('DOMContentLoaded event fired...');
   
-  if (isFirstLoad) {
-    loadRenderLockedTags();
-    isFirstLoad = false;
-  }
-});
+//   if (isFirstLoad) {
+//     loadRenderLockedTags();
+//     isFirstLoad = false;
+//   }
+// });
