@@ -720,27 +720,28 @@ randomBtn.addEventListener('click', () => {
   
   // Get all available tags
   const allTags = Array.from(document.querySelectorAll('.tag .name')).map(span => span.textContent);
-  
-  const numTagsToSelect = Math.floor(Math.random() * 3) + 2;
+  const numTagsToSelect = Math.floor(Math.random() * 3) + 1;
+  let totalImages = 0;
   
   // Set max number of images per tag
   let maxImagesPerTag;
   switch (numTagsToSelect) {
-    case 2:
+    case 1:
       maxImagesPerTag = 6;
       break;
-    case 3:
+    case 2:
       maxImagesPerTag = 4;
       break;
-    case 4:
+    case 3:
       maxImagesPerTag = 3;
       break;
+    case 4:
+      maxImagesPerTag = 2;
+      break;
     default:
-      maxImagesPerTag = 3;
+      maxImagesPerTag = 2;
   }
-  
-  let totalImages = 0;
-  
+    
   // Randomly select tags and set random slider values
   for (let i = 0; i < numTagsToSelect; i++) {
     const randomTagIndex = Math.floor(Math.random() * allTags.length);
@@ -754,27 +755,11 @@ randomBtn.addEventListener('click', () => {
     
     // Set value for slider, considering totalImages
     const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 2, 12 - totalImages);
-    
-    console.log('Randomly selected tag:', selectedTag);
-
-    // console.log('Slider Exists:', !!document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`));
-    // console.log('Slider Value:', sliderValue);
-    // console.log('Slider Value:', document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`).value);
-    
+        
     // Set value for slider
     const slider = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`);
     slider.value = sliderValue;
     
-    // // Update slider value display
-    // const sliderValueDisplay = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .sliderValue`);
-    // if (sliderValueDisplay) {
-    //   sliderValueDisplay.innerHTML = slider.value;
-    // console.log('Slider Value:', slider.value);
-    // console.log('Slider Value Display:', sliderValueDisplay.innerHTML);
-    // } else {
-    //   console.warn(`Element for displaying slider value of tag "${selectedTag}" does not exist.`);
-    // }
-
     // Update totalImages count
     totalImages += sliderValue;
   }
