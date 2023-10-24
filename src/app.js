@@ -756,24 +756,25 @@ randomBtn.addEventListener('click', () => {
     const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 2, 12 - totalImages);
     
     console.log('Randomly selected tag:', selectedTag);
-    console.log('Slider Exists:', !!document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`));
-    console.log('Slider Value:', sliderValue);
-    console.log('Slider Value:', document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`).value);
+
+    // console.log('Slider Exists:', !!document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`));
+    // console.log('Slider Value:', sliderValue);
+    // console.log('Slider Value:', document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`).value);
     
     // Set value for slider
     const slider = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`);
     slider.value = sliderValue;
     
-    // Update slider value display
-    const sliderValueDisplay = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .sliderValue`);
-    if (sliderValueDisplay) {
-      sliderValueDisplay.innerHTML = slider.value;
-    console.log('Slider Value:', slider.value);
-    console.log('Slider Value Display:', sliderValueDisplay.innerHTML);
-    } else {
-      console.warn(`Element for displaying slider value of tag "${selectedTag}" does not exist.`);
-    }
-    
+    // // Update slider value display
+    // const sliderValueDisplay = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .sliderValue`);
+    // if (sliderValueDisplay) {
+    //   sliderValueDisplay.innerHTML = slider.value;
+    // console.log('Slider Value:', slider.value);
+    // console.log('Slider Value Display:', sliderValueDisplay.innerHTML);
+    // } else {
+    //   console.warn(`Element for displaying slider value of tag "${selectedTag}" does not exist.`);
+    // }
+
     // Update totalImages count
     totalImages += sliderValue;
   }
