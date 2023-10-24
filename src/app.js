@@ -99,7 +99,7 @@ const checkAuthentication = async () => {
         window.location.href = '/flashcards.html';
       }
 
-      loadRenderLockedTags();
+      // loadRenderLockedTags();
     } else {
       console.log('User is not authenticated.');
       
@@ -500,10 +500,10 @@ const clearSelectedTags = (removeLockedTags = false) => {
 
   // Clear locked tags from local storage if removeLockedTags is true
   if (removeLockedTags) {
-    console.log('Run saveLockedTags(false)..clearing locked tags from local storage...')
+    console.log('Clearing locked tags from local storage...')
     saveLockedTags(false);
   } else {
-    console.log('Run saveLockedTags(true)...saving locked tags to local storage...')
+    console.log('Saving locked tags to local storage...')
     saveLockedTags(true);
   };
 
@@ -755,13 +755,24 @@ randomBtn.addEventListener('click', () => {
     // Set value for slider, considering totalImages
     const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 2, 12 - totalImages);
     
+    console.log('Randomly selected tag:', selectedTag);
+    console.log('Slider Exists:', !!document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`));
+    console.log('Slider Value:', sliderValue);
+    console.log('Slider Value:', document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`).value);
+    
     // Set value for slider
     const slider = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`);
     slider.value = sliderValue;
     
     // Update slider value display
     const sliderValueDisplay = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .sliderValue`);
-    sliderValueDisplay.innerHTML = slider.value;
+    if (sliderValueDisplay) {
+      sliderValueDisplay.innerHTML = slider.value;
+    console.log('Slider Value:', slider.value);
+    console.log('Slider Value Display:', sliderValueDisplay.innerHTML);
+    } else {
+      console.warn(`Element for displaying slider value of tag "${selectedTag}" does not exist.`);
+    }
     
     // Update totalImages count
     totalImages += sliderValue;
