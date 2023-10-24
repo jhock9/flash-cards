@@ -1,5 +1,6 @@
 const contentWrapper = document.querySelector('#flash-content-wrapper');
-const openBtn = document.querySelector('#open-btn');
+const mobileOpenBtn = document.querySelector('#mobile-open-btn');
+const tabletOpenBtn = document.querySelector('#tablet-open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 const sidePanel = document.querySelector('#side-panel');
 const resetBtn = document.querySelector('#reset-btn');
@@ -275,12 +276,20 @@ dropdown.addEventListener('change', () => {
       removeTag(selectedTag);
     });
     
-  selectedDiv.appendChild(slider);
-  selectedDiv.appendChild(sliderValue);
-  selectedDiv.appendChild(tagName);
-  selectedDiv.appendChild(lockToggle);
-  selectedDiv.appendChild(removeBtn);
-  
+    const sliderTagDiv = document.createElement('div');
+    sliderTagDiv.classList.add('slider-tag-div', 'center');
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.classList.add('icon-div', 'center');
+    
+    sliderTagDiv.appendChild(slider);
+    sliderTagDiv.appendChild(sliderValue);
+    sliderTagDiv.appendChild(tagName);
+    iconDiv.appendChild(lockToggle);
+    iconDiv.appendChild(removeBtn);
+    selectedDiv.appendChild(sliderTagDiv);
+    selectedDiv.appendChild(iconDiv);
+    
   selectedTagsWrapper.appendChild(selectedDiv);
   
   // Select the tag in the tags-list
@@ -372,11 +381,19 @@ tagsList.addEventListener('click', (e) => {
       removeTag(selectedTag);
     });
       
-    selectedDiv.appendChild(slider);
-    selectedDiv.appendChild(sliderValue);
-    selectedDiv.appendChild(tagName);
-    selectedDiv.appendChild(lockToggle);
-    selectedDiv.appendChild(removeBtn);
+    const sliderTagDiv = document.createElement('div');
+    sliderTagDiv.classList.add('slider-tag-div', 'center');
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.classList.add('icon-div', 'center');
+    
+    sliderTagDiv.appendChild(slider);
+    sliderTagDiv.appendChild(sliderValue);
+    sliderTagDiv.appendChild(tagName);
+    iconDiv.appendChild(lockToggle);
+    iconDiv.appendChild(removeBtn);
+    selectedDiv.appendChild(sliderTagDiv);
+    selectedDiv.appendChild(iconDiv);
     
     selectedTagsWrapper.appendChild(selectedDiv);
   }
@@ -486,17 +503,13 @@ const clearSelectedTags = (removeLockedTags = false) => {
   
   // Remove selected tags from selected-tags-wrapper that are not locked, or when removeLockedTags is true
   selectedDivs.forEach((div) => {
-    // console.log ('Evaluating if selected-div:', div.dataset.tag, 'is locked:', div.dataset.locked);
     if (removeLockedTags || div.dataset.locked !== 'true') {
-      // console.log('Div:', div.dataset.tag, 'is not locked. Removing it...');
       removeTag(div.dataset.tag); 
     }
   });
   
-  // console.log('selectedTags after removing unlocked tags:', selectedTags);
-  
   // Update selectedTags array to only contain locked tags if removeLockedTags is true
-  selectedTags = removeLockedTags ? selectedTags.filter(tag => tag.locked) : selectedTags;
+  selectedTags = removeLockedTags ? selectedTags.filter(tag => tag.locked) : selectedTags;//!!
 
   // Clear locked tags from local storage if removeLockedTags is true
   if (removeLockedTags) {
@@ -607,11 +620,19 @@ const loadRenderLockedTags = () => {
       removeTag(selectedTag);
     });
       
-    selectedDiv.appendChild(slider);
-    selectedDiv.appendChild(sliderValue);
-    selectedDiv.appendChild(tagName);
-    selectedDiv.appendChild(lockToggle);
-    selectedDiv.appendChild(removeBtn);
+    const sliderTagDiv = document.createElement('div');
+    sliderTagDiv.classList.add('slider-tag-div', 'center');
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.classList.add('icon-div', 'center');
+    
+    sliderTagDiv.appendChild(slider);
+    sliderTagDiv.appendChild(sliderValue);
+    sliderTagDiv.appendChild(tagName);
+    iconDiv.appendChild(lockToggle);
+    iconDiv.appendChild(removeBtn);
+    selectedDiv.appendChild(sliderTagDiv);
+    selectedDiv.appendChild(iconDiv);
     
     selectedTagsWrapper.appendChild(selectedDiv);
     toggleBorders();
@@ -619,12 +640,25 @@ const loadRenderLockedTags = () => {
 };
 
 //* TOGGLES & BUTTONS
+//!! also called in submitBtn event listener
+// const toggleNav = (event) => {
+//   console.log('Toggling nav...');
+//   const clickedBtn = event.currentTarget;
+//   clickedBtn.classList.toggle('open');
+//   // openBtns.classList.toggle('open');
+//   sidePanel.classList.toggle('open');
+
+//   if (sidePanel.classList.contains('open')) {
+//     loadRenderLockedTags();
+//   } else {
+//     clearSelectedTags();  
+//   }
+// };
+
 const toggleNav = () => {
   console.log('Toggling nav...');
-  openBtn.classList.toggle('open');
+  tabletOpenBtn.classList.toggle('open');
   sidePanel.classList.toggle('open');
-  // clearSelectedTags();
-  // toggleBorders();
 
   if (sidePanel.classList.contains('open')) {
     loadRenderLockedTags();
@@ -670,19 +704,38 @@ remainder.addEventListener('change', () => {
   lastUseRemainder = useRemainder;
 });
 
-removeBtns.forEach(removeBtn => {
-  removeBtn.addEventListener('click', () => {
+removeBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
     console.log('Remove button clicked..');
-    const selectedTag = removeBtn.parentElement.dataset.tag;
+    const selectedTag = btn.parentElement.dataset.tag;
     removeTag(selectedTag);
   });
 });
 
-openBtn.addEventListener('click', async () => {
+// openBtns.forEach((btn) => {
+//   btn.addEventListener('click', async (event) => {
+//     console.log('Open button clicked...');
+//     await fetchPhotosData();
+//     toggleNav(event);
+//   });
+// });
+
+// openBtns.addEventListener('click', async () => {
+//   console.log('Open button clicked...');
+//   await fetchPhotosData();
+//   toggleNav();
+// });
+
+mobileOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   await fetchPhotosData();
   toggleNav();
-  // loadRenderLockedTags();
+});
+
+tabletOpenBtn.addEventListener('click', async () => {
+  console.log('Open button clicked...');
+  await fetchPhotosData();
+  toggleNav();
 });
 
 refreshBtn.addEventListener('click', async () => {

@@ -6,15 +6,6 @@
   --border-color: #cacaca;
   --black: #000000;
   --white: #ffffff;
-
-  /* --third-color: #6B6D76; */
-  /* --third-color: #404e67; */
-
-  
-  /* --primary-color: #32a0da; */
-  /* --second-color: #f5995c; */
-  /* --border-color: #7bba51; */
-  /* --fourth-color: #dd4559; */
 }
 
 .hide {
@@ -50,17 +41,25 @@ body {
 }
 
 .btn {
-  width: 8rem;
+  width: 6rem;
   aspect-ratio: 1/1;
   margin: 1rem 1.75rem;
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: 700;
-  text-transform: uppercase;
+  text-transform: uppercase;  
+  color: var(--primary-color);
   background-color: var(--white);
   border: .3rem solid var(--border-color);
   border-radius: .4rem;
   cursor: pointer;
   transition: 0.3s;
+}
+
+.btn:hover,
+.btn:active {
+  color: var(--white);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .slider {
@@ -191,7 +190,7 @@ footer p {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 41.4rem;
+  width: 100%;
   padding: 0;
   margin: 0;
   flex-direction: column;
@@ -219,31 +218,6 @@ footer p {
   flex: 1;
 }
 
-#reset-btn,
-#random-btn, 
-#submit-btn {
-  color: var(--primary-color);
-  background-color: var(--white);
-  border-color: var(--border-color);
-}
-
-#reset-btn i,
-#random-btn i,
-#submit-btn i {
-margin: 0;
-padding: .3rem 0 0 .5rem;
-}
-
-#reset-btn:hover,
-#reset-btn:active,
-#random-btn:hover,
-#random-btn:active,
-#submit-btn:hover,
-#submit-btn:active {
-  color: var(--white);
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
 
 #display-quantity-wrapper {
   width: 90%;
@@ -337,9 +311,20 @@ letter-spacing: 0.1rem;
 }
 
 .selected-div {
-  width: 90%;
+  width: 100%;
   padding: .75rem 0;
+  justify-content: space-between;
+}
+
+.selected-div .slider-tag-div {
+  width: 80%;
   justify-content: flex-start;
+  margin: 0;
+  padding: 0;
+}
+
+.selected-div .slider {
+  margin-left: 1rem;
 }
 
 .selected-div .name,
@@ -363,12 +348,17 @@ letter-spacing: 0.1rem;
   border-color: var(--white);
 }
 
+.icon-div {
+  width: 20%;
+  margin: 0;
+  padding: 0;
+  justify-content: flex-end;
+}
+
 .lock-toggle,
 .remove-btn {
-  position: absolute;
-  right: 4rem;
-  width: auto;
-  margin: 0 4.5rem 0 1rem;
+  width: 2rem;
+  margin: 0 1rem;
   padding: 0;
   font-size: 2.2rem;
   color: var(--border-color);
@@ -376,18 +366,10 @@ letter-spacing: 0.1rem;
   border: none;
 }
 
-.remove-btn {
-  right: 0;
-}
-
 .lock-toggle:hover,
 .lock-toggle:active,
 .remove-btn:hover,
-.remove-btn:active {
-  color: var(--primary-color);
-  background-color: var(--second-color);
-}
-
+.remove-btn:active,
 .locked {
   color: var(--primary-color);
   background-color: var(--second-color);
@@ -478,41 +460,25 @@ letter-spacing: 0.1rem;
 #signout-btn:active {
   color: var(--white);
   background-color: var(--black);
+  border-color: var(--black);
 }
 
-#open-btn,
+#menu-btns {
+  margin: 0;
+  padding: 0;
+}
+
+#tablet-open-btn,
 #refresh-btn {
   position: fixed;
   top: 3rem;
   left: 0;
   margin: 0;
-  color: var(--primary-color);
-  background-color: var(--white);
-  border-color: var(--border-color);
   z-index: 2;
 }
 
-#open-btn {
-  transform: translateX(0); 
-  transition: transform 0.6s; 
-  z-index: 4;
-}
-
-#open-btn.open {
-  position: absolute;
-  transition: transform 0.6s; 
-  transform: translateX(41.6rem);
-}
-
 #refresh-btn {
-  top: 13rem;
-}
-
-#refresh-btn:hover,
-#refresh-btn:active {
-  color: var(--white);
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  top: 11rem;
 }
 
 /* Main-page styles */
@@ -557,60 +523,82 @@ main {
     flex-direction: column;
     justify-content: space-between;
   }
-
+  
   figure .logo img {
     max-width: 40rem;
   }
-
+  
   .welcome-text h1,
   .welcome-text p {
     text-align: center;
   }
-
+  
   .welcome-text br {
     display: none;
   }
-
+  
   footer {
     padding: 1.5rem 0;
   }
-
+  
   footer p{
     font-size: 2rem;
   }
-
+  
   /**** Flashcards-Page ****/
   #side-panel {
     left: 0;
     width: 50rem;
   }
-
+  
   #item-selection-form {
     min-width: 25rem;
   }
   
-  #open-btn.open {
-    transform: translateX(40rem);
+  .btn {
+    width: 8rem;
+    margin: 1rem 1.75rem;
+    font-size: 4rem;
   }
-
+  
   #display-quantity-wrapper {
     width: 95%;
   }
-
+  
   #total-slider-wrapper label {
     margin-right: 0;
   }
-
+  
   #total-slider {
     width: 16rem;
   }
-
+  
   #selected-tags-wrapper {
     width: 100%;
   }
+  
+  #mobile-open-btn {
+    display: none;
+  }
+  
+  #tablet-open-btn {
+    transform: translateX(0); 
+    transition: transform 0.6s; 
+    z-index: 4;
+  }
+  
+  #tablet-open-btn.open {
+    position: absolute;
+    transition: transform 0.6s; 
+    transform: translateX(50rem);
+    
+  }
 }
 
+#refresh-btn {
+  top: 14rem;
+}
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
-
+  
 }

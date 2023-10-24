@@ -7,12 +7,12 @@
   <meta name="google-site-verification" content="03OSzltztIYEfli3IBMepEStSED0F-GGmw8CGxUPdWY"/>
   <title>Interactive Flash Cards</title>
   <meta name="description" content="An interactive flashcard app by ABA Co-op. Sign in with your Google account to continue.">
-
+  
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="main.css">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
-
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,13 +21,14 @@
 <body class="center">
   <div id="flashcards-page" class="center">
     <div id="flash-content-wrapper" class="content-wrapper center">
-      <aside id="side-panel" class="center"> 
+      <aside id="side-panel" class=" center"> 
         <!-- //!! open class added for testing -->
         <form id="item-selection-form" class="center">
           <div id="panel-btns" class="center">
             <button id="reset-btn" class="btn center" type="button"><i class="fa-solid fa-rotate-left"></i></i></button>
             <button id="random-btn" class="btn center" type="button"><i class="fa-solid fa-shuffle"></i></button>
-            <button id="submit-btn" class="btn center" type="submit"><i class="fas fa-angle-double-right"></i></button>  
+            <button id="submit-btn" class="btn center" type="submit"><i class="fas fa-angle-double-right"></i></button>
+            <button id="mobile-open-btn" class="btn open-btn center"><i class="fa-solid fa-bars"></i></button>
           </div>
           
           <div id="display-quantity-wrapper" class="center">
@@ -42,10 +43,10 @@
               <input type="checkbox" id="remainder-checkbox">
             </div> 
           </div>
-
+          
           <div id="selected-tags-wrapper" class="center hide">
           </div>
-
+          
           <div id="tags-wrapper" class="center"> 
             <select id="dropdown" class="center">
               <option value="" disabled selected>Select a tag</option>
@@ -83,7 +84,6 @@
                 <div class="tag center">
                   <span class="name center">tree</span>
                 </div> -->
-
             </div>
           </div>
         </form>
@@ -92,9 +92,11 @@
           <button id="signout-btn" class="btn center">Sign Out&nbsp;<i class="fas fa-sign-out-alt"></i></button>
         </div>
       </aside>
-
-      <button id="open-btn" class="btn center"><i class="fa-solid fa-bars"></i></button>
-      <button id="refresh-btn" class="btn center"><i class="fa-solid fa-rotate"></i></button> 
+      
+      <div id="menu-btns"> 
+        <button id="tablet-open-btn" class="btn open-btn center"><i class="fa-solid fa-bars"></i></button>
+        <button id="refresh-btn" class="btn center"><i class="fa-solid fa-rotate"></i></button> 
+      </div>
 
       <main class="center">
         <section id="images-wrapper" class="center">
@@ -104,7 +106,7 @@
       </main>
     </div>
   </div>
-
+  
   <!-- <script src="support/jwt-decode.js"></script> -->
   <script src="app.js"></script>
 </body> 
