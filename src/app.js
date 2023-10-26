@@ -272,7 +272,7 @@ dropdown.addEventListener('change', () => {
     removeBtn.appendChild(removeIcon);
     
     removeBtn.addEventListener('click', () => {
-      const selectedTag = removeBtn.parentElement.dataset.tag;
+      const selectedTag = removeBtn.parentElement.parentElement.dataset.tag;
       removeTag(selectedTag);
     });
     
@@ -377,7 +377,7 @@ tagsList.addEventListener('click', (e) => {
     removeBtn.appendChild(removeIcon);
     
     removeBtn.addEventListener('click', () => {
-      const selectedTag = removeBtn.parentElement.dataset.tag;
+      const selectedTag = removeBtn.parentElement.parentElement.dataset.tag;
       removeTag(selectedTag);
     });
       
@@ -616,7 +616,7 @@ const loadRenderLockedTags = () => {
     removeBtn.appendChild(removeIcon);
     
     removeBtn.addEventListener('click', () => {
-      const selectedTag = removeBtn.parentElement.dataset.tag;
+      const selectedTag = removeBtn.parentElement.parentElement.dataset.tag;
       removeTag(selectedTag);
     });
       
