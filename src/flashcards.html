@@ -9,7 +9,9 @@
   <meta name="description" content="An interactive flashcard app by ABA Co-op. Sign in with your Google account to continue.">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/flashcards.css">
+  
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
   
@@ -31,7 +33,7 @@
             <button id="mobile-open-btn" class="btn open-btn center"><i class="fa-solid fa-bars"></i></button>
           </div>
           
-          <div id="display-quantity-wrapper" class="center">
+          <div id="total-quantity-wrapper" class="center">
             <div id="total-slider-wrapper" class="center">
               <label for="total-slider">Total to display:</label>
               <input type="range" id="total-slider" class="slider" min="0" max="10" value="0">
