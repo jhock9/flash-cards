@@ -1,0 +1,60 @@
+{
+  "name": "flash-cards",
+  "version": "1.0.0",
+  "description": "VB-MAPP Flash Cards App for ABA Co-op",
+  "main": "./src/app.js",
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:webpack\"",
+    "dev:server": "NODE_ENV=development nodemon server/server.js",
+    "dev:webpack": "webpack --mode=development --hot",
+    "build": "NODE_ENV=production webpack --mode=production",
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhock9/flash-cards.git"
+  },
+  "author": "Jon Hocker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jhock9/flash-cards/issues"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "googleapis": "^118.0.0",
+    "jwt-decode": "^3.1.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.0.1",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.2",
+    "concurrently": "^8.0.1",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "dotenv-webpack": "^8.0.1",
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^8.0.3",
+    "sass": "^1.58.3",
+    "sass-loader": "^13.2.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
