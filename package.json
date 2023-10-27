@@ -2,7 +2,7 @@
   "name": "flash-cards",
   "version": "1.0.0",
   "description": "VB-MAPP Flash Cards App for ABA Co-op",
-  "main": "./src/app.js",
+  "main": "./src/js/app.js",
   "scripts": {
     "lint": "eslint .",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:webpack\"",

@@ -6,7 +6,7 @@ const Dotenv = require('dotenv-webpack');
 const dotenv = require('dotenv').config().parsed;
 
 module.exports = {
-  entry: './src/app.js',
+  entry: './src/js/app.js',
   mode: 'development',
   output: {
     clean: true,
@@ -46,7 +46,9 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: 'src/assets', to: 'assets' },
-        { from: 'src/main.css', to: './' },
+        { from: 'src/css/common.css', to: './' },
+        { from: 'src/css/landing.css', to: './' },
+        { from: 'src/css/flashcards.css', to: './' },
         { from: 'src/favicon.ico', to: './' },
         // { from: 'src/support', to: 'support' }, 
       ],
