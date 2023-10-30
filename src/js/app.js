@@ -13,7 +13,7 @@ const remainder = document.querySelector('#remainder-checkbox');
 const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsWrapper = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll('.remove-btn');
-const dropdown = document.querySelector('#dropdown');
+// const dropdown = document.querySelector('#dropdown');
 const filterInput = document.querySelector('#filter-tags');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
@@ -42,7 +42,9 @@ const fetchConfig = async () => {
 };
 fetchConfig();
 
-//* GOOGLE AUTHENTICATION & AUTHORIZATION
+
+//*   GOOGLE AUTHENTICATION & AUTHORIZATION   *//
+
 // Redirect user to Google's authentication page
 const googleAuth = () => {
   window.location.href = '/authorize';
@@ -77,12 +79,10 @@ const handleCredentialResponse = async (response) => {
     await googleAuth();
 };
 
-// Sign in failure callback
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-//* CHECK AUTHENTICATION
 const checkAuthentication = async () => {
   try {
     console.log('Checking authentication...');
@@ -100,8 +100,7 @@ const checkAuthentication = async () => {
       if (window.location.pathname === '/landing.html') {
         window.location.href = '/flashcards.html';
       }
-
-      // loadRenderLockedTags();
+      
     } else {
       console.log('User is not authenticated.');
       
@@ -121,7 +120,9 @@ window.addEventListener('beforeunload', () => {
   sessionStorage.removeItem('authenticationChecked');
 });
 
-//* FETCH PHOTOS DATA AND DISPLAY TAGS
+
+//*   FETCH PHOTOS DATA AND DISPLAY TAGS   *//
+
 const fetchPhotosData = async () => {
   console.log('Fetching photos data...');
   try {
@@ -137,19 +138,17 @@ const fetchPhotosData = async () => {
   }
 };
 
-// Display tags
 const displayTags = async (photoData) => {
-  const defaultOption = dropdown.querySelector('option[value=""]');
-  dropdown.innerHTML = '';
-  if (defaultOption) {
-    dropdown.appendChild(defaultOption);
-  }
+  // const defaultOption = dropdown.querySelector('option[value=""]');
+  // dropdown.innerHTML = '';
+  // if (defaultOption) {
+  //   dropdown.appendChild(defaultOption);
+  // }
   tagsList.innerHTML = '';
-
+  
   console.log('Displaying tags...');
   const descriptions = await fetchDescriptions(photoData);
   
-  // Count tags
   const tagCounts = {};
   for (const description of descriptions) {
     const tags = description.split(' ');
@@ -162,7 +161,6 @@ const displayTags = async (photoData) => {
     }
   }
   
-  // Filter tags
   // Determines which tags to display based on the number of photos they appear in
   const filteredTags = [];
   for (const tag in tagCounts) {
@@ -176,10 +174,10 @@ const displayTags = async (photoData) => {
   
   // Display tags in dropdown and as selectable tags
   for (const tag of filteredTags) {
-    const option = document.createElement('option');
-    option.value = tag;
-    option.text = tag;
-    dropdown.add(option);
+    // const option = document.createElement('option');
+    // option.value = tag;
+    // option.text = tag;
+    // dropdown.add(option);
     
     const tagDiv = document.createElement('div');
     tagDiv.classList.add('tag', 'center');
@@ -197,8 +195,36 @@ const fetchDescriptions = async (photoData) => {
   console.log('Photo descriptions parsed...');
   return descriptions;
 };
+
+
+//**   SELECT TAGS TO DISPLAY   **//
+
+totalSlider.addEventListener('input', () => {
+  totalPhotos = parseInt(totalSlider.value, 10);
+  lastTotalPhotos = totalPhotos;
   
-//* SELECT TAGS TO DISPLAY
+  // Display 'N/A' when slider value is 0
+  totalSliderValue.textContent = totalPhotos === 0 ? 'N/A' : totalPhotos;
+  
+  // Disable and uncheck filler tags checkbox if total slider value is 'N/A'
+  if (totalPhotos === 0) {
+    remainder.disabled = true;
+    remainder.checked = false;
+    useRemainder = false;
+    totalSliderValue.classList.add('gray-out');
+    remainder.classList.add('gray-out');
+      } else {
+    remainder.disabled = false;
+    totalSliderValue.classList.remove('gray-out');
+    remainder.classList.remove('gray-out');
+  }
+});
+
+remainder.addEventListener('change', () => {
+  useRemainder = remainder.checked;
+  lastUseRemainder = useRemainder;
+});
+
 //Search and filter tags
 filterInput.addEventListener("input", function (e) {
   const searchText = e.target.value.toLowerCase();
@@ -220,212 +246,282 @@ filterInput.addEventListener("keydown", function (e) {
   }
 });
 
-// // Select tags from dropdown
 // dropdown.addEventListener('change', () => {
 //   console.log('Dropdown changed...');
 //   const selectedTag = dropdown.value;
   
-//   if (selectedTags.includes(selectedTag)) {
-//     removeTag(selectedTag);
-//     resetTagSelect();
+//   const proceed = handleTagSelection(selectedTag);
+//   if (!proceed) {
 //     return;
-//   }
+//   }  
   
-//   // Check if 4 tags have already been selected
-//   if (selectedTags.length >= 4) {
-//     return;
-//   }
-  
-//   selectedTags.push(selectedTag);
 //   dropdown.selectedIndex = 0;
-//   toggleBorders();
-  
-//   // Create a new div for the selected tag
-//   const selectedDiv = document.createElement('div');
-//   selectedDiv.classList.add('selected-div', 'center');
-//   selectedDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
-  
-//   // Add a quantity slider, tag name, lock toggle, and remove btn
-//   const slider = document.createElement('input');
-//   slider.type = 'range';
-//   slider.min = 1;
-//   slider.max = 6; 
-//   slider.value = 1;
-//   slider.classList.add('slider');
-  
-//   const sliderValue = document.createElement('span');
-//   sliderValue.classList.add('slider-value');
-//   sliderValue.innerHTML = slider.value;
-//   slider.oninput = () => {
-//     sliderValue.innerHTML = slider.value;
-//   };
-  
-//   const tagName = document.createElement('span');
-//   tagName.classList.add('name', 'center');
-//   tagName.textContent = selectedTag;
-  
-//   const lockToggle = document.createElement('button');
-//   lockToggle.type = 'button';
-//   lockToggle.classList.add('lock-toggle', 'center');
-  
-//   const lockIcon = document.createElement('i');
-//   lockIcon.classList.add('fa-solid', 'fa-unlock');
-//   lockToggle.appendChild(lockIcon);
-  
-//   lockToggle.addEventListener('click', () => {
-//     const isLocked = selectedDiv.dataset.locked === 'true';
-//     selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
-//     if (isLocked) {
-//       lockIcon.classList.remove('fa-lock');
-//       lockIcon.classList.add('fa-unlock');
-//       saveLockedTags(false);
-//     } else {
-//       lockIcon.classList.add('fa-lock');
-//       lockIcon.classList.remove('fa-unlock');
-//       saveLockedTags(true);
-//     }
-//   });
-  
-//   const removeBtn = document.createElement('button');
-//     removeBtn.type = 'button';
-//     removeBtn.classList.add('remove-btn', 'center'); 
-//     const removeIcon = document.createElement('i');
-    
-//     removeIcon.classList.add('fa-solid', 'fa-trash-can');
-//     removeBtn.appendChild(removeIcon);
-    
-//     removeBtn.addEventListener('click', () => {
-//       const selectedTag = removeBtn.parentElement.parentElement.dataset.tag;
-//       removeTag(selectedTag);
-//     });
-    
-//     const sliderTagDiv = document.createElement('div');
-//     sliderTagDiv.classList.add('slider-tag-div', 'center');
-    
-//     const iconDiv = document.createElement('div');
-//     iconDiv.classList.add('icon-div', 'center');
-    
-//     sliderTagDiv.appendChild(slider);
-//     sliderTagDiv.appendChild(sliderValue);
-//     sliderTagDiv.appendChild(tagName);
-//     iconDiv.appendChild(lockToggle);
-//     iconDiv.appendChild(removeBtn);
-//     selectedDiv.appendChild(sliderTagDiv);
-//     selectedDiv.appendChild(iconDiv);
-    
-//   selectedTagsWrapper.appendChild(selectedDiv);
   
 //   // Select the tag in the tags-list
 //   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
 //   if (tagSpan) {
 //     tagSpan.classList.add('selected');
 //   }
+  
+//   createSelectedDiv(selectedTag);
+//   resetTagSelect();
 // });
 
-// Select tags from tags-list
 tagsList.addEventListener('click', (e) => {  
   console.log('Tags-list clicked...');
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
     
-    // Check if the tag is already selected
-    if (selectedTags.includes(selectedTag)) {
-      removeTag(selectedTag);
-      resetTagSelect();
+    const proceed = handleTagSelection(selectedTag, e.target);
+    if (!proceed) {
       return;
-    }
-        
-    // Check if 4 tags have already been selected
-    if (selectedTags.length >= 4) {
-      return;
-    }
+    }  
     
-    selectedTags.push(selectedTag);
-    toggleBorders();
-    
-    // Add 'selected' class to the tag
     e.target.classList.add('selected');
-    
-    // Create a new div for the selected tag
-    const selectedDiv = document.createElement('div');
-    selectedDiv.classList.add('selected-div', 'center');
-    selectedDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
-    
-    // Add a quantity slider, tag name, lock toggle, and remove btn
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = 1;
-    slider.max = 6; 
-    slider.value = 1;
-    slider.classList.add('slider');
-    
-    const sliderValue = document.createElement('span');
-    sliderValue.classList.add('slider-value');
-    sliderValue.innerHTML = slider.value;
-    slider.oninput = () => {
-      sliderValue.innerHTML = slider.value;
-    };
-    
-    const tagName = document.createElement('span');
-    tagName.classList.add('name', 'center');
-    tagName.textContent = selectedTag;
-    
-    const lockToggle = document.createElement('button');
-    lockToggle.type = 'button';
-    lockToggle.classList.add('lock-toggle', 'center');
-    
-    const lockIcon = document.createElement('i');
-    lockIcon.classList.add('fa-solid', 'fa-unlock');
-    lockToggle.appendChild(lockIcon);
-    
-    lockToggle.addEventListener('click', () => {
-      const isLocked = selectedDiv.dataset.locked === 'true';
-      selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
-      if (isLocked) {
-        lockIcon.classList.remove('fa-lock');
-        lockIcon.classList.add('fa-unlock');
-        saveLockedTags(false);
-      } else {
-        lockIcon.classList.add('fa-lock');
-        lockIcon.classList.remove('fa-unlock');
-        saveLockedTags(true);
-      }
-    });
-    
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.classList.add('remove-btn', 'center'); 
-    
-    const removeIcon = document.createElement('i');
-    removeIcon.classList.add('fa-solid', 'fa-trash-can');
-    removeBtn.appendChild(removeIcon);
-    
-    removeBtn.addEventListener('click', () => {
-      const selectedTag = removeBtn.parentElement.parentElement.dataset.tag;
-      removeTag(selectedTag);
-    });
-      
-    const sliderTagDiv = document.createElement('div');
-    sliderTagDiv.classList.add('slider-tag-div', 'center');
-    
-    const iconDiv = document.createElement('div');
-    iconDiv.classList.add('icon-div', 'center');
-    
-    sliderTagDiv.appendChild(slider);
-    sliderTagDiv.appendChild(sliderValue);
-    sliderTagDiv.appendChild(tagName);
-    iconDiv.appendChild(lockToggle);
-    iconDiv.appendChild(removeBtn);
-    selectedDiv.appendChild(sliderTagDiv);
-    selectedDiv.appendChild(iconDiv);
-    
-    selectedTagsWrapper.appendChild(selectedDiv);
+    createSelectedDiv(selectedTag);
   }
   
   resetTagSelect();
 });
 
-//* HELPER FUNCTIONS
+const loadRenderLockedTags = () => {
+  console.log('loadRenderLockedTags called...');
+  const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
+  
+  selectedTagsWrapper.innerHTML = '';
+  selectedTags = [];
+  
+  loadedLockedTags.forEach(tagInfo => {
+    const { tag, quantity } = tagInfo;
+    
+    const proceed = handleTagSelection(tag);
+    if (!proceed) {
+      return;
+    }
+    
+    // Modify the slider value to reflect stored quantity
+    const selectedDiv = createSelectedDiv(tag);
+    const slider = selectedDiv.querySelector('.slider');
+    const sliderValue = selectedDiv.querySelector('.slider-value');
+    slider.value = quantity;
+    sliderValue.textContent = quantity;
+    
+    // Set tag to locked
+    const lockIcon = selectedDiv.querySelector('.fa-solid');
+    selectedDiv.dataset.locked = 'true';
+    lockIcon.classList.add('fa-lock');
+    lockIcon.classList.remove('fa-unlock');
+  });
+  
+  resetTagSelect();
+};
+
+
+//**   CHOOSING AND DISPLAYING SELECTED TAGS   **/
+
+const handleTagSelection = (selectedTag, sourceElement = null) => {
+  if (selectedTags.includes(selectedTag)) {
+    removeTag(selectedTag);
+    resetTagSelect();
+    return false;
+  }
+  
+  // Check if 4 tags have already been selected
+  if (selectedTags.length >= 4) {
+    return false;
+  }
+  
+  selectedTags.push(selectedTag);
+  toggleBorders();
+  
+  if (sourceElement) sourceElement.classList.add('selected');
+  
+  return true;
+};
+
+// Creating selected tag divs
+const createSelectedDiv = (selectedTag) => {
+  // Create a new div for the selected tag
+  const selectedDiv = document.createElement('div');
+  selectedDiv.classList.add('selected-div', 'center');
+  selectedDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
+  
+  // Create elements
+  const [slider, sliderValue] = createSlider();
+  const tagName = createTagName(selectedTag);
+  const [lockToggle, lockIcon] = createLockToggle(selectedDiv);
+  const removeBtn = createRemoveBtn(selectedDiv);
+  
+  // Append elements
+  const sliderTagDiv = appendToNewDiv('slider-tag-div center', [slider, sliderValue, tagName]);
+  const iconDiv = appendToNewDiv('icon-div center', [lockToggle, removeBtn]);
+  
+  selectedDiv.appendChild(sliderTagDiv);
+  selectedDiv.appendChild(iconDiv);
+  
+  selectedTagsWrapper.appendChild(selectedDiv);
+  
+  return selectedDiv;
+};
+
+const appendToNewDiv = (classList, elements) => {
+  const newDiv = document.createElement('div');
+  newDiv.classList.add(...classList.split(' '));
+  elements.forEach(el => newDiv.appendChild(el));
+  return newDiv;
+};
+
+
+//**   SELECTED TAG HELPERS   **//
+
+const createSlider = () => {
+  const slider = document.createElement('input');
+  slider.type = 'range';
+  slider.min = 1;
+  slider.max = 6;
+  slider.value = 1;
+  slider.classList.add('slider');
+  
+  const sliderValue = document.createElement('span');
+  sliderValue.classList.add('slider-value');
+  sliderValue.innerHTML = slider.value;
+  slider.oninput = () => {
+    sliderValue.innerHTML = slider.value;
+  };
+  
+  return [slider, sliderValue];
+};
+
+const createTagName = (selectedTag) => {
+  const tagName = document.createElement('span');
+  tagName.classList.add('name', 'center');
+  tagName.textContent = selectedTag;
+  return tagName;
+};
+
+
+//** SAVING SELECTED TAGS **//
+
+const createLockToggle = (selectedDiv) => {
+  const lockToggle = document.createElement('button');
+  lockToggle.type = 'button';
+  lockToggle.classList.add('lock-toggle', 'center');
+  
+  const lockIcon = document.createElement('i');
+  lockIcon.classList.add('fa-solid', 'fa-unlock');
+  lockToggle.appendChild(lockIcon);
+  
+  lockToggle.addEventListener('click', () => {
+    toggleLock(selectedDiv, lockIcon);
+  });
+  
+  return [lockToggle, lockIcon];
+};
+
+const toggleLock = (selectedDiv, lockIcon) => {
+  const isLocked = selectedDiv.dataset.locked === 'true';
+  selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
+  lockIcon.classList.toggle('fa-lock');
+  lockIcon.classList.toggle('fa-unlock');
+  saveLockedTags(!isLocked);
+};
+
+// Save or remove locked tags from local storage
+const saveLockedTags = (save = true) => {
+  console.log('saveLockedTags called...');
+  if (save) {
+    // Save locked tags to local storage
+    const lockedTags = Array.from(document.querySelectorAll('.selected-div'))
+      .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
+      .map(selectedDiv => {
+        return { tag: selectedDiv.dataset.tag, quantity: selectedDiv.querySelector('.slider').value };
+      });
+    localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
+  } else {
+    // Remove locked tags from local storage
+    localStorage.removeItem('lockedTags');
+  }
+};
+
+
+//**   REMOVING SELECTED TAGS   **//
+
+const createRemoveBtn = (selectedDiv) => {
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.classList.add('remove-btn', 'center');
+  
+  const removeIcon = document.createElement('i');
+  removeIcon.classList.add('fa-solid', 'fa-trash-can');
+  removeBtn.appendChild(removeIcon);
+  
+  removeBtn.addEventListener('click', () => {
+    const tag = selectedDiv.dataset.tag;
+    removeTag(tag);
+  });
+  
+  return removeBtn;
+};
+
+const removeTag = (selectedTag) => {
+  console.log('removeTag called...');
+  // Remove the tag from the selectedTags array
+  selectedTags = selectedTags.filter(tag => tag !== selectedTag);
+  
+  // Remove the tag from the selected-tags-wrapper
+  const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
+  if (selectedDiv) {
+    selectedDiv.remove();
+    saveLockedTags(false);
+  }
+  
+  // Deselect the tag in the tags-list
+  const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
+  if (tagSpan) {
+    tagSpan.classList.remove('selected');
+  }
+  toggleBorders();
+}
+
+// Clears selected tags based on removeLockedTags
+const clearSelectedTags = (removeLockedTags = false) => {
+  console.log('clearSelectedTags called...');
+  let selectedDivs = document.querySelectorAll('.selected-div');
+  
+  // Remove selected tags from selected-tags-wrapper that are not locked, or when removeLockedTags is true
+  selectedDivs.forEach((div) => {
+    if (removeLockedTags || div.dataset.locked !== 'true') {
+      removeTag(div.dataset.tag); 
+    }
+  });
+  
+  //!! Is this still necessary?
+  // Update selectedTags array to only contain locked tags if removeLockedTags is true
+  selectedTags = removeLockedTags ? selectedTags.filter(tag => tag.locked) : selectedTags;
+  
+  // Clear locked tags from local storage if removeLockedTags is true
+  if (removeLockedTags) {
+    console.log('Clearing locked tags from local storage...')
+    saveLockedTags(false);
+  } else {
+    console.log('Saving locked tags to local storage...')
+    saveLockedTags(true);
+  };
+  
+  toggleBorders();
+};
+
+// Reset dropdown, filterInput and tagsList
+const resetTagSelect = () => {
+  // dropdown.selectedIndex = 0;
+  const tags = document.querySelectorAll(".tag");
+  tags.forEach(tag => tag.classList.remove("hide")); 
+  filterInput.value = "";
+}
+
+
+//**   DISPLAY SELECTED PHOTOS   **//
+
 const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
   
@@ -502,180 +598,7 @@ const displayPhotos = (photos) => {
   }
 };
 
-const removeTag = (selectedTag) => {
-  console.log('removeTag called...');
-  // Remove the tag from the selectedTags array
-  selectedTags = selectedTags.filter(tag => tag !== selectedTag);
-  
-  // Remove the tag from the selected-tags-wrapper
-  const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
-  if (selectedDiv) {
-    selectedDiv.remove();
-    saveLockedTags(false);
-  }
-  
-  // Deselect the tag in the tags-list
-  const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-  if (tagSpan) {
-    tagSpan.classList.remove('selected');
-  }
-  toggleBorders();
-}
-
-// Clears selected tags based on removeLockedTags
-const clearSelectedTags = (removeLockedTags = false) => {
-  console.log('clearSelectedTags called...');
-  let selectedDivs = document.querySelectorAll('.selected-div');
-  
-  // Remove selected tags from selected-tags-wrapper that are not locked, or when removeLockedTags is true
-  selectedDivs.forEach((div) => {
-    if (removeLockedTags || div.dataset.locked !== 'true') {
-      removeTag(div.dataset.tag); 
-    }
-  });
-  
-  // Update selectedTags array to only contain locked tags if removeLockedTags is true
-  selectedTags = removeLockedTags ? selectedTags.filter(tag => tag.locked) : selectedTags;//!!
-
-  // Clear locked tags from local storage if removeLockedTags is true
-  if (removeLockedTags) {
-    console.log('Clearing locked tags from local storage...')
-    saveLockedTags(false);
-  } else {
-    console.log('Saving locked tags to local storage...')
-    saveLockedTags(true);
-  };
-
-  toggleBorders();
-};
-
-// Save or remove locked tags from local storage
-const saveLockedTags = (save = true) => {
-  console.log('saveLockedTags called...');
-  if (save) {
-    // Save locked tags to local storage
-    const lockedTags = Array.from(document.querySelectorAll('.selected-div'))
-      .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
-      .map(selectedDiv => {
-        return { tag: selectedDiv.dataset.tag, quantity: selectedDiv.querySelector('.slider').value };
-      });
-    localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
-  } else {
-    // Remove locked tags from local storage
-    localStorage.removeItem('lockedTags');
-  }
-};
-
-// Load and render locked tags
-const loadRenderLockedTags = () => {
-  console.log('loadRenderLockedTags called...');
-  const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
-  
-  selectedTagsWrapper.innerHTML = '';
-  selectedTags = [];
-  
-  loadedLockedTags.forEach(tagInfo => {
-    const { tag, quantity } = tagInfo;
-    
-    // Check if 4 tags have already been selected
-    if (selectedTags.length >= 4) {
-      return;
-    }
-    
-    selectedTags.push(tag);
-    dropdown.selectedIndex = 0;
-    toggleBorders();
-    
-    // Create a new div for the selected tag
-    const selectedDiv = document.createElement('div');
-    selectedDiv.classList.add('selected-div', 'center');
-    selectedDiv.dataset.tag = tag;
-    
-    // Add a quantity slider, tag name, lock toggle, and remove btn
-    const slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = 1;
-    slider.max = 6; 
-    slider.value = quantity;
-    slider.classList.add('slider');
-    
-    const sliderValue = document.createElement('span');
-    sliderValue.classList.add('slider-value');
-    sliderValue.innerHTML = quantity;
-    slider.oninput = () => {
-      sliderValue.innerHTML = slider.value;
-    };
-    
-    const tagName = document.createElement('span');
-    tagName.classList.add('name', 'center');
-    tagName.textContent = tag;
-    
-    const lockToggle = document.createElement('button');
-    lockToggle.type = 'button';
-    lockToggle.classList.add('lock-toggle', 'center');
-    selectedDiv.dataset.locked = 'true';
-    
-    const lockIcon = document.createElement('i');
-    lockIcon.classList.add('fa-solid', 'fa-lock');
-    lockToggle.appendChild(lockIcon);
-    
-    lockToggle.addEventListener('click', () => {
-      const isLocked = selectedDiv.dataset.locked === 'true';
-      selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
-      if (isLocked) {
-        lockIcon.classList.remove('fa-lock');
-        lockIcon.classList.add('fa-unlock');
-        saveLockedTags(false);
-      } else {
-        lockIcon.classList.add('fa-lock');
-        lockIcon.classList.remove('fa-unlock');
-        saveLockedTags(true);
-      }
-    });
-    
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.classList.add('remove-btn', 'center'); 
-    
-    const removeIcon = document.createElement('i');
-    removeIcon.classList.add('fa-solid', 'fa-trash-can');
-    removeBtn.appendChild(removeIcon);
-    
-    removeBtn.addEventListener('click', () => {
-      const selectedTag = removeBtn.parentElement.parentElement.dataset.tag;
-      removeTag(selectedTag);
-    });
-      
-    const sliderTagDiv = document.createElement('div');
-    sliderTagDiv.classList.add('slider-tag-div', 'center');
-    
-    const iconDiv = document.createElement('div');
-    iconDiv.classList.add('icon-div', 'center');
-    
-    sliderTagDiv.appendChild(slider);
-    sliderTagDiv.appendChild(sliderValue);
-    sliderTagDiv.appendChild(tagName);
-    iconDiv.appendChild(lockToggle);
-    iconDiv.appendChild(removeBtn);
-    selectedDiv.appendChild(sliderTagDiv);
-    selectedDiv.appendChild(iconDiv);
-    
-    selectedTagsWrapper.appendChild(selectedDiv);
-    toggleBorders();
-  });
-  
-  resetTagSelect();
-};
-
- // Reset dropdown, filterInput and tagsList
-const resetTagSelect = () => {
-  // dropdown.selectedIndex = 0;
-  const tags = document.querySelectorAll(".tag");
-  tags.forEach(tag => tag.classList.remove("hide")); 
-  filterInput.value = "";
-}
-
-//* TOGGLES & BUTTONS
+//**   TOGGLES   **//
 const toggleNav = () => {
   console.log('Toggling nav...');
   tabletOpenBtn.classList.toggle('open');
@@ -699,39 +622,8 @@ const toggleBorders = () => {
   }
 }
 
-totalSlider.addEventListener('input', () => {
-  totalPhotos = parseInt(totalSlider.value, 10);
-  lastTotalPhotos = totalPhotos;
 
-  // Display 'N/A' when slider value is 0
-  totalSliderValue.textContent = totalPhotos === 0 ? 'N/A' : totalPhotos;
-
-  // Disable and uncheck filler tags checkbox if total slider value is 'N/A'
-  if (totalPhotos === 0) {
-    remainder.disabled = true;
-    remainder.checked = false;
-    useRemainder = false;
-    totalSliderValue.classList.add('gray-out');
-    remainder.classList.add('gray-out');
-      } else {
-    remainder.disabled = false;
-    totalSliderValue.classList.remove('gray-out');
-    remainder.classList.remove('gray-out');
-  }
-});
-
-remainder.addEventListener('change', () => {
-  useRemainder = remainder.checked;
-  lastUseRemainder = useRemainder;
-});
-
-removeBtns.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    console.log('Remove button clicked..');
-    const selectedTag = btn.parentElement.dataset.tag;
-    removeTag(selectedTag);
-  });
-});
+//**   BUTTONS   **//
 
 mobileOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
@@ -809,9 +701,9 @@ randomBtn.addEventListener('click', () => {
     
     allTags.splice(randomTagIndex, 1); // Removes duplicates
     
-    // Simulate selecting tag by setting dropdown value, triggering change event
-    dropdown.value = selectedTag;
-    dropdown.dispatchEvent(new Event('change'));
+    // // Simulate selecting tag by setting dropdown value, triggering change event
+    // dropdown.value = selectedTag;
+    // dropdown.dispatchEvent(new Event('change'));
     
     // Set value for slider, considering totalImages
     const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 2, 12 - totalImages);
@@ -842,7 +734,7 @@ submitBtn.addEventListener('click', async (e) => {
   });
   
   lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
-
+  
   if (photos) {
     const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, totalPhotos, useRemainder);
     displayPhotos(filteredPhotos);
@@ -851,6 +743,14 @@ submitBtn.addEventListener('click', async (e) => {
   }
   
   toggleNav();
+});
+
+removeBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    console.log('Remove button clicked..');
+    const selectedTag = btn.parentElement.dataset.tag;
+    removeTag(selectedTag);
+  });
 });
 
 signoutBtn.addEventListener('click', async (e) => {
