@@ -349,7 +349,7 @@ const createSelectedDiv = (selectedTag) => {
   // Create elements
   const [slider, sliderValue] = createSlider();
   const tagName = createTagName(selectedTag);
-  const [lockToggle, lockIcon] = createLockToggle(selectedDiv);
+  const lockToggle = createLockToggle(selectedDiv);
   const removeBtn = createRemoveBtn(selectedDiv);
   
   // Append elements
@@ -415,7 +415,7 @@ const createLockToggle = (selectedDiv) => {
     toggleLock(selectedDiv, lockIcon);
   });
   
-  return [lockToggle, lockIcon];
+  return lockToggle;
 };
 
 const toggleLock = (selectedDiv, lockIcon) => {
