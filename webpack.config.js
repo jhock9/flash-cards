@@ -6,7 +6,7 @@ const Dotenv = require('dotenv-webpack');
 const dotenv = require('dotenv').config().parsed;
 
 module.exports = {
-  entry: './src/js/app.js',
+  entry: './src/app.js',
   mode: 'development',
   output: {
     clean: true,

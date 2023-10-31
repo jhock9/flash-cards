@@ -2,9 +2,10 @@
   "name": "flash-cards",
   "version": "1.0.0",
   "description": "VB-MAPP Flash Cards App for ABA Co-op",
-  "main": "./src/js/app.js",
+  "main": "./src/app.js",
   "scripts": {
     "lint": "eslint .",
+    "test": "jest",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:webpack\"",
     "dev:server": "NODE_ENV=development nodemon server/server.js",
     "dev:webpack": "webpack --mode=development --hot",
@@ -34,6 +35,7 @@
     "express-session": "^1.17.3",
     "googleapis": "^118.0.0",
     "jwt-decode": "^3.1.2",
+    "mongoose": "^8.0.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
     "winston": "^3.10.0"
@@ -51,6 +53,7 @@
     "eslint-plugin-import": "^2.27.5",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.3",
+    "jest": "^29.7.0",
     "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",

@@ -9,8 +9,8 @@ const { google } = require('googleapis');
 const session = require('express-session');
 const axios = require('axios');
 
-const morganMiddleware = require('./morgan.js');
-const logger = require('./winston.js');
+const morganMiddleware = require('./config/morgan.js');
+const logger = require('./config/winston.js');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
