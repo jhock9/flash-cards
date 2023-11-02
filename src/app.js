@@ -100,6 +100,13 @@ const checkAuthentication = async () => {
       
       if (window.location.pathname === '/landing.html') {
         window.location.href = '/flashcards.html';
+        try {
+          const photosData = await fetchPhotosData();
+          savePhotosData(photosData);
+          localStorage.setItem('photos', JSON.stringify(photosData));
+        } catch (error) {
+          console.error('Error fetching new photos:', error);
+        }
       }
       
     } else {
