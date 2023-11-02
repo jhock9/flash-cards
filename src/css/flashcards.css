@@ -461,10 +461,6 @@ main {
   }
 }
 
-#refresh-btn {
-  top: 14rem;
-}
-
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
   
