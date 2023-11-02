@@ -98,20 +98,20 @@ const checkAuthentication = async () => {
       console.log('User is authenticated.');
       sessionStorage.setItem('authenticationChecked', 'true');
       
+      try {
+        const photosData = await fetchPhotosData();
+        savePhotosData(photosData);
+        localStorage.setItem('photos', JSON.stringify(photosData));
+      } catch (error) {
+        console.error('Error fetching new photos:', error);
+      }
+      
       if (window.location.pathname === '/landing.html') {
         window.location.href = '/flashcards.html';
-        try {
-          const photosData = await fetchPhotosData();
-          savePhotosData(photosData);
-          localStorage.setItem('photos', JSON.stringify(photosData));
-        } catch (error) {
-          console.error('Error fetching new photos:', error);
-        }
       }
       
     } else {
       console.log('User is not authenticated.');
-      
       if (window.location.pathname === '/flashcards.html') {
         window.location.href = '/landing.html';
       }
@@ -188,8 +188,10 @@ const fetchPhotosDataIfNeeded = async () => {
     console.log('Fetching new photos data...');
     try {
       const photosData = await fetchPhotosData();
-      savePhotosData(photosData);
-      localStorage.setItem('lastFetch', now.toISOString());
+      if (photosData) {
+        savePhotosData(photosData);
+        localStorage.setItem('lastFetch', now.toISOString());
+        }
     } catch (error) {
       console.error('Error fetching new photos:', error);
     }
@@ -207,6 +209,7 @@ const fetchPhotosData = async () => {
     }
     const responseText = await response.text();
     photos = JSON.parse(responseText);
+    return photos;
     console.log('Photos data fetched:', photos);
   } catch (error) {
     console.error('Error fetching photos:', error);
