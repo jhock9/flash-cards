@@ -149,8 +149,12 @@ window.addEventListener('beforeunload', () => {
 // });
 
 const savePhotosData = (photosData) => {
-  localStorage.setItem('photos', JSON.stringify(photosData));
-  console.log('Photos data saved to local storage.');
+  if (photosData) {
+    localStorage.setItem('photos', JSON.stringify(photosData));
+    console.log('Photos data saved to local storage.');
+  } else {
+    console.error('No photos data to save.');
+  }
 };
 
 const loadPhotosData = () => {
