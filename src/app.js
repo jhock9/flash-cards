@@ -18,6 +18,7 @@ const filterInput = document.querySelector('#filter-tags');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
 
+// const cron = require('node-cron');
 let googleClientID; 
 let lastSelectedTagsAndQuantities;
 let selectedTags = [];
@@ -123,6 +124,69 @@ window.addEventListener('beforeunload', () => {
 
 //*   FETCH PHOTOS DATA AND DISPLAY TAGS   *//
 
+// const updatePhotosData = async () => {
+//   console.log('Fetching photos data...');
+//   try {
+//     const response = await fetch('/getPhotos');
+//     if (!response.ok) {
+//       throw new Error(`Server responded with status: ${response.status}`);
+//     }
+//     const photosData = await response.json();
+//     // Assuming you have a function to save this data locally or in your database
+//     savePhotosData(photosData);
+//     console.log('Photos data updated.');
+//   } catch (error) {
+//     console.error('Error fetching photos:', error);
+//   }
+// };
+
+// cron.schedule('0 2 * * *', () => {
+//   console.log('Running cron job...');
+//   updatePhotosData();
+// }, {
+//   scheduled: true,
+//   timezone: 'America/Chicago'
+// });
+
+const savePhotosData = (photosData) => {
+  localStorage.setItem('photos', JSON.stringify(photosData));
+  console.log('Photos data saved to local storage.');
+};
+
+const loadPhotosData = () => {
+  const photosData = localStorage.getItem('photos');
+  if (photosData) {
+    return JSON.parse(photosData);
+  } else {
+    console.error('No photos data found in local storage.');
+    return [];
+  }
+};
+  
+const fetchPhotosDataIfNeeded = async () => {
+  const lastFetch = localStorage.getItem('lastFetch');
+  const now = new Date();
+  
+  // Extract just the date part in YYYY-MM-DD format
+  const lastFetchDate = lastFetch ? new Date(lastFetch).toISOString().split('T')[0] : '';
+  const currentDate = now.toISOString().split('T')[0];
+  const currentHour = now.getHours();
+  
+  // Check if there's no last fetch record or if it's a new day and past 2 AM
+  if (!lastFetch || (lastFetchDate < currentDate && currentHour >= 2)) {
+    console.log('Fetching new photos data...');
+    try {
+      const photosData = await fetchPhotosData();
+      savePhotosData(photosData);
+      localStorage.setItem('lastFetch', now.toISOString());
+    } catch (error) {
+      console.error('Error fetching new photos:', error);
+    }
+  } else {
+    console.log('Using cached photos data.');
+  }
+};
+
 const fetchPhotosData = async () => {
   console.log('Fetching photos data...');
   try {
@@ -132,7 +196,7 @@ const fetchPhotosData = async () => {
     }
     const responseText = await response.text();
     photos = JSON.parse(responseText);
-    displayTags(photos);
+    console.log('Photos data fetched:', photos);
   } catch (error) {
     console.error('Error fetching photos:', error);
   }
@@ -627,14 +691,30 @@ const toggleBorders = () => {
 
 mobileOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
-  await fetchPhotosData();
-  toggleNav();
+  // await fetchPhotosData();
+  // toggleNav();
+  try {
+    await fetchPhotosDataIfNeeded();
+    const photosData = loadPhotosData();
+    displayTags(photosData);
+    toggleNav();
+  } catch (error) {
+    console.error('Error on open button click:', error);
+  }
 });
 
 tabletOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
-  await fetchPhotosData();
-  toggleNav();
+  // await fetchPhotosData();
+  // toggleNav();
+  try {
+    await fetchPhotosDataIfNeeded();
+    const photosData = loadPhotosData();
+    displayTags(photosData);
+    toggleNav();
+  } catch (error) {
+    console.error('Error on open button click:', error);
+  }
 });
 
 refreshBtn.addEventListener('click', async () => {
