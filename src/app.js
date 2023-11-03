@@ -799,13 +799,17 @@ randomBtn.addEventListener('click', () => {
     // dropdown.value = selectedTag;
     // dropdown.dispatchEvent(new Event('change'));
     
-    // Set value for slider, considering totalImages
-    const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 2, 12 - totalImages);
-        
-    // Set value for slider
-    const slider = document.querySelector(`.selected-div[data-tag="${selectedTag}"] .slider`);
-    slider.value = sliderValue;
+    // Directly call the process that would happen on clicking the tag
+    const proceed = handleTagSelection(selectedTag);
+    if (!proceed) continue;  // If the tag shouldn't be added, skip to the next iteration
     
+    const selectedDiv = createSelectedDiv(selectedTag);
+    const slider = selectedDiv.querySelector('.slider');
+    
+    // Set value for slider, considering totalImages
+    const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 1, 12 - totalImages);
+    slider.value = sliderValue;
+
     // Update totalImages count
     totalImages += sliderValue;
   }
