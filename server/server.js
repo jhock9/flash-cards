@@ -1,6 +1,7 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
 const url = require('url');
@@ -11,12 +12,14 @@ const axios = require('axios');
 
 const morganMiddleware = require('./config/morgan.js');
 const logger = require('./config/winston.js');
+const { getAllPhotos, getPhotoById, updatePhotoById } = require('./controllers/photoController.js');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
+const MONGO_URI = process.env.MONGO_URI;
 
 logger.info(`Environment variables: REDIRECT_URL = ${REDIRECT_URL}, NODE_ENV = ${NODE_ENV}`);
 
@@ -55,14 +58,22 @@ app.use((req, res, next) => {
     '.png': 'image/png',
     '.ico': 'image/x-icon',
   };
-
+  
   const ext = path.extname(req.url);
   if (contentTypeMap[ext]) {
     res.setHeader('Content-Type', contentTypeMap[ext]);
   }
-
+  
   next();
 });
+
+// MongoDB connection
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('Could not connect to MongoDB', err));
 
 // Add middleware 
 app.use(express.json());
@@ -94,6 +105,14 @@ app.get('/config', (req, res) => {
   });
 });
 
+
+//* CRUD OPERATIONS
+// Photos
+app.get('/photos', getAllPhotos);
+app.get('/photos/:id', getPhotoById);
+app.patch('/photos/:id', updatePhotoById);
+
+
 //* OAUTH 2.0
 // Set up your OAuth2 client for the API
 const oauth2Client = new google.auth.OAuth2(
@@ -121,6 +140,7 @@ app.get('/authorize', (req, res) => {
   // with endpoint /oauth2callback
 });
 
+
 //* HANDLING THE OAUTH 2.0 SERVER RESPONSE
 // Exchange authorization code for access and refresh tokens
 app.get('/oauth2callback', async (req, res) => {
@@ -137,10 +157,10 @@ app.get('/oauth2callback', async (req, res) => {
     }
     // Get access and refresh tokens
     logger.info('Attempting to get tokens with code...');
-
+    
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.info(`Received tokens of type: ${typeof tokens}`);
-
+    
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
     
@@ -153,6 +173,7 @@ app.get('/oauth2callback', async (req, res) => {
   }
 });
 
+
 //* PHOTOS LIBRARY API
 app.get('/getPhotos', async (req, res) => {
   logger.info('Received request for /getPhotos...');
@@ -163,7 +184,7 @@ app.get('/getPhotos', async (req, res) => {
     const params = {
       pageSize: 100,
     };
-  
+    
     const response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
       headers: {
         'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
@@ -171,7 +192,7 @@ app.get('/getPhotos', async (req, res) => {
       },
     });
     logger.info('Received media items...');
-
+    
     res.json(response.data.mediaItems);
   } catch (error) {
     logger.error('Error in /getPhotos route:', error);
