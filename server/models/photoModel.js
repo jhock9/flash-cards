@@ -3,10 +3,7 @@ const mongoose = require('mongoose');
 const photoSchema = new mongoose.Schema({
   googleId: { type: String, required: true, unique: true },
   productUrl: { type: String, required: true },
-  // baseUrl: { type: String, required: true },
-  // mimeType: { type: String, required: true },
   description: { type: String, required: true },
-  // selectedTags: [{ type: String }],
   tags: [{ 
     name: String, 
     qty: { type: Number, default: 0 }, 
