@@ -4,8 +4,7 @@ const loginForm = document.querySelector('#login-form');
 const registerForm = document.querySelector('#register-form');
 const formContainer = document.querySelector('#form-container');
 
-let googleClientID; 
-
+// let googleClientID; 
 
 // const fetchConfig = async () => {
 //   try {
@@ -129,3 +128,5 @@ backBtn.addEventListener('click', () => {
   registerForm.classList.remove('fade-in');
   registerForm.classList.add('fade-out');
 });
+
+}
