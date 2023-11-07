@@ -47,6 +47,64 @@ figure .logo img {
   padding: 0;
 }
 
+#form-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#form-container {
+  width: 40rem;
+  margin: 0;
+  padding: 0;
+  transform: 1s ease-in-out;
+  justify-content: center;
+  flex-flow: row nowrap;
+  transform: translateX(37.5%);
+}
+
+#login-form,
+#register-form {
+  margin: 0 3rem;
+  padding: 2rem 0;
+  flex-direction: column;
+}
+
+#register-form {
+  opacity: 0;
+}
+
+#form-container.shift-left {
+  transition: 1s ease-in-out;
+  transform: translateX(-37.5%);
+}
+
+#form-container.shift-right {
+  transition: 1s ease-in-out;
+  transform: translateX(37.5%);
+}
+
+#login-form.fade-out,
+#register-form.fade-out {
+  opacity: 0;
+  transition: opacity 0.75s ease-in-out;
+}
+
+#register-form.fade-in,
+#login-form.fade-in {
+  opacity: 1;
+  transition: opacity 0.75s ease-in-out;
+}
+
+.input-field {
+  width: 21.5rem;
+  height: 3rem;
+  font-size: 2rem;
+  margin: 1rem 0;
+  padding: .2rem 1rem;
+}
+
 #g_id_onload,
 #google-signin {
   margin: 6rem 0;
@@ -79,7 +137,7 @@ footer p {
 
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
-
+  
   #landing-page .content-wrapper {
     min-height: calc(100vh - 3rem); /* Adjust based on tablet/desktop footer height */
     flex-direction: column;
@@ -106,6 +164,7 @@ footer p {
   footer p{
     font-size: 2rem;
   }
+}
 
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
