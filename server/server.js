@@ -8,11 +8,15 @@ const url = require('url');
 const port = process.env.PORT || 3003;
 const { google } = require('googleapis');
 const session = require('express-session');
+const passport = require('passport');
 const axios = require('axios');
 
 const morganMiddleware = require('./config/morgan.js');
 const logger = require('./config/winston.js');
+const authRoutes = require('./routes/authRoutes.js');
 const { getAllPhotos, getPhotoById, updatePhotoById } = require('./controllers/photoController.js');
+const localPassport = require('./config/passport');
+require('./config/passport')(passport);
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -81,7 +85,7 @@ app.use(cors());
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
 }));
 
 app.use(morganMiddleware);
@@ -105,13 +109,20 @@ app.get('/config', (req, res) => {
   });
 });
 
+// Passport configuration
+app.use(passport.initialize());
+app.use(passport.session());
 
-//* CRUD OPERATIONS
-// Photos
+// Configure passport-local to use user model for authentication
+localPassport(passport);
+
+// Routes
+app.use('/auth', authRoutes);
+
+// CRUD routes
 app.get('/photos', getAllPhotos);
 app.get('/photos/:id', getPhotoById);
 app.patch('/photos/:id', updatePhotoById);
-
 
 //* OAUTH 2.0
 // Set up your OAuth2 client for the API
@@ -139,7 +150,6 @@ app.get('/authorize', (req, res) => {
   // This response will be sent back to the specified redirect URL 
   // with endpoint /oauth2callback
 });
-
 
 //* HANDLING THE OAUTH 2.0 SERVER RESPONSE
 // Exchange authorization code for access and refresh tokens
@@ -172,7 +182,6 @@ app.get('/oauth2callback', async (req, res) => {
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
-
 
 //* PHOTOS LIBRARY API
 app.get('/getPhotos', async (req, res) => {
