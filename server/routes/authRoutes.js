@@ -8,6 +8,7 @@ router.post('/register', async (req, res) => {
     const user = new User(req.body);
     await user.save();
     res.status(201).send(`Welcome ${user.username}!`);
+    res.status(201).redirect('../../src/landing.html');
   } catch (error) {
     res.status(400).send('Error registering new user please try again.');
   }
