@@ -128,5 +128,3 @@ backBtn.addEventListener('click', () => {
   registerForm.classList.remove('fade-in');
   registerForm.classList.add('fade-out');
 });
-
-}
