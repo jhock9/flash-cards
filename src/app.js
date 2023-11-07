@@ -2,24 +2,25 @@ const contentWrapper = document.querySelector('#flash-content-wrapper');
 const mobileOpenBtn = document.querySelector('#mobile-open-btn');
 const tabletOpenBtn = document.querySelector('#tablet-open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
+
 const sidePanel = document.querySelector('#side-panel');
+const signoutBtn = document.querySelector('#signout-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
-const signoutBtn = document.querySelector('#signout-btn');
+
 const totalSlider = document.querySelector('#total-slider');
 const totalSliderValue = document.querySelector('#total-slider-value');
 const remainder = document.querySelector('#remainder-checkbox');
-const tagsWrapper = document.querySelector('#tags-wrapper');
 const selectedTagsWrapper = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll('.remove-btn');
+
+const tagsWrapper = document.querySelector('#tags-wrapper');
 // const dropdown = document.querySelector('#dropdown');
 const filterInput = document.querySelector('#filter-tags');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
 
-// const cron = require('node-cron');
-let googleClientID; 
 let lastSelectedTagsAndQuantities;
 let selectedTags = [];
 let photos;
@@ -28,133 +29,7 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
-const fetchConfig = async () => {
-  try {
-    const response = await fetch('/config');
-    const config = await response.json();
-    
-    googleClientID = config.GOOGLE_CLIENT_ID;
-    console.log('googleClientID LOADED...'); 
-    
-    initGoogleSignIn();
-  } catch (error) {
-    console.error('Error fetching configuration:', error);
-  }
-};
-fetchConfig();
-
-
-//*   GOOGLE AUTHENTICATION & AUTHORIZATION   *//
-
-// Redirect user to Google's authentication page
-const googleAuth = () => {
-  window.location.href = '/authorize';
-};
-
-// Initialize Google Sign-In
-const initGoogleSignIn = () => {
-  google.accounts.id.initialize({
-    client_id: googleClientID,
-    callback: handleCredentialResponse,
-    on_failure: onSignInFailure
-  });
-  
-  google.accounts.id.renderButton(
-    document.getElementById('google-signin'),
-    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
-  );
-};
-
-// Sign in success callback
-const handleCredentialResponse = async (response) => {
-  console.log('handleCredentialResponse CALLED...');
-  let decodedUserInfo;
-  try {
-    console.log('Encoded JWT ID token RETRIEVED...')
-    decodedUserInfo = jwt_decode(response.credential);
-    console.log('Decoded User Info LOADED...');
-  } catch (error) {
-    console.error('Error decoding user credential:', error);
-  }
-  
-    await googleAuth();
-};
-
-const onSignInFailure = (error) => {
-  console.error('Sign-in error:', error);
-};
-
-const checkAuthentication = async () => {
-  try {
-    console.log('Checking authentication...');
-    const response = await fetch('/is-authenticated', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    
-    if (data.isAuthenticated) {
-      console.log('User is authenticated.');
-      sessionStorage.setItem('authenticationChecked', 'true');
-      
-      try {
-        const photosData = await fetchPhotosData();
-        savePhotosData(photosData);
-        localStorage.setItem('photos', JSON.stringify(photosData));
-      } catch (error) {
-        console.error('Error fetching new photos:', error);
-      }
-      
-      if (window.location.pathname === '/landing.html') {
-        window.location.href = '/flashcards.html';
-      }
-      
-    } else {
-      console.log('User is not authenticated.');
-      if (window.location.pathname === '/flashcards.html') {
-        window.location.href = '/landing.html';
-      }
-    } 
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-  }
-};
-
-// Call checkAuthentication when the page initially loads
-window.addEventListener('load', checkAuthentication);
-// Call checkAuthentication when the page refreshes
-window.addEventListener('beforeunload', () => {
-  sessionStorage.removeItem('authenticationChecked');
-});
-
-
 //*   FETCH PHOTOS DATA AND DISPLAY TAGS   *//
-
-// const updatePhotosData = async () => {
-//   console.log('Fetching photos data...');
-//   try {
-//     const response = await fetch('/getPhotos');
-//     if (!response.ok) {
-//       throw new Error(`Server responded with status: ${response.status}`);
-//     }
-//     const photosData = await response.json();
-//     // Assuming you have a function to save this data locally or in your database
-//     savePhotosData(photosData);
-//     console.log('Photos data updated.');
-//   } catch (error) {
-//     console.error('Error fetching photos:', error);
-//   }
-// };
-
-// cron.schedule('0 2 * * *', () => {
-//   console.log('Running cron job...');
-//   updatePhotosData();
-// }, {
-//   scheduled: true,
-//   timezone: 'America/Chicago'
-// });
-
 const savePhotosData = (photosData) => {
   if (photosData) {
     localStorage.setItem('photos', JSON.stringify(photosData));
