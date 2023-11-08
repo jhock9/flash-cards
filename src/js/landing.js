@@ -6,16 +6,39 @@ const newUserBtn = document.querySelector('#new-user-btn');
 const registerBtn = document.querySelector('#register-btn');
 const backBtn = document.querySelector('#back-btn');
 
-loginBtn.addEventListener('click', () => {
+// loginBtn.addEventListener('click', () => {
+//   const username = document.querySelector('#login-username').value;
+//   const password = document.querySelector('#login-password').value;
+
+//   fetch('/auth/login', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({ username, password }),
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       if (data.success) {
+//         window.location.href = '/flashcards.html';
+//       } else {
+//         console.log('Error logging in user...');
+//       }
+//     });
+// });
+
+loginBtn.addEventListener('click', (event) => {
+  event.preventDefault(); // prevent the form from submitting normally
   const username = document.querySelector('#login-username').value;
   const password = document.querySelector('#login-password').value;
 
+  const formData = new FormData();
+  formData.append('username', username);
+  formData.append('password', password);
+
   fetch('/auth/login', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, password }),
+    body: formData,
   })
     .then(response => response.json())
     .then(data => {
@@ -39,23 +62,47 @@ newUserBtn.addEventListener('click', () => {
   registerForm.classList.add('fade-in');
 });
 
-registerBtn.addEventListener('click', () => {
+// registerBtn.addEventListener('click', () => {
+//   const username = document.querySelector('#register-username').value;
+//   const password = document.querySelector('#register-password').value;
+
+//   fetch('/auth/register', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({ username, password }),
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       if (data.success) {
+//         window.location.href = '/landing.html';
+//       } else {
+//         console.log('Error registering new user...');
+//       }
+//     });
+// });
+
+registerBtn.addEventListener('click', (event) => {
+  event.preventDefault(); 
   const username = document.querySelector('#register-username').value;
   const password = document.querySelector('#register-password').value;
 
+  const formData = new FormData();
+  formData.append('username', username);
+  formData.append('password', password);
+
   fetch('/auth/register', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, password }),
+    body: formData,
   })
     .then(response => response.json())
     .then(data => {
       if (data.success) {
         window.location.href = '/landing.html';
       } else {
-        console.log('Error registering new user...');      }
+        console.log('Error registering new user...');
+      }
     });
 });
 
