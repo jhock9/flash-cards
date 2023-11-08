@@ -79,6 +79,8 @@ mongoose.connect(MONGO_URI, {
 .then(() => console.log('Connected to MongoDB Atlas'))
 .catch(err => console.error('Could not connect to MongoDB Atlas', err));
 
+mongoose.set('debug', true);
+
 // Add middleware 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
