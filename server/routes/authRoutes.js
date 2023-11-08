@@ -4,6 +4,7 @@ const User = require('../models/userModel');
 
 // Register route
 router.post('/register', async (req, res) => {
+  console.log(req.body)
   try {
     const user = new User(req.body);
     await user.save();
