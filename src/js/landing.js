@@ -1,8 +1,75 @@
-const registerBtn = document.querySelector('#register-btn');
-const backBtn = document.querySelector('#back-btn');
+const formContainer = document.querySelector('#form-container');
 const loginForm = document.querySelector('#login-form');
 const registerForm = document.querySelector('#register-form');
-const formContainer = document.querySelector('#form-container');
+const loginBtn = document.querySelector('#login-submit-btn');
+const newUserBtn = document.querySelector('#new-user-btn');
+const registerBtn = document.querySelector('#register-btn');
+const backBtn = document.querySelector('#back-btn');
+
+loginBtn.addEventListener('click', () => {
+  const username = document.querySelector('#login-username').value;
+  const password = document.querySelector('#login-password').value;
+
+  fetch('/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.href = '/flashcards.html';
+      } else {
+        console.log('Error logging in user...');
+      }
+    });
+});
+
+newUserBtn.addEventListener('click', () => {
+  console.log('Add new user form button clicked...');
+  formContainer.classList.add('shift-left');
+  formContainer.classList.remove('shift-right');
+  
+  loginForm.classList.remove('fade-in');
+  loginForm.classList.add('fade-out');
+  
+  registerForm.classList.remove('fade-out'); 
+  registerForm.classList.add('fade-in');
+});
+
+registerBtn.addEventListener('click', () => {
+  const username = document.querySelector('#register-username').value;
+  const password = document.querySelector('#register-password').value;
+
+  fetch('/auth/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.href = '/landing.html';
+      } else {
+        console.log('Error registering new user...');      }
+    });
+});
+
+backBtn.addEventListener('click', () => {
+  console.log('Back button to go to login form clicked...');
+  formContainer.classList.add('shift-right');
+  formContainer.classList.remove('shift-left');
+  
+  loginForm.classList.remove('fade-out');
+  loginForm.classList.add('fade-in');
+  
+  registerForm.classList.remove('fade-in');
+  registerForm.classList.add('fade-out');
+});
 
 // let googleClientID; 
 
@@ -104,27 +171,3 @@ const formContainer = document.querySelector('#form-container');
 // window.addEventListener('beforeunload', () => {
 //   sessionStorage.removeItem('authenticationChecked');
 // });
-
-registerBtn.addEventListener('click', () => {
-  console.log('Register button to add new user clicked...');
-  formContainer.classList.add('shift-left');
-  formContainer.classList.remove('shift-right');
-  
-  loginForm.classList.remove('fade-in');
-  loginForm.classList.add('fade-out');
-  
-  registerForm.classList.remove('fade-out'); 
-  registerForm.classList.add('fade-in');
-});
-
-backBtn.addEventListener('click', () => {
-  console.log('Back button to login user clicked...');
-  formContainer.classList.add('shift-right');
-  formContainer.classList.remove('shift-left');
-  
-  loginForm.classList.remove('fade-out');
-  loginForm.classList.add('fade-in');
-  
-  registerForm.classList.remove('fade-in');
-  registerForm.classList.add('fade-out');
-});

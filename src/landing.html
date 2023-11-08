@@ -43,16 +43,16 @@
         <div id="form-wrapper" class="center">
           <div id="form-container" class="center">
             <form id="login-form" class="center" action="/auth/login" method="post">
-              <input type="text" class="input-field" placeholder="Username" name="username" required>
-              <input type="password" class="input-field" placeholder="Password" name="password" required>
-              <button type="submit" id="login-submit" class="login-btn btn">Login</button>
-              <button type="button" id="register-btn" class="login-btn btn">New user?</button>
+              <input type="text" id="login-username" class="input-field" placeholder="Username" name="username" required>
+              <input type="password" id="login-password" class="input-field" placeholder="Password" name="password" required>
+              <button type="submit" id="login-submit-btn" class="login-btn btn">Login</button>
+              <button type="button" id="new-user-btn" class="login-btn btn">New user?</button>
             </form>
             
             <form id="register-form" class="center" action="/auth/register" method="post">
-              <input type="text" class="input-field" placeholder="Username" name="username" required>
-              <input type="password" class="input-field" placeholder="Password" name="password" required>
-              <button type="submit" class="login-btn btn">Register</button>
+              <input type="text" id="register-username" class="input-field" placeholder="Username" name="username" required>
+              <input type="password" id="register-password" class="input-field" placeholder="Password" name="password" required>
+              <button type="submit" id="register-btn" class="login-btn btn">Register</button>
               <button type="button" id="back-btn" class="login-btn btn">Back</button>
             </form>
           </div>
