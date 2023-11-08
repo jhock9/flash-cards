@@ -81,6 +81,7 @@ mongoose.connect(MONGO_URI, {
 
 // Add middleware 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(session({
   secret: SESSION_SECRET,
