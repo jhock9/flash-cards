@@ -38,7 +38,10 @@ loginBtn.addEventListener('click', (event) => {
 
   fetch('/auth/login', {
     method: 'POST',
-    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
   })
     .then(response => response.json())
     .then(data => {
@@ -94,7 +97,10 @@ registerBtn.addEventListener('click', (event) => {
 
   fetch('/auth/register', {
     method: 'POST',
-    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
   })
     .then(response => response.json())
     .then(data => {

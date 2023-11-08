@@ -4,6 +4,7 @@ const User = require('../models/userModel');
 
 // Register route
 router.post('/register', async (req, res) => {
+  console.log('Request:', req);
   const { username, password } = req.body;
 
   if (!username || !password) {
