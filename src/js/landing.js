@@ -5,37 +5,17 @@ const loginBtn = document.querySelector('#login-submit-btn');
 const newUserBtn = document.querySelector('#new-user-btn');
 const registerBtn = document.querySelector('#register-btn');
 const backBtn = document.querySelector('#back-btn');
-
-// loginBtn.addEventListener('click', () => {
-//   const username = document.querySelector('#login-username').value;
-//   const password = document.querySelector('#login-password').value;
-
-//   fetch('/auth/login', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ username, password }),
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       if (data.success) {
-//         window.location.href = '/flashcards.html';
-//       } else {
-//         console.log('Error logging in user...');
-//       }
-//     });
-// });
+const modals = document.querySelectorAll('.modal');
 
 loginBtn.addEventListener('click', (event) => {
   event.preventDefault(); // prevent the form from submitting normally
   const username = document.querySelector('#login-username').value;
   const password = document.querySelector('#login-password').value;
-
+  
   const formData = new FormData();
   formData.append('username', username);
   formData.append('password', password);
-
+  
   fetch('/auth/login', {
     method: 'POST',
     headers: {
@@ -43,54 +23,31 @@ loginBtn.addEventListener('click', (event) => {
     },
     body: JSON.stringify(formData),
   })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        window.location.href = '/flashcards.html';
-      } else {
-        console.log('Error logging in user...');
-      }
-    });
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      window.location.href = '/flashcards.html';
+    } else {
+      console.log('Error logging in user...');
+    }
+  });
 });
 
-newUserBtn.addEventListener('click', () => {
-  console.log('Add new user form button clicked...');
-  formContainer.classList.add('shift-left');
-  formContainer.classList.remove('shift-right');
-  
-  loginForm.classList.remove('fade-in');
-  loginForm.classList.add('fade-out');
-  
-  registerForm.classList.remove('fade-out'); 
-  registerForm.classList.add('fade-in');
+registerForm.addEventListener('submit', event => {
+  const password = document.querySelector('#register-password').value;
+  const confirmPassword = document.querySelector('#register-confirm-password').value;
+
+  if (password !== confirmPassword) {
+    event.preventDefault();
+    alert('Passwords do not match.');
+  }
 });
-
-// registerBtn.addEventListener('click', () => {
-//   const username = document.querySelector('#register-username').value;
-//   const password = document.querySelector('#register-password').value;
-
-//   fetch('/auth/register', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ username, password }),
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       if (data.success) {
-//         window.location.href = '/landing.html';
-//       } else {
-//         console.log('Error registering new user...');
-//       }
-//     });
-// });
 
 registerBtn.addEventListener('click', (event) => {
   event.preventDefault(); 
   const username = document.querySelector('#register-username').value;
   const password = document.querySelector('#register-password').value;
-
+  
   const userData = {
     username,
     password,
@@ -103,18 +60,79 @@ registerBtn.addEventListener('click', (event) => {
     },
     body: JSON.stringify(userData),
   })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        window.location.href = '/landing.html';
-      } else {
-        console.log('Error registering new user...');
-      }
-    });
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      window.location.href = '/landing.html';
+      
+      showSuccessModal();
+
+      setTimeout(() => {
+        hideSuccessModal();
+        shiftFormsToLogin();
+      }, 2000);
+    } else if (data.error) {
+      console.log(data.error);
+    }
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
+});
+
+newUserBtn.addEventListener('click', () => {
+  console.log('Add new user form button clicked...');
+  shiftFormsToRegister();
 });
 
 backBtn.addEventListener('click', () => {
   console.log('Back button to go to login form clicked...');
+  shiftFormsToLogin();
+});
+
+//* MODAL FUNCTIONS
+// Stops click events from propagating
+modals.forEach(modal => { 
+  modal.addEventListener('click', event => {
+    event.stopPropagation();
+  });
+});
+
+const hideModal = () => { 
+  modal.classList.add('hide');
+}
+
+// Hides modals when clicked
+modals.forEach(modal => {
+  modal.addEventListener('click', hideModal);
+});
+
+const showSuccessModal = () => {
+  successModal.classList.remove('hide');
+};
+
+const hideSuccessModal = () => {
+  successModal.classList.add('hide');
+};
+
+//* HELPER FUNCTIONS
+const shiftFormsToRegister = () => {
+  formContainer.classList.add('shift-left');
+  formContainer.classList.remove('shift-right');
+  
+  loginForm.classList.remove('fade-in');
+  loginForm.classList.add('fade-out');
+  
+  registerForm.classList.remove('fade-out'); 
+  registerForm.classList.add('fade-in');
+};
+
+const shiftFormsToLogin = () => {
   formContainer.classList.add('shift-right');
   formContainer.classList.remove('shift-left');
   
@@ -123,7 +141,8 @@ backBtn.addEventListener('click', () => {
   
   registerForm.classList.remove('fade-in');
   registerForm.classList.add('fade-out');
-});
+};
+
 
 // let googleClientID; 
 
