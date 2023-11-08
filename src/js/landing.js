@@ -91,10 +91,11 @@ registerBtn.addEventListener('click', (event) => {
   const username = document.querySelector('#register-username').value;
   const password = document.querySelector('#register-password').value;
 
-  const formData = new FormData();
-  formData.append('username', username);
-  formData.append('password', password);
-
+  const userData = {
+    username,
+    password,
+  };
+  
   fetch('/auth/register', {
     method: 'POST',
     headers: {
