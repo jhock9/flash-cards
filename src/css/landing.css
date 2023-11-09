@@ -109,6 +109,42 @@ figure .logo img {
   padding: .2rem 1rem;
 }
 
+#login-submit-btn,
+#register-btn {
+  color: var(--white);
+  background-color: var(--third-color);
+  border-color: var(--third-color);
+}
+
+#login-submit-btn:active,
+#login-submit-btn:hover,
+#register-btn:hover,
+#register-btn:active {
+  color: var(--white);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+#login-submit-btn:active,
+#register-btn:active {
+  border-color: var(--white);
+}
+
+#new-user-btn:active,
+#new-user-btn:hover,
+#back-btn:active,
+#back-btn:hover {
+  color: var(--primary-color);
+  background-color: var(--second-color);
+  border-color: var(--third-color);
+}
+
+#new-user-btn:active,
+#back-btn:active {
+  color: var(--white);
+  border-color: var(--white);
+}
+
 .password-wrapper {
   position: relative;
 }
