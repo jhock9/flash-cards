@@ -66,7 +66,7 @@ registerBtn.addEventListener('click', (event) => {
     setTimeout(() => {
       hidePasswordReqModal();
     }, 3000);
-
+    
     return;
   };
   
@@ -77,13 +77,14 @@ registerBtn.addEventListener('click', (event) => {
     setTimeout(() => {
       hideModal();
     }, 3000);
-
+    
     return;
   };
   
   const userData = {
     username,
     password,
+    confirmPassword,
   };
   
   fetch('/auth/register', {
