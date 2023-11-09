@@ -14,7 +14,6 @@ const photoSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 photoSchema.index({ 'tags.name': 1 });
-photoSchema.index({ googleId: 1 });
 photoSchema.index({ description: 'text' });
 
 const Photo = mongoose.model('Photo', photoSchema);
