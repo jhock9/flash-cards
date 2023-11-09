@@ -44,15 +44,30 @@
           <div id="form-container" class="center">
             <form id="login-form" class="center" action="/auth/login" method="post">
               <input type="text" id="login-username" class="input-field" placeholder="Username" name="username" required>
-              <input type="password" id="login-password" class="input-field" placeholder="4-Digit Code" name="password" required>
+              <!-- <input type="password" id="login-password" class="input-field" placeholder="4-Digit Code" name="password" required> -->
+              <div class="password-wrapper center">
+                <input type="password" id="login-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+                <i class="toggle-password fa-regular fa-eye-slash"></i>
+                <i class="toggle-password hide fa-solid fa-eye"></i>
+              </div>
               <button type="submit" id="login-submit-btn" class="login-btn btn">Login</button>
               <button type="button" id="new-user-btn" class="login-btn btn">New user?</button>
             </form>
             
             <form id="register-form" class="center" action="/auth/register" method="post">
               <input type="text" id="register-username" class="input-field" placeholder="Username" name="username" required>
-              <input type="password" id="register-password" class="input-field" placeholder="4-Digit Code" name="password" required>
-              <input type="password" id="confirm-password" class="input-field" placeholder="Confirm Code" name="confirmPassword" required>
+              <!-- <input type="password" id="register-password" class="input-field" placeholder="4-Digit Code" name="password" required> -->
+              <div class="password-wrapper center">
+                <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+                <i class="toggle-password fa-regular fa-eye-slash"></i>
+                <i class="toggle-password hide fa-solid fa-eye"></i>
+              </div>
+              <!-- <input type="password" id="confirm-password" class="input-field" placeholder="Confirm Code" name="confirmPassword" required> -->
+              <div class="password-wrapper center">
+                <input type="password" id="confirm-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" required>
+                <i class="toggle-password fa-regular fa-eye-slash"></i>
+                <i class="toggle-password hide fa-solid fa-eye"></i>
+              </div>
               <button type="submit" id="register-btn" class="login-btn btn">Register</button>
               <button type="button" id="back-btn" class="login-btn btn">Back</button>
             </form>
@@ -89,24 +104,27 @@
   </div>
   
   <!-- Modals -->
-  <div id="success-modal" class="modal">
-    <div class="modal-content">
-      <h2>Registration Successful!</h2>
-      <p>You can now log in with your new account.</p>
+  <div id="success-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">You're registered!</h2>
+      <i class="fa-regular fa-face-laugh-beam"></i> 
+      <p class="center">Now go log in with your<br>new account!</p>
     </div>
   </div>
   
-  <div id="incorrect-modal" class="modal">
-    <div class="modal-content">
-      <h2>Incorrect Username or Pass Code</h2>
-      <p>Please try again.</p>
+  <div id="incorrect-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">You entered the wrong<br>Username or Passcode.</h2>
+      <i class="fa-regular fa-face-tired"></i>
+      <p class="center">Please try again!</p>
     </div>
   </div>
   
-  <div id="unavailable-modal" class="modal">
-    <div class="modal-content">
-      <h2>Username is Unavailable</h2>
-      <p>Please try again.</p>
+  <div id="unavailable-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">Sorry, that username<br>is already taken.</h2>
+      <i class="fa-regular fa-face-grimace"></i>
+      <p class="center">Please try again!</p>
     </div>
   </div>
   

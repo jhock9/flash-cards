@@ -6,6 +6,7 @@ const newUserBtn = document.querySelector('#new-user-btn');
 const registerBtn = document.querySelector('#register-btn');
 const backBtn = document.querySelector('#back-btn');
 const modals = document.querySelectorAll('.modal');
+const togglePasswordButtons = document.querySelectorAll('.toggle-password');
 
 loginBtn.addEventListener('click', (event) => {
   event.preventDefault(); // prevent the form from submitting normally
@@ -33,7 +34,7 @@ loginBtn.addEventListener('click', (event) => {
   });
 });
 
-registerForm.addEventListener('submit', event => {
+registerForm.addEventListener('submit', (event) => {
   const password = document.querySelector('#register-password').value;
   const confirmPassword = document.querySelector('#register-confirm-password').value;
 
@@ -95,10 +96,61 @@ backBtn.addEventListener('click', () => {
   shiftFormsToLogin();
 });
 
+togglePasswordButtons.forEach(function(button) {
+  button.addEventListener('click', function() {
+    const wrapper = this.parentElement;
+    const passwordInput = wrapper.querySelector('input[type=password], input[type=text]');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+
+    const slashIcon = wrapper.querySelector('.fa-regular.fa-eye-slash');
+    const eyeIcon = wrapper.querySelector('.fa-solid.fa-eye');
+
+    if (type === 'text') {
+      slashIcon.classList.add('hide');
+      eyeIcon.classList.remove('hide');
+    } else {
+      slashIcon.classList.remove('hide');
+      eyeIcon.classList.add('hide');
+    }
+  });
+});
+
+// togglePasswordButtons.forEach(function(button) {
+//   button.addEventListener('click', function() {
+//     console.log('Event listener triggered');
+
+//     const wrapper = this.parentElement;
+//     console.log(wrapper);
+
+//     const passwordInput = wrapper.querySelector('input[type=password], input[type=text]');
+//     console.log(passwordInput);
+
+//     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+//     console.log(type);
+
+//     passwordInput.setAttribute('type', type);
+
+//     const slashIcon = wrapper.querySelector('.fa-regular.fa-eye-slash');
+//     console.log(slashIcon);
+
+//     const eyeIcon = wrapper.querySelector('.fa-solid.fa-eye');
+//     console.log(eyeIcon);
+
+//     if (type === 'text') {
+//       slashIcon.classList.add('hide');
+//       eyeIcon.classList.remove('hide');
+//     } else {
+//       slashIcon.classList.remove('hide');
+//       eyeIcon.classList.add('hide');
+//     }
+//   });
+// });
+
 //* MODAL FUNCTIONS
 // Stops click events from propagating
 modals.forEach(modal => { 
-  modal.addEventListener('click', event => {
+  modal.addEventListener('click', (event) => {
     event.stopPropagation();
   });
 });

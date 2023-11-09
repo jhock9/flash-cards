@@ -5,7 +5,21 @@ const User = require('../models/userModel');
 // Register route
 router.post('/register', async (req, res) => {
   console.log('Request:', req.body);
-  const { username, password } = req.body;
+  const { username, password, confirmPassword } = req.body;
+  
+  // Username & Password validation
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required' });
+  }
+  
+  if (password !== confirmPassword) {
+    return res.status(400).json({ error: 'Passwords do not match.' });
+  } 
+  
+  // Password = 4 digit code
+  if (!password.match(/^\d{4}$/)) {
+    return res.status(400).json({ error: 'Password must be a 4 digit code.' });
+  }
   
   // // Password = 4 characters, letters and numbers
   // if (!password.match(/^[A-Za-z0-9]{4,}$/)) {
@@ -17,14 +31,6 @@ router.post('/register', async (req, res) => {
   //   return res.status(400).json({ error: 'Password must be at least 6 characters and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.' });
   // }
   
-  // Password = 4 digit code
-  if (!password.match(/^\d{4}$/)) {
-    return res.status(400).json({ error: 'Password must be a 4 digit code.' });
-  }
-  
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Username and password are required' });
-  }
   console.log(req.body)
   try {
     const user = new User(req.body);
