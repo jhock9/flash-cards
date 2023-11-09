@@ -31,10 +31,10 @@ loginBtn.addEventListener('click', (event) => {
     body: JSON.stringify(userData),
   })
   .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    if (response.ok) {
+      return response.json();
     }
-    return response.json();
+    throw new Error('Network response was not ok');
   })
   .then(data => {
     if (data.success) {
@@ -45,7 +45,7 @@ loginBtn.addEventListener('click', (event) => {
         
         setTimeout(() => {
           hideModal();
-        }, 3000);
+        }, 2000);
       } else {
         console.log(data.error);
       }
@@ -65,7 +65,7 @@ registerBtn.addEventListener('click', (event) => {
     
     setTimeout(() => {
       hidePasswordReqModal();
-    }, 3000);
+    }, 2000);
     
     return;
   };
@@ -76,7 +76,7 @@ registerBtn.addEventListener('click', (event) => {
     
     setTimeout(() => {
       hideModal();
-    }, 3000);
+    }, 2000);
     
     return;
   };
@@ -109,14 +109,14 @@ registerBtn.addEventListener('click', (event) => {
       setTimeout(() => {
         hideSuccessModal();
         shiftFormsToLogin();
-      }, 3000);
+      }, 2000);
     } else if (data.error) {
       if (data.error === 'User already exists') {
         showUnavailableModal();
         
         setTimeout(() => {
           hideModal();
-        }, 3000);
+        }, 2000);
       } else {
         console.log(data.error);
       };

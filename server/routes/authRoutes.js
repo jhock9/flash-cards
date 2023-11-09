@@ -47,14 +47,22 @@ router.post('/register', async (req, res) => {
 });
 
 // Login route
-router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.json({ success: true });
-
-});// router.post('/login', passport.authenticate('local', {
-//   successRedirect: '../../src/flashcards.html',
-//   failureRedirect: '../../src/landing.html', 
-// }));
-
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json({ success: true });
+    });
+  })(req, res, next);
+});
 
 // Logout route
 router.get('/logout', (req, res) => {
