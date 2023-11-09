@@ -2,7 +2,7 @@
   Mobile Styles
   ========================================================================== */
 
-#landing-content-wrapper {
+#login-content-wrapper {
   min-height: calc(100vh - 2rem); /* Adjust based on mobile footer height */
   width: 100%;
   flex-direction: column;
@@ -238,7 +238,7 @@ footer p {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
   
-  #landing-page .content-wrapper {
+  #login-page .content-wrapper {
     min-height: calc(100vh - 3rem); /* Adjust based on tablet/desktop footer height */
     flex-direction: column;
     justify-content: space-between;

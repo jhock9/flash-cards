@@ -105,7 +105,7 @@ registerBtn.addEventListener('click', (event) => {
   })
   .then(data => {
     if (data.success) {
-      window.location.href = '/landing.html';
+      window.location.href = '/login.html';
       
       showSuccessModal();
       
@@ -304,14 +304,14 @@ const shiftFormsToLogin = () => {
 //         console.error('Error fetching new photos:', error);
 //       }
       
-//       if (window.location.pathname === '/landing.html') {
+//       if (window.location.pathname === '/login.html') {
 //         window.location.href = '/flashcards.html';
 //       }
       
 //     } else {
 //       console.log('User is not authenticated.');
 //       if (window.location.pathname === '/flashcards.html') {
-//         window.location.href = '/landing.html';
+//         window.location.href = '/login.html';
 //       }
 //     } 
 //   } catch (error) {

@@ -738,7 +738,7 @@ signoutBtn.addEventListener('click', async (e) => {
     google.accounts.id.disableAutoSelect();
     console.log('User signed out.');
     
-    window.location.href = '/landing.html';
+    window.location.href = '/login.html';
     loadRenderLockedTags();
   } catch (error) {
     console.error('Error during logout:', error);

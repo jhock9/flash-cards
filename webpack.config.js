@@ -31,8 +31,8 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       hash: true,
-      template: './src/landing.html',
-      filename: 'landing.html',
+      template: './src/login.html',
+      filename: 'login.html',
       inject: 'body',
       favicon: path.resolve(__dirname, 'src/favicon.ico'),
     }),
@@ -47,7 +47,7 @@ module.exports = {
       patterns: [
         { from: 'src/assets', to: 'assets' },
         { from: 'src/css/common.css', to: './' },
-        { from: 'src/css/landing.css', to: './' },
+        { from: 'src/css/login.css', to: './' },
         { from: 'src/css/flashcards.css', to: './' },
         { from: 'src/favicon.ico', to: './' },
         // { from: 'src/support', to: 'support' }, 

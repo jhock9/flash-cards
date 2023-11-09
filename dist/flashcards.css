@@ -395,7 +395,7 @@ main {
     min-width: 25rem;
   }
   
-  .btn {
+  .square-btn {
     width: 8rem;
     margin: 1rem 1.75rem;
     font-size: 4rem;
@@ -431,7 +431,10 @@ main {
     position: absolute;
     transition: transform 0.6s; 
     transform: translateX(50rem);
-    
+  }
+
+  #refresh-btn {
+    top: 14rem;
   }
 }
 

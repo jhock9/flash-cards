@@ -2,7 +2,7 @@
   Mobile Styles
   ========================================================================== */
 
-#landing-content-wrapper {
+#login-content-wrapper {
   min-height: calc(100vh - 2rem); /* Adjust based on mobile footer height */
   width: 100%;
   flex-direction: column;
@@ -109,6 +109,42 @@ figure .logo img {
   padding: .2rem 1rem;
 }
 
+#login-submit-btn,
+#register-btn {
+  color: var(--white);
+  background-color: var(--third-color);
+  border-color: var(--third-color);
+}
+
+#login-submit-btn:active,
+#login-submit-btn:hover,
+#register-btn:hover,
+#register-btn:active {
+  color: var(--white);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+#login-submit-btn:active,
+#register-btn:active {
+  border-color: var(--white);
+}
+
+#new-user-btn:active,
+#new-user-btn:hover,
+#back-btn:active,
+#back-btn:hover {
+  color: var(--primary-color);
+  background-color: var(--second-color);
+  border-color: var(--third-color);
+}
+
+#new-user-btn:active,
+#back-btn:active {
+  color: var(--white);
+  border-color: var(--white);
+}
+
 .password-wrapper {
   position: relative;
 }
@@ -202,7 +238,7 @@ footer p {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
   
-  #landing-page .content-wrapper {
+  #login-page .content-wrapper {
     min-height: calc(100vh - 3rem); /* Adjust based on tablet/desktop footer height */
     flex-direction: column;
     justify-content: space-between;
@@ -229,19 +265,25 @@ footer p {
     font-size: 2rem;
   }
   
-  #success-modal .modal-content,
-  #unavailable-modal .modal-content {
-    width: 50rem;
-    height: 30rem;
-  }
-  
   #incorrect-modal .modal-content {
     width: 55rem;
     height: 30rem;
   }
+    
+  #success-modal .modal-content,
+  #unavailable-modal .modal-content,
+  #password-mismatch-modal .modal-content {
+    width: 50rem;
+    height: 30rem;
+  }
+  
+  #password-req-modal .modal-content {
+    width: 60rem;
+    height: 35rem;
+  }
   
   .modal-content h2 {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
   
   .modal-content i  {

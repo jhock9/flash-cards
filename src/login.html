@@ -10,7 +10,7 @@
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/common.css">
-  <link rel="stylesheet" href="css/landing.css">
+  <link rel="stylesheet" href="css/login.css">
 
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
@@ -18,12 +18,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.ico?f90a88d6d6ad3317cfc1"></head>
+</head>
 
 
 <body class="center">
-  <div id="landing-page" class="center">
-    <div id="landing-content-wrapper" class="content-wrapper center">
+  <div id="login-page" class="center">
+    <div id="login-content-wrapper" class="content-wrapper center">
       <section class="center">
         <figure class="center">
           <div class="logo center">
@@ -73,7 +73,7 @@
             </form>
           </div>
         </div>
-<!-- 
+        <!--    
         <div id="g_id_onload"
           data-client_id=""
           data-context="use"
@@ -106,7 +106,7 @@
   <!-- Modals -->
   <div id="incorrect-modal" class="modal hide center">
     <div class="modal-content center">
-      <h2 class="center">You entered the wrong<br>Username or Passcode.</h2>
+      <h2 class="center">Oops, you entered the wrong<br>username or passcode.</h2>
       <i class="fa-regular fa-face-tired"></i>
       <p class="center">Please try again!</p>
     </div>
@@ -119,7 +119,7 @@
       <p class="center">Now go log in with your<br>new account!</p>
     </div>
   </div>
-
+  
   <div id="unavailable-modal" class="modal hide center">
     <div class="modal-content center">
       <h2 class="center">Sorry, that username<br>is already taken.</h2>
@@ -130,11 +130,20 @@
   
   <div id="password-mismatch-modal" class="modal hide center">
     <div class="modal-content center">
-      <h2 class="center">Sorry, your passwords<br>don't match.</h2>
+      <h2 class="center">Oops, your passcode<br>doesn't match.</h2>
       <i class="fa-regular fa-face-frown"></i>
       <p class="center">Please try again!</p>
     </div>
-
-  <script src="js/landing.js"></script>
-<script defer src="bundle.js?f90a88d6d6ad3317cfc1"></script></body> 
+  </div>
+  
+  <div id="password-req-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">Oops, your passcode<br>doesn't meet the requirements.</h2>
+      <i class="fa-regular fa-face-frown"></i>
+      <p class="center">Please try again with<br>a 4-digit code!</p>
+    </div>
+  </div>
+  
+  <script src="js/login.js"></script>
+</body> 
 </html>

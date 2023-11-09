@@ -68,7 +68,7 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', (req, res) => {
   req.logout();
   req.session.destroy(() => {
-    res.redirect('./../src/landing.html');
+    res.redirect('./../src/login.html');
   });
 });
 
