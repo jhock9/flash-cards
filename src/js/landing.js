@@ -116,37 +116,6 @@ togglePasswordButtons.forEach(function(button) {
   });
 });
 
-// togglePasswordButtons.forEach(function(button) {
-//   button.addEventListener('click', function() {
-//     console.log('Event listener triggered');
-
-//     const wrapper = this.parentElement;
-//     console.log(wrapper);
-
-//     const passwordInput = wrapper.querySelector('input[type=password], input[type=text]');
-//     console.log(passwordInput);
-
-//     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-//     console.log(type);
-
-//     passwordInput.setAttribute('type', type);
-
-//     const slashIcon = wrapper.querySelector('.fa-regular.fa-eye-slash');
-//     console.log(slashIcon);
-
-//     const eyeIcon = wrapper.querySelector('.fa-solid.fa-eye');
-//     console.log(eyeIcon);
-
-//     if (type === 'text') {
-//       slashIcon.classList.add('hide');
-//       eyeIcon.classList.remove('hide');
-//     } else {
-//       slashIcon.classList.remove('hide');
-//       eyeIcon.classList.add('hide');
-//     }
-//   });
-// });
-
 //* MODAL FUNCTIONS
 // Stops click events from propagating
 modals.forEach(modal => { 
@@ -179,9 +148,11 @@ const shiftFormsToRegister = () => {
   
   loginForm.classList.remove('fade-in');
   loginForm.classList.add('fade-out');
-  
+  loginForm.style.pointerEvents = 'none';
+
   registerForm.classList.remove('fade-out'); 
   registerForm.classList.add('fade-in');
+  registerForm.style.pointerEvents = 'auto';
 };
 
 const shiftFormsToLogin = () => {
@@ -190,9 +161,11 @@ const shiftFormsToLogin = () => {
   
   loginForm.classList.remove('fade-out');
   loginForm.classList.add('fade-in');
-  
+  loginForm.style.pointerEvents = 'auto'; 
+
   registerForm.classList.remove('fade-in');
   registerForm.classList.add('fade-out');
+  registerForm.style.pointerEvents = 'none';
 };
 
 

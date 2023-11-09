@@ -74,6 +74,7 @@ figure .logo img {
 
 #register-form {
   opacity: 0;
+  pointer-events: none
 }
 
 #form-container.shift-left {
@@ -90,12 +91,14 @@ figure .logo img {
 #register-form.fade-out {
   opacity: 0;
   transition: opacity 0.75s ease-in-out;
+  pointer-events: none;
 }
 
 #register-form.fade-in,
 #login-form.fade-in {
   opacity: 1;
   transition: opacity 0.75s ease-in-out;
+  pointer-events: auto;
 }
 
 .input-field {
