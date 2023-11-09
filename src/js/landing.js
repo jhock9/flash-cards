@@ -56,7 +56,7 @@ registerBtn.addEventListener('click', (event) => {
   event.preventDefault(); 
   const username = document.querySelector('#register-username').value;
   const password = document.querySelector('#register-password').value;
-  const confirmPassword = document.querySelector('#register-confirm-password').value;
+  const confirmPassword = document.querySelector('#confirm-password').value;
   
   if (password !== confirmPassword) {
     event.preventDefault();
