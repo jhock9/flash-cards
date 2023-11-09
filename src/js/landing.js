@@ -11,6 +11,7 @@ const incorrectModal = document.querySelector('#incorrect-modal');
 const successModal = document.querySelector('#success-modal');
 const unavailableModal = document.querySelector('#unavailable-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
+const passwordReqModal = document.querySelector('#password-req-modal');
 
 loginBtn.addEventListener('click', (event) => {
   event.preventDefault(); // prevent the form from submitting normally
@@ -58,6 +59,17 @@ registerBtn.addEventListener('click', (event) => {
   const password = document.querySelector('#register-password').value;
   const confirmPassword = document.querySelector('#confirm-password').value;
   
+    if (!/^\d{4}$/.test(password)) {
+    event.preventDefault();
+    showPasswordReqModal();
+    
+    setTimeout(() => {
+      hidePasswordReqModal();
+    }, 3000);
+
+    return;
+  };
+  
   if (password !== confirmPassword) {
     event.preventDefault();
     showPasswordMismatchModal();
@@ -65,6 +77,8 @@ registerBtn.addEventListener('click', (event) => {
     setTimeout(() => {
       hideModal();
     }, 3000);
+
+    return;
   };
   
   const userData = {
@@ -149,9 +163,11 @@ modals.forEach(modal => {
   });
 });
 
-const hideModal = () => { 
-  modal.classList.add('hide');
-}
+const hideModal = () => {
+  modals.forEach(modal => {
+    modal.classList.add('hide');
+  }); 
+};
 
 modals.forEach(modal => {
   modal.addEventListener('click', hideModal);
@@ -159,7 +175,7 @@ modals.forEach(modal => {
 
 const showIncorrectModal = () => {
   incorrectModal.classList.remove('hide');
-}
+};
 
 const showSuccessModal = () => {
   successModal.classList.remove('hide');
@@ -167,11 +183,15 @@ const showSuccessModal = () => {
 
 const showUnavailableModal = () => {
   unavailableModal.classList.remove('hide');
-}
+};
 
 const showPasswordMismatchModal = () => {
   passwordMismatchModal.classList.remove('hide');
-}
+};
+
+const showPasswordReqModal = () => {
+  passwordReqModal.classList.remove('hide');
+};
 
 //* HELPER FUNCTIONS
 const shiftFormsToRegister = () => {

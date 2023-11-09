@@ -229,19 +229,25 @@ footer p {
     font-size: 2rem;
   }
   
-  #success-modal .modal-content,
-  #unavailable-modal .modal-content {
-    width: 50rem;
-    height: 30rem;
-  }
-  
   #incorrect-modal .modal-content {
     width: 55rem;
     height: 30rem;
   }
+    
+  #success-modal .modal-content,
+  #unavailable-modal .modal-content,
+  #password-mismatch-modal .modal-content {
+    width: 50rem;
+    height: 30rem;
+  }
+  
+  #password-req-modal .modal-content {
+    width: 60rem;
+    height: 35rem;
+  }
   
   .modal-content h2 {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
   
   .modal-content i  {
