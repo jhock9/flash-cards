@@ -7,47 +7,65 @@ const registerBtn = document.querySelector('#register-btn');
 const backBtn = document.querySelector('#back-btn');
 const modals = document.querySelectorAll('.modal');
 const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+const incorrectModal = document.querySelector('#incorrect-modal');
+const successModal = document.querySelector('#success-modal');
+const unavailableModal = document.querySelector('#unavailable-modal');
+const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
 
 loginBtn.addEventListener('click', (event) => {
   event.preventDefault(); // prevent the form from submitting normally
   const username = document.querySelector('#login-username').value;
   const password = document.querySelector('#login-password').value;
   
-  const formData = new FormData();
-  formData.append('username', username);
-  formData.append('password', password);
+  const userData = {
+    username,
+    password,
+  };
   
   fetch('/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formData),
+    body: JSON.stringify(userData),
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
   .then(data => {
     if (data.success) {
       window.location.href = '/flashcards.html';
-    } else {
-      console.log('Error logging in user...');
+    } else if (data.error) {
+      if (data.error === 'Invalid username or password') {
+        showIncorrectModal();
+        
+        setTimeout(() => {
+          hideModal();
+        }, 3000);
+      } else {
+        console.log(data.error);
+      }
     }
   });
-});
-
-registerForm.addEventListener('submit', (event) => {
-  const password = document.querySelector('#register-password').value;
-  const confirmPassword = document.querySelector('#register-confirm-password').value;
-
-  if (password !== confirmPassword) {
-    event.preventDefault();
-    alert('Passwords do not match.');
-  }
 });
 
 registerBtn.addEventListener('click', (event) => {
   event.preventDefault(); 
   const username = document.querySelector('#register-username').value;
   const password = document.querySelector('#register-password').value;
+  const confirmPassword = document.querySelector('#register-confirm-password').value;
+  
+  if (password !== confirmPassword) {
+    event.preventDefault();
+    showPasswordMismatchModal();
+    
+    setTimeout(() => {
+      hideModal();
+    }, 3000);
+  };
   
   const userData = {
     username,
@@ -72,14 +90,22 @@ registerBtn.addEventListener('click', (event) => {
       window.location.href = '/landing.html';
       
       showSuccessModal();
-
+      
       setTimeout(() => {
         hideSuccessModal();
         shiftFormsToLogin();
-      }, 2000);
+      }, 3000);
     } else if (data.error) {
-      console.log(data.error);
-    }
+      if (data.error === 'User already exists') {
+        showUnavailableModal();
+        
+        setTimeout(() => {
+          hideModal();
+        }, 3000);
+      } else {
+        console.log(data.error);
+      };
+    };
   })
   .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);
@@ -102,10 +128,10 @@ togglePasswordButtons.forEach(function(button) {
     const passwordInput = wrapper.querySelector('input[type=password], input[type=text]');
     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
     passwordInput.setAttribute('type', type);
-
+    
     const slashIcon = wrapper.querySelector('.fa-regular.fa-eye-slash');
     const eyeIcon = wrapper.querySelector('.fa-solid.fa-eye');
-
+    
     if (type === 'text') {
       slashIcon.classList.add('hide');
       eyeIcon.classList.remove('hide');
@@ -117,7 +143,6 @@ togglePasswordButtons.forEach(function(button) {
 });
 
 //* MODAL FUNCTIONS
-// Stops click events from propagating
 modals.forEach(modal => { 
   modal.addEventListener('click', (event) => {
     event.stopPropagation();
@@ -128,18 +153,25 @@ const hideModal = () => {
   modal.classList.add('hide');
 }
 
-// Hides modals when clicked
 modals.forEach(modal => {
   modal.addEventListener('click', hideModal);
 });
+
+const showIncorrectModal = () => {
+  incorrectModal.classList.remove('hide');
+}
 
 const showSuccessModal = () => {
   successModal.classList.remove('hide');
 };
 
-const hideSuccessModal = () => {
-  successModal.classList.add('hide');
-};
+const showUnavailableModal = () => {
+  unavailableModal.classList.remove('hide');
+}
+
+const showPasswordMismatchModal = () => {
+  passwordMismatchModal.classList.remove('hide');
+}
 
 //* HELPER FUNCTIONS
 const shiftFormsToRegister = () => {
@@ -149,7 +181,7 @@ const shiftFormsToRegister = () => {
   loginForm.classList.remove('fade-in');
   loginForm.classList.add('fade-out');
   loginForm.style.pointerEvents = 'none';
-
+  
   registerForm.classList.remove('fade-out'); 
   registerForm.classList.add('fade-in');
   registerForm.style.pointerEvents = 'auto';
@@ -162,7 +194,7 @@ const shiftFormsToLogin = () => {
   loginForm.classList.remove('fade-out');
   loginForm.classList.add('fade-in');
   loginForm.style.pointerEvents = 'auto'; 
-
+  
   registerForm.classList.remove('fade-in');
   registerForm.classList.add('fade-out');
   registerForm.style.pointerEvents = 'none';
