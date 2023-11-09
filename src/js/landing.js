@@ -31,25 +31,28 @@ loginBtn.addEventListener('click', (event) => {
     body: JSON.stringify(userData),
   })
   .then(response => {
-    if (response.ok) {
-      return response.json();
+    if (response.status === 401) {
+      throw new Error('Invalid username or password');
+    } else if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-    throw new Error('Network response was not ok');
+    return response.json();
   })
   .then(data => {
     if (data.success) {
       window.location.href = '/flashcards.html';
-    } else if (data.error) {
-      if (data.error === 'Invalid username or password') {
-        showIncorrectModal();
-        
-        setTimeout(() => {
-          hideModal();
-        }, 2000);
-      } else {
-        console.log(data.error);
-      }
     }
+  })
+  .catch(error => {
+    if (error.message === 'Invalid username or password') {
+      showIncorrectModal();
+      
+      setTimeout(() => {
+        hideModal();
+      }, 2000);
+    } else {
+      console.log(error.message);
+    };
   });
 });
 
