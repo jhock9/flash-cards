@@ -47,6 +47,88 @@ figure .logo img {
   padding: 0;
 }
 
+#form-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#form-container {
+  width: 40rem;
+  margin: 0;
+  padding: 0;
+  transform: 1s ease-in-out;
+  justify-content: center;
+  align-items: flex-start;
+  flex-flow: row nowrap;
+  transform: translateX(37.5%);
+}
+
+#login-form,
+#register-form {
+  margin: 0 3rem;
+  padding: 2rem 0;
+  flex-direction: column;
+}
+
+#register-form {
+  opacity: 0;
+  pointer-events: none
+}
+
+#form-container.shift-left {
+  transition: 1s ease-in-out;
+  transform: translateX(-37.5%);
+}
+
+#form-container.shift-right {
+  transition: 1s ease-in-out;
+  transform: translateX(37.5%);
+}
+
+#login-form.fade-out,
+#register-form.fade-out {
+  opacity: 0;
+  transition: opacity 0.75s ease-in-out;
+  pointer-events: none;
+}
+
+#register-form.fade-in,
+#login-form.fade-in {
+  opacity: 1;
+  transition: opacity 0.75s ease-in-out;
+  pointer-events: auto;
+}
+
+.input-field {
+  width: 21.5rem;
+  height: 3rem;
+  font-size: 2rem;
+  margin: 1rem 0;
+  padding: .2rem 1rem;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+input[type=password] {
+  width: 18.5rem;
+  padding-right: 4rem; 
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 #g_id_onload,
 #google-signin {
   margin: 6rem 0;
@@ -73,13 +155,53 @@ footer p {
   display: block;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+.modal-content {
+  width: 80%;
+  margin: 0;
+  padding: 2rem 0;
+  text-align: center;
+  border: .5rem solid var(--third-color);
+  background-color: var(--white);
+  color: var(--third-color);
+  flex-direction: column;
+}
+
+.modal-content h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 2.5rem;
+}
+
+.modal-content i {
+  margin: 2rem 0;
+  padding: 0;
+  font-size: 5rem;
+  color: var(--third-color);
+}
+
+.modal-content p {
+  margin: 0;
+  padding: 0;
+  font-size: 2.3rem;
+}
+
 /*=====================================================================================
   Media Queries for Responsive Design     
 =====================================================================================*/
 
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
-
+  
   #landing-page .content-wrapper {
     min-height: calc(100vh - 3rem); /* Adjust based on tablet/desktop footer height */
     flex-direction: column;
@@ -106,6 +228,31 @@ footer p {
   footer p{
     font-size: 2rem;
   }
+  
+  #success-modal .modal-content,
+  #unavailable-modal .modal-content {
+    width: 50rem;
+    height: 30rem;
+  }
+  
+  #incorrect-modal .modal-content {
+    width: 55rem;
+    height: 30rem;
+  }
+  
+  .modal-content h2 {
+    font-size: 4rem;
+  }
+  
+  .modal-content i  {
+    margin: 4rem 0;
+    font-size: 6rem;
+  }
+  
+  .modal-content p {
+    font-size: 3rem;
+  }
+}
 
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {

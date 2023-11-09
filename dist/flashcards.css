@@ -81,28 +81,6 @@
   flex: 1;
 }
 
-.btn {
-  width: 6rem;
-  aspect-ratio: 1/1;
-  margin: 1rem 1.75rem;
-  font-size: 3rem;
-  font-weight: 700;
-  text-transform: uppercase;  
-  color: var(--primary-color);
-  background-color: var(--white);
-  border: .3rem solid var(--border-color);
-  border-radius: .4rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn:hover,
-.btn:active {
-  color: var(--white);
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
 /* Total quantity styles */
 #total-quantity-wrapper {
   width: 90%;
@@ -336,17 +314,24 @@ letter-spacing: 0.1rem;
 }
 
 #signout-btn {
-  width: 24rem;
-  height: 4rem;
-  padding-left: 1rem;
-  font-size: 1.3rem;
-  letter-spacing: .6rem;
   color: var(--black);
   background-color: var(--white);
   border-color: var(--black);
 }
 
-/* Button styles */
+#signout-btn i {
+  margin: 0;
+  padding: .1rem 0 0 .5rem;
+}
+
+#signout-btn:hover,
+#signout-btn:active {
+  color: var(--white);
+  background-color: var(--black);
+  border-color: var(--black);
+}
+
+/* Menu button styles */
 #menu-btns {
   margin: 0;
   padding: 0;
@@ -365,17 +350,6 @@ letter-spacing: 0.1rem;
   top: 11rem;
 }
 
-#signout-btn i {
-  margin: 0;
-  padding: .1rem 0 0 .5rem;
-}
-
-#signout-btn:hover,
-#signout-btn:active {
-  color: var(--white);
-  background-color: var(--black);
-  border-color: var(--black);
-}
 /* Main-Images styles */
 main {  
   margin: 5rem 10rem;

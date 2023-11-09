@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.ico?f576e61d4bebef802005"></head>
+<link rel="icon" href="favicon.ico?f90a88d6d6ad3317cfc1"></head>
 
 
 <body class="center">
@@ -32,14 +32,48 @@
         </figure>
         
         <div class="welcome-text center">
-          <h1 class="center"> Welcome to the<br>
+          <h1 class="center">Welcome to the<br>
             Interactive<br>
             Flashcard App</h1>
-          <p class ="center"> Please sign in to your<br> 
+          <p class ="center">Please sign in to your<br> 
             Google account<br>
             to continue.</p>
         </div>
         
+        <div id="form-wrapper" class="center">
+          <div id="form-container" class="center">
+            <form id="login-form" class="center" action="/auth/login" method="post">
+              <input type="text" id="login-username" class="input-field" placeholder="Username" name="username" required>
+              <!-- <input type="password" id="login-password" class="input-field" placeholder="4-Digit Code" name="password" required> -->
+              <div class="password-wrapper center">
+                <input type="password" id="login-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+                <i class="toggle-password fa-regular fa-eye-slash"></i>
+                <i class="toggle-password hide fa-solid fa-eye"></i>
+              </div>
+              <button type="submit" id="login-submit-btn" class="login-btn btn">Login</button>
+              <button type="button" id="new-user-btn" class="login-btn btn">New user?</button>
+            </form>
+            
+            <form id="register-form" class="center" action="/auth/register" method="post">
+              <input type="text" id="register-username" class="input-field" placeholder="Username" name="username" required>
+              <!-- <input type="password" id="register-password" class="input-field" placeholder="4-Digit Code" name="password" required> -->
+              <div class="password-wrapper center">
+                <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+                <i class="toggle-password fa-regular fa-eye-slash"></i>
+                <i class="toggle-password hide fa-solid fa-eye"></i>
+              </div>
+              <!-- <input type="password" id="confirm-password" class="input-field" placeholder="Confirm Code" name="confirmPassword" required> -->
+              <div class="password-wrapper center">
+                <input type="password" id="confirm-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" required>
+                <i class="toggle-password fa-regular fa-eye-slash"></i>
+                <i class="toggle-password hide fa-solid fa-eye"></i>
+              </div>
+              <button type="submit" id="register-btn" class="login-btn btn">Register</button>
+              <button type="button" id="back-btn" class="login-btn btn">Back</button>
+            </form>
+          </div>
+        </div>
+<!-- 
         <div id="g_id_onload"
           data-client_id=""
           data-context="use"
@@ -55,7 +89,7 @@
           data-text="signin_with"
           data-size="large"
           data-logo_alignment="left">
-        </div>
+        </div> -->
       </section>
       
       <footer>
@@ -69,6 +103,38 @@
     </div>
   </div>
   
-  <script src="app.js"></script>
-<script defer src="bundle.js?f576e61d4bebef802005"></script></body> 
+  <!-- Modals -->
+  <div id="incorrect-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">You entered the wrong<br>Username or Passcode.</h2>
+      <i class="fa-regular fa-face-tired"></i>
+      <p class="center">Please try again!</p>
+    </div>
+  </div>
+  
+  <div id="success-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">You're registered!</h2>
+      <i class="fa-regular fa-face-laugh-beam"></i> 
+      <p class="center">Now go log in with your<br>new account!</p>
+    </div>
+  </div>
+
+  <div id="unavailable-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">Sorry, that username<br>is already taken.</h2>
+      <i class="fa-regular fa-face-grimace"></i>
+      <p class="center">Please try again!</p>
+    </div>
+  </div>
+  
+  <div id="password-mismatch-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">Sorry, your passwords<br>don't match.</h2>
+      <i class="fa-regular fa-face-frown"></i>
+      <p class="center">Please try again!</p>
+    </div>
+
+  <script src="js/landing.js"></script>
+<script defer src="bundle.js?f90a88d6d6ad3317cfc1"></script></body> 
 </html>

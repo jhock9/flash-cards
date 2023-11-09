@@ -38,3 +38,33 @@ body {
   font-size: 2rem;
   background-color: var(--white);
 }
+
+.btn {
+  width: 6rem;
+  aspect-ratio: 1/1;
+  margin: 1rem 1.75rem;
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;  
+  color: var(--primary-color);
+  background-color: var(--white);
+  border: .3rem solid var(--border-color);
+  border-radius: .4rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover,
+.btn:active {
+  color: var(--white);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.login-btn {
+  width: 24rem;
+  height: 4rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.6rem;
+  margin: 1rem 0;
+}
