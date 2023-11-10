@@ -225,103 +225,103 @@ const shiftFormsToLogin = () => {
 };
 
 
-// let googleClientID; 
+let googleClientID; 
 
-// const fetchConfig = async () => {
-//   try {
-//     const response = await fetch('/config');
-//     const config = await response.json();
+const fetchConfig = async () => {
+  try {
+    const response = await fetch('/config');
+    const config = await response.json();
     
-//     googleClientID = config.GOOGLE_CLIENT_ID;
-//     console.log('googleClientID LOADED...'); 
+    googleClientID = config.GOOGLE_CLIENT_ID;
+    console.log('googleClientID LOADED...'); 
     
-//     initGoogleSignIn();
-//   } catch (error) {
-//     console.error('Error fetching configuration:', error);
-//   }
-// };
-// fetchConfig();
+    initGoogleSignIn();
+  } catch (error) {
+    console.error('Error fetching configuration:', error);
+  }
+};
+fetchConfig();
 
-//*   GOOGLE AUTHENTICATION & AUTHORIZATION   *//
+*   GOOGLE AUTHENTICATION & AUTHORIZATION   *//
 
-// // Redirect user to Google's authentication page
-// const googleAuth = () => {
-//   window.location.href = '/authorize';
-// };
+// Redirect user to Google's authentication page
+const googleAuth = () => {
+  window.location.href = '/authorize';
+};
 
-// // Initialize Google Sign-In
-// const initGoogleSignIn = () => {
-//   google.accounts.id.initialize({
-//     client_id: googleClientID,
-//     callback: handleCredentialResponse,
-//     on_failure: onSignInFailure
-//   });
+// Initialize Google Sign-In
+const initGoogleSignIn = () => {
+  google.accounts.id.initialize({
+    client_id: googleClientID,
+    callback: handleCredentialResponse,
+    on_failure: onSignInFailure
+  });
   
-//   google.accounts.id.renderButton(
-//     document.getElementById('google-signin'),
-//     { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
-//   );
-// };
+  google.accounts.id.renderButton(
+    document.getElementById('google-signin'),
+    { theme: 'outline', size: 'large', text: 'sign_in_with', logo_alignment: 'left' }
+  );
+};
 
-// // Sign in success callback
-// const handleCredentialResponse = async (response) => {
-//   console.log('handleCredentialResponse CALLED...');
-//   let decodedUserInfo;
-//   try {
-//     console.log('Encoded JWT ID token RETRIEVED...')
-//     decodedUserInfo = jwt_decode(response.credential);
-//     console.log('Decoded User Info LOADED...');
-//   } catch (error) {
-//     console.error('Error decoding user credential:', error);
-//   }
+// Sign in success callback
+const handleCredentialResponse = async (response) => {
+  console.log('handleCredentialResponse CALLED...');
+  let decodedUserInfo;
+  try {
+    console.log('Encoded JWT ID token RETRIEVED...')
+    decodedUserInfo = jwt_decode(response.credential);
+    console.log('Decoded User Info LOADED...');
+  } catch (error) {
+    console.error('Error decoding user credential:', error);
+  }
   
-//     await googleAuth();
-// };
+    await googleAuth();
+};
 
-// const onSignInFailure = (error) => {
-//   console.error('Sign-in error:', error);
-// };
+const onSignInFailure = (error) => {
+  console.error('Sign-in error:', error);
+};
 
-// const checkAuthentication = async () => {
-//   try {
-//     console.log('Checking authentication...');
-//     const response = await fetch('/is-authenticated', { credentials: 'include' });
-//     if (!response.ok) {
-//       console.error(`Server responded with status: ${response.status}`);
-//       throw new Error(`Server responded with status: ${response.status}`);
-//     }
-//     const data = await response.json();
+const checkAuthentication = async () => {
+  try {
+    console.log('Checking authentication...');
+    const response = await fetch('/is-authenticated', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
     
-//     if (data.isAuthenticated) {
-//       console.log('User is authenticated.');
-//       sessionStorage.setItem('authenticationChecked', 'true');
+    if (data.isAuthenticated) {
+      console.log('User is authenticated.');
+      sessionStorage.setItem('authenticationChecked', 'true');
       
-//       try {
-//         const photosData = await fetchPhotosData();
-//         savePhotosData(photosData);
-//         localStorage.setItem('photos', JSON.stringify(photosData));
-//       } catch (error) {
-//         console.error('Error fetching new photos:', error);
-//       }
+      try {
+        const photosData = await fetchPhotosData();
+        savePhotosData(photosData);
+        localStorage.setItem('photos', JSON.stringify(photosData));
+      } catch (error) {
+        console.error('Error fetching new photos:', error);
+      }
       
-//       if (window.location.pathname === '/login.html') {
-//         window.location.href = '/flashcards.html';
-//       }
+      if (window.location.pathname === '/login.html') {
+        window.location.href = '/flashcards.html';
+      }
       
-//     } else {
-//       console.log('User is not authenticated.');
-//       if (window.location.pathname === '/flashcards.html') {
-//         window.location.href = '/login.html';
-//       }
-//     } 
-//   } catch (error) {
-//     console.error('Error checking authentication:', error);
-//   }
-// };
+    } else {
+      console.log('User is not authenticated.');
+      if (window.location.pathname === '/flashcards.html') {
+        window.location.href = '/login.html';
+      }
+    } 
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+  }
+};
 
-// // Call checkAuthentication when the page initially loads
-// window.addEventListener('load', checkAuthentication);
-// // Call checkAuthentication when the page refreshes
-// window.addEventListener('beforeunload', () => {
-//   sessionStorage.removeItem('authenticationChecked');
-// });
+// Call checkAuthentication when the page initially loads
+window.addEventListener('load', checkAuthentication);
+// Call checkAuthentication when the page refreshes
+window.addEventListener('beforeunload', () => {
+  sessionStorage.removeItem('authenticationChecked');
+});
