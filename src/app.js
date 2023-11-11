@@ -29,6 +29,7 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
+//!! move to MongoDB
 //*   FETCH PHOTOS DATA AND DISPLAY TAGS   *//
 const savePhotosData = (photosData) => {
   if (photosData) {

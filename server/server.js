@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 const cors = require('cors');
+const cron = require('node-cron');
 const port = process.env.PORT || 3003;
 const session = require('express-session');
 const passport = require('passport');
@@ -129,7 +130,18 @@ Token.findOne({}, (err, tokenDoc) => {
   }
 });
 
-// Clear session on logout
+const fetchPhotoData = async () => {
+Z  // Code to fetch photos from Google Photos API
+  const photos = await googlePhotosApi.getPhotos();
+
+  // Code to store photos in your database
+  await PhotoModel.insertMany(photos);
+};
+
+// Fetch photos at 2:00 AM every day
+cron.schedule('0 2 * * *', fetchPhotoData);
+
+  // Clear session on logout
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
