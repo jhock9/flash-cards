@@ -1,13 +1,12 @@
 require('dotenv').config();
 const path = require('path');
 const express = require('express');
-const mongoose = require('mongoose');
 const app = express();
-const cors = require('cors');
-const cron = require('node-cron');
 const port = process.env.PORT || 3003;
+const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
+const mongoose = require('mongoose');
 
 const morganMiddleware = require('./config/morgan');
 const logger = require('./config/winston');
@@ -16,8 +15,8 @@ const localPassport = require('./config/passport');
 require('./config/passport')(passport);
 
 const authRoutes = require('./routes/authRoutes');
-const Token = require('./models/tokenModel'); 
 const { getAllPhotos, getPhotoById, updatePhotoById } = require('./controllers/photoController');
+const { updatePhotoData } = require('./routes/googleRoutes');
 
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -72,10 +71,15 @@ mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('Connected to MongoDB Atlas'))
-.catch(err => console.error('Could not connect to MongoDB Atlas', err));
+.then(() => {
+  logger.info('Connected to MongoDB Atlas');
+  // Update photo data from Google Photos API at server startup and 2:00 AM every day
+  updatePhotoData();
+  })
+.catch(err => logger.error('Could not connect to MongoDB Atlas', err));
 
 mongoose.set('debug', true);
+
 
 // Add middleware 
 app.use(express.json());
@@ -118,29 +122,6 @@ app.get('/photos', getAllPhotos);
 app.get('/photos/:id', getPhotoById);
 app.patch('/photos/:id', updatePhotoById);
 
-Token.findOne({}, (err, tokenDoc) => {
-  if (err) {
-    logger.error('Error loading tokens from database:', err);
-  } else if (tokenDoc) {
-    oauth2Client.setCredentials({
-      access_token: tokenDoc.accessToken,
-      refresh_token: tokenDoc.refreshToken,
-    });
-    logger.info('Tokens loaded from database and set in OAuth2 client.');
-  }
-});
-
-const fetchPhotoData = async () => {
-Z  // Code to fetch photos from Google Photos API
-  const photos = await googlePhotosApi.getPhotos();
-
-  // Code to store photos in your database
-  await PhotoModel.insertMany(photos);
-};
-
-// Fetch photos at 2:00 AM every day
-cron.schedule('0 2 * * *', fetchPhotoData);
-
   // Clear session on logout
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {
@@ -162,5 +143,5 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  logger.info(`Server running at http://localhost:${port}`);
 });
