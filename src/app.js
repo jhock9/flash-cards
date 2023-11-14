@@ -21,9 +21,18 @@ const filterInput = document.querySelector('#filter-tags');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
 
+let lastSelectedTagsAndQuantities;
+let selectedTags = [];
+let googleTags;
+let photos;
+let totalPhotos = 0;
+let useRemainder = false;
+let lastTotalPhotos; 
+let lastUseRemainder;
 
 //* COMMENTING OUT fetchTagsIfNeeded, saveTagsData and loadTagsData
 // WILL INCLUDE LATER IF PERFORMANCE IS AN ISSUE AND NEED TO SAVE TAGS TO LOCAL STORAGE TO REDUCE FETCHES
+// WILL NEED TO TEST TO MAKE SURE THIS CODE WORKS WITH THE REST OF THE APP IF ADDED BACK IN
 
 // const fetchTagsIfNeeded = async () => {
 // // Fetch tags data and save to local storage, if necessary, every day after 2 AM
@@ -71,91 +80,66 @@ const displayedImages = document.querySelector('#images-container');
 //   }
 // };
 
-let lastSelectedTagsAndQuantities;
-let selectedTags = [];
-let tags;
-let photos;
-let totalPhotos = 0;
-let useRemainder = false;
-let lastTotalPhotos; 
-let lastUseRemainder;
 
 //*   FETCH AND DISPLAY PHOTO TAGS   *//
 
+// Fetch tags data from database
 const fetchTagsData = async () => {
-  console.log('Fetching photo tags...');
+  console.log('Fetching google tags...');
   try {
-    const response = await fetch('/getPhotoTags');
+    const response = await fetch('/get-tags', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const responseText = await response.text();
-    tags = JSON.parse(responseText);
-    console.log('Photo tags fetched:', tags);
-    return tags;
+    googleTags = JSON.parse(responseText);
+    console.log('google tags fetched:', googleTags);
+    return googleTags;
   } catch (error) {
-    console.error('Error fetching photo tags:', error);
+    console.error('Error fetching google tags:', error);
   }
 };
 
-const displayTags = async (photoData) => {
-  // const defaultOption = dropdown.querySelector('option[value=""]');
-  // dropdown.innerHTML = '';
-  // if (defaultOption) {
-  //   dropdown.appendChild(defaultOption);
-  // }
-  tagsList.innerHTML = '';
-  
+const displayTags = async () => {
   console.log('Displaying tags...');
-  const descriptions = await fetchDescriptions(photoData);
-  
-  const tagCounts = {};
-  for (const description of descriptions) {
-    const tags = description.split(' ');
-    for (const tag of tags) {
-      if (tag in tagCounts) {
-        tagCounts[tag]++;
-      } else {
-        tagCounts[tag] = 1;
-      }
-    }
-  }
-  
-  // Determines which tags to display based on the number of photos they appear in
-  const filteredTags = [];
-  for (const tag in tagCounts) {
-    if (tagCounts[tag] >= 6) {
-      filteredTags.push(tag);
-    }
-  }
-  
-  // Sort tags
-  filteredTags.sort();
-  
-  // Display tags in dropdown and as selectable tags
-  for (const tag of filteredTags) {
-    // const option = document.createElement('option');
-    // option.value = tag;
-    // option.text = tag;
-    // dropdown.add(option);
+  try {
+    const response = await fetch('/api/get-tags'); // Replace with your actual API endpoint
+    const filteredTags = await response.json();
     
-    const tagDiv = document.createElement('div');
-    tagDiv.classList.add('tag', 'center');
-    const tagName = document.createElement('span');
-    tagName.classList.add('name', 'center');
-    tagName.innerText = tag;
-    tagDiv.appendChild(tagName);  
-    tagsList.appendChild(tagDiv);
+    tagsList.innerHTML = '';
+    // Set default option for dropdown
+    // const defaultOption = dropdown.querySelector('option[value=""]');
+    // dropdown.innerHTML = '';
+    // if (defaultOption) {
+    //   dropdown.appendChild(defaultOption);
+    // }
+    
+    for (const tag of filteredTags) {
+      // Display tags in dropdown
+      // const option = document.createElement('option');
+      // option.value = tag;
+      // option.text = tag;
+      // dropdown.add(option);
+      
+      // Display tags as selectable tags
+      const tagDiv = document.createElement('div');
+      tagDiv.classList.add('tag', 'center');
+      const tagName = document.createElement('span');
+      tagName.classList.add('name', 'center');
+      tagName.innerText = tag;
+      tagDiv.appendChild(tagName);  
+      tagsList.appendChild(tagDiv);
+    }
+    console.log('Tags displayed...');
+  } catch (error) {
+    console.error('Error:', error);
   }
-}
-
-// Fetch descriptions
-const fetchDescriptions = async (photoData) => {
-  const descriptions = await photoData.map(photo => photo.description).filter(description => description);
-  console.log('Photo descriptions parsed...');
-  return descriptions;
 };
 
+//!! THIS IS WHERE I LEFT OFF
 
 //**   SELECT TAGS TO DISPLAY   **//
 
@@ -501,10 +485,11 @@ const resetTagSelect = () => {
 
 //**   DISPLAY SELECTED PHOTOS   **//
 
+// Fetch photos data from database
 const fetchPhotosData = async (tags) => {
   console.log('Fetching photos data...');
   try {
-    const response = await fetch('/getPhotos', {
+    const response = await fetch('/get-photos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tags }),
