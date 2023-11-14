@@ -4,11 +4,11 @@ const photoSchema = new mongoose.Schema({
   googleId: { type: String, required: true, unique: true },
   productUrl: { type: String, required: true },
   tagsFromGoogle: { type: String, required: true },
-  // tags: [{ 
-  //   name: String, 
-  //   qty: { type: Number, default: 0 }, 
-  //   locked: { type: Boolean, default: false } 
-  // }],
+  tags: [{ 
+    name: String, 
+    qty: { type: Number, default: 0 }, 
+    locked: { type: Boolean, default: false } 
+  }],
   isFavorite: { type: Boolean, default: false },
   selectedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
