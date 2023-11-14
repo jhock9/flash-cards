@@ -14,9 +14,17 @@ const logger = require('./config/winston');
 const localPassport = require('./config/passport');
 require('./config/passport')(passport);
 
-const authRoutes = require('./routes/authRoutes');
-const { getAllPhotos, getPhotoById, updatePhotoById } = require('./controllers/photoController');
-const { updatePhotoData } = require('./routes/googleRoutes');
+const authRoutes = require('./routes/authRoutes'); // Routes for authentication
+const photoDB = require('./routes/photoDB'); // Cron job and routes for photo database
+const googleAPI = require('./routes/googleAPI'); // Routes for Google Photos API
+const { 
+  savePhoto, 
+  getAllPhotos, 
+  getPhotoTags, 
+  getSelectedPhotos, 
+  getPhotoById, 
+  updatePhotoById 
+} = require('./controllers/photoController'); // CRUD operations for photo database
 
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -115,10 +123,14 @@ localPassport(passport);
 
 // Routes
 app.use('/auth', authRoutes);
-app.use('/google', googleRoutes);
+app.use('/photos', photoDB);
+app.use('/api', googleAPI);
 
 // CRUD routes
+app.post('/photos', savePhoto);
 app.get('/photos', getAllPhotos);
+app.get('/tags', getPhotoTags);
+app.get('/selected-photos', getSelectedPhotos);
 app.get('/photos/:id', getPhotoById);
 app.patch('/photos/:id', updatePhotoById);
 
