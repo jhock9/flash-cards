@@ -21,74 +21,80 @@ const filterInput = document.querySelector('#filter-tags');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
 
+
+//* COMMENTING OUT fetchTagsIfNeeded, saveTagsData and loadTagsData
+// WILL INCLUDE LATER IF PERFORMANCE IS AN ISSUE AND NEED TO SAVE TAGS TO LOCAL STORAGE TO REDUCE FETCHES
+
+// const fetchTagsIfNeeded = async () => {
+// // Fetch tags data and save to local storage, if necessary, every day after 2 AM
+//   const lastFetch = localStorage.getItem('lastFetch');
+//   const now = new Date();
+  
+//   // Extract just the date part in YYYY-MM-DD format
+//   const lastFetchDate = lastFetch ? new Date(lastFetch).toISOString().split('T')[0] : '';
+//   const currentDate = now.toISOString().split('T')[0];
+//   const currentHour = now.getHours();
+  
+//   // Check if there's no last fetch record or if it's a new day and past 2 AM
+//   if (!lastFetch || (lastFetchDate < currentDate && currentHour >= 2)) {
+//     console.log('Fetching new tags data...');
+//     try {
+//       const tagsData = await fetchTagsData();
+//       if (tagsData) {
+//         saveTagsData(tagsData);
+//         localStorage.setItem('lastFetch', now.toISOString());
+//         }
+//     } catch (error) {
+//       console.error('Error fetching new photo tags:', error);
+//     }
+//   } else {
+//     console.log('Using cached photo tag data.');
+//   }
+// };
+
+// const saveTagsData = (tagsData) => {
+//   if (tagsData) {
+//     localStorage.setItem('tags', JSON.stringify(tagsData));
+//     console.log('Tags data saved to local storage.');
+//   } else {
+//     console.error('No tags data to save.');
+//   }
+// };
+
+// const loadTagsData = () => {
+//   const tagsData = localStorage.getItem('tags');
+//   if (tagsData) {
+//     return JSON.parse(tagsData);
+//   } else {
+//     console.error('No tags data found in local storage.');
+//     return [];
+//   }
+// };
+
 let lastSelectedTagsAndQuantities;
 let selectedTags = [];
+let tags;
 let photos;
 let totalPhotos = 0;
 let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
-//!! move to MongoDB
-//*   FETCH PHOTOS DATA AND DISPLAY TAGS   *//
-const savePhotosData = (photosData) => {
-  if (photosData) {
-    localStorage.setItem('photos', JSON.stringify(photosData));
-    console.log('Photos data saved to local storage.');
-  } else {
-    console.error('No photos data to save.');
-  }
-};
+//*   FETCH AND DISPLAY PHOTO TAGS   *//
 
-const loadPhotosData = () => {
-  const photosData = localStorage.getItem('photos');
-  if (photosData) {
-    return JSON.parse(photosData);
-  } else {
-    console.error('No photos data found in local storage.');
-    return [];
-  }
-};
-  
-const fetchPhotosDataIfNeeded = async () => {
-  const lastFetch = localStorage.getItem('lastFetch');
-  const now = new Date();
-  
-  // Extract just the date part in YYYY-MM-DD format
-  const lastFetchDate = lastFetch ? new Date(lastFetch).toISOString().split('T')[0] : '';
-  const currentDate = now.toISOString().split('T')[0];
-  const currentHour = now.getHours();
-  
-  // Check if there's no last fetch record or if it's a new day and past 2 AM
-  if (!lastFetch || (lastFetchDate < currentDate && currentHour >= 2)) {
-    console.log('Fetching new photos data...');
-    try {
-      const photosData = await fetchPhotosData();
-      if (photosData) {
-        savePhotosData(photosData);
-        localStorage.setItem('lastFetch', now.toISOString());
-        }
-    } catch (error) {
-      console.error('Error fetching new photos:', error);
-    }
-  } else {
-    console.log('Using cached photos data.');
-  }
-};
-
-const fetchPhotosData = async () => {
-  console.log('Fetching photos data...');
+const fetchTagsData = async () => {
+  console.log('Fetching photo tags...');
   try {
-    const response = await fetch('/getPhotos');
+    const response = await fetch('/getPhotoTags');
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const responseText = await response.text();
-    photos = JSON.parse(responseText);
-    return photos;
-    console.log('Photos data fetched:', photos);
+    tags = JSON.parse(responseText);
+    console.log('Photo tags fetched:', tags);
+    return tags;
   } catch (error) {
-    console.error('Error fetching photos:', error);
+    console.error('Error fetching photo tags:', error);
   }
 };
 
@@ -397,6 +403,25 @@ const saveLockedTags = (save = true) => {
   }
 };
 
+//!! Local Storage Methods: saving, getting and removing
+// Save selections to local storage
+localStorage.setItem('selections', JSON.stringify(selections));
+
+// Get selections from local storage
+const selections = JSON.parse(localStorage.getItem('selections'));
+
+// Clear selections from local storage
+localStorage.removeItem('selections');
+
+// In this example, selections is an object that contains the user's current session selections
+// You can adjust this object to fit your needs. For example, you could make tags an array of objects, 
+// where each object has a name, qty, and locked field, similar to the tags field in your Photo model.
+const selections = {
+  tags: ['tag1', 'tag2', 'tag3', 'tag4'],
+  quantities: [1, 2, 3, 4],
+  locked: [false, true, false, true],
+};
+//!! Local Storage Methods: saving, getting and removing
 
 //**   REMOVING SELECTED TAGS   **//
 
@@ -476,6 +501,26 @@ const resetTagSelect = () => {
 
 //**   DISPLAY SELECTED PHOTOS   **//
 
+const fetchPhotosData = async (tags) => {
+  console.log('Fetching photos data...');
+  try {
+    const response = await fetch('/getPhotos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tags }),
+    });
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const responseText = await response.text();
+    photos = JSON.parse(responseText);
+    console.log('Photos data fetched:', photos);
+    return photos;
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+  }
+};
+
 const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
   
@@ -553,6 +598,7 @@ const displayPhotos = (photos) => {
 };
 
 //**   TOGGLES   **//
+
 const toggleNav = () => {
   console.log('Toggling nav...');
   tabletOpenBtn.classList.toggle('open');
@@ -581,12 +627,10 @@ const toggleBorders = () => {
 
 mobileOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
-  // await fetchPhotosData();
-  // toggleNav();
   try {
-    await fetchPhotosDataIfNeeded();
-    const photosData = loadPhotosData();
-    displayTags(photosData);
+    await fetchTagsIfNeeded();
+    const tagsData = loadTagsData();
+    displayTags(tagsData);
     toggleNav();
   } catch (error) {
     console.error('Error on open button click:', error);
@@ -595,12 +639,10 @@ mobileOpenBtn.addEventListener('click', async () => {
 
 tabletOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
-  // await fetchPhotosData();
-  // toggleNav();
   try {
-    await fetchPhotosDataIfNeeded();
-    const photosData = loadPhotosData();
-    displayTags(photosData);
+    await fetchTagsIfNeeded();
+    const tagsData = loadTagsData();
+    displayTags(tagsData);
     toggleNav();
   } catch (error) {
     console.error('Error on open button click:', error);
