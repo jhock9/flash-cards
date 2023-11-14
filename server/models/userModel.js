@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-});
+  favoriteTags: [{ type: String }],
+}, { timestamps: true });
 
 // Password hashing middleware
 userSchema.pre('save', async function(next) {
