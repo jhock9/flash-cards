@@ -1,12 +1,8 @@
 const router = require('express').Router();
 const url = require('url');
-const axios = require('axios');
-const cron = require('node-cron');
-
+const logger = require('../config/winston');
 const oauth2Client = require('../config/googleClient');
 const Token = require('../models/tokenModel');
-const Photo = require('../models/photoModel');
-const logger = require('../config/winston');
 
 // Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({
@@ -63,93 +59,4 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
-// Fetch photos from database and send them to client
-router.get('/getPhotos', async (req, res) => {
-  const photos = await Photo.find();
-  res.json(photos);
-});
-
-// Fetch photo Google Photos 
-const fetchGooglePhotos = async () => {
-  logger.info('fetching photos and photo data...');
-  
-  try {
-    logger.info('Initializing Google Photos client...');
-    
-    let nextPageToken
-    let allPhotos = [];
-    do {
-      const params = {
-        pageSize: 100,
-        pageToken: nextPageToken,
-      };
-      let response;
-      try {
-        response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
-          headers: {
-            'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-      } catch (error) {
-        if (error.response && error.response.status === 401) { // If the token is expired
-          // Refresh the token
-          const newTokens = await oauth2Client.refreshAccessToken();
-          oauth2Client.setCredentials(newTokens.credentials);
-          logger.info('Tokens refreshed and set in OAuth2 client.');
-          
-          // Retry the request with the new token
-          response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
-            headers: {
-              'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-        } else {
-          throw error;
-        }
-      }
-      
-      logger.info('Received media items...');
-      
-      allPhotos = allPhotos.concat(response.data.mediaItems);
-      nextPageToken = response.data.nextPageToken;
-    } while (nextPageToken);
-    
-    res.json(response.data.mediaItems);
-  } catch (error) {
-    logger.error('Error in /getPhotos route:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-// Update photo data in database 
-const updatePhotoData = async () => {
-  logger.info('Updating database photo data using cron job...');
-  const fetchedPhotos = await fetchGooglePhotos();
-  
-  // Fetch existing photos from the database
-  const existingPhotos = await Photo.find({});
-  
-  // Convert existing photos to a Map for easy lookup
-  const existingPhotosMap = new Map(existingPhotos.map(photo => [photo.id, photo]));
-  
-  // Prepare photo data to add
-  const photosToAdd = [];
-  for (const fetchedPhoto of fetchedPhotos) {
-    if (existingPhotosMap.has(fetchedPhoto.id)) {
-      // If the photo data does not exist in the database, add it
-      photosToAdd.push(fetchedPhoto);
-    }
-  }
-  
-  // Add photo data
-  for (const photo of photosToAdd) {
-    await Photo.create(photo);
-  }
-};
-
-// Fetch photos at 2:00 AM every day
-cron.schedule('0 2 * * *', updatePhotoData);
-
-module.exports = { router, updatePhotoData };
+module.exports = { router, oauth2Client };
