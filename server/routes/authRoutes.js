@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const passport = require('passport');
+const logger = require('../config/winston');
 const User = require('../models/userModel');
 
 // Register route
 router.post('/register', async (req, res) => {
-  console.log('Request:', req.body);
+  logger.info('Received request for /register...');
   const { username, password, confirmPassword } = req.body;
   
   // Username & Password validation
@@ -30,14 +31,13 @@ router.post('/register', async (req, res) => {
   // if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/)) {
   //   return res.status(400).json({ error: 'Password must be at least 6 characters and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.' });
   // }
-  
-  console.log(req.body)
+  logger info('Username and password validated...');
   try {
     const user = new User(req.body);
     await user.save();
     res.status(201).json({ success: true });
   } catch (error) {
-    console.log(error);
+    logger.error('ERROR saving user to database:', error)
     if (error.code === 11000) {
       res.status(400).json({ error: 'Username already exists.' });
     } else { 

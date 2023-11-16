@@ -1,3 +1,4 @@
+const logger = require('../config/winston.js');
 const Photo = require('../models/photoModel.js');
 
 // Save photo to database
@@ -10,7 +11,7 @@ const savePhoto = async (photoData) => {
     });
     await photo.save();
   } catch (error) {
-    console.error(error);
+    logger.error('ERROR saving photo to database:', error);
   }
 };
 
