@@ -3,7 +3,7 @@ const cron = require('node-cron');
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
 const photoController = require('../controllers/photoController');
-const { fetchGooglePhotos } = require('./routes/googleAPI');
+const { fetchGooglePhotos } = require('./routes/googlePhotosAPI');
 
 // Fetch filtered tags from database (photoController) and send to client
 router.get('/get-tags', async (req, res) => {
@@ -45,3 +45,5 @@ const updatePhotoData = async () => {
 
 // at 2:00 AM every day
 cron.schedule('0 2 * * *', updatePhotoData);
+
+module.exports = router;

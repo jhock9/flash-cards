@@ -7,6 +7,7 @@ Thumbs.db
 /node_modules/
 /zsh-syntax-highlighting/
 /server/logs/
+/extra/
 
 # Ignore files with private information
 .env
@@ -18,6 +19,5 @@ Thumbs.db
 # Ignore SASS config files
 .sass-cache
 
-# Test files
-/test-pages/
-test.js
+# Specific files
+google-keyfile.json
