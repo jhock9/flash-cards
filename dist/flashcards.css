@@ -304,7 +304,7 @@ letter-spacing: 0.1rem;
   margin: 2rem;
 }
 
-#signout-container {
+#logout-container {
   position: sticky;
   bottom: 0;
   width: 100%;
@@ -313,19 +313,19 @@ letter-spacing: 0.1rem;
   align-items: flex-end;
 }
 
-#signout-btn {
+#logout-btn {
   color: var(--black);
   background-color: var(--white);
   border-color: var(--black);
 }
 
-#signout-btn i {
+#logout-btn i {
   margin: 0;
   padding: .1rem 0 0 .5rem;
 }
 
-#signout-btn:hover,
-#signout-btn:active {
+#logout-btn:hover,
+#logout-btn:active {
   color: var(--white);
   background-color: var(--black);
   border-color: var(--black);

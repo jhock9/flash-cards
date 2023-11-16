@@ -4,7 +4,7 @@ const tabletOpenBtn = document.querySelector('#tablet-open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 
 const sidePanel = document.querySelector('#side-panel');
-const signoutBtn = document.querySelector('#signout-btn');
+const logoutBtn = document.querySelector('#logout-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
@@ -754,20 +754,19 @@ removeBtns.forEach((btn) => {
   });
 });
 
-signoutBtn.addEventListener('click', async (e) => {
+logoutBtn.addEventListener('click', async (e) => {
   console.log('Sign out button clicked...');
   e.preventDefault();
   try {
     // Call the server-side logout endpoint
-    const response = await fetch('/logout', { method: 'POST' });
+    const response = await fetch('/auth/logout', { method: 'GET' });
     if (!response.ok) {
       throw new Error('Logout failed');
     }
-    google.accounts.id.disableAutoSelect();
     console.log('User signed out.');
     
     window.location.href = '/login.html';
-    loadRenderLockedTags();
+    loadRenderLockedTags(); //!! still needed?
   } catch (error) {
     console.error('Error during logout:', error);
   }
