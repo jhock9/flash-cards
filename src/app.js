@@ -106,7 +106,7 @@ const fetchTagsData = async () => {
 const displayTags = async () => {
   console.log('Displaying tags...');
   try {
-    const response = await fetch('/api/get-tags'); // Replace with your actual API endpoint
+    const response = await fetch('/google-photos-api/get-tags'); // Replace with your actual API endpoint
     const filteredTags = await response.json();
     
     tagsList.innerHTML = '';
