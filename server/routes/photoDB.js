@@ -31,7 +31,7 @@ const updatePhotoData = async () => {
   // Prepare photo data to add
   const photosToAdd = [];
   for (const fetchedPhoto of fetchedPhotos) {
-    if (existingPhotosMap.has(fetchedPhoto.id)) {
+    if (!existingPhotosMap.has(fetchedPhoto.id)) {
       // If the photo data does not exist in the database, add it
       photosToAdd.push(fetchedPhoto);
     }
