@@ -3,7 +3,8 @@ const cron = require('node-cron');
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
 const photoController = require('../controllers/photoController');
-const { fetchGooglePhotos } = require('./routes/googlePhotosAPI');
+const fetchGooglePhotos = require('./googlePhotosAPI');
+const fs = require('fs');
 
 // Fetch filtered tags from database (photoController) and send to client
 router.get('/get-tags', async (req, res) => {
@@ -22,6 +23,13 @@ const updatePhotoData = async () => {
   logger.info('Updating database photo data using cron job...');
   const fetchedPhotos = await fetchGooglePhotos();
   
+  // Limit the logging
+  console.log(fetchedPhotos.length); // logs the number of photos fetched
+  console.log(fetchedPhotos.slice(0, 5).map(photo => ({ id: photo.id, url: photo.productUrl }))); // logs the first 5 photos fetched with their id and url
+
+  // Write the data to a file
+  fs.writeFileSync('data.json', JSON.stringify(fetchedPhotos[0], null, 2));
+
   // Fetch existing photos from the database
   const existingPhotos = await Photo.find({});
   
@@ -46,4 +54,7 @@ const updatePhotoData = async () => {
 // at 2:00 AM every day
 cron.schedule('0 2 * * *', updatePhotoData);
 
-module.exports = router;
+module.exports = {
+  router,
+  updatePhotoData
+};

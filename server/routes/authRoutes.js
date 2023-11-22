@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
   // if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/)) {
   //   return res.status(400).json({ error: 'Password must be at least 6 characters and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number.' });
   // }
-  logger info('Username and password validated...');
+  logger.info('Username and password validated...');
   try {
     const user = new User(req.body);
     await user.save();

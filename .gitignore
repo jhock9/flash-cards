@@ -8,6 +8,7 @@ Thumbs.db
 /zsh-syntax-highlighting/
 /server/logs/
 /extra/
+/logs/
 
 # Ignore files with private information
 .env

@@ -1,13 +1,13 @@
 const axios = require('axios');
 const logger = require('../config/winston');
 const photoController = require('../controllers/photoController');
-const { google } = require('google-auth-library');
+const { JWT } = require('google-auth-library');
 const key = require('../../google-keyfile.json');
 
 let tokens;
 
-const jwtClient = new google.auth.JWT(
-  logger.info('Google Photos client initialized...'),
+logger.info('Google Photos client initialized...');
+const jwtClient = new JWT(
   key.client_email,
   null,
   key.private_key,
@@ -48,8 +48,8 @@ const fetchGooglePhotos = async () => {
           pageToken: nextPageToken,
         };
         
+        logger.info('Google Photos client options set...');
         const options = {
-          logger.info('Google Photos client options set...'),
           headers: {
             'Authorization': `Bearer ${tokens.access_token}`
           }
@@ -77,4 +77,5 @@ const fetchGooglePhotos = async () => {
   }
 };
 
-module.exports = { fetchGooglePhotos };
+// Fetch photos from Google Photos API and send to photoDBRoutes.js
+module.exports = fetchGooglePhotos;

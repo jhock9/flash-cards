@@ -15,8 +15,7 @@ const localPassport = require('./config/passport');
 require('./config/passport')(passport);
 
 const authRoutes = require('./routes/authRoutes'); // Routes for authentication
-const photoDBRoutes = require('./routes/photoDBRoutes'); // Cron job and routes for photo database
-const googlePhotosAPI = require('./routes/googlePhotosAPI'); // Routes for Google Photos API
+const { router: photoDBRoutes, updatePhotoData } = require('./routes/photoDBRoutes'); // Cron job and routes for photo database
 const { 
   savePhoto, 
   getAllPhotos, 
@@ -124,7 +123,6 @@ localPassport(passport);
 // Routes
 app.use('/auth', authRoutes);
 app.use('/photos', photoDBRoutes);
-app.use('/google-photos-api', googlePhotosAPI);
 
 // CRUD routes
 app.post('/photos', savePhoto);
