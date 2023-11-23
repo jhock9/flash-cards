@@ -46,8 +46,8 @@
   padding: 0;
 }
 
-/* Side-panel */
-#side-panel {
+/* Flashcards-panel */
+#flashcards-panel {
   position: fixed;
   top: 0;
   left: 0;
@@ -65,7 +65,7 @@
   z-index: 3;
 }
 
-#side-panel.open {
+#flashcards-panel.open {
   transform: translateX(0);
 }
 
@@ -386,7 +386,7 @@ main {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
 
-  #side-panel {
+  #flashcards-panel {
     left: 0;
     width: 50rem;
   }
