@@ -3,7 +3,7 @@ const mobileOpenBtn = document.querySelector('#mobile-open-btn');
 const tabletOpenBtn = document.querySelector('#tablet-open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 
-const sidePanel = document.querySelector('#side-panel');
+const flashcardsPanel = document.querySelector('#flashcards-panel');
 const logoutBtn = document.querySelector('#logout-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
@@ -587,9 +587,9 @@ const displayPhotos = (photos) => {
 const toggleNav = () => {
   console.log('Toggling nav...');
   tabletOpenBtn.classList.toggle('open');
-  sidePanel.classList.toggle('open');
+  flashcardsPanel.classList.toggle('open');
 
-  if (sidePanel.classList.contains('open')) {
+  if (flashcardsPanel.classList.contains('open')) {
     loadRenderLockedTags();
   } else {
     clearSelectedTags();  
