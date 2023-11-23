@@ -1,0 +1,302 @@
+/* ==========================================================================
+  Mobile Styles
+  ========================================================================== */
+
+#login-content-wrapper {
+  min-height: calc(100vh - 2rem); /* Adjust based on mobile footer height */
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+figure {
+  width: 100%;
+  margin: 5rem 0 0 0;
+  padding: 0;
+  background-color: var(--white);
+}
+
+figure .logo {
+  width: 100%;
+  justify-content: center;
+}
+
+figure .logo img {
+  width: 100%;
+  max-width: 25rem;
+  margin: 0 3rem;
+}
+
+.welcome-text {
+  width: 100%;
+}
+
+.welcome-text h1 {
+  width: 100%;
+  font-size: 3.5rem;
+  text-align: center;
+  margin: 5rem 0;
+  padding: 0;
+}
+
+.welcome-text p {
+  width: 100%;
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+#form-wrapper {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#form-container {
+  width: 40rem;
+  margin: 0;
+  padding: 0;
+  transform: 1s ease-in-out;
+  justify-content: center;
+  align-items: flex-start;
+  flex-flow: row nowrap;
+  transform: translateX(37.5%);
+}
+
+#login-form,
+#register-form {
+  margin: 0 3rem;
+  padding: 2rem 0;
+  flex-direction: column;
+}
+
+#register-form {
+  opacity: 0;
+  pointer-events: none
+}
+
+#form-container.shift-left {
+  transition: 1s ease-in-out;
+  transform: translateX(-37.5%);
+}
+
+#form-container.shift-right {
+  transition: 1s ease-in-out;
+  transform: translateX(37.5%);
+}
+
+#login-form.fade-out,
+#register-form.fade-out {
+  opacity: 0;
+  transition: opacity 0.75s ease-in-out;
+  pointer-events: none;
+}
+
+#register-form.fade-in,
+#login-form.fade-in {
+  opacity: 1;
+  transition: opacity 0.75s ease-in-out;
+  pointer-events: auto;
+}
+
+.input-field {
+  width: 21.5rem;
+  height: 3rem;
+  font-size: 2rem;
+  margin: 1rem 0;
+  padding: .2rem 1rem;
+}
+
+#login-submit-btn,
+#register-btn {
+  color: var(--white);
+  background-color: var(--third-color);
+  border-color: var(--third-color);
+}
+
+#login-submit-btn:active,
+#login-submit-btn:hover,
+#register-btn:hover,
+#register-btn:active {
+  color: var(--white);
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+#login-submit-btn:active,
+#register-btn:active {
+  border-color: var(--white);
+}
+
+#new-user-btn:active,
+#new-user-btn:hover,
+#back-btn:active,
+#back-btn:hover {
+  color: var(--primary-color);
+  background-color: var(--second-color);
+  border-color: var(--third-color);
+}
+
+#new-user-btn:active,
+#back-btn:active {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+input[type=password] {
+  width: 18.5rem;
+  padding-right: 4rem; 
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+#g_id_onload,
+#google-signin {
+  margin: 6rem 0;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 1rem 0;
+}
+
+footer p {
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.copyright-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+.modal-content {
+  width: 80%;
+  margin: 0;
+  padding: 2rem 0;
+  text-align: center;
+  border: .5rem solid var(--third-color);
+  background-color: var(--white);
+  color: var(--third-color);
+  flex-direction: column;
+}
+
+.modal-content h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 2.5rem;
+}
+
+.modal-content i {
+  margin: 2rem 0;
+  padding: 0;
+  font-size: 5rem;
+  color: var(--third-color);
+}
+
+.modal-content p {
+  margin: 0;
+  padding: 0;
+  font-size: 2.3rem;
+}
+
+/*=====================================================================================
+  Media Queries for Responsive Design     
+=====================================================================================*/
+
+/**** TABLET STYLES ****/
+@media screen and (min-width: 768px) {
+  
+  #login-page .content-wrapper {
+    min-height: calc(100vh - 3rem); /* Adjust based on tablet/desktop footer height */
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  figure .logo img {
+    max-width: 40rem;
+  }
+  
+  .welcome-text h1,
+  .welcome-text p {
+    text-align: center;
+  }
+  
+  .welcome-text br {
+    display: none;
+  }
+  
+  footer {
+    padding: 1.5rem 0;
+  }
+  
+  footer p{
+    font-size: 2rem;
+  }
+  
+  #incorrect-modal .modal-content {
+    width: 55rem;
+    height: 30rem;
+  }
+    
+  #success-modal .modal-content,
+  #unavailable-modal .modal-content,
+  #password-mismatch-modal .modal-content {
+    width: 50rem;
+    height: 30rem;
+  }
+  
+  #password-req-modal .modal-content {
+    width: 60rem;
+    height: 35rem;
+  }
+  
+  .modal-content h2 {
+    font-size: 3.5rem;
+  }
+  
+  .modal-content i  {
+    margin: 4rem 0;
+    font-size: 6rem;
+  }
+  
+  .modal-content p {
+    font-size: 3rem;
+  }
+}
+
+/**** DESKTOP STYLES ****/
+@media screen and (min-width: 1200px) {
+  
+}
