@@ -40,12 +40,8 @@ loginBtn.addEventListener('click', (event) => {
   })
   .then(data => {
     if (data.success) {
-    // Redirect users based on their role
-      if (data.role === 'admin') {
-        window.location.href = '/admin.html';
-      } else {
-        window.location.href = '/flashcards.html';
-      }
+      localStorage.setItem('userRole', data.role);
+      window.location.href = '/dashboard.html';
     }
   })
   .catch(error => {
