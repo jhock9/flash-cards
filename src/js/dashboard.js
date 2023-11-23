@@ -1,5 +1,6 @@
 const adminViews = document.querySelectorAll('admin-view');
 const tableHeaders = document.querySelectorAll('#users-table th');
+const navLinks = document.querySelectorAll('#dash-nav-list a');
 
 // Show or hide elements based on the user's role
 const updateDashNav = () => {
@@ -15,6 +16,23 @@ const updateDashNav = () => {
 }
 
 window.onload = updateDashNav;
+
+navLinks.forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    
+    // Hide all sections
+    const sections = document.querySelectorAll('main > section');
+    sections.forEach((section) => {
+      section.classList.add('hide');
+    });
+    
+    // Show the clicked section
+    const sectionId = link.textContent.toLowerCase();
+    const section = document.querySelector(`#${sectionId}`);
+    section.classList.remove('hide');
+  });
+});
 
 // Hide the password column
 document.querySelectorAll('#users-table tbody td:nth-child(2)').forEach(td => {

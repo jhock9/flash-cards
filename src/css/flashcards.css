@@ -432,7 +432,7 @@ main {
     transition: transform 0.6s; 
     transform: translateX(50rem);
   }
-
+  
   #refresh-btn {
     top: 14rem;
   }
