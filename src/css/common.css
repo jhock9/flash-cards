@@ -61,7 +61,7 @@ body {
   border-color: var(--primary-color);
 }
 
-.login-btn {
+.wide-btn {
   width: 24rem;
   height: 4rem;
   font-size: 1.3rem;
