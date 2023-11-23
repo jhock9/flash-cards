@@ -74,10 +74,7 @@ app.use((req, res, next) => {
 });
 
 // MongoDB connection
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(MONGO_URI)
 .then(() => {
   logger.info('Connected to MongoDB Atlas');
   // Update photo data from Google Photos API at server startup and 2:00 AM every day
