@@ -12,7 +12,6 @@
 figure {
   width: 100%;
   margin: 5rem 0 0 0;
-  padding: 0;
   background-color: var(--white);
 }
 
@@ -36,28 +35,21 @@ figure .logo img {
   font-size: 3.5rem;
   text-align: center;
   margin: 5rem 0;
-  padding: 0;
 }
 
 .welcome-text p {
   width: 100%;
   font-size: 2.5rem;
   text-align: center;
-  margin: 0;
-  padding: 0;
 }
 
 #form-wrapper {
   width: 100%;
-  margin: 0;
-  padding: 0;
   overflow: hidden;
 }
 
 #form-container {
   width: 40rem;
-  margin: 0;
-  padding: 0;
   transform: 1s ease-in-out;
   justify-content: center;
   align-items: flex-start;
@@ -179,8 +171,6 @@ footer {
 }
 
 footer p {
-  margin: 0;
-  padding: 0;  
   font-size: 1.5rem;
   color: var(--white);
 }
@@ -202,7 +192,6 @@ footer p {
 
 .modal-content {
   width: 80%;
-  margin: 0;
   padding: 2rem 0;
   text-align: center;
   border: .5rem solid var(--third-color);
@@ -212,21 +201,16 @@ footer p {
 }
 
 .modal-content h2 {
-  margin: 0;
-  padding: 0;
   font-size: 2.5rem;
 }
 
 .modal-content i {
   margin: 2rem 0;
-  padding: 0;
   font-size: 5rem;
   color: var(--third-color);
 }
 
 .modal-content p {
-  margin: 0;
-  padding: 0;
   font-size: 2.3rem;
 }
 
