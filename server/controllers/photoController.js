@@ -96,11 +96,12 @@ const updatePhotoById = async (req, res) => {
   }
 };
 
+// Export to server.js, googlePhotosAPI.js, and photoDBRoutes.js
 module.exports = {
-  savePhoto,
-  getAllPhotos,
-  getPhotoTags,
-  getSelectedPhotos,
-  getPhotoById,
-  updatePhotoById,
+  savePhoto, // Export to server.js and googlePhotosAPI.js
+  getAllPhotos, // Export to server.js
+  getPhotoTags, // Export to server.js and photoDBRoutes.js
+  getSelectedPhotos, // Export to server.js
+  getPhotoById, // Export to server.js
+  updatePhotoById, // Export to server.js
 };

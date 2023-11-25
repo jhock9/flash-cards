@@ -53,4 +53,5 @@ const logger = winston.createLogger({
   transports,
 })
 
+// Export to server.js, morgan.js, googleConfig.js, photoController.js, authRoutes.js, googlePhotosAPI.js, googleRoutes.js, and photoDBRoutes.js
 module.exports = logger

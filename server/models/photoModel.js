@@ -18,4 +18,5 @@ photoSchema.index({ tagsFromGoogle: 'text' });
 
 const Photo = mongoose.model('Photo', photoSchema);
 
+// Export to photoController.js and photoDBRoutes.js
 module.exports = Photo;

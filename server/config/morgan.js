@@ -18,4 +18,5 @@ const morganMiddleware = morgan(
   { stream, skip }
 );
 
+// Export to server.js
 module.exports = morganMiddleware;

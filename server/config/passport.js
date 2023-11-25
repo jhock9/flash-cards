@@ -30,4 +30,5 @@ const localPassport = (passport) => {
   });
 };
 
+// Export to server.js
 module.exports = localPassport;
