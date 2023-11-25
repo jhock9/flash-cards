@@ -2,7 +2,7 @@ const router = require('express').Router();
 const url = require('url');
 const logger = require('../config/winston');
 const Token = require('../models/tokenModel');
-const oauth2Client = require('../config/googleClient');
+const { oauth2Client } = require('../config/googleClient');
 
 // Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({

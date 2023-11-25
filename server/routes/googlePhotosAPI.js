@@ -1,7 +1,7 @@
 const axios = require('axios');
 const logger = require('../config/winston');
 const photoController = require('../controllers/photoController');
-const { oauth2Client } = require('./routes/googleAuthRoutes');
+const { oauth2Client } = require('./googleAuthRoutes');
 const newOauth2Client = oauth2Client;
 
 // Fetch photo Google Photos and send to photoDBRoutes.js
