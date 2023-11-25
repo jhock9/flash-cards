@@ -59,5 +59,8 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
-// Export to server.js and googlePhotosAPI.js
-module.exports = { router, oauth2Client };
+// Export to server.js and googlePhotosAPI.js, respectively
+module.exports = { 
+  router, 
+  oauth2Client
+};

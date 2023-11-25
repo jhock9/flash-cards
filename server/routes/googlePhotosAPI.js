@@ -64,4 +64,4 @@ const fetchGooglePhotos = async () => {
 };
 
 // Export to photoDBRoutes.js
-module.exports = { fetchGooglePhotos };
+module.exports = fetchGooglePhotos;

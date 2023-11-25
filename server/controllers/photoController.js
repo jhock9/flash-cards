@@ -103,5 +103,5 @@ module.exports = {
   getPhotoTags, // Export to server.js and photoDBRoutes.js
   getSelectedPhotos, // Export to server.js
   getPhotoById, // Export to server.js
-  updatePhotoById, // Export to server.js
+  updatePhotoById // Export to server.js
 };
