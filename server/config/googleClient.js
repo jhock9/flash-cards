@@ -6,7 +6,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
 const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN
-logger.info(`Environment variables: REDIRECT_URL = ${REDIRECT_URL}, NODE_ENV = ${NODE_ENV}`);
+logger.info(`Environment variables: REDIRECT_URL = ${REDIRECT_URL}`);
 
 // Set up your OAuth2 client for the API
 const oauth2Client = new google.auth.OAuth2(
