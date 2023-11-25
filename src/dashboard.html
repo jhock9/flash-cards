@@ -23,12 +23,16 @@
 <body class="center">
   <div id="dash-page" class="">
     <div id="dash-content-wrapper" class="content-wrapper center">
-      <aside id="dash-panel" class="center">         
+      <aside id="dash-panel" class="center"> 
         <nav id="dash-nav" class="center">
-          <ul id="dash-nav-list" class="center">
-            
+          <div id="dash-nav-header" class="center">
+            <i class="fa-solid fa-bars"></i> 
+            <h1 class="center">Menu</h1> 
+          </div>
+          
+          <ul id="dash-nav-list" class="center">            
             <li class="nav-tab center">
-              <a class="center" href="#account-info">My Account</a>
+              <a class="center" href="#account">My Account</a>
             </li>
             
             <li class="admin-view nav-tab center">
@@ -40,7 +44,7 @@
             </li>
             
             <li class="admin-view nav-tab center">
-              <a class="center" href="#google-connect">Google Account</a>
+              <a class="center" href="#google">Google Account</a>
             </li>
             
             <li class="nav-tab center">
@@ -62,12 +66,12 @@
             </div>  
           </figure>
           
-          <h1 class="center">Welcome,&nbsp;<span id="username"></span>!</h1>
+          <h3 class="center">Welcome,&nbsp;<span id="username"></span>!</h3>
         </section>
         
-        <section class="center">
-          <div id="account-info" class="hide center">
-            <h2>Account Information</h2>
+        <section id="account" class="hide center">
+          <div id="account-info" class="center">
+            <p>Name: <span id="acct-name"></span></p>
             <p>Username: <span id="acct-username"></span></p>
             <p>Email: <span id="acct-email"></span></p>
             <p>Role: <span id="acct-role"></span></p>
@@ -76,13 +80,13 @@
           <div class="form-wrapper hide center">
             <h2>Update Login Information</h2>
             <form id="update-account-form">
-              <label for="username">Username:</label>
+              <label for="new-username">Username:</label>
               <input type="text" id="new-username" class="input-field" placeholder="Enter New Username" name="username">
               
-              <label for="password">Password:</label>
+              <label for="new-password">Password:</label>
               <input type="password" id="new-password" class="input-field" placeholder="Enter new 4-Digit Code" name="password">
               
-              <label for="password">Confirm Password:</label>
+              <label for="confirm-new-password">Confirm Password:</label>
               <input type="password" id="confirm-new-password" class="input-field" placeholder="Confirm new 4-Digit Code" name="confirmPassword">
               
               <input type="submit" value="Update Login Info">
@@ -91,80 +95,96 @@
           </div>
         </section>
         
-        <section>
-          <div id="users" class="hide center">
-            <h2>Users</h2>
-            <table id="users-table" class="center">
-              <thead>
-                <!-- Todo: Sortable table -->
-                <tr>
-                  <th>Username</th>
-                  <th>Password</th> 
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              
-              <tbody id="users-table-body">
-                <!-- Todo: Password hidden: 
-                  You can hide the password by replacing it with asterisks 
-                  or dots. You can do this in your backend you're preparing 
-                  the data to send to the frontend.-->
-
-                <!-- Todo: Actions? 
-                radio button to reset password? 
-                radio button to delete user? -->
-              </tbody>
-            </table>
+        <section id="users" class="hide center">
+          <table id="users-table" class="center">
+            <thead>
+              <!-- Todo: Sortable table -->
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Password</th> 
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
             
-            <div class="form-wrapper hide center">
-              <h2>Create New User</h2>
-              < id="create-user-form">
-                <label for="new-username">Username:</label>
-                <input type="text" id="new-user-name" name="username">
-                
-                <label for="new-password">Password:</label>
-                <input type="password" id="new-user-pass" name="password">
-                
-                <label for="confirm-new-password">Confirm Password:</label>
-                <input type="password" id="confirm-new-user-pass" name="password">
-                
-                <label for="role">Role:</label>
-                <label>
-                  <input type="radio" name="role" value="user">
-                  User
-                </label>
-                <label>
-                  <input type="radio" name="role" value="admin">
-                  Admin
-                </label>
-                
-                <input type="submit" value="Create User">
-                <button type="submit" id="create-user-btn" class="wide-btn btn">Create User</button>
-              </form>
-            </div>
+            <tbody id="users-table-body">
+              <!-- Todo: Password hidden: 
+              You can hide the password by replacing it with asterisks 
+              or dots. You can do this in your backend you're preparing 
+              the data to send to the frontend.-->
+              
+              <!-- Todo: Actions? 
+              radio button to reset password? 
+              radio button to delete user? -->
+              
+              <!-- Todo: Link their name to go to their client list -->
+            </tbody>
+          </table>
+            
+          <div class="form-wrapper hide center">
+            <h2>Create New User</h2>
+            <form id="create-user-form">
+              <!-- //!! Add name to registration page also -->
+              <label for="new-name">Name:</label>
+              <input type="text" id="new-name" name="name">
+              
+              <label for="new-username">Username:</label>
+              <input type="text" id="new-user-name" name="username">
+              
+              <label for="new-password">Password:</label>
+              <input type="password" id="new-user-pass" name="password">
+              
+              <label for="confirm-new-password">Confirm Password:</label>
+              <input type="password" id="confirm-new-user-pass" name="password">
+              
+              <label>Role:</label>
+              <label for="role-user">
+                User
+                <input type="radio" id="role-user" name="role" value="user">
+              </label>
+              
+              <label for="role-admin">
+                Admin
+                <input type="radio" id="role-admin" name="role" value="admin">
+              </label>
+              
+              <input type="submit" value="Create User">
+              <button type="submit" id="create-user-btn" class="wide-btn btn">Create User</button>
+            </form>
+          </div>
         </section>
         
-        <section class="center">
-          <div id="clients" class="hide center">
-            <h2>Clients</h2>
+        <section id="clients" class="hide center">
+          <table id="clients-table" class="center">
+            <thead>
+              <tr>
+                <th>Therapist Name</th>
+                <th>Client ID</th>
+                <th>Client Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
             
-            <table id="clients-table" class="center">
-              <thead>
-                <tr>
-                  <th>Client Name</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+            <tbody id="clients-table-body">
               
-              <tbody id="clients-table-body">
-                </tbody> 
-            </table>
-          </div>
+              <!-- Todo: Actions? 
+              Todo: Link their name to go to their last session -->
+              
+              </tbody> 
+          </table>
           
           <div class="form-wrapper hide center">
             <h2>Create New Client</h2>
             <form id="new-client-form">
+              <label for="therapist-name">Therapist Name:</label>
+              <input type="text" id="therapist-name" class="input-field" placeholder="Enter Therapist Name" name="therapistName">
+              
+              <!-- Todo: should this be auto-generated? 
+              Or does Jeremy have an identifier already for this too? -->
+              <label for="client-id">Client ID:</label>
+              <input type="text" id="client-id" class="input-field" placeholder="Enter Client ID" name="clientID">
+              
               <label for="client-name">Client Name:</label>
               <input type="text" id="client-name" class="input-field" placeholder="Enter Client Name" name="clientName">
               
@@ -174,25 +194,22 @@
           </div>
         </section>
         
-        <section class="center">
-          <div id="google-connect" class=" hide center">
-            <!-- ! update the data-login-uri -->
-            <div id="g_id_onload"
-              data-client_id=""
-              data-context="use"
-              data-ux_mode="popup"
-              data-login_uri="put-the-login-uri-here" 
-              data-auto_prompt="false">
-            </div>
-            
-            <div id="google-signin" class="g_id_signin"
-              data-type="standard"
-              data-shape="rectangular"
-              data-theme="outline"
-              data-text="signin_with"
-              data-size="large"
-              data-logo_alignment="left">
-            </div>
+        <section id="google" class="hide center">
+          <div id="g_id_onload"
+            data-client_id=""
+            data-context="use"
+            data-ux_mode="popup"
+            data-login_uri="https://abacoop-flashcards-8fb5e3fd1eda.herokuapp.com/oauth2callback" 
+            data-auto_prompt="false">
+          </div>
+          
+          <div id="google-signin" class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large"
+            data-logo_alignment="left">
           </div>
         </section>
       </main>

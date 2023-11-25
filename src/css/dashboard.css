@@ -5,8 +5,6 @@
 #dash-page {
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
   flex-direction: column;
   justify-content: flex-start;
 }
@@ -14,8 +12,7 @@
 #dash-content-wrapper {
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
+
   justify-content: flex-start;
 }
 
@@ -23,18 +20,29 @@
 #dash-panel {
   width: 100%;
   height: 100vh;
-  margin: 0;
-  padding: 0;
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--second-color);
-  border-right: .3rem solid var(--border-color);
+}
+
+#dash-nav-header {
+  width: 100%;
+  padding: 3rem 4rem;
+  font-size: 3rem;
+  letter-spacing: 0.5rem;
+  color: var(--white);
+  background-color: var(--primary-color);
+  justify-content: flex-start;
+}
+
+#dash-nav-header i {
+  font-size: 4rem;
+  margin-right: 2rem;
 }
 
 #dash-nav {
   width: 100%;
-  margin: 0;
-  padding: 0;
+
 }
 
 #dash-nav-list {
@@ -42,15 +50,10 @@
   height: 100%;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 0;
-  padding: 0;
 }
 
 .nav-tab {
   width: 100%;
-  /* height: 5rem; */
-  margin: 0;
-  padding: 0;
 }
 
 .nav-tab a {
@@ -58,10 +61,8 @@
   padding: 3rem 4rem;
   font-size: 2.5rem;
   font-weight: 700;
-  text-decoration: none;
   color: var(--black);
   justify-content: flex-start;
-  
 }
 
 .nav-tab a:hover,
@@ -84,7 +85,6 @@
 }
 
 #logout-btn i {
-  margin: 0;
   padding: .1rem 0 0 .5rem;
 }
 
@@ -98,54 +98,34 @@
 /* Section styles */
 main {
   height: 100vh;
-  margin: 0;
-  padding: 0;
   flex-grow: 1;
 }
 
-#welcome-section {
+#welcome {
   width: 100%;
-  margin: 0;
-  padding: 0;
+  margin: -5rem 0 0 0;
+}
+
+#welcome h3 {
+  font-size: 3.5rem;
 }
 
 figure {
   width: 100%;
-  margin: 5rem 0 0 0;
-  padding: 0;
-  background-color: var(--white);
-}
-
-figure .logo {
-  width: 100%;
-  justify-content: center;
 }
 
 figure .logo img {
-  width: 100%;
   max-width: 40rem;
   margin-bottom: 5rem;
 }
 
-.welcome-text {
-  width: 100%;
+
+#g_id_onload,
+#google-signin {
+  margin: 6rem 0;
 }
 
-.welcome-text h1 {
-  width: 100%;
-  font-size: 3.5rem;
-  text-align: center;
-  margin: 5rem 0;
-  padding: 0;
-}
 
-.welcome-text p {
-  width: 100%;
-  font-size: 2.5rem;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-}
 
 /*=====================================================================================
   Media Queries for Responsive Design     
