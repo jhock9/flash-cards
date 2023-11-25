@@ -2,6 +2,17 @@ const adminViews = document.querySelectorAll('admin-view');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 
+import { fetchConfig, checkAuthentication } from './googleAuth.js';
+
+// Initialize the dashboard
+const init = async () => {
+  updateDashNav();
+  await fetchConfig();
+  checkAuthentication(); 
+  //!! do we still need checkAuthentication()?
+  //!! after all set up, remove and test without it
+}
+
 // Show or hide elements based on the user's role
 const updateDashNav = () => {
   const userRole = localStorage.getItem('userRole');
@@ -15,22 +26,33 @@ const updateDashNav = () => {
   }
 }
 
-window.onload = updateDashNav;
+//**   DO THIS WHEN THE PAGE LOADS   **//
+window.addEventListener('load', init);
+window.addEventListener('beforeunload', () => {
+  sessionStorage.removeItem('authenticationChecked');
+});
 
+
+// Add event listeners to the navigation links
 navLinks.forEach((link) => {
   link.addEventListener('click', (event) => {
-    event.preventDefault();
+    const href = link.getAttribute('href');
     
-    // Hide all sections
-    const sections = document.querySelectorAll('main > section');
-    sections.forEach((section) => {
-      section.classList.add('hide');
-    });
-    
-    // Show the clicked section
-    const sectionId = link.textContent.toLowerCase();
-    const section = document.querySelector(`#${sectionId}`);
-    section.classList.remove('hide');
+    // Only handle links that navigate to a section on the current page
+    if (href.startsWith('#')) {
+      event.preventDefault();
+      
+      // Hide all sections
+      const sections = document.querySelectorAll('main section');
+      sections.forEach((section) => {
+        section.classList.add('hide');
+      });
+      
+      // Show the clicked section
+      const sectionId = href.slice(1);
+      const section = document.querySelector(`#${sectionId}`);
+      section.classList.remove('hide');
+    }
   });
 });
 
@@ -104,3 +126,4 @@ const sortTable = (columnIndex) => {
     }
   }
 }
+
