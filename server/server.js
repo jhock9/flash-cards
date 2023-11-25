@@ -14,8 +14,11 @@ const logger = require('./config/winston');
 const localPassport = require('./config/passport');
 require('./config/passport')(passport);
 
-const authRoutes = require('./routes/authRoutes'); // Routes for authentication
-const { router: photoDBRoutes, updatePhotoData } = require('./routes/photoDBRoutes'); // Cron job and routes for photo database
+const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
+const { router: googleAuthRoutes } = require('./routes/googleAuthRoutes'); // Routes for Google authentication
+const { router: photoDBRoutes, updatePhotoData } = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
+const { GOOGLE_CLIENT_ID } = require('./googleClient'); // Google client ID for /config route
+
 const { 
   savePhoto, 
   getAllPhotos, 
@@ -102,12 +105,23 @@ app.use(express.static(path.join(__dirname, '../src/')));
 
 // Serve landing.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../src/', 'landing.html'));
+  res.sendFile(path.join(__dirname, '../src/', 'login.html'));
 });
 
 // Serve flashcards.html
 app.get('/flashcards', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/', 'flashcards.html'));
+});
+
+// Serve dashboard.html
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, '../src/', 'dashboard.html'));
+});
+
+app.get('/config', (req, res) => {
+  res.json({
+    GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
+  });
 });
 
 // Passport configuration
@@ -120,6 +134,7 @@ localPassport(passport);
 // Routes
 app.use('/auth', authRoutes);
 app.use('/photos', photoDBRoutes);
+app.use('/google-auth', googleAuthRoutes);
 
 // CRUD routes
 app.post('/photos', savePhoto);

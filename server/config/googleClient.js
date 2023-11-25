@@ -29,5 +29,8 @@ oauth2Client.setCredentials({
   refresh_token: GOOGLE_REFRESH_TOKEN
 });
 
-// Export to googleAuthRoutes.js
-module.exports = oauth2Client;
+// Export to server.js and googleAuthRoutes.js, respectively
+module.exports = {
+  GOOGLE_CLIENT_ID,
+  oauth2Client
+};

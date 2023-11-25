@@ -3,7 +3,7 @@ let googleClientID;
 // Fetch Google Client ID from server
 const fetchConfig = async () => {
   try {
-    const response = await fetch('/config/google');
+    const response = await fetch('/config');
     const config = await response.json();
     
     googleClientID = config.GOOGLE_CLIENT_ID;
@@ -50,7 +50,7 @@ const onSignInFailure = (error) => {
 
 // Redirect user to Google's authentication page
 const googleAuth = () => {
-  window.location.href = '/authorize';
+  window.location.href = '/google-auth/authorize';
 };
 
 // Check if user is authenticated and redirect to login page if not
