@@ -7,5 +7,5 @@ const tokenSchema = new mongoose.Schema({
 
 const Token = mongoose.model('Token', tokenSchema);
 
-// Export to GoogleRoutes.js
+// Export to googleAuthRoutes.js
 module.exports = Token;
