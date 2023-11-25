@@ -387,25 +387,25 @@ const saveLockedTags = (save = true) => {
   }
 };
 
-//!! Local Storage Methods: saving, getting and removing
-// Save selections to local storage
-localStorage.setItem('selections', JSON.stringify(selections));
+// //!! Local Storage Methods: saving, getting and removing
+// // Save selections to local storage
+// localStorage.setItem('selections', JSON.stringify(selections));
 
-// Get selections from local storage
-const selections = JSON.parse(localStorage.getItem('selections'));
+// // Get selections from local storage
+// const selections = JSON.parse(localStorage.getItem('selections'));
 
-// Clear selections from local storage
-localStorage.removeItem('selections');
+// // Clear selections from local storage
+// localStorage.removeItem('selections');
 
-// In this example, selections is an object that contains the user's current session selections
-// You can adjust this object to fit your needs. For example, you could make tags an array of objects, 
-// where each object has a name, qty, and locked field, similar to the tags field in your Photo model.
-const selections = {
-  tags: ['tag1', 'tag2', 'tag3', 'tag4'],
-  quantities: [1, 2, 3, 4],
-  locked: [false, true, false, true],
-};
-//!! Local Storage Methods: saving, getting and removing
+// // In this example, selections is an object that contains the user's current session selections
+// // You can adjust this object to fit your needs. For example, you could make tags an array of objects, 
+// // where each object has a name, qty, and locked field, similar to the tags field in your Photo model.
+// const selections = {
+//   tags: ['tag1', 'tag2', 'tag3', 'tag4'],
+//   quantities: [1, 2, 3, 4],
+//   locked: [false, true, false, true],
+// };
+// //!! Local Storage Methods: saving, getting and removing
 
 //**   REMOVING SELECTED TAGS   **//
 
