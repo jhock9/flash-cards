@@ -6,25 +6,24 @@ import { fetchConfig, checkAuthentication } from './googleAuth.js';
 
 // Initialize the dashboard
 const init = async () => {
-  updateDashNav();
+  // updateDashNav(); //!! COMMENTED OUT FOR TESTING
   await fetchConfig();
-  checkAuthentication(); 
-  //!! do we still need checkAuthentication()?
-  //!! after all set up, remove and test without it
+  checkAuthentication(); //!! do we still need checkAuthentication()? after all set up, remove and test without it
 }
 
-// Show or hide elements based on the user's role
-const updateDashNav = () => {
-  const userRole = localStorage.getItem('userRole');
+  //!! COMMENTED OUT FOR TESTING
+// // Show or hide elements based on the user's role
+// const updateDashNav = () => {
+//   const userRole = localStorage.getItem('userRole');
   
-  for (let view of adminViews) {
-    if (userRole === 'admin') {
-      view.classList.remove('hide');
-    } else {
-      view.classList.add('hide');
-    }
-  }
-}
+//   for (let view of adminViews) {
+//     if (userRole === 'admin') {
+//       view.classList.remove('hide');
+//     } else {
+//       view.classList.add('hide');
+//     }
+//   }
+// }
 
 //**   DO THIS WHEN THE PAGE LOADS   **//
 window.addEventListener('load', init);
