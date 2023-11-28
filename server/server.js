@@ -15,8 +15,8 @@ const localPassport = require('./config/passport');
 require('./config/passport')(passport);
 
 const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
-const { router: googleAuthRoutes } = require('./routes/googleAuthRoutes'); // Routes for Google authentication
-const { router: photoDBRoutes } = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
+const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Google authentication
+const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
 const { GOOGLE_CLIENT_ID } = require('./config/googleClient'); // Google client ID for /config route
 
 const NODE_ENV = process.env.NODE_ENV;
