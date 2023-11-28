@@ -5,9 +5,10 @@ const Photo = require('../models/photoModel.js');
 const savePhoto = async (photoData) => {
   try {
     const photo = new Photo({
-      id: photoData.id,
-      url: photoData.productUrl,
-      tagsFromGoogle: photoData.description,
+      googleId: photoData.id,
+      productUrl: photoData.url,
+      tagsFromGoogle: photoData.tagsFromGoogle,
+      selectedBy: photoData.selected,
     });
     await photo.save();
   } catch (error) {
@@ -15,22 +16,12 @@ const savePhoto = async (photoData) => {
   }
 };
 
-// Get all photos from database
-const getAllPhotos = async (req, res) => {Post
-  try {
-    const photos = await Photo.find({});
-    res.send(photos);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Get photo tags from database, filter, sort, and send to photoRoutes.js
-const getPhotoTags = async (req, res) => {
+// Get tags to be displayed from database
+const getPhotoTags = async () => {
   try {
     const photos = await Photo.find({});
     const tagCounts = {};
-
+    
     photos.forEach(photo => {
       const tags = photo.tagsFromGoogle.split(' ');
       tags.forEach(tag => {
@@ -50,58 +41,51 @@ const getPhotoTags = async (req, res) => {
     }
     
     filteredTags.sort();
-    res.json(filteredTags);
+    return filteredTags;
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error getting photo tags:', error);
+    return [];
   }
 };
 
-// Get selected photos from database and send to photoRoutes.js
-const getSelectedPhotos = async (req, res) => {
+// Get selected photos from database
+const getSelectedPhotos = async () => {
   try {
     const selectedPhotos = await Photo.find({});
-    res.json(selectedPhotos);
+    return selectedPhotos;
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error('ERROR getting selected photos:', error);
+    return [];
   }
 };
 
 // Get photo by id from database
-const getPhotoById = async (req, res) => {
+const getPhotoById = async (id) => {
   try {
-    const photo = await Photo.findById(req.params.id);
-    if (photo) {
-      res.send(photo);
-    } else {
-      res.status(404).send();
-    }
+    const photo = await Photo.findById(id);
+    return photo;
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    logger.error(`ERROR getting photo by id ${id}:`, error);
+    return null;
   }
 }
 
-// Update photo by id in database
-const updatePhotoById = async (req, res) => {
+// Get all photos from database
+const getAllPhotos = async () => {
   try {
-    const photo = await Photo.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!photo) {
-      return res.status(404).send();
-    }
-    res.send(photo);
+    const photos = await Photo.find({});
+    return photos;
   } catch (error) {
-    res.status(400).send(error);
+    logger.error('ERROR getting all photos:', error);
+    return [];
   }
 };
 
-// Export to server.js, googlePhotosAPI.js, and photoDBRoutes.js
+// Export to photoDBRoutes.js for CRUD routes
 module.exports = {
-  savePhoto, // Export to server.js and googlePhotosAPI.js
-  getAllPhotos, // Export to server.js
-  getPhotoTags, // Export to server.js and photoDBRoutes.js
-  getSelectedPhotos, // Export to server.js
-  getPhotoById, // Export to server.js
-  updatePhotoById // Export to server.js
+  savePhoto, //also googlePhotosAPI.js
+  getPhotoTags,
+  getSelectedPhotos,
+  getPhotoById,
+  getAllPhotos,
 };

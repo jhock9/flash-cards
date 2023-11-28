@@ -19,15 +19,6 @@ const { router: googleAuthRoutes } = require('./routes/googleAuthRoutes'); // Ro
 const { router: photoDBRoutes, updatePhotoData } = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
 const { GOOGLE_CLIENT_ID } = require('./config/googleClient'); // Google client ID for /config route
 
-const { 
-  savePhoto, 
-  getAllPhotos, 
-  getPhotoTags, 
-  getSelectedPhotos, 
-  getPhotoById, 
-  updatePhotoById 
-} = require('./controllers/photoController'); // CRUD operations for photo database
-
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const MONGO_URI = process.env.MONGO_URI;
@@ -137,14 +128,7 @@ app.use('/auth', authRoutes);
 app.use('/photos', photoDBRoutes);
 app.use('/google-auth', googleAuthRoutes);
 
-// CRUD routes
-app.post('/photos', savePhoto);
-app.get('/photos', getAllPhotos);
-app.get('/tags', getPhotoTags);
-app.get('/selected-photos', getSelectedPhotos);
-app.get('/photos/:id', getPhotoById);
-app.patch('/photos/:id', updatePhotoById);
-
+//!! is this correct??
   // Clear session on logout
 app.post('/logout', (req, res) => {
   req.session.destroy((err) => {

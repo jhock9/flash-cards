@@ -4,7 +4,7 @@ const photoSchema = new mongoose.Schema({
   googleId: { type: String, required: true, unique: true },
   productUrl: { type: String, required: true },
   tagsFromGoogle: { type: String, required: true },
-  tags: [{ 
+  tags: [{  //!! do I really need this?
     name: String, 
     qty: { type: Number, default: 0 }, 
     locked: { type: Boolean, default: false } 
