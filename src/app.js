@@ -16,7 +16,6 @@ const selectedTagsWrapper = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll('.remove-btn');
 
 const tagsWrapper = document.querySelector('#tags-wrapper');
-// const dropdown = document.querySelector('#dropdown');
 const filterInput = document.querySelector('#filter-tags');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
@@ -30,56 +29,6 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
-//* COMMENTING OUT fetchTagsIfNeeded, saveTagsData and loadTagsData
-// WILL INCLUDE LATER IF PERFORMANCE IS AN ISSUE AND NEED TO SAVE TAGS TO LOCAL STORAGE TO REDUCE FETCHES
-// WILL NEED TO TEST TO MAKE SURE THIS CODE WORKS WITH THE REST OF THE APP IF ADDED BACK IN
-
-// const fetchTagsIfNeeded = async () => {
-// // Fetch tags data and save to local storage, if necessary, every day after 2 AM
-//   const lastFetch = localStorage.getItem('lastFetch');
-//   const now = new Date();
-  
-//   // Extract just the date part in YYYY-MM-DD format
-//   const lastFetchDate = lastFetch ? new Date(lastFetch).toISOString().split('T')[0] : '';
-//   const currentDate = now.toISOString().split('T')[0];
-//   const currentHour = now.getHours();
-  
-//   // Check if there's no last fetch record or if it's a new day and past 2 AM
-//   if (!lastFetch || (lastFetchDate < currentDate && currentHour >= 2)) {
-//     console.log('Fetching new tags data...');
-//     try {
-//       const tagsData = await fetchTagsData();
-//       if (tagsData) {
-//         saveTagsData(tagsData);
-//         localStorage.setItem('lastFetch', now.toISOString());
-//         }
-//     } catch (error) {
-//       console.error('Error fetching new photo tags:', error);
-//     }
-//   } else {
-//     console.log('Using cached photo tag data.');
-//   }
-// };
-
-// const saveTagsData = (tagsData) => {
-//   if (tagsData) {
-//     localStorage.setItem('tags', JSON.stringify(tagsData));
-//     console.log('Tags data saved to local storage.');
-//   } else {
-//     console.error('No tags data to save.');
-//   }
-// };
-
-// const loadTagsData = () => {
-//   const tagsData = localStorage.getItem('tags');
-//   if (tagsData) {
-//     return JSON.parse(tagsData);
-//   } else {
-//     console.error('No tags data found in local storage.');
-//     return [];
-//   }
-// };
-
 
 //*   FETCH AND DISPLAY PHOTO TAGS   *//
 
@@ -87,7 +36,7 @@ let lastUseRemainder;
 const fetchTagsData = async () => {
   console.log('Fetching google tags...');
   try {
-    const response = await fetch('/get-tags', {
+    const response = await fetch('/photos/get-tags', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -106,25 +55,11 @@ const fetchTagsData = async () => {
 const displayTags = async () => {
   console.log('Displaying tags...');
   try {
-    const response = await fetch('/google-photos-api/get-tags'); // Replace with your actual API endpoint
-    const filteredTags = await response.json();
+    const filteredTags = await fetchPhotosData;
     
     tagsList.innerHTML = '';
-    // Set default option for dropdown
-    // const defaultOption = dropdown.querySelector('option[value=""]');
-    // dropdown.innerHTML = '';
-    // if (defaultOption) {
-    //   dropdown.appendChild(defaultOption);
-    // }
     
     for (const tag of filteredTags) {
-      // Display tags in dropdown
-      // const option = document.createElement('option');
-      // option.value = tag;
-      // option.text = tag;
-      // dropdown.add(option);
-      
-      // Display tags as selectable tags
       const tagDiv = document.createElement('div');
       tagDiv.classList.add('tag', 'center');
       const tagName = document.createElement('span');
@@ -141,7 +76,7 @@ const displayTags = async () => {
 
 //!! THIS IS WHERE I LEFT OFF
 
-//**   SELECT TAGS TO DISPLAY   **//
+//**   USER INPUTS TO SELECT PHOTOS TO DISPLAY   **//
 
 totalSlider.addEventListener('input', () => {
   totalPhotos = parseInt(totalSlider.value, 10);
@@ -189,27 +124,6 @@ filterInput.addEventListener("keydown", function (e) {
     e.preventDefault();
   }
 });
-
-// dropdown.addEventListener('change', () => {
-//   console.log('Dropdown changed...');
-//   const selectedTag = dropdown.value;
-  
-//   const proceed = handleTagSelection(selectedTag);
-//   if (!proceed) {
-//     return;
-//   }  
-  
-//   dropdown.selectedIndex = 0;
-  
-//   // Select the tag in the tags-list
-//   const tagSpan = Array.from(document.querySelectorAll('.tag .name')).find(span => span.textContent === selectedTag);
-//   if (tagSpan) {
-//     tagSpan.classList.add('selected');
-//   }
-  
-//   createSelectedDiv(selectedTag);
-//   resetTagSelect();
-// });
 
 tagsList.addEventListener('click', (e) => {  
   console.log('Tags-list clicked...');
@@ -613,9 +527,7 @@ const toggleBorders = () => {
 mobileOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   try {
-    await fetchTagsIfNeeded();
-    const tagsData = loadTagsData();
-    displayTags(tagsData);
+    displayTags();
     toggleNav();
   } catch (error) {
     console.error('Error on open button click:', error);
@@ -625,9 +537,7 @@ mobileOpenBtn.addEventListener('click', async () => {
 tabletOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   try {
-    await fetchTagsIfNeeded();
-    const tagsData = loadTagsData();
-    displayTags(tagsData);
+    displayTags();
     toggleNav();
   } catch (error) {
     console.error('Error on open button click:', error);
@@ -697,10 +607,6 @@ randomBtn.addEventListener('click', () => {
     const selectedTag = allTags[randomTagIndex];
     
     allTags.splice(randomTagIndex, 1); // Removes duplicates
-    
-    // // Simulate selecting tag by setting dropdown value, triggering change event
-    // dropdown.value = selectedTag;
-    // dropdown.dispatchEvent(new Event('change'));
     
     // Directly call the process that would happen on clicking the tag
     const proceed = handleTagSelection(selectedTag);

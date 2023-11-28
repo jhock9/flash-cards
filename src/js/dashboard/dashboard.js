@@ -31,7 +31,6 @@ window.addEventListener('beforeunload', () => {
   sessionStorage.removeItem('authenticationChecked');
 });
 
-
 // Add event listeners to the navigation links
 navLinks.forEach((link) => {
   link.addEventListener('click', (event) => {
@@ -54,6 +53,9 @@ navLinks.forEach((link) => {
     }
   });
 });
+
+
+//*   MAIN SECTION   *//
 
 // Hide the password column
 document.querySelectorAll('#users-table tbody td:nth-child(2)').forEach(td => {
