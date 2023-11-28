@@ -2,7 +2,6 @@ const axios = require('axios');
 const logger = require('../config/winston');
 const photoController = require('../controllers/photoController'); // savePhoto()
 const { oauth2Client } = require('./googleAuthRoutes');
-const newOauth2Client = oauth2Client;
 
 // Fetch Google Photos and send to photoDBRoutes.js
 const fetchGooglePhotos = async () => {
@@ -22,21 +21,21 @@ const fetchGooglePhotos = async () => {
       try {
         response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
           headers: {
-            'Authorization': `Bearer ${newOauth2Client.credentials.access_token}`,
+            'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
             'Content-Type': 'application/json',
           },
         });
       } catch (error) {
         if (error.response && error.response.status === 401) { // If the token is expired
           // Refresh the token
-          const newTokens = await newOauth2Client.refreshAccessToken();
-          newOauth2Client.setCredentials(newTokens.credentials);
+          const newTokens = await oauth2Client.refreshAccessToken();
+          oauth2Client.setCredentials(newTokens.credentials);
           logger.info('Tokens refreshed and set in OAuth2 client.');
           
           // Retry the request with the new token
           response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
             headers: {
-              'Authorization': `Bearer ${newOauth2Client.credentials.access_token}`,
+              'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
               'Content-Type': 'application/json',
             },
           });
