@@ -1,4 +1,5 @@
 require('dotenv').config();
+const logger = require('../server/config/winston');
 const mongoose = require('mongoose');
 const User = require('../server/models/userModel');
 
@@ -16,7 +17,7 @@ const createSuperAdmin = async () => {
   
   await superAdmin.save();
   
-  console.log('SuperAdmin user created successfully');
+  logger.info('SuperAdmin user created successfully');
   process.exit();
 }
 
