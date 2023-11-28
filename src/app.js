@@ -55,7 +55,7 @@ const fetchTagsData = async () => {
 const displayTags = async () => {
   console.log('Displaying tags...');
   try {
-    const filteredTags = await fetchPhotosData;
+    const filteredTags = await fetchTagsData();
     
     tagsList.innerHTML = '';
     
