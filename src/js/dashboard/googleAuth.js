@@ -57,7 +57,7 @@ const googleAuth = () => {
 const checkAuthentication = async () => {
   try {
     console.log('Checking authentication...');
-    const response = await fetch('/is-authenticated', { credentials: 'include' });
+    const response = await fetch('/google-auth/is-authenticated', { credentials: 'include' });
     if (!response.ok) {
       console.error(`Server responded with status: ${response.status}`);
       throw new Error(`Server responded with status: ${response.status}`);

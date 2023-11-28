@@ -125,22 +125,8 @@ localPassport(passport);
 
 // Routes
 app.use('/auth', authRoutes);
-app.use('/photos', photoDBRoutes);
 app.use('/google-auth', googleAuthRoutes);
-
-//!! is this correct??
-  // Clear session on logout
-app.post('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      logger.error(err);
-      res.status(500).json({ message: 'Server error: Failed to destroy session', isAuthenticated: true });
-    } else {
-      logger.info('Session destroyed successfully. User logged out.');
-      res.status(200).json({ message: 'Logout successful', isAuthenticated: false });
-    }
-  });
-});
+app.use('/photos', photoDBRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {

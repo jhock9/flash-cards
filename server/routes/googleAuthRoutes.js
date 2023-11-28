@@ -59,6 +59,16 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
+// Check if user is authenticated
+router.get('/is-authenticated', (req, res) => {
+  logger.info('Received request for /is-authenticated...');
+  if (req.session && req.session.isAuthenticated) {
+    res.status(200).json({ isAuthenticated: true });
+  } else {
+    res.status(200).json({ isAuthenticated: false });
+  }
+});
+
 // Export to server.js and googlePhotosAPI.js, respectively
 module.exports = { 
   router, 
