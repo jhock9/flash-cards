@@ -49,17 +49,18 @@ router.get('/get-all-photos', async (req, res) => {
   res.json(allPhotos);
 });
 
+
 //** Google Photos API **//
 
-// Update photo data in database using cron job
+// Update photo data in database
 const updatePhotoData = async () => {
   logger.info('Updating database photo data using cron job...');
   try {
     const fetchedPhotos = await fetchGooglePhotos();
     
     // Limit the logging
-    console.log(fetchedPhotos.length); // logs the number of photos fetched
-    console.log(fetchedPhotos.slice(0, 5).map(photo => ({ id: photo.id, url: photo.productUrl }))); // logs the first 5 photos fetched with their id and url
+    logger.info(fetchedPhotos.length); // logs the number of photos fetched
+    logger.info(fetchedPhotos.slice(0, 5).map(photo => ({ id: photo.id, url: photo.productUrl }))); // logs the first 5 photos fetched with their id and url
     
     // Write the data to a file
     fs.writeFileSync('data.json', JSON.stringify(fetchedPhotos[0], null, 2));
@@ -88,10 +89,10 @@ const updatePhotoData = async () => {
   }
 };
 
-// at 2:00 AM every day
+// Update photo data in database at 2:00 AM every day
 cron.schedule('0 2 * * *', updatePhotoData);
 
-// Export to server.js
+// Export to server.js and googleAuthRoutes.js, respectively
 module.exports = {
   router,
   updatePhotoData

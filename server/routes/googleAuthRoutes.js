@@ -3,6 +3,7 @@ const url = require('url');
 const logger = require('../config/winston');
 const Token = require('../models/tokenModel');
 const { oauth2Client } = require('../config/googleClient');
+const { updatePhotoData } = require('./photoDBRoutes');
 
 // Generate the URL that will be used for the consent dialog
 const authUrl = oauth2Client.generateAuthUrl({
@@ -49,6 +50,14 @@ router.get('/oauth2callback', async (req, res) => {
       }
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
+    
+    // Update photo data after tokens have been set
+    try {
+      await updatePhotoData();
+      logger.info('Photo data updated.');
+    } catch (error) {
+      logger.error('Failed to update photo data:', error);
+    }
     
     req.session.isAuthenticated = true;
     

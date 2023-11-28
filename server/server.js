@@ -16,7 +16,7 @@ require('./config/passport')(passport);
 
 const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
 const { router: googleAuthRoutes } = require('./routes/googleAuthRoutes'); // Routes for Google authentication
-const { router: photoDBRoutes, updatePhotoData } = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
+const { router: photoDBRoutes } = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
 const { GOOGLE_CLIENT_ID } = require('./config/googleClient'); // Google client ID for /config route
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -71,13 +71,10 @@ app.use((req, res, next) => {
 mongoose.connect(MONGO_URI)
 .then(() => {
   logger.info('Connected to MongoDB Atlas');
-  // Update photo data from Google Photos API at server startup and 2:00 AM every day
-  updatePhotoData();
-  })
+})
 .catch(err => logger.error('Could not connect to MongoDB Atlas', err));
 
 mongoose.set('debug', true);
-
 
 // Add middleware 
 app.use(express.json());
