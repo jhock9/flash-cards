@@ -4,8 +4,12 @@ const Photo = require('../models/photoModel.js');
 // Save photo to database
 const savePhoto = async (photoData) => {
   try {
-    const photo = new Photo(photoData);
-    await photo.save();
+    if (photoData.tagsFromGoogle) {
+      const photo = new Photo(photoData);
+      await photo.save();
+    } else {
+      logger.error(`Photo with id ${photoData.googleId} does not have tagsFromGoogle`);
+    }
   } catch (error) {
     logger.error('ERROR saving photo to database:', error);
   }
