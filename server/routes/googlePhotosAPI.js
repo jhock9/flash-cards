@@ -15,6 +15,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
         pageSize: 100,
         pageToken: nextPageToken,
       };
+      let response;
       try {
         response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
           headers: {
@@ -47,23 +48,17 @@ const fetchGooglePhotos = async (oauth2Client) => {
       
       // Save photo data to database
       for (const photoData of response.data.mediaItems) {
-        // Skip the photo if it doesn't have a description
-        if (!photoData.description) {
-          continue;
-        }
-        
         const mappedPhotoData = {
           googleId: photoData.id,
           productUrl: photoData.productUrl,
           tagsFromGoogle: photoData.description,
         };  
-        
         try {
           await photoController.savePhoto(mappedPhotoData);
         } catch (error) {
           throw error; // This will stop the execution of fetchGooglePhotos
         }
-      }
+          }
     } while (nextPageToken);
     
     return response.data.mediaItems;
