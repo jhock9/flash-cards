@@ -16,7 +16,6 @@ const savePhoto = async (photoData) => {
       await photo.save();
     }
   }
-  // If photoData does not have tagsFromGoogle, simply ignore it
 };
 
 // Get tags to be displayed from database
