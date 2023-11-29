@@ -10,7 +10,6 @@ const fetchGooglePhotos = async (oauth2Client) => {
     logger.info('Initializing Google Photos client...');
     
     let nextPageToken
-    let allPhotos = [];
     do {
       const params = {
         pageSize: 100,
@@ -45,7 +44,6 @@ const fetchGooglePhotos = async (oauth2Client) => {
       
       logger.info('Received media items...');
       
-      allPhotos = allPhotos.concat(response.data.mediaItems);
       nextPageToken = response.data.nextPageToken;
       
       // Save photo data to database
