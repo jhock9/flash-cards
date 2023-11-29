@@ -9,13 +9,13 @@ const fetchGooglePhotos = async (oauth2Client) => {
   try {
     logger.info('Initializing Google Photos client...');
     
-    let nextPageToken
+    let nextPageToken;
+    let response;
     do {
       const params = {
         pageSize: 100,
         pageToken: nextPageToken,
       };
-      let response;
       try {
         response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
           headers: {
