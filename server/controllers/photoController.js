@@ -4,8 +4,17 @@ const Photo = require('../models/photoModel.js');
 // Save photo to database
 const savePhoto = async (photoData) => {
   if (photoData.tagsFromGoogle) {
-    const photo = new Photo(photoData);
-    await photo.save();
+    const existingPhoto = await Photo.findOne({ googleId: photoData.googleId });
+    if (existingPhoto) {
+      // Photo with the same googleId already exists, update it with the new data
+      existingPhoto.productUrl = photoData.productUrl;
+      existingPhoto.tagsFromGoogle = photoData.tagsFromGoogle;
+      await existingPhoto.save();
+    } else {
+      // Photo with the same googleId does not exist, insert a new photo
+      const photo = new Photo(photoData);
+      await photo.save();
+    }
   } else {
     throw new Error(`Photo with id ${photoData.googleId} does not have tagsFromGoogle`);
   }
