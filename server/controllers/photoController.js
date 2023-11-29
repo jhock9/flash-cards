@@ -9,6 +9,7 @@ const savePhoto = async (photoData) => {
       await photo.save();
     } else {
       logger.error(`Photo with id ${photoData.googleId} does not have tagsFromGoogle`);
+      throw new Error(`Photo with id ${photoData.googleId} does not have tagsFromGoogle`);
     }
   } catch (error) {
     logger.error('ERROR saving photo to database:', error);
