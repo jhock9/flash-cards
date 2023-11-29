@@ -30,7 +30,7 @@ let lastTotalPhotos;
 let lastUseRemainder;
 
 
-//*   FETCH AND DISPLAY PHOTO TAGS   *//
+//**   FETCH AND DISPLAY PHOTO TAGS   **//
 
 // Fetch tags data from database
 const fetchTagsData = async () => {
@@ -74,7 +74,6 @@ const displayTags = async () => {
   }
 };
 
-//!! THIS IS WHERE I LEFT OFF
 
 //**   USER INPUTS TO SELECT PHOTOS TO DISPLAY   **//
 
@@ -230,7 +229,8 @@ const appendToNewDiv = (classList, elements) => {
 };
 
 
-//**   SELECTED TAG HELPERS   **//
+//**   HELPERS FOR SELECTED DIV ELEMENTS   **//
+//!! Move these to a separate file and import
 
 const createSlider = () => {
   const slider = document.createElement('input');
@@ -256,9 +256,6 @@ const createTagName = (selectedTag) => {
   tagName.textContent = selectedTag;
   return tagName;
 };
-
-
-//** SAVING SELECTED TAGS **//
 
 const createLockToggle = (selectedDiv) => {
   const lockToggle = document.createElement('button');
@@ -300,28 +297,6 @@ const saveLockedTags = (save = true) => {
     localStorage.removeItem('lockedTags');
   }
 };
-
-// //!! Local Storage Methods: saving, getting and removing
-// // Save selections to local storage
-// localStorage.setItem('selections', JSON.stringify(selections));
-
-// // Get selections from local storage
-// const selections = JSON.parse(localStorage.getItem('selections'));
-
-// // Clear selections from local storage
-// localStorage.removeItem('selections');
-
-// // In this example, selections is an object that contains the user's current session selections
-// // You can adjust this object to fit your needs. For example, you could make tags an array of objects, 
-// // where each object has a name, qty, and locked field, similar to the tags field in your Photo model.
-// const selections = {
-//   tags: ['tag1', 'tag2', 'tag3', 'tag4'],
-//   quantities: [1, 2, 3, 4],
-//   locked: [false, true, false, true],
-// };
-// //!! Local Storage Methods: saving, getting and removing
-
-//**   REMOVING SELECTED TAGS   **//
 
 const createRemoveBtn = (selectedDiv) => {
   const removeBtn = document.createElement('button');
@@ -403,7 +378,7 @@ const resetTagSelect = () => {
 const fetchPhotosData = async (tags) => {
   console.log('Fetching photos data...');
   try {
-    const response = await fetch('/get-photos', {
+    const response = await fetch('/photos/get-photos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ tags }),
@@ -502,7 +477,7 @@ const toggleNav = () => {
   console.log('Toggling nav...');
   tabletOpenBtn.classList.toggle('open');
   flashPanel.classList.toggle('open');
-
+  
   if (flashPanel.classList.contains('open')) {
     loadRenderLockedTags();
   } else {
@@ -618,7 +593,7 @@ randomBtn.addEventListener('click', () => {
     // Set value for slider, considering totalImages
     const sliderValue = Math.min(Math.floor(Math.random() * maxImagesPerTag) + 1, 12 - totalImages);
     slider.value = sliderValue;
-
+    
     // Update totalImages count
     totalImages += sliderValue;
   }
@@ -641,6 +616,9 @@ submitBtn.addEventListener('click', async (e) => {
   });
   
   lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
+  
+  // Fetch photos based on the selected tags
+  photos = await fetchPhotosData(selectedTagsAndQuantities.map(({ tag }) => tag));
   
   if (photos) {
     const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, totalPhotos, useRemainder);

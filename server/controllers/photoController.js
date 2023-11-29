@@ -53,9 +53,9 @@ const getPhotoTags = async () => {
 };
 
 // Get selected photos from database
-const getSelectedPhotos = async () => {
+const getSelectedPhotos = async (tags) => {
   try {
-    const selectedPhotos = await Photo.find({});
+    const selectedPhotos = await Photo.find({ tags: { $in: tags } });
     return selectedPhotos;
   } catch (error) {
     logger.error('ERROR getting selected photos:', error);

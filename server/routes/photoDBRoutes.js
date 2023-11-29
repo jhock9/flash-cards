@@ -15,8 +15,9 @@ router.get('/get-tags', async (req, res) => {
 });
 
 // Fetch selected photos from database (photoController) and send to client
-router.get('/get-photos', async (req, res) => {
-  const selectedPhotos = await getSelectedPhotos();
+router.post('/get-photos', async (req, res) => {
+  const tags = req.body.tags;
+  const selectedPhotos = await getSelectedPhotos(tags);
   res.json(selectedPhotos);
 });
 
