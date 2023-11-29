@@ -53,8 +53,12 @@ const fetchGooglePhotos = async (oauth2Client) => {
           productUrl: photoData.productUrl,
           tagsFromGoogle: photoData.description,
         };  
-        await photoController.savePhoto(mappedPhotoData);  
-      }
+        try {
+          await photoController.savePhoto(mappedPhotoData);
+        } catch (error) {
+          throw error; // This will stop the execution of fetchGooglePhotos
+        }
+          }
     } while (nextPageToken);
     
     return response.data.mediaItems;
