@@ -4,12 +4,7 @@ const Photo = require('../models/photoModel.js');
 // Save photo to database
 const savePhoto = async (photoData) => {
   try {
-    const photo = new Photo({
-      googleId: photoData.id,
-      productUrl: photoData.url,
-      tagsFromGoogle: photoData.tagsFromGoogle,
-      selectedBy: photoData.selected,
-    });
+    const photo = new Photo(photoData);
     await photo.save();
   } catch (error) {
     logger.error('ERROR saving photo to database:', error);
@@ -81,9 +76,9 @@ const getAllPhotos = async () => {
   }
 };
 
-// Export to photoDBRoutes.js for CRUD routes
+// Export to photoDBRoutes.js for CRUD routes (except savePhoto)
 module.exports = {
-  savePhoto, //also googlePhotosAPI.js
+  savePhoto, // Export to googlePhotosAPI.js 
   getPhotoTags,
   getSelectedPhotos,
   getPhotoById,

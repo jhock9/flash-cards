@@ -50,7 +50,12 @@ const fetchGooglePhotos = async (oauth2Client) => {
       
       // Save photo data to database
       for (const photoData of response.data.mediaItems) {
-        await photoController.savePhoto(photoData);
+        const mappedPhotoData = {
+          googleId: photoData.id,
+          productUrl: photoData.productUrl,
+          tagsFromGoogle: photoData.description,
+        };  
+        await photoController.savePhoto(mappedPhotoData);  
       }
     } while (nextPageToken);
     

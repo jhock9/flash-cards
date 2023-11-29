@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { // For CRUD operations
-  savePhoto,
   getPhotoTags, 
   getSelectedPhotos,
   getPhotoById,
@@ -8,16 +7,6 @@ const { // For CRUD operations
 } = require('../controllers/photoController');
 
 //**   CRUD routes  **//
-
-// Save photo to database (photoController)
-router.post('/save-photos', async (req, res) => {
-  try {
-    await savePhoto(req.body);
-    res.status(201).json(req.body);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
 
 // Fetch tags to display from database (photoController) and send to client
 router.get('/get-tags', async (req, res) => {
