@@ -9,7 +9,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
   try {
     logger.info('Initializing Google Photos client...');
     
-    let nextPageToken
+    let nextPageToken;
     do {
       const params = {
         pageSize: 100,
@@ -58,7 +58,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
         } catch (error) {
           throw error; // This will stop the execution of fetchGooglePhotos
         }
-          }
+      }
     } while (nextPageToken);
     
     return response.data.mediaItems;
