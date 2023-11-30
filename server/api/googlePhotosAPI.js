@@ -51,7 +51,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
         const mappedPhotoData = {
           googleId: photoData.id,
           productUrl: photoData.productUrl,
-          tagsFromGoogle: photoData.description,
+          tagsFromGoogle: photoData.description.split(' '),
         };  
         try {
           await photoController.savePhoto(mappedPhotoData);

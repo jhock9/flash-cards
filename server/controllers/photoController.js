@@ -27,8 +27,7 @@ const getPhotoTags = async () => {
     const tagCounts = {};
     
     photos.forEach(photo => {
-      const tags = photo.tagsFromGoogle.split(' ');
-      tags.forEach(tag => {
+      photo.tagsFromGoogle.forEach(tag => {
         if (tag in tagCounts) {
           tagCounts[tag]++;
         } else {
@@ -91,7 +90,7 @@ const getAllPhotos = async () => {
 module.exports = {
   savePhoto, // Export savePhoto(photoData) to googlePhotosAPI.js 
   getPhotoTags,
-  getSelectedPhotos,
-  getPhotoById,
+  getSelectedPhotos, // getSelectedPhotos(tags)
+  getPhotoById, // getPhotoById(id)
   getAllPhotos,
 };
