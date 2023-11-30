@@ -25,8 +25,7 @@ const getPhotoTags = async () => {
     const tagCounts = {};
     
     photos.forEach(photo => {
-      const tags = photo.tagsFromGoogle.split(' ');
-      tags.forEach(tag => {
+      photo.tagsFromGoogle.forEach(tag => {
         if (tag in tagCounts) {
           tagCounts[tag]++;
         } else {
@@ -53,7 +52,9 @@ const getPhotoTags = async () => {
 // Get selected photos from database
 const getSelectedPhotos = async (tags) => {
   try {
+    logger.info('Getting photos with tags:', tags);
     const selectedPhotos = await Photo.find({ tagsFromGoogle: { $in: tags } });
+    logger.info('Found photos:', selectedPhotos);
     return selectedPhotos;
   } catch (error) {
     logger.error('ERROR getting selected photos:', error);
@@ -83,11 +84,11 @@ const getAllPhotos = async () => {
   }
 };
 
-// Export to photoDBRoutes.js for CRUD routes (except savePhoto)
+// Export to photoDBRoutes.js for CRUD routes, except savePhoto
 module.exports = {
-  savePhoto, // Export to googlePhotosAPI.js 
+  savePhoto, // Export savePhoto(photoData) to googlePhotosAPI.js 
   getPhotoTags,
-  getSelectedPhotos,
-  getPhotoById,
+  getSelectedPhotos, // getSelectedPhotos(tags)
+  getPhotoById, // getPhotoById(id)
   getAllPhotos,
 };
