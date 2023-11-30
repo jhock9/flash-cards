@@ -87,9 +87,9 @@ const getAllPhotos = async () => {
   }
 };
 
-// Export to photoDBRoutes.js for CRUD routes (except savePhoto)
+// Export to photoDBRoutes.js for CRUD routes, except savePhoto
 module.exports = {
-  savePhoto, // Export to googlePhotosAPI.js 
+  savePhoto, // Export savePhoto(photoData) to googlePhotosAPI.js 
   getPhotoTags,
   getSelectedPhotos,
   getPhotoById,

@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
-const fetchGooglePhotos = require('../routes/googlePhotosAPI'); // fetchGooglePhotos(oauth2Client)
+const fetchGooglePhotos = require('../api/googlePhotosAPI'); // fetchGooglePhotos(oauth2Client)
 
 // Update photo data in database
 const updatePhotoData = async (oauth2Client) => {

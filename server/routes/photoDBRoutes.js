@@ -33,5 +33,5 @@ router.get('/get-all-photos', async (req, res) => {
   res.json(allPhotos);
 });
 
-// Export to server.js and googleAuthRoutes.js
+// Export to server.js
 module.exports = router;
