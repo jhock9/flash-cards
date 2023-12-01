@@ -410,18 +410,18 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   for (const { tag, quantity } of selectedTagsAndQuantities) {
     
     const selectedPhotos = photos.filter(photo => 
-      photo.description && photo.description.includes(tag) && !selectedPhotoIds.has(photo.id));
+      photo.tagsFromGoogle && photo.tagsFromGoogle.includes(tag) && !selectedPhotoIds.has(photo.googleId));
     
     shuffleArray(selectedPhotos);
     const photosToDisplay = selectedPhotos.slice(0, quantity);
     
-    photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.id)); // Add selected photo IDs to the Set
+    photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.googleId)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
   
   // If 'useRemainder' is checked and there are remaining photos to be filled
   if (useRemainder && remainingPhotos > 0) {
-    const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.id));
+    const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
     shuffleArray(additionalPhotos);
     filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
   }
