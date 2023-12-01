@@ -64,8 +64,9 @@ const fetchGooglePhotos = async (oauth2Client) => {
     
     return response.data.mediaItems;
   } catch (error) {
-    logger.error('ERROR getting photos:', error)
-    throw new Error('Failed to fetch Google Photos');
+    logger.error('ERROR getting photos:', error.message);
+    logger.error('Stack trace:', error.stack);
+      throw new Error('Failed to fetch Google Photos');
   }
 };
 
