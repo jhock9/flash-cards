@@ -386,8 +386,7 @@ const fetchPhotosData = async (tags) => {
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
-    const responseText = await response.text();
-    photos = JSON.parse(responseText);
+    const photos = await response.text();
     console.log('Photos data fetched:', photos);
     return photos;
   } catch (error) {
