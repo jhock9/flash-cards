@@ -12,7 +12,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
     let nextPageToken;
     do {
       const params = {
-        pageSize: 50,
+        pageSize: 100,
         pageToken: nextPageToken,
       };
       let response;
@@ -50,7 +50,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
         if (photoData.description) { // Only process photos with a description
           const mappedPhotoData = {
             googleId: photoData.id,
-            productUrl: photoData.productUrl,
+            baseUrl: photoData.baseUrl,
             tagsFromGoogle: photoData.description.split(' ').filter(Boolean),
           };  
           try {
