@@ -11,7 +11,7 @@ const updatePhotoData = async (oauth2Client) => {
     
     // Limit the logging
     logger.info(fetchedPhotos.length); // logs the number of photos fetched
-    logger.info(fetchedPhotos.slice(0, 5).map(photo => ({ id: photo.id, url: photo.productUrl }))); // logs the first 5 photos fetched with their id and url
+    logger.info(fetchedPhotos.slice(0, 5).map(photo => ({ googleId: photo.googleId, url: photo.baseUrl }))); // logs the first 5 photos fetched with their id and url
     
     // Write the data to a file
     fs.writeFileSync('data.json', JSON.stringify(fetchedPhotos[0], null, 2));
@@ -20,12 +20,12 @@ const updatePhotoData = async (oauth2Client) => {
     const existingPhotos = await Photo.find({});
     
     // Convert existing photos to a Map for easy lookup
-    const existingPhotosMap = new Map(existingPhotos.map(photo => [photo.id, photo]));
+    const existingPhotosMap = new Map(existingPhotos.map(photo => [photo.googleId, photo]));
     
     // Prepare photo data to add
     const photosToAdd = [];
     for (const fetchedPhoto of fetchedPhotos) {
-      if (!existingPhotosMap.has(fetchedPhoto.id)) {
+      if (!existingPhotosMap.has(fetchedPhoto.googleId)) {
         // If the photo data does not exist in the database, add it
         photosToAdd.push(fetchedPhoto);
       }

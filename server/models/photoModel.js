@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const photoSchema = new mongoose.Schema({
   googleId: { type: String, required: true, unique: true },
-  productUrl: { type: String, required: true },
+  baseUrl: { type: String, required: true },
   tagsFromGoogle: [{ type: String, required: true }],
   tags: [{  //!! do I really need this?
     name: String, 

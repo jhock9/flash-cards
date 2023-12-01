@@ -7,7 +7,7 @@ const savePhoto = async (photoData) => {
     const existingPhoto = await Photo.findOne({ googleId: photoData.googleId });
     if (existingPhoto) {
       // Photo with the same googleId already exists, update it with the new data
-      existingPhoto.productUrl = photoData.productUrl;
+      existingPhoto.baseUrl = photoData.baseUrl;
       existingPhoto.tagsFromGoogle = photoData.tagsFromGoogle;
       await existingPhoto.save();
     } else {
