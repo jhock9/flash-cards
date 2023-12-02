@@ -1,4 +1,3 @@
-const cron = require('node-cron');
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
 const fetchGooglePhotos = require('../api/googlePhotosAPI'); // fetchGooglePhotos(oauth2Client)
@@ -36,8 +35,5 @@ const updatePhotoData = async (oauth2Client) => {
   }
 };
 
-// Update photo data in database at 2:00 AM every day
-cron.schedule('0 2 * * *', updatePhotoData(oauth2Client));
-
-// Export updatePhotoData(oauth2Client) to googleAuthRoutes.js
+// Export updatePhotoData(oauth2Client) to googleAuthRoutes.js and server.js
 module.exports = updatePhotoData;

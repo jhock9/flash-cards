@@ -7,6 +7,7 @@ const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const cron = require('node-cron');
 
 const morganMiddleware = require('./config/morgan');
 const logger = require('./config/winston');
@@ -17,7 +18,8 @@ require('./config/passport')(passport);
 const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
 const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Google authentication
 const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
-const { GOOGLE_CLIENT_ID } = require('./config/googleClient'); // Google client ID for /config route
+const { GOOGLE_CLIENT_ID, initializeOauthClient } = require('./config/googleClient'); // Google client ID for /config route, initializeOauthClient() for cron job
+const updatePhotoData = require('./server/controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
 
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -125,6 +127,11 @@ app.use('/auth', authRoutes);
 app.use('/google-auth', googleAuthRoutes);
 app.use('/photos', photoDBRoutes);
 
+// Update photo data in database at 2:00 AM every day
+initializeOauthClient().then((oauth2Client) => {
+  cron.schedule('0 2 * * *', () => updatePhotoData(oauth2Client));
+});
+
 // // Error handler
 // app.use((err, req, res, next) => {
 //   logger.error(err);
@@ -135,12 +142,12 @@ app.use('/photos', photoDBRoutes);
 // Error handler
 app.use((err, req, res, next) => {
   logger.error(err);
-
+  
   // Log out the user
   req.session = null; // if using sessions
   // or
   req.user = null; // if using tokens
-
+  
   res.status(500).send('Something went wrong!');
 });
 

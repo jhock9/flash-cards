@@ -40,8 +40,22 @@ oauth2Client.on('tokens', (tokens) => {
   }
 });
 
+// Initialize the OAuth2 client with the refresh token
+const initializeOauthClient = async () => {
+  try {
+    const tokenDoc = await Token.findOne({});
+    if (tokenDoc) {
+      oauth2Client.setCredentials({ refresh_token: tokenDoc.refreshToken });
+    }
+  } catch (err) {
+    logger.error('Failed to fetch refresh token from database:', err);
+  }
+  return oauth2Client;
+};
+
 // Export to server.js and googleAuthRoutes.js, respectively
 module.exports = {
   GOOGLE_CLIENT_ID,
-  oauth2Client
+  initializeOauthClient,
+  oauth2Client // Export to googleAuthRoutes.js
 };
