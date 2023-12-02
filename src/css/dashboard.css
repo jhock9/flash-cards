@@ -84,10 +84,6 @@
   border-color: var(--black);
 }
 
-#logout-btn i {
-  padding: .1rem 0 0 .5rem;
-}
-
 #logout-btn:hover,
 #logout-btn:active {
   color: var(--white);

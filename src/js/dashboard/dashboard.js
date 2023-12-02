@@ -1,6 +1,8 @@
 const adminViews = document.querySelectorAll('admin-view');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
+const logoutBtn = document.querySelector('#logout-btn');
+
 
 import { fetchConfig, checkAuthentication } from './googleAuth.js';
 
@@ -8,7 +10,7 @@ import { fetchConfig, checkAuthentication } from './googleAuth.js';
 const init = async () => {
   // updateDashNav(); //!! COMMENTED OUT FOR TESTING
   await fetchConfig();
-  checkAuthentication(); //!! do we still need checkAuthentication()? after all set up, remove and test without it
+  checkAuthentication();
 }
 
   //!! COMMENTED OUT FOR TESTING
@@ -128,3 +130,18 @@ const sortTable = (columnIndex) => {
   }
 }
 
+logoutBtn.addEventListener('click', async (e) => {
+  console.log('Sign out button clicked...');
+  e.preventDefault();
+  try {
+    const response = await fetch('/auth/logout', { method: 'GET' });
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+    console.log('User signed out.');
+    
+    window.location.href = '/login.html';
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
+});
