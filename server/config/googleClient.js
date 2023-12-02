@@ -1,11 +1,11 @@
 require('dotenv').config();
 const { google } = require('googleapis');
 const logger = require('./winston');
+const Token = require('../models/tokenModel');
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URL = process.env.REDIRECT_URL;
-const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN
 logger.info(`Environment variables: REDIRECT_URL = ${REDIRECT_URL}`);
 
 // Set up your OAuth2 client for the API
@@ -16,17 +16,25 @@ const oauth2Client = new google.auth.OAuth2(
 );
 logger.info('OAuth2 client CREATED...');
 
+// Fetch the refresh token from the database
+Token.findOne({}, (err, tokenDoc) => {
+  if (err) {
+    logger.error('Failed to fetch refresh token from database:', err);
+  } else if (tokenDoc) {
+    oauth2Client.setCredentials({ refresh_token: tokenDoc.refreshToken });
+  }
+});
+
 // Listen for the "tokens" event for refreshing the access token when expired
 oauth2Client.on('tokens', (tokens) => {
   if (tokens.refresh_token) {
-    // store the refresh_token in my database!
-    logger.info(tokens.refresh_token);
+    // Update the refresh token in the database
+    Token.findOneAndUpdate({}, { refreshToken: tokens.refresh_token }, { upsert: true }, (err) => {
+      if (err) {
+        logger.error('Failed to update refresh token in database:', err);
+      }
+    });
   }
-  logger.info(tokens.access_token);
-});
-
-oauth2Client.setCredentials({
-  refresh_token: GOOGLE_REFRESH_TOKEN
 });
 
 // Export to server.js and googleAuthRoutes.js, respectively
