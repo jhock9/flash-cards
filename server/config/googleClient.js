@@ -17,13 +17,16 @@ const oauth2Client = new google.auth.OAuth2(
 logger.info('OAuth2 client CREATED...');
 
 // Fetch the refresh token from the database
-Token.findOne({}, (err, tokenDoc) => {
-  if (err) {
+(async () => {
+  try {
+    const tokenDoc = await Token.findOne({});
+    if (tokenDoc) {
+      oauth2Client.setCredentials({ refresh_token: tokenDoc.refreshToken });
+    }
+  } catch (err) {
     logger.error('Failed to fetch refresh token from database:', err);
-  } else if (tokenDoc) {
-    oauth2Client.setCredentials({ refresh_token: tokenDoc.refreshToken });
   }
-});
+})();
 
 // Listen for the "tokens" event for refreshing the access token when expired
 oauth2Client.on('tokens', (tokens) => {
