@@ -9,10 +9,6 @@ const updatePhotoData = async (oauth2Client) => {
   try {
     const fetchedPhotos = await fetchGooglePhotos(oauth2Client);
     
-    // Limit the logging
-    logger.info(fetchedPhotos.length); // logs the number of photos fetched
-    logger.info(fetchedPhotos.slice(0, 5).map(photo => ({ googleId: photo.googleId, url: photo.baseUrl }))); // logs the first 5 photos fetched with their id and url
-    
     // Write the data to a file
     fs.writeFileSync('data.json', JSON.stringify(fetchedPhotos[0], null, 2));
     
@@ -41,7 +37,7 @@ const updatePhotoData = async (oauth2Client) => {
 };
 
 // Update photo data in database at 2:00 AM every day
-cron.schedule('0 2 * * *', updatePhotoData);
+cron.schedule('0 2 * * *', updatePhotoData(oauth2Client));
 
 // Export updatePhotoData(oauth2Client) to googleAuthRoutes.js
 module.exports = updatePhotoData;
