@@ -4,10 +4,10 @@ const tabletOpenBtn = document.querySelector('#tablet-open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 
 const flashPanel = document.querySelector('#flash-panel');
-const logoutBtn = document.querySelector('#logout-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
+const dashboardBtn = document.querySelector('#dashboard-btn');
 
 const totalSlider = document.querySelector('#total-slider');
 const totalSliderValue = document.querySelector('#total-slider-value');
@@ -637,20 +637,11 @@ removeBtns.forEach((btn) => {
   });
 });
 
-logoutBtn.addEventListener('click', async (e) => {
-  console.log('Sign out button clicked...');
+dashboardBtnBtn.addEventListener('click', async (e) => {
+  console.log('Dashboard button clicked...');
   e.preventDefault();
-  try {
-    // Call the server-side logout endpoint
-    const response = await fetch('/auth/logout', { method: 'GET' });
-    if (!response.ok) {
-      throw new Error('Logout failed');
-    }
-    console.log('User signed out.');
-    
-    window.location.href = '/login.html';
-    loadRenderLockedTags(); //!! still needed?
-  } catch (error) {
-    console.error('Error during logout:', error);
-  }
+  
+  //!! save current selections and state to local storage? or database?
+  
+  window.location.href = '/dashboard.html';
 });
