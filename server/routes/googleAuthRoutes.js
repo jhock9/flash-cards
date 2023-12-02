@@ -44,7 +44,6 @@ router.get('/oauth2callback', async (req, res) => {
     
     // Save the refresh token to your database and environment variables
     if (tokens.refresh_token) {
-      process.env.GOOGLE_REFRESH_TOKEN = tokens.refresh_token;
       const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token }, { upsert: true, new: true });
       logger.info('Tokens saved to database:', tokenDoc);
       }
@@ -61,7 +60,7 @@ router.get('/oauth2callback', async (req, res) => {
     
     req.session.isAuthenticated = true;
     
-    res.redirect('/flashcards');
+    res.redirect('/dashboard');
   } catch (error) {
     logger.error('ERROR in /oauth2callback:', error);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
