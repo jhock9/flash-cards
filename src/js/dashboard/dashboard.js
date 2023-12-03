@@ -1,37 +1,82 @@
-const adminViews = document.querySelectorAll('admin-view');
-const tableHeaders = document.querySelectorAll('#users-table th');
+const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
+const tableHeaders = document.querySelectorAll('#users-table th');
 
+import { fetchConfig } from './googleAuth.js';
 
-import { fetchConfig, checkAuthentication } from './googleAuth.js';
+// Check if the login date is different from the current date
+const checkLoginDate = () => {
+  const loginDate = localStorage.getItem('loginDate');
+  const currentDate = new Date().toDateString();
+  
+  if (loginDate !== currentDate) {
+    logout();
+  }
+};
 
 // Initialize the dashboard
 const init = async () => {
-  // updateDashNav(); //!! COMMENTED OUT FOR TESTING
-  await fetchConfig();
-  checkAuthentication();
+  updateDashNav();
+  await fetchConfig(); //? needed for user role?
 }
 
-  //!! COMMENTED OUT FOR TESTING
-// // Show or hide elements based on the user's role
-// const updateDashNav = () => {
-//   const userRole = localStorage.getItem('userRole');
+// Show or hide elements based on the user's role
+const updateDashNav = () => {
+  const userRole = localStorage.getItem('userRole');
   
-//   for (let view of adminViews) {
-//     if (userRole === 'admin') {
-//       view.classList.remove('hide');
-//     } else {
-//       view.classList.add('hide');
-//     }
-//   }
-// }
+  for (let view of adminViews) {
+    if (userRole === 'admin') {
+      view.classList.remove('hide');
+    } else {
+      view.classList.add('hide');
+    }
+  }
+}
 
-//**   DO THIS WHEN THE PAGE LOADS   **//
-window.addEventListener('load', init);
-window.addEventListener('beforeunload', () => {
-  sessionStorage.removeItem('authenticationChecked');
+//**   WhHEN THE PAGE LOADS   **/
+window.addEventListener('load', () => {
+  console.log('Window loaded...');
+  checkLoginDate();
+  init();
 });
+window.addEventListener('beforeunload', logout);
+
+// Check if admin is authenticated with Google
+const checkGoogleAuthentication = async () => {
+  try {
+    console.log('Checking Google authentication...');
+    const response = await fetch('/google-auth/google-authenticate', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    if (data.isGoogleAuthenticated) {
+      console.log('Admin is authenticated with Google.');
+      displayGoogleSignInStatus(true);
+    } else {
+      console.log('Admin is not authenticated with Google.');
+      displayGoogleSignInStatus(false);
+    } 
+  } catch (error) {
+    console.error('Error checking Google authentication:', error);
+  }
+};
+
+//!! Finish coding html -- update call in check google auth function
+const displayGoogleSignInStatus = (isAuthenticated) => {
+  if (isAuthenticated) {
+    // Display a div that says the user is signed in with Google
+    // Replace 'googleSignInStatusDiv' with the actual id of your div
+    document.getElementById('googleSignInStatusDiv').innerHTML = 'You are signed in with your Google account and have authorized access to your Google Photos library.';
+  } else {
+    // Display the Google sign-in button
+    // Replace 'googleSignInButton' with the actual id of your Google sign-in button
+    document.getElementById('googleSignInButton').style.display = 'block';
+  }
+};
 
 // Add event listeners to the navigation links
 navLinks.forEach((link) => {
@@ -52,6 +97,11 @@ navLinks.forEach((link) => {
       const sectionId = href.slice(1);
       const section = document.querySelector(`#${sectionId}`);
       section.classList.remove('hide');
+      
+      // Call checkGoogleAuthentication function
+      if (sectionId === 'google') {
+        checkGoogleAuthentication();
+      }
     }
   });
 });
@@ -82,6 +132,7 @@ tableHeaders.forEach(header => {
 
 //!! AI generated code
 // Function to sort the table
+let direction = 'asc';
 const sortTable = (columnIndex) => {
   const table = document.querySelector('#users-table');
   const rows = table.rows;
@@ -130,18 +181,22 @@ const sortTable = (columnIndex) => {
   }
 }
 
-logoutBtn.addEventListener('click', async (e) => {
-  console.log('Sign out button clicked...');
-  e.preventDefault();
+// Logout
+const logout = async () => {
   try {
     const response = await fetch('/auth/logout', { method: 'GET' });
     if (!response.ok) {
       throw new Error('Logout failed');
     }
     console.log('User signed out.');
-    
     window.location.href = '/login.html';
   } catch (error) {
     console.error('Error during logout:', error);
   }
+};
+
+logoutBtn.addEventListener('click', async (e) => {
+  console.log('Sign out button clicked...');
+  e.preventDefault();
+  await logout();
 });

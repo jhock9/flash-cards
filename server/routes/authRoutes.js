@@ -72,5 +72,15 @@ router.get('/logout', (req, res) => {
   });
 });
 
+// Check if user is authenticated
+router.get('/authenticate', (req, res) => {
+  logger.info('Received request for /authenticate...');
+  if (req.session && req.session.isAuthenticated) {
+    res.status(200).json({ isAuthenticated: true, userRole: req.user.role });
+  } else {
+    res.status(200).json({ isAuthenticated: false });
+  }
+});
+
 // Export to server.js
 module.exports = router;

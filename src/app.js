@@ -29,6 +29,31 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
+// Check if the login date is different from the current date
+const checkLoginDate = () => {
+  const loginDate = localStorage.getItem('loginDate');
+  const currentDate = new Date().toDateString();
+
+  if (loginDate !== currentDate) {
+    logout();
+  }
+};
+
+checkLoginDate();
+
+// The logout function //!! repeated function in dashboard.js
+const logout = async () => {
+  try {
+    const response = await fetch('/auth/logout', { method: 'GET' });
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+    console.log('User signed out.');
+    window.location.href = '/login.html';
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
+};
 
 //**   FETCH AND DISPLAY PHOTO TAGS   **//
 

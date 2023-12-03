@@ -13,6 +13,32 @@ const unavailableModal = document.querySelector('#unavailable-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
 const passwordReqModal = document.querySelector('#password-req-modal');
 
+// Check if user is authenticated; redirect to dashboard page
+const checkAuthentication = async () => {
+  try {
+    console.log('Checking authentication...');
+    const response = await fetch('/auth/authenticate', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    if (data.isAuthenticated) {
+      console.log('User is authenticated.');
+      sessionStorage.setItem('authenticationChecked', 'true');
+      // Redirect to dashboard if user is authenticated
+      window.location.href = './dashboard.html';
+    } else {
+      console.log('User is not authenticated.');
+      // Stay on login page if user is not authenticated
+    } 
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+  }
+};
+checkAuthentication();
+
 loginBtn.addEventListener('click', (event) => {
   event.preventDefault(); // prevent the form from submitting normally
   const username = document.querySelector('#login-username').value;
@@ -41,6 +67,7 @@ loginBtn.addEventListener('click', (event) => {
   .then(data => {
     if (data.success) {
       localStorage.setItem('userRole', data.role);
+      storeLoginData();
       window.location.href = '/dashboard.html';
     }
   })
@@ -130,6 +157,11 @@ registerBtn.addEventListener('click', (event) => {
     console.error('There has been a problem with your fetch operation:', error);
   });
 });
+
+const storeLoginDate = () => {
+  const date = new Date();
+  localStorage.setItem('loginDate', date.toDateString());
+};
 
 newUserBtn.addEventListener('click', () => {
   console.log('Add new user form button clicked...');

@@ -67,13 +67,13 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
-// Check if user is authenticated
-router.get('/is-authenticated', (req, res) => {
-  logger.info('Received request for /is-authenticated...');
-  if (req.session && req.session.isAuthenticated) {
-    res.status(200).json({ isAuthenticated: true });
+// Check if admin has authenticated with Google
+router.get('/google-authenticate', (req, res) => {
+  logger.info('Received request for /google-authenticate...');
+  if (req.session && req.session.isGoogleAuthenticated) {
+    res.status(200).json({ isGoogleAuthenticated: true });
   } else {
-    res.status(200).json({ isAuthenticated: false });
+    res.status(200).json({ isGoogleAuthenticated: false });
   }
 });
 

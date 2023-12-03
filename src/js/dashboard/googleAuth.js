@@ -15,12 +15,12 @@ const fetchConfig = async () => {
   }
 };
 
-// Initialize Google Sign-In
+// Initialize Google Sign-In called in fetchConfig()
 const initGoogleSignIn = () => {
   google.accounts.id.initialize({
     client_id: googleClientID,
-    callback: handleCredentialResponse,
-    on_failure: onSignInFailure
+    callback: handleCredentialResponse, // Success callback function
+    on_failure: onSignInFailure // Failure callback function
   });
   
   google.accounts.id.renderButton(
@@ -29,7 +29,7 @@ const initGoogleSignIn = () => {
   );
 };
 
-// Sign in success callback
+// Sign in success callback called in initGoogleSignIn()
 const handleCredentialResponse = async (response) => {
   console.log('handleCredentialResponse CALLED...');
   let decodedUserInfo;
@@ -44,55 +44,15 @@ const handleCredentialResponse = async (response) => {
   await googleAuth();
 };
 
+// Sign in failure callback called in initGoogleSignIn()
 const onSignInFailure = (error) => {
   console.error('Sign-in error:', error);
 };
 
-// Redirect user to Google's authentication page
+// Redirect user to Google's authentication page called in handleCredentialResponse()
 const googleAuth = () => {
   window.location.href = '/google-auth/authorize';
 };
 
-// Check if user is authenticated and redirect to login page if not
-const checkAuthentication = async () => {
-  try {
-    console.log('Checking authentication...');
-    const response = await fetch('/google-auth/is-authenticated', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    
-    if (data.isAuthenticated) {
-      console.log('User is authenticated.');
-      sessionStorage.setItem('authenticationChecked', 'true');
-      
-      try {
-        const photosData = await fetchPhotosData();
-        savePhotosData(photosData);
-        localStorage.setItem('photos', JSON.stringify(photosData));
-      } catch (error) {
-        console.error('Error fetching new photos:', error);
-      }
-      
-      if (window.location.pathname === './login.html') {
-        window.location.href = './flashcards.html';
-      }
-      
-    } else {
-      console.log('User is not authenticated.');
-      if (window.location.pathname === './flashcards.html') {
-        window.location.href = './login.html';
-      }
-    } 
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-  }
-};
-
 // Export to dashboard.js
-export { 
-  fetchConfig, 
-  checkAuthentication 
-};
+export { fetchConfig };
