@@ -139,25 +139,11 @@ initializeOauthClient().then((oauth2Client) => {
   cron.schedule('0 2 * * *', () => updatePhotoData(oauth2Client));
 });
 
-// // Error handler
-// app.use((err, req, res, next) => {
-//   logger.error(err);
-//   res.status(500).send('Something went wrong!');
-// });
-
-//!! for testing right now, add previous error handler back in later
 // Error handler
 app.use((err, req, res, next) => {
   logger.error(err);
-  
-  // Log out the user
-  req.session = null; // if using sessions
-  // or
-  req.user = null; // if using tokens
-  
   res.status(500).send('Something went wrong!');
 });
-
 
 // Start server
 app.listen(port, () => {
