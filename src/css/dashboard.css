@@ -12,7 +12,6 @@
 #dash-content-wrapper {
   width: 100%;
   height: 100%;
-
   justify-content: flex-start;
 }
 
@@ -25,24 +24,17 @@
   background-color: var(--second-color);
 }
 
-#dash-nav-header {
-  width: 100%;
-  padding: 3rem 4rem;
-  font-size: 3rem;
-  letter-spacing: 0.5rem;
-  color: var(--white);
-  background-color: var(--primary-color);
-  justify-content: flex-start;
-}
-
-#dash-nav-header i {
-  font-size: 4rem;
-  margin-right: 2rem;
-}
-
 #dash-nav {
   width: 100%;
+}
 
+#dash-nav h1 {
+  width: 100%;
+  padding: 3rem 4rem;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+  color: var(--white);
+  background-color: var(--primary-color);
 }
 
 #dash-nav-list {
