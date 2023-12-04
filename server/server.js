@@ -101,10 +101,9 @@ app.use(morganMiddleware);
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
-// !! changing to dashboard.html for testing
 // Serve login.html at root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../src/', 'dashboard.html'));
+  res.sendFile(path.join(__dirname, '../src/', 'login.html'));
 });
 
 // Serve flashcards.html 
