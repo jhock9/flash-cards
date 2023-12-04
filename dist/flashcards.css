@@ -286,7 +286,7 @@ letter-spacing: 0.1rem;
   margin: 2rem;
 }
 
-#logout-container {
+#db-btn-container {
   position: sticky;
   bottom: 0;
   width: 100%;
@@ -295,28 +295,16 @@ letter-spacing: 0.1rem;
   align-items: flex-end;
 }
 
-#logout-btn {
-  color: var(--black);
-  background-color: var(--white);
-  border-color: var(--black);
-}
-
-#logout-btn i {
-  padding: .1rem 0 0 .5rem;
-}
-
-#logout-btn:hover,
-#logout-btn:active {
-  color: var(--white);
-  background-color: var(--black);
-  border-color: var(--black);
+#dashboard-btn i {
+  font-size: 1.5rem;
+  padding: 0 0 .1rem 0;
 }
 
 /* Menu button styles */
 #tablet-open-btn,
 #refresh-btn {
   position: fixed;
-  top: 3rem;
+  top: 2rem;
   left: 0;
   z-index: 2;
 }
