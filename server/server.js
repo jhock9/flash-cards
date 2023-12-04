@@ -20,7 +20,7 @@ const authRoutes = require('./routes/authRoutes'); // Routes for local authentic
 const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Google authentication
 const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
 const { GOOGLE_CLIENT_ID, initializeOauthClient } = require('./config/googleClient'); // Google client ID for /config route, initializeOauthClient() for cron job
-const updatePhotoData = require('./server/controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
+const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
 
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
