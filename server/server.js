@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 3003;
 const cors = require('cors');
 const session = require('express-session');
+const mongoDBStore = require('connect-mongodb-session')(session);
 const passport = require('passport');
 const mongoose = require('mongoose');
 const cron = require('node-cron');
@@ -78,6 +79,12 @@ mongoose.connect(MONGO_URI)
 
 mongoose.set('debug', true);
 
+// Create a new MongoDB store
+const store = new MongoDBStore({
+  uri: MONGO_URI,
+  collection: 'sessions'
+});
+
 // Add middleware 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -86,6 +93,7 @@ app.use(session({
   secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: store,
 }));
 
 app.use(morganMiddleware);
