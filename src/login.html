@@ -43,30 +43,31 @@
           <div id="form-container" class="center">
             <form id="login-form" class="center" action="/auth/login" method="post">
               <input type="text" id="login-username" class="input-field" placeholder="Username" name="username" required>
-              <!-- <input type="password" id="login-password" class="input-field" placeholder="4-Digit Code" name="password" required> -->
               <div class="password-wrapper center">
                 <input type="password" id="login-password" class="input-field" name="password" placeholder="4-Digit Code" required>
                 <i class="toggle-password fa-regular fa-eye-slash"></i>
                 <i class="toggle-password hide fa-solid fa-eye"></i>
               </div>
+
               <button type="submit" id="login-submit-btn" class="wide-btn btn">Login</button>
               <button type="button" id="new-user-btn" class="wide-btn btn">New user?</button>
             </form>
             
             <form id="register-form" class="center" action="/auth/register" method="post">
+              <input type="text" id="register-fullname" class="input-field" placeholder="Full Name" name="fullname" required>
               <input type="text" id="register-username" class="input-field" placeholder="Username" name="username" required>
-              <!-- <input type="password" id="register-password" class="input-field" placeholder="4-Digit Code" name="password" required> -->
               <div class="password-wrapper center">
                 <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" required>
                 <i class="toggle-password fa-regular fa-eye-slash"></i>
                 <i class="toggle-password hide fa-solid fa-eye"></i>
               </div>
-              <!-- <input type="password" id="confirm-password" class="input-field" placeholder="Confirm Code" name="confirmPassword" required> -->
+
               <div class="password-wrapper center">
                 <input type="password" id="confirm-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" required>
                 <i class="toggle-password fa-regular fa-eye-slash"></i>
                 <i class="toggle-password hide fa-solid fa-eye"></i>
               </div>
+              
               <button type="submit" id="register-btn" class="wide-btn btn">Register</button>
               <button type="button" id="back-btn" class="wide-btn btn">Back</button>
             </form>
