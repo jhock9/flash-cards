@@ -45,7 +45,7 @@ window.addEventListener('load', () => {
   .then(response => response.json())
   .then(data => {
     console.log('After /authenticate, response data:', data);
-    updateDashNav(data.role);
+    updateDashNav(data.user.role);
   })
   .catch(error => {
     console.error('Error:', error);

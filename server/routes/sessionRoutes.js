@@ -6,7 +6,7 @@ router.get('/authenticate', (req, res) => {
   logger.info('Received request for /authenticate...');
   console.log('At start of /authenticate, req.session:', req.session); 
   if (req.session && req.session.isAuthenticated) {
-    res.status(200).json({ isAuthenticated: true, userRole: req.user.role, user: req.session.user });
+    res.status(200).json({ isAuthenticated: true, user: req.session.user });
   } else {
     res.status(200).json({ isAuthenticated: false });
   }
