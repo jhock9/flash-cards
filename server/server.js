@@ -124,6 +124,7 @@ app.get('/config', (req, res) => {
 });
 
 // Passport configuration
+console.log ('passport', passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
