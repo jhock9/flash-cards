@@ -662,7 +662,7 @@ dashboardBtnBtn.addEventListener('click', async (e) => {
   console.log('Dashboard button clicked...');
   e.preventDefault();
   
-  //!! save current selections and state to local storage? or database?
+  //!! save current selections and state to database?
   
   window.location.href = '/dashboard.html';
 });
