@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['admin', 'user'], default: 'user' },
-  savedPhotos: [{ type: String }],
 }, { timestamps: true });
 
 // Password hashing middleware
@@ -25,4 +24,5 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 const User = mongoose.model('User', userSchema);
 
 // Export to createSuperAdmin.js, passport.js, and authRoutes.js
+// Also used in clientModel.js and sessionModel.js
 module.exports = User;
