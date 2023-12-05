@@ -29,17 +29,10 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
-// Check if the login date is different from the current date
-const checkLoginDate = () => {
-  const loginDate = localStorage.getItem('loginDate');
-  const currentDate = new Date().toDateString();
-
-  if (loginDate !== currentDate) {
-    logout();
-  }
-};
-
-checkLoginDate();
+window.addEventListener('load', () => {
+  // Logout after 12 hours
+  setTimeout(logout, 12 * 60 * 60 * 1000);
+});
 
 // The logout function //!! repeated function in dashboard.js
 const logout = async () => {
@@ -168,6 +161,7 @@ tagsList.addEventListener('click', (e) => {
 
 const loadRenderLockedTags = () => {
   console.log('loadRenderLockedTags called...');
+  //! update to use mongoDBStore session, not localStorage
   const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
   
   selectedTagsWrapper.innerHTML = '';
@@ -316,9 +310,11 @@ const saveLockedTags = (save = true) => {
       .map(selectedDiv => {
         return { tag: selectedDiv.dataset.tag, quantity: selectedDiv.querySelector('.slider').value };
       });
+    //! update to use mongoDBStore session, not localStorage
     localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
   } else {
     // Remove locked tags from local storage
+    //! update to use mongoDBStore session, not localStorage
     localStorage.removeItem('lockedTags');
   }
 };
