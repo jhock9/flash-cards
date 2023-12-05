@@ -17,16 +17,15 @@ const passwordReqModal = document.querySelector('#password-req-modal');
 const checkAuthentication = async () => {
   try {
     console.log('Checking authentication...');
-    const response = await fetch('/auth/authenticate', { credentials: 'include' });
+    const response = await fetch('/session/authenticate', { credentials: 'include' });
     if (!response.ok) {
       console.error(`Server responded with status: ${response.status}`);
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const data = await response.json();
     
-    if (data.isAuthenticated) {
+    if (data.role) {
       console.log('User is authenticated.');
-      sessionStorage.setItem('authenticationChecked', 'true');
       // Redirect to dashboard if user is authenticated
       window.location.href = './dashboard.html';
     } else {
@@ -66,8 +65,6 @@ loginBtn.addEventListener('click', (event) => {
   })
   .then(data => {
     if (data.success) {
-      localStorage.setItem('userRole', data.role);
-      storeLoginData();
       window.location.href = '/dashboard.html';
     }
   })
@@ -158,11 +155,6 @@ registerBtn.addEventListener('click', (event) => {
   });
 });
 
-const storeLoginDate = () => {
-  const date = new Date();
-  localStorage.setItem('loginDate', date.toDateString());
-};
-
 newUserBtn.addEventListener('click', () => {
   console.log('Add new user form button clicked...');
   shiftFormsToRegister();
@@ -193,21 +185,14 @@ togglePasswordButtons.forEach(function(button) {
   });
 });
 
-//* MODAL FUNCTIONS
-modals.forEach(modal => { 
-  modal.addEventListener('click', (event) => {
-    event.stopPropagation();
-  });
-});
 
-const hideModal = () => {
-  modals.forEach(modal => {
-    modal.classList.add('hide');
-  }); 
-};
+//**   MODAL FUNCTIONS   **//
 
 modals.forEach(modal => {
-  modal.addEventListener('click', hideModal);
+  modal.addEventListener('click', event => {
+    event.stopPropagation();
+    modal.classList.add('hide');
+  });
 });
 
 const showIncorrectModal = () => {
@@ -230,7 +215,9 @@ const showPasswordReqModal = () => {
   passwordReqModal.classList.remove('hide');
 };
 
-//* HELPER FUNCTIONS
+
+//**   HELPER FUNCTIONS   **//
+
 const shiftFormsToRegister = () => {
   formContainer.classList.add('shift-left');
   formContainer.classList.remove('shift-right');

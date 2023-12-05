@@ -49,6 +49,7 @@ const initializeOauthClient = async () => {
     }
   } catch (err) {
     logger.error('Failed to fetch refresh token from database:', err);
+    await Token.findOneAndUpdate({}, { isGoogleAuthenticated: false });
   }
   return oauth2Client;
 };

@@ -59,6 +59,10 @@ router.post('/login', (req, res, next) => {
       if (err) {
         return next(err);
       }
+      req.session.user = {
+        role: user.role,
+      };
+      req.session.isAuthenticated = true;
       return res.json({ success: true, role: user.role });
     });
   })(req, res, next);
@@ -70,16 +74,6 @@ router.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.status(200).json({ message: 'Logged out' });
   });
-});
-
-// Check if user is authenticated
-router.get('/authenticate', (req, res) => {
-  logger.info('Received request for /authenticate...');
-  if (req.session && req.session.isAuthenticated) {
-    res.status(200).json({ isAuthenticated: true, userRole: req.user.role });
-  } else {
-    res.status(200).json({ isAuthenticated: false });
-  }
 });
 
 // Export to server.js

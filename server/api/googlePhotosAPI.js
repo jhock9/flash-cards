@@ -25,18 +25,24 @@ const fetchGooglePhotos = async (oauth2Client) => {
         });
       } catch (error) {
         if (error.response && error.response.status === 401) { // If the token is expired
-          // Refresh the token
-          const newTokens = await oauth2Client.refreshAccessToken();
-          oauth2Client.setCredentials(newTokens.credentials);
-          logger.info('Tokens refreshed and set in OAuth2 client.');
-          
-          // Retry the request with the new token
-          response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
-            headers: {
-              'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
-              'Content-Type': 'application/json',
-            },
-          });
+          try {
+            // Refresh the token
+            const newTokens = await oauth2Client.refreshAccessToken();
+            oauth2Client.setCredentials(newTokens.credentials);
+            logger.info('Tokens refreshed and set in OAuth2 client.');
+            
+            // Retry the request with the new token
+            response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
+              headers: {
+                'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+          } catch (refreshError) {
+            console.error('Failed to refresh access token:', refreshError);
+            await Token.findOneAndUpdate({}, { isGoogleAuthenticated: false });
+            throw refreshError;
+          }
         } else {
           throw error;
         }

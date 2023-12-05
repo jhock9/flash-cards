@@ -44,9 +44,9 @@ router.get('/oauth2callback', async (req, res) => {
     
     // Save the refresh token to your database and environment variables
     if (tokens.refresh_token) {
-      const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token }, { upsert: true, new: true });
+      const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
       logger.info('Tokens saved to database:', tokenDoc);
-      }
+    }
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
     
@@ -58,22 +58,12 @@ router.get('/oauth2callback', async (req, res) => {
       logger.error('Failed to update photo data:', error);
     }
     
-    req.session.isAuthenticated = true;
+    req.session.isGoogleAuthenticated = true;
     
     res.redirect('/dashboard');
   } catch (error) {
     logger.error('ERROR in /oauth2callback:', error);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
-  }
-});
-
-// Check if admin has authenticated with Google
-router.get('/google-authenticate', (req, res) => {
-  logger.info('Received request for /google-authenticate...');
-  if (req.session && req.session.isGoogleAuthenticated) {
-    res.status(200).json({ isGoogleAuthenticated: true });
-  } else {
-    res.status(200).json({ isGoogleAuthenticated: false });
   }
 });
 
