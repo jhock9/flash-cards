@@ -6,10 +6,12 @@ const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
+// 
 import { fetchConfig } from './googleAuth.js';
 
 // Show or hide elements based on the user's role
 const updateDashNav = async (userRole) => {
+  console.log('In updateDashNav, userRole:', userRole);
   for (let view of adminViews) {
     if (userRole === 'admin') {
       view.classList.remove('hide');
@@ -25,11 +27,9 @@ const logout = async () => {
   try {
     console.log('Sending logout request...');
     const response = await fetch('/auth/logout', { method: 'GET' });
-    console.log('Logout request completed.');
     if (!response.ok) {
       throw new Error('Logout failed');
     }
-    console.log('User signed out.');
     window.location.href = '/login.html';
   } catch (error) {
     console.error('Error during logout:', error);
@@ -44,6 +44,7 @@ window.addEventListener('load', () => {
   fetch('/session/authenticate')
   .then(response => response.json())
   .then(data => {
+    console.log('After /authenticate, response data:', data);
     updateDashNav(data.role);
   })
   .catch(error => {
@@ -55,6 +56,7 @@ window.addEventListener('load', () => {
 });
 
 window.addEventListener('beforeunload', logout);
+
 
 //**   NAV BAR  **//
 

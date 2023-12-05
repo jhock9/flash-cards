@@ -64,6 +64,7 @@ loginBtn.addEventListener('click', (event) => {
     return response.json();
   })
   .then(data => {
+    console.log('After login, response data:', data);
     if (data.success) {
       window.location.href = '/dashboard.html';
     }

@@ -48,6 +48,7 @@ router.post('/register', async (req, res) => {
 
 // Login route
 router.post('/login', (req, res, next) => {
+  logger.info('Received request for /login...');
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err);
@@ -63,6 +64,7 @@ router.post('/login', (req, res, next) => {
         role: user.role,
       };
       req.session.isAuthenticated = true;
+      logger.info('After login, req.session:', req.session); 
       return res.json({ success: true, role: user.role });
     });
   })(req, res, next);
@@ -70,10 +72,10 @@ router.post('/login', (req, res, next) => {
 
 // Logout route
 router.get('/logout', (req, res) => {
-  console.log('Logging out user, req.logOut:', req.logOut);
+  logger.info('Received request for /logout...');
   req.logOut(() => { // Pass an empty callback function
     req.session.destroy(() => {
-      console.log('User logged out.');
+      logger.info('User logged out.');
       res.status(200).json({ message: 'Logged out' });
     });
   });
