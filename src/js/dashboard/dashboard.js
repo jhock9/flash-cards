@@ -8,6 +8,32 @@ const flashcardsModal = document.querySelector('#flashcards-modal');
 
 import { fetchConfig } from './googleAuth.js';
 
+// Show or hide elements based on the user's role
+const updateDashNav = async (userRole) => {
+  for (let view of adminViews) {
+    if (userRole === 'admin') {
+      view.classList.remove('hide');
+      await fetchConfig();
+      checkGoogleAuthentication();
+    } else {
+      view.classList.add('hide');
+    }
+  }
+};
+
+const logout = async () => {
+  try {
+    const response = await fetch('/auth/logout', { method: 'GET' });
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+    console.log('User signed out.');
+    window.location.href = '/login.html';
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
+};
+
 
 //**   ON LOAD / UNLOAD  **//
 
@@ -27,19 +53,6 @@ window.addEventListener('load', () => {
 });
 
 window.addEventListener('beforeunload', logout);
-
-// Show or hide elements based on the user's role
-const updateDashNav = async (userRole) => {
-  for (let view of adminViews) {
-    if (userRole === 'admin') {
-      view.classList.remove('hide');
-      await fetchConfig();
-      checkGoogleAuthentication();
-    } else {
-      view.classList.add('hide');
-    }
-  }
-};
 
 //**   NAV BAR  **//
 
@@ -109,19 +122,6 @@ window.onclick = (event) => {
   if (event.target === flashcardsModal) {
     flashcardsModal.classList.add('hide');
     window.location.href = '/flashcards.html';
-  }
-};
-
-const logout = async () => {
-  try {
-    const response = await fetch('/auth/logout', { method: 'GET' });
-    if (!response.ok) {
-      throw new Error('Logout failed');
-    }
-    console.log('User signed out.');
-    window.location.href = '/login.html';
-  } catch (error) {
-    console.error('Error during logout:', error);
   }
 };
 
