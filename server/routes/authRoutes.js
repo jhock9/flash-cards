@@ -71,7 +71,7 @@ router.post('/login', (req, res, next) => {
 // Logout route
 router.get('/logout', (req, res) => {
   console.log('Logging out user, req.logOut:', req.logOut);
-  req.logOut();
+  req.logOut(() => {});
   req.session.destroy(() => {
     console.log('User logged out.');
     res.status(200).json({ message: 'Logged out' });
