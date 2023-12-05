@@ -59,8 +59,16 @@ router.get('/oauth2callback', async (req, res) => {
     }
     
     req.session.isGoogleAuthenticated = true;
+    logger.info('req.session:', req.session);
     
-    res.redirect('/dashboard');
+    req.session.save((err) => {
+      if (err) {
+        logger.error('Error saving session:', err);
+        res.status(500).send(`Something went wrong! Error: ${err.message}`);
+      } else {
+        res.redirect('/dashboard');
+      }
+    });
   } catch (error) {
     logger.error('ERROR in /oauth2callback:', error);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
