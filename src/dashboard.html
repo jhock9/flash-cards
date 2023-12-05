@@ -194,27 +194,46 @@
         </section>
         
         <section id="google" class="hide center">
-          <div id="g_id_onload"
-            data-client_id=""
-            data-context="use"
-            data-ux_mode="popup"
-            data-login_uri="https://abacoop-flashcards-8fb5e3fd1eda.herokuapp.com/oauth2callback" 
-            data-auto_prompt="false">
+          <div id="signed-in-wrapper" class="hide center">
+            <i class="fa-regular fa-circle-check"></i>
+            <h2>Nothing to do here!</h2>
+            <p>You're all signed in and have <br>
+              authorized access to your Google Photos library.</p>
           </div>
-          
-          <div id="google-signin" class="g_id_signin"
-            data-type="standard"
-            data-shape="rectangular"
-            data-theme="outline"
-            data-text="signin_with"
-            data-size="large"
-            data-logo_alignment="left">
+          <div id="google-signin-wrapper" class="hide center">
+            <div id="g_id_onload"
+              data-client_id=""
+              data-context="use"
+              data-ux_mode="popup"
+              data-login_uri="https://abacoop-flashcards-8fb5e3fd1eda.herokuapp.com/oauth2callback" 
+              data-auto_prompt="false">
+            </div>
+            
+            <div id="google-signin" class="g_id_signin"
+              data-type="standard"
+              data-shape="rectangular"
+              data-theme="outline"
+              data-text="signin_with"
+              data-size="large"
+              data-logo_alignment="left">
+            </div>
           </div>
         </section>
       </main>
     </div>
   </div>
   
+  <!-- Modals -->
+  <div id="flashcards-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2>Whoops! The photo library missed an update!</h2>
+      <i class="fa-regular fa-face-grin-beam-sweat"></i>
+      <p>Its ok though, you can still access the flashcards page.</p>
+      <p>Just make sure to let an admin know to reauthorize the photo library soon.</p>
+      <h3>Thanks!</h3>
+    </div>
+  </div>
+
   <script type="module" src="js/dashboard/dashboard.js"></script>
 </body> 
 </html>
