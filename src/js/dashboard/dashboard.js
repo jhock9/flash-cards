@@ -2,81 +2,46 @@ const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
+const signedIn = document.querySelector('#signed-in-wrapper');
+const googleSignIn = document.querySelector('#google-signin-wrapper');
+const flashcardsModal = document.querySelector('#flashcards-modal');
 
 import { fetchConfig } from './googleAuth.js';
 
-// Check if the login date is different from the current date
-const checkLoginDate = () => {
-  const loginDate = localStorage.getItem('loginDate');
-  const currentDate = new Date().toDateString();
-  
-  if (loginDate !== currentDate) {
-    logout();
-  }
-};
 
-// Initialize the dashboard
-const init = async () => {
-  updateDashNav();
-  await fetchConfig(); //? needed for user role?
-}
+//**   ON LOAD / UNLOAD  **//
+
+window.addEventListener('load', () => {
+  console.log('Window loaded...');
+  fetch('/session/authenticate')
+  .then(response => response.json())
+  .then(data => {
+    updateDashNav(data.role);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+  
+  // Logout after 12 hours
+  setTimeout(logout, 12 * 60 * 60 * 1000);
+});
+
+window.addEventListener('beforeunload', logout);
 
 // Show or hide elements based on the user's role
-const updateDashNav = () => {
-  const userRole = localStorage.getItem('userRole');
-  
+const updateDashNav = async (userRole) => {
   for (let view of adminViews) {
     if (userRole === 'admin') {
       view.classList.remove('hide');
+      await fetchConfig();
+      checkGoogleAuthentication();
     } else {
       view.classList.add('hide');
     }
   }
-}
-
-//**   WhHEN THE PAGE LOADS   **/
-window.addEventListener('load', () => {
-  console.log('Window loaded...');
-  checkLoginDate();
-  init();
-});
-window.addEventListener('beforeunload', logout);
-
-// Check if admin is authenticated with Google
-const checkGoogleAuthentication = async () => {
-  try {
-    console.log('Checking Google authentication...');
-    const response = await fetch('/google-auth/google-authenticate', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    
-    if (data.isGoogleAuthenticated) {
-      console.log('Admin is authenticated with Google.');
-      displayGoogleSignInStatus(true);
-    } else {
-      console.log('Admin is not authenticated with Google.');
-      displayGoogleSignInStatus(false);
-    } 
-  } catch (error) {
-    console.error('Error checking Google authentication:', error);
-  }
 };
 
-//!! Finish coding html -- update call in check google auth function
-const displayGoogleSignInStatus = (isAuthenticated) => {
-  if (isAuthenticated) {
-    // Display a div that says the user is signed in with Google
-    // Replace 'googleSignInStatusDiv' with the actual id of your div
-    document.getElementById('googleSignInStatusDiv').innerHTML = 'You are signed in with your Google account and have authorized access to your Google Photos library.';
-  } else {
-    // Display the Google sign-in button
-    // Replace 'googleSignInButton' with the actual id of your Google sign-in button
-    document.getElementById('googleSignInButton').style.display = 'block';
-  }
-};
+//**   NAV BAR  **//
 
 // Add event listeners to the navigation links
 navLinks.forEach((link) => {
@@ -98,16 +63,76 @@ navLinks.forEach((link) => {
       const section = document.querySelector(`#${sectionId}`);
       section.classList.remove('hide');
       
-      // Call checkGoogleAuthentication function
-      if (sectionId === 'google') {
-        checkGoogleAuthentication();
+      // Show the flashcards modal if not authenticated with Google
+      if (sectionId === 'flashcards') {
+        checkGoogleAuthentication().then(isAuthenticated => {
+          if (!isAuthenticated) {
+            flashcardsModal.classList.remove('hide');
+          }
+        });
       }
     }
   });
 });
 
+// Check if admin is authenticated with Google
+const checkGoogleAuthentication = async () => {
+  try {
+    console.log('Checking Google authentication...');
+    const response = await fetch('/session/google-authenticate', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    if (data.isGoogleAuthenticated) {
+      console.log('Admin is authenticated with Google.');
+      signedIn.classList.remove('hide');
+    } else {
+      console.log('Admin is not authenticated with Google.');
+      signedIn.classList.add('hide');
+      googleSignIn.classList.remove('hide');
+    } 
+  } catch (error) {
+    console.error('Error checking Google authentication:', error);
+  }
+};
 
-//*   MAIN SECTION   *//
+flashcardsModal.addEventListener('click', event => {
+  event.stopPropagation();
+  flashcardsModal.classList.add('hide');
+  window.location.href = '/flashcards.html';
+});
+
+window.onclick = (event) => {
+  if (event.target === flashcardsModal) {
+    flashcardsModal.classList.add('hide');
+    window.location.href = '/flashcards.html';
+  }
+};
+
+const logout = async () => {
+  try {
+    const response = await fetch('/auth/logout', { method: 'GET' });
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+    console.log('User signed out.');
+    window.location.href = '/login.html';
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }
+};
+
+logoutBtn.addEventListener('click', async (e) => {
+  console.log('Sign out button clicked...');
+  e.preventDefault();
+  await logout();
+});
+
+
+//**   MAIN SECTION   **//
 
 // Hide the password column
 document.querySelectorAll('#users-table tbody td:nth-child(2)').forEach(td => {
@@ -180,23 +205,3 @@ const sortTable = (columnIndex) => {
     }
   }
 }
-
-// Logout
-const logout = async () => {
-  try {
-    const response = await fetch('/auth/logout', { method: 'GET' });
-    if (!response.ok) {
-      throw new Error('Logout failed');
-    }
-    console.log('User signed out.');
-    window.location.href = '/login.html';
-  } catch (error) {
-    console.error('Error during logout:', error);
-  }
-};
-
-logoutBtn.addEventListener('click', async (e) => {
-  console.log('Sign out button clicked...');
-  e.preventDefault();
-  await logout();
-});
