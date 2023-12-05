@@ -6,11 +6,16 @@ const Dotenv = require('dotenv-webpack');
 const dotenv = require('dotenv').config().parsed;
 
 module.exports = {
-  entry: './src/app.js',
+  entry: {
+    app: './src/app.js',
+    login: './src/js/login.js',
+    dashboard: './src/js/dashboard/dashboard.js',
+    flashcards: './src/js/flashcards.js',
+  },
   mode: 'development',
   output: {
     clean: true,
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {
