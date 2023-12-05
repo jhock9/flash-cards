@@ -23,7 +23,9 @@ const updateDashNav = async (userRole) => {
 
 const logout = async () => {
   try {
+    console.log('Sending logout request...');
     const response = await fetch('/auth/logout', { method: 'GET' });
+    console.log('Logout request completed.');
     if (!response.ok) {
       throw new Error('Logout failed');
     }
