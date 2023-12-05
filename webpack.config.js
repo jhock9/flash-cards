@@ -21,8 +21,6 @@ module.exports = {
   module: {
     rules: [
       { test: /\.js$/, exclude: /node_modules/, use: { loader: 'babel-loader', options: { presets: ['@babel/preset-env'] } } },
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-      { test: /\.s(a|c)ss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
       { test: /\.(png|svg|jpg|jpeg|gif)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' } },
       { test: /\.(woff|woff2|eot|ttf|otf)$/i, type: 'asset/resource', generator: { filename: 'assets/[name][ext]' } },
     ],
@@ -39,14 +37,14 @@ module.exports = {
       template: './src/login.html',
       filename: 'login.html',
       inject: 'body',
-      favicon: path.resolve(__dirname, 'src/favicon.ico'),
+      favicon: path.resolve(__dirname, 'src/assets/favicon.ico'),
     }),
     new HtmlWebpackPlugin({
       hash: true,
       template: './src/flashcards.html',
       filename: 'flashcards.html',
       inject: 'body',
-      favicon: path.resolve(__dirname, 'src/favicon.ico'),
+      favicon: path.resolve(__dirname, 'src/assets/favicon.ico'),
     }),
     new CopyPlugin({
       patterns: [
@@ -54,8 +52,7 @@ module.exports = {
         { from: 'src/css/common.css', to: './' },
         { from: 'src/css/login.css', to: './' },
         { from: 'src/css/flashcards.css', to: './' },
-        { from: 'src/favicon.ico', to: './' },
-        // { from: 'src/support', to: 'support' }, 
+        { from: 'src/assets/favicon.ico', to: './' },
       ],
     }),
     new Dotenv({
