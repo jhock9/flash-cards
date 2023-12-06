@@ -11,8 +11,8 @@ const checkAuthentication = async () => {
     
     console.log('Authentication data:', data);
     console.log('User data:', data.user);
-
-    if (data.role && window.location.pathname !== '/dashboard.html') {
+    
+    if (data.user && data.user.role && window.location.pathname !== '/dashboard.html') {
       console.log('User is authenticated.');
       window.location.href = './dashboard.html';
     } else if (window.location.pathname !== '/login.html') {
