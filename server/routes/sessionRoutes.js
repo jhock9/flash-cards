@@ -12,13 +12,25 @@ router.get('/authenticate', (req, res) => {
   }
 });
 
-// Check if admin has authenticated with Google
-router.get('/google-authenticate', (req, res) => {
+// Check if admin has authenticated with database
+router.get('/google-authenticate', async (req, res) => {
   logger.info('Received request for /google-authenticate...');
-  if (req.session && req.session.isGoogleAuthenticated) {
-    res.status(200).json({ isGoogleAuthenticated: true });
-  } else {
-    res.status(200).json({ isGoogleAuthenticated: false });
+  try {
+    const tokenDoc = await Token.findOne({});
+    if (tokenDoc && tokenDoc.accessToken) {
+      // Check if the access token is valid
+      const isValid = await checkTokenValidity(tokenDoc.accessToken);
+      if (isValid) {
+        res.json({ isGoogleAuthenticated: true });
+      } else {
+        res.json({ isGoogleAuthenticated: false });
+      }
+    } else {
+      res.json({ isGoogleAuthenticated: false });
+    }
+  } catch (error) {
+    logger.error('Error checking Google authentication:', error);
+    res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
 
