@@ -17,6 +17,7 @@ const checkAuthentication = async () => {
       console.log('User is not authenticated.');
       window.location.href = './login.html';
     } 
+    return data;  // Return the user data
   } catch (error) {
     console.error('Error checking authentication:', error);
   }
