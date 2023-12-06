@@ -17,6 +17,7 @@ logger.info('OAuth2 client AUTH URL generated...');
 // Redirect to Google's OAuth 2.0 server
 router.get('/authorize', (req, res) => {
   logger.info('Received request for /authorize...');
+  logger.info('At start of /google-auth/authorize, req.session:', req.session);
   res.redirect(authUrl);
   logger.info("Redirected to Google's OAuth 2.0 server...");
   // This response will be sent back to the specified redirect URL 

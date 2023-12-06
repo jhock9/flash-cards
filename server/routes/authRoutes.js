@@ -73,6 +73,7 @@ router.post('/login', (req, res, next) => {
 // Logout route
 router.get('/logout', (req, res) => {
   logger.info('Received request for /logout...');
+  logger.info('At start of /auth/logout, req.session:', req.session);
   req.logOut(() => { // Pass an empty callback function
     req.session.destroy(() => {
       logger.info('User logged out.');
