@@ -19,7 +19,7 @@ import { checkAuthentication } from './auth/localAuth.js';
 //**   ON LOAD / UNLOAD  **//
 
 window.addEventListener('load', () => {
-  console.log('Window loaded...');
+  console.log('Login window loaded, checking authentication...');
   checkAuthentication();
 });
 

@@ -8,21 +8,33 @@ import { checkAuthentication } from './auth/localAuth.js';
 import { fetchConfig, checkGoogleAuthentication } from './auth/googleAuth.js';
 
 // Show or hide elements based on the user's role
-const updateDashNav = async (userRole) => {
-  console.log('In updateDashNav, userRole:', userRole);
-  for (let view of adminViews) {
-    if (userRole === 'admin') {
-      view.classList.remove('hide');
-      await fetchConfig();
-      const response = await checkGoogleAuthentication();
-      if (!response.isGoogleAuthenticated) {
-        signedIn.classList.add('hide');
-        googleSignIn.classList.remove('hide');
-        document.querySelector('#google').click();
-      }
-    } else {
-      view.classList.add('hide');
+const updateDashNav = async () => {
+  try {
+    const response = await fetch('/auth/local-check', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
     }
+    const data = await response.json();
+    const userRole = data.user ? data.user.role : null;
+    
+    console.log('In updateDashNav, userRole:', userRole);
+    for (let view of adminViews) {
+      if (userRole === 'admin') {
+        view.classList.remove('hide');
+        await fetchConfig();
+        const response = await checkGoogleAuthentication();
+        if (!response.isGoogleAuthenticated) {
+          signedIn.classList.add('hide');
+          googleSignIn.classList.remove('hide');
+          document.querySelector('#google').click();
+        }
+      } else {
+        view.classList.add('hide');
+      }
+    }
+  } catch (error) {
+    console.error('Error updating dashboard navigation:', error);
   }
 };
 
@@ -42,12 +54,10 @@ const logout = async () => {
 
 //**   ON LOAD / UNLOAD  **//
 
-window.addEventListener('load', async () => {
-  console.log('Window loaded...');
-  const data = await checkAuthentication();
-  if (data) {
-    updateDashNav(data.role);
-  }
+window.addEventListener('load', () => {
+  console.log('Dashboard window loaded, checking authentication...');
+  checkAuthentication();
+  updateDashNav();
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
 });
