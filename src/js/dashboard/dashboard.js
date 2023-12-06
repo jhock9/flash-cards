@@ -7,7 +7,7 @@ const googleSignIn = document.querySelector('#google-signin-wrapper');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 // 
-import { fetchConfig } from './googleAuth.js';
+import { fetchConfig, checkGoogleAuthentication } from './googleAuth.js';
 
 // Show or hide elements based on the user's role
 const updateDashNav = async (userRole) => {
@@ -16,7 +16,12 @@ const updateDashNav = async (userRole) => {
     if (userRole === 'admin') {
       view.classList.remove('hide');
       await fetchConfig();
-      checkGoogleAuthentication();
+      const response = await checkGoogleAuthentication();
+      if (!response.isGoogleAuthenticated) {
+        signedIn.classList.add('hide');
+        googleSignIn.classList.remove('hide');
+        document.querySelector('#google').click();
+      }
     } else {
       view.classList.add('hide');
     }
@@ -41,10 +46,10 @@ const logout = async () => {
 
 window.addEventListener('load', () => {
   console.log('Window loaded...');
-  fetch('/session/authenticate')
+  fetch('/auth/local-check')
   .then(response => response.json())
   .then(data => {
-    console.log('After /authenticate, response data:', data);
+    console.log('After /local-check, response data:', data);
     updateDashNav(data.user.role);
   })
   .catch(error => {
@@ -82,8 +87,8 @@ navLinks.forEach((link) => {
       
       // Show the flashcards modal if not authenticated with Google
       if (sectionId === 'flashcards') {
-        checkGoogleAuthentication().then(isAuthenticated => {
-          if (!isAuthenticated) {
+        checkGoogleAuthentication().then(response => {
+          if (!response.isGoogleAuthenticated) {
             flashcardsModal.classList.remove('hide');
           }
         });
@@ -91,30 +96,6 @@ navLinks.forEach((link) => {
     }
   });
 });
-
-// Check if admin is authenticated with Google
-const checkGoogleAuthentication = async () => {
-  try {
-    console.log('Checking Google authentication...');
-    const response = await fetch('/session/google-authenticate', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    
-    if (data.isGoogleAuthenticated) {
-      console.log('Admin is authenticated with Google.');
-      signedIn.classList.remove('hide');
-    } else {
-      console.log('Admin is not authenticated with Google.');
-      signedIn.classList.add('hide');
-      googleSignIn.classList.remove('hide');
-    } 
-  } catch (error) {
-    console.error('Error checking Google authentication:', error);
-  }
-};
 
 flashcardsModal.addEventListener('click', event => {
   event.stopPropagation();

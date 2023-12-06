@@ -54,5 +54,29 @@ const googleAuth = () => {
   window.location.href = '/google-auth/authorize';
 };
 
+// Check if admin is authenticated with Google
+const checkGoogleAuthentication = async () => {
+  try {
+    console.log('Checking Google authentication...');
+    const response = await fetch('/google-auth/google-check', { credentials: 'include' });
+    if (!response.ok) {
+      console.error(`Server responded with status: ${response.status}`);
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    const data = await response.json();
+    
+    if (data.isGoogleAuthenticated) {
+      console.log('Admin is authenticated with Google.');
+      signedIn.classList.remove('hide');
+    } else {
+      console.log('Admin is not authenticated with Google.');
+      signedIn.classList.add('hide');
+      googleSignIn.classList.remove('hide');
+    } 
+  } catch (error) {
+    console.error('Error checking Google authentication:', error);
+  }
+};
+
 // Export to dashboard.js
-export { fetchConfig };
+export { fetchConfig, checkGoogleAuthentication };
