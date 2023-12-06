@@ -17,7 +17,6 @@ logger.info('OAuth2 client AUTH URL generated...');
 // Redirect to Google's OAuth 2.0 server
 router.get('/authorize', (req, res) => {
   logger.info('Received request for /authorize...');
-  logger.info('At start of /google-auth/authorize, req.session:', req.session);
   res.redirect(authUrl);
   logger.info("Redirected to Google's OAuth 2.0 server...");
   // This response will be sent back to the specified redirect URL 
@@ -59,22 +58,33 @@ router.get('/oauth2callback', async (req, res) => {
       logger.error('Failed to update photo data:', error);
     }
     
-    req.session.isGoogleAuthenticated = true;
-    logger.info('req.session:', req.session);
-    
-    req.session.save((err) => {
-      if (err) {
-        logger.error('Error saving session:', err);
-        res.status(500).send(`Something went wrong! Error: ${err.message}`);
-      } else {
-        res.redirect('/dashboard');
-      }
-    });
+    res.redirect('/dashboard');
   } catch (error) {
     logger.error('ERROR in /oauth2callback:', error);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
+
+// Check if admin has authenticated with database
+router.get('/google-check', async (req, res) => {
+  logger.info('Received request for /google-check...');
+  try {
+    const tokenDoc = await Token.findOne({});
+    if (tokenDoc) {
+      // Check if the access token is valid
+      const isValid = await checkTokenValidity(tokenDoc.accessToken);
+      if (isValid) {
+        res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
+      } else {
+        res.json({ isGoogleAuthenticated: false });
+      }
+    } else {
+      res.json({ isGoogleAuthenticated: false });
+    }
+  } catch (error) {
+    logger.error('Error checking Google authentication:', error);
+    res.status(500).send(`Something went wrong! Error: ${error.message}`);
+  }});
 
 // Export to server.js
 module.exports = router;
