@@ -13,7 +13,7 @@ const checkAuthentication = async () => {
     if (data.role && window.location.pathname !== '/dashboard.html') {
       console.log('User is authenticated.');
       window.location.href = './dashboard.html';
-    } else {
+    } else if (window.location.pathname !== '/login.html') {
       console.log('User is not authenticated.');
       window.location.href = './login.html';
     } 
