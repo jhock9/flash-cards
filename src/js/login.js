@@ -14,7 +14,8 @@ const passwordMismatchModal = document.querySelector('#password-mismatch-modal')
 const passwordReqModal = document.querySelector('#password-req-modal');
 
 // Check if user is authenticated; redirect to dashboard page
-const checkAuthentication = async () => {
+// Exported to dashboard.js
+export const checkAuthentication = async () => {
   try {
     console.log('Checking authentication...');
     const response = await fetch('/auth/local-check', { credentials: 'include' });
@@ -24,7 +25,7 @@ const checkAuthentication = async () => {
     }
     const data = await response.json();
     
-    if (data.role) {
+    if (data.role && window.location.pathname !== '/dashboard.html') {
       console.log('User is authenticated.');
       // Redirect to dashboard if user is authenticated
       window.location.href = './dashboard.html';

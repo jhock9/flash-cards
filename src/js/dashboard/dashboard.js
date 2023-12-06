@@ -4,7 +4,7 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
-// 
+import { checkAuthentication } from '../login.js';
 import { fetchConfig, checkGoogleAuthentication } from './googleAuth.js';
 
 // Show or hide elements based on the user's role
@@ -42,23 +42,15 @@ const logout = async () => {
 
 //**   ON LOAD / UNLOAD  **//
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
   console.log('Window loaded...');
-  fetch('/auth/local-check')
-  .then(response => response.json())
-  .then(data => {
-    console.log('After /local-check, response data:', data);
-    updateDashNav(data.user.role);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-  
+  const data = await checkAuthentication();
+  if (data) {
+    updateDashNav(data.role);
+  }
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
 });
-
-window.addEventListener('beforeunload', logout);
 
 
 //**   NAV BAR  **//
