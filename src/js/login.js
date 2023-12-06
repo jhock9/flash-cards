@@ -13,31 +13,18 @@ const unavailableModal = document.querySelector('#unavailable-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
 const passwordReqModal = document.querySelector('#password-req-modal');
 
-// Check if user is authenticated; redirect to dashboard page
-// Exported to dashboard.js
-export const checkAuthentication = async () => {
-  try {
-    console.log('Checking authentication...');
-    const response = await fetch('/auth/local-check', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    
-    if (data.role && window.location.pathname !== '/dashboard.html') {
-      console.log('User is authenticated.');
-      // Redirect to dashboard if user is authenticated
-      window.location.href = './dashboard.html';
-    } else {
-      console.log('User is not authenticated.');
-      // Stay on login page if user is not authenticated
-    } 
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-  }
-};
-checkAuthentication();
+import { checkAuthentication } from './auth/localAuth.js';
+
+
+//**   ON LOAD / UNLOAD  **//
+
+window.addEventListener('load', () => {
+  console.log('Window loaded...');
+  checkAuthentication();
+});
+
+
+//**   BUTTONS   **/
 
 loginBtn.addEventListener('click', (event) => {
   event.preventDefault(); // prevent the form from submitting normally

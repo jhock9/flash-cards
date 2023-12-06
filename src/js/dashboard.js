@@ -4,8 +4,8 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
-import { checkAuthentication } from '../login.js';
-import { fetchConfig, checkGoogleAuthentication } from './googleAuth.js';
+import { checkAuthentication } from './auth/localAuth.js';
+import { fetchConfig, checkGoogleAuthentication } from './auth/googleAuth.js';
 
 // Show or hide elements based on the user's role
 const updateDashNav = async (userRole) => {
