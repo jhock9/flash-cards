@@ -17,7 +17,8 @@ const checkAuthentication = async () => {
       window.location.href = './dashboard.html';
     } else if (window.location.pathname !== '/login.html') {
       console.log('User is not authenticated.');
-      window.location.href = './login.html';
+      // window.location.href = './login.html';
+      console.log('User is not authenticated. Redirecting to login page...');
     } 
     return data;  // Return the user data
   } catch (error) {
