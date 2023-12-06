@@ -64,6 +64,8 @@ router.post('/login', (req, res, next) => {
         role: user.role,
       };
       req.session.isAuthenticated = true;
+      
+      logger.info('req.session.user:', req.session.user);
       return res.json({ success: true, role: user.role });
     });
   })(req, res, next);
