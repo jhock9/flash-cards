@@ -65,10 +65,23 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
+// Check if access token is valid
 const checkTokenValidity = async (accessToken) => {
-  oauth2Client.setCredentials({ access_token: accessToken });
-  const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
-  return Date.now() < tokenInfo.expiry_date;
+  try {
+    logger.info('Checking token validity...');
+    oauth2Client.setCredentials({ access_token: accessToken });
+    const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
+    const isValid = Date.now() < tokenInfo.expiry_date;
+    logger.info(`Token is valid: ${isValid}`);
+    return isValid;
+  } catch (error) {
+    if (error.message === 'invalid_token') {
+      logger.info('Token is invalid.');
+      return false;
+    }
+    logger.error('Error while checking token validity:', error);
+    throw error;
+  }
 };
 
 // Check if admin has authenticated with database
@@ -79,12 +92,14 @@ router.get('/google-check', async (req, res) => {
     if (tokenDoc) {
       // Check if the access token is valid
       const isValid = await checkTokenValidity(tokenDoc.accessToken);
+      logger.info(`Token validity: ${isValid}`);
       if (isValid) {
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
       } else {
         res.json({ isGoogleAuthenticated: false });
       }
     } else {
+      logger.info('No token document found.');
       res.json({ isGoogleAuthenticated: false });
     }
   } catch (error) {
