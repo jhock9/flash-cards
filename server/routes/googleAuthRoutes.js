@@ -65,6 +65,12 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
+const checkTokenValidity = async (accessToken) => {
+  oauth2Client.setCredentials({ access_token: accessToken });
+  const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
+  return Date.now() < tokenInfo.expiry_date;
+};
+
 // Check if admin has authenticated with database
 router.get('/google-check', async (req, res) => {
   logger.info('Received request for /google-check...');
