@@ -64,7 +64,6 @@ router.post('/login', (req, res, next) => {
         role: user.role,
       };
       req.session.isAuthenticated = true;
-      logger.info('After login, req.session:', req.session); 
       return res.json({ success: true, role: user.role });
     });
   })(req, res, next);
@@ -73,13 +72,22 @@ router.post('/login', (req, res, next) => {
 // Logout route
 router.get('/logout', (req, res) => {
   logger.info('Received request for /logout...');
-  logger.info('At start of /auth/logout, req.session:', req.session);
   req.logOut(() => { // Pass an empty callback function
     req.session.destroy(() => {
       logger.info('User logged out.');
       res.status(200).json({ message: 'Logged out' });
     });
   });
+});
+
+// Check if user is authenticated with session
+router.get('/local-check', (req, res) => {
+  logger.info('Received request for /local-check...');
+  if (req.session && req.session.isAuthenticated) {
+    res.status(200).json({ isAuthenticated: true, user: req.session.user });
+  } else {
+    res.status(200).json({ isAuthenticated: false });
+  }
 });
 
 // Export to server.js

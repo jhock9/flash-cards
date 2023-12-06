@@ -17,7 +17,7 @@ const passwordReqModal = document.querySelector('#password-req-modal');
 const checkAuthentication = async () => {
   try {
     console.log('Checking authentication...');
-    const response = await fetch('/session/authenticate', { credentials: 'include' });
+    const response = await fetch('/auth/local-check', { credentials: 'include' });
     if (!response.ok) {
       console.error(`Server responded with status: ${response.status}`);
       throw new Error(`Server responded with status: ${response.status}`);
