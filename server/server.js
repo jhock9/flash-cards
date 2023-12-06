@@ -19,7 +19,6 @@ require('./config/passport')(passport);
 const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
 const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Google authentication
 const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
-const sessionRoutes = require('./routes/sessionRoutes'); // Routes for session data
 const { GOOGLE_CLIENT_ID, initializeOauthClient } = require('./config/googleClient'); // Google client ID for /config route, initializeOauthClient() for cron job
 const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
 
@@ -134,7 +133,6 @@ localPassport(passport);
 app.use('/auth', authRoutes);
 app.use('/google-auth', googleAuthRoutes);
 app.use('/photos', photoDBRoutes);
-app.use('/session', sessionRoutes);
 
 // Update photo data in database at 2:00 AM every day
 initializeOauthClient().then((oauth2Client) => {
