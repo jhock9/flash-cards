@@ -2,8 +2,6 @@ const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
-const signedIn = document.querySelector('#signed-in-wrapper');
-const googleSignIn = document.querySelector('#google-signin-wrapper');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 // 

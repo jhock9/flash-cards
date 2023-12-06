@@ -1,3 +1,5 @@
+const signedIn = document.querySelector('#signed-in-wrapper');
+const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientID; 
 
 // Fetch Google Client ID from server
