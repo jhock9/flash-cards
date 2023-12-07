@@ -31,6 +31,7 @@ logger.info('OAuth2 client CREATED...');
 // Listen for the "tokens" event for refreshing the access token when expired
 oauth2Client.on('tokens', (tokens) => {
   if (tokens.refresh_token) {
+    logger.info('New tokens:', tokens);
     // Update the refresh token in the database
     Token.findOneAndUpdate({}, { refreshToken: tokens.refresh_token }, { upsert: true }, (err) => {
       if (err) {

@@ -39,7 +39,8 @@ const fetchGooglePhotos = async (oauth2Client) => {
               },
             });
           } catch (refreshError) {
-            console.error('Failed to refresh access token:', refreshError);
+            logger.error('Failed to refresh access token:', refreshError);
+            
             await Token.findOneAndUpdate({}, { isGoogleAuthenticated: false });
             throw refreshError;
           }

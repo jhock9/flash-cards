@@ -42,7 +42,10 @@ router.get('/oauth2callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.info(`Received tokens of type: ${typeof tokens}`);
     
-    // Save the refresh token to your database and environment variables
+    logger.info('Tokens:', tokens);
+    logger.info('Token model:', Token);
+    
+    // Save the refresh token to your database
     if (tokens.refresh_token) {
       const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
       logger.info('Tokens saved to database:', tokenDoc);
