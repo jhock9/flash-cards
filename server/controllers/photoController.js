@@ -44,7 +44,7 @@ const getPhotoTags = async () => {
     filteredTags.sort();
     return filteredTags;
   } catch (error) {
-    console.error('Error getting photo tags:', error);
+    logger.error('Error getting photo tags:', error);
     return [];
   }
 };
