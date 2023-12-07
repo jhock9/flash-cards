@@ -71,7 +71,7 @@ const checkGoogleAuthentication = async () => {
       console.log('Admin is authenticated with Google.');
       signedIn.classList.remove('hide');
     } else {
-      console.log('Admin is not authenticated with Google.');
+      console.log('Admin is not authenticated with Google. Sign in again.');
       signedIn.classList.add('hide');
       googleSignIn.classList.remove('hide');
     } 

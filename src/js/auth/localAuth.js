@@ -9,17 +9,13 @@ const checkAuthentication = async () => {
     }
     const data = await response.json();
     
-    console.log('Authentication data:', data);
-    console.log('User data:', data.user);
-    
-    if (data.user && data.user.role && window.location.pathname !== '/dashboard.html') {
-      console.log('User is authenticated.');
+    if (data.isAuthenticated && window.location.pathname !== '/dashboard.html') {
+      console.log('User is authenticated. Redirecting to dashboard...');
       window.location.href = './dashboard.html';
     } else if (window.location.pathname !== '/login.html') {
-      console.log('User is not authenticated.');
-      // window.location.href = './login.html';
       console.log('User is not authenticated. Redirecting to login page...');
-    } 
+      window.location.href = './login.html';
+    }
     return data;  // Return the user data
   } catch (error) {
     console.error('Error checking authentication:', error);
