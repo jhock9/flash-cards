@@ -58,7 +58,8 @@
 }
 
 .nav-tab a:hover,
-.nav-tab a:active {
+.nav-tab a:active,
+.nav-tab a.clicked {
   color: var(--white);
   background-color: var(--third-color);
 }

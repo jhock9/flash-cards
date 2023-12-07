@@ -1,5 +1,6 @@
 const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
+const googleTab = document.querySelector('#google');
 const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
@@ -26,7 +27,9 @@ const updateDashNav = async () => {
         if (!response.isGoogleAuthenticated) {
           signedIn.classList.add('hide');
           googleSignIn.classList.remove('hide');
-          document.querySelector('#google').click();
+          googleTab.click();
+          googleTab.classList.add('clicked');
+          
         }
       } else {
         view.classList.add('hide');
@@ -56,6 +59,14 @@ const logout = async () => {
 window.addEventListener('load', () => {
   console.log('Dashboard window loaded, checking authentication...');
   updateDashNav();
+  
+  // Add event listeners to remove the 'clicked' class
+  document.querySelectorAll('.nav-tab a').forEach(tab => {
+    tab.addEventListener('click', () => {
+      googleTab.classList.remove('clicked');
+    });
+  });
+  
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
 });
