@@ -4,7 +4,6 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
-import { checkAuthentication } from './auth/localAuth.js';
 import { fetchConfig, checkGoogleAuthentication } from './auth/googleAuth.js';
 
 // Show or hide elements based on the user's role
@@ -56,7 +55,6 @@ const logout = async () => {
 
 window.addEventListener('load', () => {
   console.log('Dashboard window loaded, checking authentication...');
-  checkAuthentication();
   updateDashNav();
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);

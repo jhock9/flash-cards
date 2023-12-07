@@ -13,15 +13,32 @@ const unavailableModal = document.querySelector('#unavailable-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
 const passwordReqModal = document.querySelector('#password-req-modal');
 
-import { checkAuthentication } from './auth/localAuth.js';
-
-
 //**   ON LOAD / UNLOAD  **//
 
 window.addEventListener('load', () => {
   console.log('Login window loaded, checking authentication...');
   checkAuthentication();
 });
+
+// Check if user is authenticated; redirect to dashboard page
+const checkAuthentication = async () => {
+  try {
+    console.log('Checking authentication...');
+    const response = await fetch('/auth/local-check', { credentials: 'include' });
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    console.log('Response:', response);
+    const data = await response.json();
+        
+    if (data.isAuthenticated) {
+      console.log('User is authenticated. Redirecting to dashboard...');
+      window.location.href = './dashboard.html';
+    }
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+  }
+};
 
 
 //**   BUTTONS   **/
