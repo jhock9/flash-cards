@@ -65,17 +65,43 @@
             </div>  
           </figure>
           
+          //!! name taken from userModel fullname
           <h3 class="center">Welcome,&nbsp;<span id="username"></span>!</h3>
         </section>
         
-        <section id="account" class="hide center">
-          <div id="account-info" class="center">
-            <p>Name: <span id="acct-name"></span></p>
-            <p>Username: <span id="acct-username"></span></p>
-            <p>Email: <span id="acct-email"></span></p>
-            <p>Role: <span id="acct-role"></span></p>
-          </div>
-          
+        <section id="account" class="hide center">          
+          <table id="account-info" class="center">
+            <tr>
+              <th>Name:</th>
+              <td><span id="acct-name"></span></td>
+            </tr>
+            <tr>
+              <th>Username:</th>
+              <td><span id="acct-username"></span></td>
+            </tr>
+            <tr>
+            <th>Password:</th>
+              <td><span id="acct-password"></span></td>
+                <!-- Todo: hide password by default 
+                  hide the password with asterisks, use eye icon to reveal    
+                  pull toggle-password class from login.js (move to localAuth.js?)        
+                  <i class="toggle-password fa-regular fa-eye-slash"></i>
+                  <i class="toggle-password hide fa-solid fa-eye"></i>
+                -->
+            </tr>
+            <tr>
+              <th>Role:</th>
+              <td><span id="acct-role"></span></td>
+            </tr>
+          </table>
+            
+            <!-- Todo: Actions - links via icons, opens modal for the update-account-form below
+              1. icon to edit account
+              <i class="fa-solid fa-pen-to-square"></i>
+                - Update data
+                - Reset password
+                - Delete user 
+            -->
           <div class="form-wrapper hide center">
             <h2>Update Login Information</h2>
             <form id="update-account-form">
@@ -108,23 +134,28 @@
             </thead>
             
             <tbody id="users-table-body">
-              <!-- Todo: Password hidden: 
-              You can hide the password by replacing it with asterisks 
-              or dots. You can do this in your backend you're preparing 
-              the data to send to the frontend.-->
+              <!-- Todo: hide password by default 
+                hide the password with asterisks, use eye icon to reveal    
+                pull toggle-password class from login.js (move to localAuth.js?)        
+                <i class="toggle-password fa-regular fa-eye-slash"></i>
+                <i class="toggle-password hide fa-solid fa-eye"></i>
+              -->
               
-              <!-- Todo: Actions? 
-              radio button to reset password? 
-              radio button to delete user? -->
-              
-              <!-- Todo: Link their name to go to their client list -->
+              <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
+                1. icon to edit user
+                <i class="fa-solid fa-pen-to-square"></i>
+                  - Update data
+                  - Reset password
+                  - Delete user 
+                2. icon to view clients
+                  <i class="fa-solid fa-user-group"></i>
+              -->
             </tbody>
           </table>
             
           <div class="form-wrapper hide center">
             <h2>Create New User</h2>
             <form id="create-user-form">
-              <!-- //!! Add name to registration page also -->
               <label for="new-name">Name:</label>
               <input type="text" id="new-name" name="name">
               
@@ -138,15 +169,15 @@
               <input type="password" id="confirm-new-user-pass" name="password">
               
               <label>Role:</label>
-              <label for="role-user">
-                User
-                <input type="radio" id="role-user" name="role" value="user">
-              </label>
-              
-              <label for="role-admin">
-                Admin
-                <input type="radio" id="role-admin" name="role" value="admin">
-              </label>
+                <label for="role-user">
+                  User
+                  <input type="radio" id="role-user" name="role" value="user">
+                </label>
+                
+                <label for="role-admin">
+                  Admin
+                  <input type="radio" id="role-admin" name="role" value="admin">
+                </label>
               
               <input type="submit" value="Create User">
               <button type="submit" id="create-user-btn" class="wide-btn btn">Create User</button>
@@ -157,6 +188,7 @@
         <section id="clients" class="hide center">
           <table id="clients-table" class="center">
             <thead>
+              <!-- Todo: Sortable table -->
               <tr>
                 <th>Therapist Name</th>
                 <th>Client ID</th>
@@ -165,11 +197,23 @@
               </tr>
             </thead>
             
-            <tbody id="clients-table-body">
-              
-              <!-- Todo: Actions? 
-              Todo: Link their name to go to their last session -->
-              
+            <tbody id="clients-table-body">       
+              <!-- Todo: Filter whats displayed by role
+                1. Admin
+                  - show all clients
+                2. User
+                  - show only clients assigned to user
+                  - hide first header & column (Therapist Name)
+              --> 
+
+              <!-- Todo: Actions - links via icons, opens modal for the new-client-form below
+                1. icon to edit client
+                  <i class="fa-solid fa-pen-to-square"></i>
+                  - Update data
+                  - Delete user
+                2. icon to view last saved session
+                  <i class="fa-regular fa-folder-open"></i>
+              -->
               </tbody> 
           </table>
           
@@ -179,11 +223,12 @@
               <label for="therapist-name">Therapist Name:</label>
               <input type="text" id="therapist-name" class="input-field" placeholder="Enter Therapist Name" name="therapistName">
               
-              <!-- Todo: should this be auto-generated? 
-              Or does Jeremy have an identifier already for this too? -->
               <label for="client-id">Client ID:</label>
               <input type="text" id="client-id" class="input-field" placeholder="Enter Client ID" name="clientID">
-              
+                <!-- Todo: should Client ID be auto-generated? 
+                  This is an unique identifier, and links the client to the therapist
+                  Or, does Jeremy have an identifier already for this on paper? 
+                -->
               <label for="client-name">Client Name:</label>
               <input type="text" id="client-name" class="input-field" placeholder="Enter Client Name" name="clientName">
               
@@ -226,11 +271,11 @@
   <!-- Modals -->
   <div id="flashcards-modal" class="modal hide center">
     <div class="modal-content center">
-      <h2>Whoops! The photo library missed an update!</h2>
+      <h2 class="center">Whoops...the photo library missed an update!</h2>
       <i class="fa-regular fa-face-grin-beam-sweat"></i>
-      <p>Its ok though, you can still access the flashcards page.</p>
-      <p>Just make sure to let an admin know to reauthorize the photo library soon.</p>
-      <h3>Thanks!</h3>
+      <p class="center">Its ok though, you can still access the flashcards page.
+      Make sure to let an admin know to reauthorize the photo library soon.</p>
+      <h3 class="center">Thanks!</h3>
     </div>
   </div>
   
