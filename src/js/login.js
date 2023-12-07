@@ -28,7 +28,6 @@ const checkAuthentication = async () => {
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
-    console.log('Response:', response);
     const data = await response.json();
         
     if (data.isAuthenticated) {
