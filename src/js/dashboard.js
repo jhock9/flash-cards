@@ -5,6 +5,7 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
+
 import { fetchConfig, checkGoogleAuthentication } from './auth/googleAuth.js';
 
 // Show or hide elements based on the user's role
@@ -23,14 +24,7 @@ const updateDashNav = async () => {
       if (userRole === 'admin') {
         view.classList.remove('hide');
         await fetchConfig();
-        const response = await checkGoogleAuthentication();
-        if (!response.isGoogleAuthenticated) {
-          signedIn.classList.add('hide');
-          googleSignIn.classList.remove('hide');
-          googleTab.click();
-          googleTab.classList.add('clicked');
-          
-        }
+        await checkGoogleAuthentication();
       } else {
         view.classList.add('hide');
       }

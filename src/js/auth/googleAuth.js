@@ -1,3 +1,4 @@
+const googleTab = document.querySelector('#google');
 const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientID; 
@@ -70,11 +71,14 @@ const checkGoogleAuthentication = async () => {
     if (data.isGoogleAuthenticated) {
       console.log('Admin is authenticated with Google.');
       signedIn.classList.remove('hide');
+      googleSignIn.classList.add('hide');
     } else {
       console.log('Admin is not authenticated with Google. Sign in again.');
+      googleTab.click();
+      googleTab.classList.add('clicked');
       signedIn.classList.add('hide');
       googleSignIn.classList.remove('hide');
-    } 
+} 
   } catch (error) {
     console.error('Error checking Google authentication:', error);
   }
