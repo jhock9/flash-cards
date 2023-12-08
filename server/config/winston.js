@@ -29,16 +29,21 @@ const colors = {
 winston.addColors(colors)
 
 // Chose the aspect of your log customizing the log format.
-const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss:ms A' }),
-  winston.format.errors({ stack: true }),
-  winston.format.printf(
-    (info) => {
-      return `[${info.timestamp}] [${info.level.toUpperCase()}]: ${info.message}`;
-    }
-  ),
-  winston.format.colorize({ all: true }),
-)
+const { combine, timestamp, errors, prettyPrint, printf, colorize } = winston.format;
+
+const format = combine(
+  timestamp({ format: 'YYYY-MM-DD hh:mm:ss:ms A' }),
+  errors({ stack: true }),
+  prettyPrint(),
+  printf((info) => {
+    const { timestamp, level, message, stack } = info;
+    const stackParts = stack ? stack.split('\n') : [];
+    const fileAndLine = stackParts[1] ? stackParts[1].trim() : '';
+    
+    return `[${timestamp}] [${level.toUpperCase()}]: ${message} ${fileAndLine}`;
+  }),
+  colorize({ all: true }),
+);
 
 // Define which transports the logger must use to print out messages.
 const transports = [
