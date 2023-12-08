@@ -41,9 +41,8 @@ router.get('/oauth2callback', async (req, res) => {
     
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.debug(`Received tokens of type: ${typeof tokens}`);
-    
-    logger.debug('Tokens:', tokens);
-    logger.debug('Token model:', Token);
+    logger.debug('Tokens:', JSON.stringify(tokens));
+    logger.debug('Token model:', Token.toString());
     
     // Save the refresh token to your database
     if (tokens.refresh_token) {
@@ -57,6 +56,7 @@ router.get('/oauth2callback', async (req, res) => {
     try {
       await updatePhotoData(oauth2Client);
       logger.info('Photo data updated.');
+      logger.debug('Photo data updated with oauth2Client:', oauth2Client)
     } catch (error) {
       logger.error('Failed to update photo data:', error);
     }

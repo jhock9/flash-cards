@@ -5,18 +5,23 @@ const fetchGooglePhotos = require('../api/googlePhotosAPI'); // fetchGooglePhoto
 // Update photo data in database
 const updatePhotoData = async (oauth2Client) => {
   logger.info('Updating database photo data using cron job...');
+  logger.debug('Updating database photo data using cron job with oauth2Client:', oauth2Client)
   try {
     const fetchedPhotos = await fetchGooglePhotos(oauth2Client);
-    
+    logger.debug('Fetched photos from Google Photos API:', fetchedPhotos.length);
+
     // Write the data to a file
     fs.writeFileSync('data.json', JSON.stringify(fetchedPhotos[0], null, 2));
-    
+    logger.debug('Wrote fetched photos to data.json');
+
     // Fetch existing photos from the database
     const existingPhotos = await Photo.find({});
-    
+    logger.debug('Fetched existing photos from database:', existingPhotos.length);
+
     // Convert existing photos to a Map for easy lookup
     const existingPhotosMap = new Map(existingPhotos.map(photo => [photo.googleId, photo]));
-    
+    logger.debug('Converted existing photos to a map:', existingPhotosMap.size);
+
     // Prepare photo data to add
     const photosToAdd = [];
     for (const fetchedPhoto of fetchedPhotos) {
@@ -25,13 +30,16 @@ const updatePhotoData = async (oauth2Client) => {
         photosToAdd.push(fetchedPhoto);
       }
     }
-    
+    logger.debug('Prepared photos to add:', photosToAdd.length);
+
     // Add photo data
     for (const photo of photosToAdd) {
       await Photo.create(photo);
     }
+    logger.debug('Added photos to database:', photosToAdd.length);
   } catch (error) {
-    logger.error('Failed to update photo data:', error);
+    logger.debug('Failed to fetch photos from Google Photos API:', error);
+    logger.error('Failed to fetch photos from Google Photos API:', error);
   }
 };
 
