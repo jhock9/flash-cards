@@ -1,3 +1,7 @@
+/* ==========================================================================
+  Mobile Styles
+  ========================================================================== */
+
 :root {
   --primary-color: #e24844;
   --second-color: #f5f5f5;
@@ -74,7 +78,6 @@ body {
   margin: 1rem 0;
 }
 
-
 .modal {
   position: fixed;
   top: 0;
@@ -85,9 +88,13 @@ body {
   z-index: 1;
 }
 
+.modal-content h2, h3, i, p {
+  /* margin: 0 3rem; */
+}
+
 .modal-content {
   width: 80%;
-  padding: 2rem 0;
+  padding: 3rem;
   text-align: center;
   border: .5rem solid var(--third-color);
   background-color: var(--white);
@@ -95,7 +102,7 @@ body {
   flex-direction: column;
 }
 
-.modal-content h2 {
+.modal-content h2, h3 {
   font-size: 2.5rem;
 }
 
@@ -107,4 +114,34 @@ body {
 
 .modal-content p {
   font-size: 2.3rem;
+}
+
+.modal-content h3 {
+  margin-top: 2rem;
+}
+
+/*=====================================================================================
+  Media Queries for Responsive Design     
+=====================================================================================*/
+
+/**** TABLET STYLES ****/
+@media screen and (min-width: 768px) {
+  
+  .modal-content h2, h3 {
+    font-size: 3.5rem;
+  }
+  
+  .modal-content i  {
+    margin: 4rem 0;
+    font-size: 6rem;
+  }
+  
+  .modal-content p {
+    font-size: 3rem;
+  }
+}
+
+/**** DESKTOP STYLES ****/
+@media screen and (min-width: 1200px) {
+  
 }
