@@ -20,7 +20,7 @@ const level = () => {
 const colors = {
   error: 'red',
   warn: 'yellow',
-  debug: 'orange',
+  debug: 'cyan',
   info: 'green',
   http: 'magenta',
 }
@@ -34,7 +34,7 @@ const format = winston.format.combine(
   winston.format.colorize({ all: true }),
   winston.format.errors({ stack: true }),
   winston.format.printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.message}`,
+    (info) => `[${info.timestamp}] [${info.level.toUpperCase()}]: ${info.message}`
   ),
 )
 
