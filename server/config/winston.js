@@ -34,7 +34,6 @@ const format = winston.format.combine(
   winston.format.errors({ stack: true }),
   winston.format.printf(
     (info) => {
-      console.log(info);
       return `[${info.timestamp}] [${info.level.toUpperCase()}]: ${info.message}`;
     }
   ),
