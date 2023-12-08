@@ -12,6 +12,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
     
     let nextPageToken;
     do {
+      logger.debug(`Starting iteration ${i}`);
       const params = {
         pageSize: 100,
         pageToken: nextPageToken,
@@ -26,7 +27,9 @@ const fetchGooglePhotos = async (oauth2Client) => {
         });
         logger.debug(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
       } catch (error) {
+        logger.error('Error getting photos:', error.message);
         if (error.response && error.response.status === 401) { // If the token is expired
+          logger.error('Error response from Google Photos API:', error.response.data);
           try {
             // Refresh the token
             const newTokens = await oauth2Client.refreshAccessToken();
@@ -51,6 +54,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
             throw refreshError;
           }
         } else {
+          logger.error('Error getting photos:', error.message, 'Error stack:', error.stack);
           throw error;
         }
       }
@@ -58,10 +62,10 @@ const fetchGooglePhotos = async (oauth2Client) => {
       logger.info('Received media items...');
       nextPageToken = response.data.nextPageToken;
       logger.debug('nextPageToken:', nextPageToken);
-
+      
       // Save photo data to database
       for (const photoData of response.data.mediaItems) {
-        logger.debug('photoData:', photoData);
+        logger.debug('Saving photo data to database...');
         if (photoData.description) { // Only process photos with a description
           const mappedPhotoData = {
             googleId: photoData.id,
@@ -70,12 +74,14 @@ const fetchGooglePhotos = async (oauth2Client) => {
           };  
           try {
             await photoController.savePhoto(mappedPhotoData);
-            logger.debug(`Saved photo data to database with Google ID: ${mappedPhotoData.googleId}`);
           } catch (error) {
+            logger.error('Error saving photo to database:', error.message, 'Photo data:', mappedPhotoData);
             throw error; // This will stop the execution of fetchGooglePhotos
           }
         }
       }
+    logger.debug(`Completed iteration ${i}`);
+    i++;
     } while (nextPageToken);
     
     return response.data.mediaItems;
