@@ -25,7 +25,7 @@ router.get('/authorize', (req, res) => {
 
 // Exchange authorization code for access and refresh tokens
 router.get('/oauth2callback', async (req, res) => {
-  logger.info(`Received OAuth2 callback with URL: ${req.url}`);
+  logger.debug(`Received OAuth2 callback with URL: ${req.url}`);
   try {
     logger.info('Received request for /oauth2callback...');
     const q = url.parse(req.url, true).query;
@@ -40,15 +40,15 @@ router.get('/oauth2callback', async (req, res) => {
     logger.info('Attempting to get tokens with code...');
     
     const { tokens } = await oauth2Client.getToken(q.code);
-    logger.info(`Received tokens of type: ${typeof tokens}`);
+    logger.debug(`Received tokens of type: ${typeof tokens}`);
     
-    logger.info('Tokens:', tokens);
-    logger.info('Token model:', Token);
+    logger.debug('Tokens:', tokens);
+    logger.debug('Token model:', Token);
     
     // Save the refresh token to your database
     if (tokens.refresh_token) {
       const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
-      logger.info('Tokens saved to database:', tokenDoc);
+      logger.debug('Tokens saved to database:', tokenDoc);
     }
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
@@ -75,7 +75,7 @@ const checkTokenValidity = async (accessToken) => {
     oauth2Client.setCredentials({ access_token: accessToken });
     const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
     const isValid = Date.now() < tokenInfo.expiry_date;
-    logger.info(`Token is valid: ${isValid}`);
+    logger.debug(`Token is valid: ${isValid}`);
     return isValid;
   } catch (error) {
     if (error.message === 'invalid_token') {
@@ -95,7 +95,7 @@ router.get('/google-check', async (req, res) => {
     if (tokenDoc) {
       // Check if the access token is valid
       const isValid = await checkTokenValidity(tokenDoc.accessToken);
-      logger.info(`Token validity: ${isValid}`);
+      logger.debug(`Token validity: ${isValid}`);
       if (isValid) {
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
       } else {
