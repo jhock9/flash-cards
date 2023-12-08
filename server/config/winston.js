@@ -4,26 +4,25 @@ const winston = require('winston');
 const levels = {
   error: 0,
   warn: 1,
-  info: 2,
-  http: 3,
-  debug: 4,
+  debug: 2,
+  info: 3,
+  http: 4,
 }
 
 // This method set the current severity based on the current NODE_ENV 
 const level = () => {
   const env = process.env.NODE_ENV || 'development'
   const isDevelopment = env === 'development'
-  return isDevelopment ? 'debug' : 'info' 
-  //!! change 'info' to 'warn' for production
+  return isDevelopment ? 'http' : 'debug' 
 }
 
 // Define different colors for each level.
 const colors = {
   error: 'red',
   warn: 'yellow',
+  debug: 'orange',
   info: 'green',
   http: 'magenta',
-  debug: 'white',
 }
 
 // Link colors defined above to the severity levels.
