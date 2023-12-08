@@ -20,9 +20,9 @@ const level = () => {
 const colors = {
   error: 'red',
   warn: 'yellow',
-  debug: 'blue',
+  debug: 'magenta',
   info: 'green',
-  http: 'magenta',
+  http: 'cyan',
 }
 
 // Link colors defined above to the severity levels.
@@ -31,11 +31,14 @@ winston.addColors(colors)
 // Chose the aspect of your log customizing the log format.
 const format = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss:ms A' }),
-  winston.format.colorize({ all: true }),
   winston.format.errors({ stack: true }),
   winston.format.printf(
-    (info) => `[${info.timestamp}] [${info.level.toUpperCase()}]: ${info.message}`
+    (info) => {
+      console.log(info);
+      return `[${info.timestamp}] [${info.level.toUpperCase()}]: ${info.message}`;
+    }
   ),
+  winston.format.colorize({ all: true }),
 )
 
 // Define which transports the logger must use to print out messages.
