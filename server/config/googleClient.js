@@ -33,11 +33,9 @@ oauth2Client.on('tokens', (tokens) => {
   if (tokens.refresh_token) {
     logger.info('New tokens:', tokens);
     // Update the refresh token in the database
-    Token.findOneAndUpdate({}, { refreshToken: tokens.refresh_token }, { upsert: true }, (err) => {
-      if (err) {
-        logger.error('Failed to update refresh token in database:', err);
-      }
-    });
+    Token.findOneAndUpdate({}, { refreshToken: tokens.refresh_token }, { upsert: true })
+      .then(() => logger.info('Refresh token updated in database'))
+      .catch(err => logger.error('Failed to update refresh token in database:', err));
   }
 });
 
