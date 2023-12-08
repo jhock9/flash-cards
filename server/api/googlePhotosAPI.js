@@ -11,6 +11,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
     logger.info('Initializing Google Photos client...');
     
     let nextPageToken;
+    let i = 1;
     do {
       logger.debug(`Starting iteration ${i}`);
       const params = {
