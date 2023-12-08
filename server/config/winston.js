@@ -20,7 +20,7 @@ const level = () => {
 const colors = {
   error: 'red',
   warn: 'yellow',
-  debug: 'cyan',
+  debug: 'blue',
   info: 'green',
   http: 'magenta',
 }
