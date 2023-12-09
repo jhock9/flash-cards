@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
 const fetchGooglePhotos = require('../api/googlePhotosAPI'); // fetchGooglePhotos(oauth2Client)
@@ -38,7 +40,6 @@ const updatePhotoData = async (oauth2Client) => {
     }
     logger.debug(`Added photos to database: ${photosToAdd.length}`);
   } catch (error) {
-    logger.debug(`Failed to fetch photos from Google Photos API: ${error}`);
     logger.error(`Failed to fetch photos from Google Photos API: ${error}`);
   }
 };
