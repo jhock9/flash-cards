@@ -5,20 +5,20 @@ const photoController = require('../controllers/photoController'); // savePhoto(
 // Fetch Google Photos and send to photoDBRoutes.js
 const fetchGooglePhotos = async (oauth2Client) => {
   logger.info('fetching photos and photo data...');
-  logger.debug(`fetch photos from API, oauth2Client: ${oauth2Client}`);
+  logger.debug('fetchGooglePhotos called...');
   
   try {
     logger.info('Initializing Google Photos client...');
     
     let nextPageToken;
     let i = 1;
+    let response;
     do {
       logger.debug(`Starting iteration ${i}`);
       const params = {
         pageSize: 100,
         pageToken: nextPageToken,
       };
-      let response;
       try {
         response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
           headers: {
@@ -67,7 +67,6 @@ const fetchGooglePhotos = async (oauth2Client) => {
       
       // Save photo data to database
       for (const photoData of response.data.mediaItems) {
-        logger.debug('Saving photo data to database...');
         if (photoData.description) { // Only process photos with a description
           const mappedPhotoData = {
             googleId: photoData.id,
@@ -86,7 +85,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
     i++;
     } while (nextPageToken);
     
-    return response.data.mediaItems;
+    return response ? response.data.mediaItems : [];
   } catch (error) {
     logger.error(`ERROR getting photos: ${error.message}`);
     logger.error(`Stack trace: ${error.stack}`);
