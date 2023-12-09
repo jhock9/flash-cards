@@ -59,7 +59,7 @@ router.get('/oauth2callback', async (req, res) => {
     try {
       await updatePhotoData(oauth2Client);
       logger.info('Photo data updated.');
-      logger.debug(`Photo data updated with oauth2Client: ${oauth2Client}`);
+      logger.debug('Photo data updated with oauth2Client...');
     } catch (error) {
       logger.error(`Failed to update photo data: ${error}`);
     }

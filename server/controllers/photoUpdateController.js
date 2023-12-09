@@ -5,7 +5,7 @@ const fetchGooglePhotos = require('../api/googlePhotosAPI'); // fetchGooglePhoto
 // Update photo data in database
 const updatePhotoData = async (oauth2Client) => {
   logger.info('Updating database photo data using cron job...');
-  logger.debug(`Updating database photo data using cron job with oauth2Client: ${oauth2Client}`);
+  logger.debug('updatePhotoData called...');
   try {
     const fetchedPhotos = await fetchGooglePhotos(oauth2Client);
     logger.debug(`Fetched photos from Google Photos API: ${fetchedPhotos.length}`);
