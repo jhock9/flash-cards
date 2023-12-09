@@ -20,6 +20,7 @@ const fetchConfig = async () => {
 
 // Initialize Google Sign-In called in fetchConfig()
 const initGoogleSignIn = () => {
+  console.log('initGoogleSignIn CALLED...');
   google.accounts.id.initialize({
     client_id: googleClientID,
     callback: handleCredentialResponse, // Success callback function
@@ -49,11 +50,12 @@ const handleCredentialResponse = async (response) => {
 
 // Sign in failure callback called in initGoogleSignIn()
 const onSignInFailure = (error) => {
-  console.error('Sign-in error:', error);
+  console.error('onSignInFailure:', error);
 };
 
 // Redirect user to Google's authentication page called in handleCredentialResponse()
 const googleAuth = () => {
+  console.log('googleAuth CALLED...');
   window.location.href = '/google-auth/authorize';
 };
 
