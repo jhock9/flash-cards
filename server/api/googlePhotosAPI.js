@@ -5,16 +5,13 @@ const photoController = require('../controllers/photoController'); // savePhoto(
 // Fetch Google Photos and send to photoDBRoutes.js
 const fetchGooglePhotos = async (oauth2Client) => {
   logger.info('fetching photos and photo data...');
-  logger.debug('fetchGooglePhotos called...');
   
   try {
     logger.info('Initializing Google Photos client...');
     
     let nextPageToken;
-    let i = 1;
     let response;
     do {
-      logger.debug(`Starting iteration ${i}`);
       const params = {
         pageSize: 100,
         pageToken: nextPageToken,
@@ -26,7 +23,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
             'Content-Type': 'application/json',
           },
         });
-        logger.debug(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
+        logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
       } catch (error) {
         logger.error(`Error getting photos: ${error.message}`);
         if (error.response && error.response.status === 401) { // If the token is expired
@@ -37,10 +34,6 @@ const fetchGooglePhotos = async (oauth2Client) => {
             oauth2Client.setCredentials(newTokens.credentials);
             logger.info('Tokens refreshed and set in OAuth2 client.');
             
-            logger.debug(`New tokens: ${newTokens}`);
-            logger.debug(`Token model: ${Token}`);
-            logger.debug(`oauth2Client: ${oauth2Client}`);
-            
             // Retry the request with the new token
             response = await axios.post('https://photoslibrary.googleapis.com/v1/mediaItems:search', params, {
               headers: {
@@ -48,8 +41,9 @@ const fetchGooglePhotos = async (oauth2Client) => {
                 'Content-Type': 'application/json',
               },
             });
-            logger.debug(`Received ${response.data.mediaItems.length} photos from Google Photos API after refreshing token`);          } catch (refreshError) {
-              logger.error(`Failed to refresh access token: ${refreshError}`);
+            logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API after refreshing token`);
+          } catch (refreshError) {
+            logger.error(`Failed to refresh access token: ${refreshError}`);
             
             await Token.findOneAndUpdate({}, { isGoogleAuthenticated: false });
             throw refreshError;
@@ -61,12 +55,14 @@ const fetchGooglePhotos = async (oauth2Client) => {
       }
       
       logger.info('Received media items...');
-      nextPageToken = response.data.nextPageToken;
-      logger.debug(`nextPageToken: ${nextPageToken}`);
       
       // Save photo data to database
       for (const photoData of response.data.mediaItems) {
         if (photoData.description) { // Only process photos with a description
+          if (!photoData.id) {
+            logger.error(`Photo missing id: ${JSON.stringify(photoData)}`);
+            continue; // Skip this photo and move to the next one
+          }
           const mappedPhotoData = {
             googleId: photoData.id,
             baseUrl: photoData.baseUrl,
@@ -80,7 +76,6 @@ const fetchGooglePhotos = async (oauth2Client) => {
           }
         }
       }
-    logger.debug(`Completed iteration ${i}`);
     i++;
     } while (nextPageToken);
     
