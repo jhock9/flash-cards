@@ -16,6 +16,7 @@ logger.info('OAuth2 client AUTH URL generated...');
 
 // Redirect to Google's OAuth 2.0 server
 router.get('/authorize', (req, res) => {
+  logger.debug('Received request for /authorize...')
   logger.info('Received request for /authorize...');
   res.redirect(authUrl);
   logger.info("Redirected to Google's OAuth 2.0 server...");
@@ -32,7 +33,7 @@ router.get('/oauth2callback', async (req, res) => {
     logger.info('Query parameters parsed...');
     
     if (q.error) {
-      logger.error('Error in query parameters:', q.error);
+      logger.error(`Error in query parameters: ${q.error}`);
       res.status(400).send('Authentication failed');
       return;
     }
@@ -41,13 +42,15 @@ router.get('/oauth2callback', async (req, res) => {
     
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.debug(`Received tokens of type: ${typeof tokens}`);
-    logger.debug('Tokens:', JSON.stringify(tokens));
-    logger.debug('Token model:', Token.toString());
-    
+    logger.debug(`Received tokens: ${tokens}`)
+    logger.debug(`Token model: ${Token}`);
+    logger.debug(`Tokens: ${JSON.stringify(tokens)}`);
+    logger.debug(`Token model: ${Token.toString()}`);
+        
     // Save the refresh token to your database
     if (tokens.refresh_token) {
       const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
-      logger.debug('Tokens saved to database:', tokenDoc);
+      logger.debug(`Tokens saved to database: ${tokenDoc}`);
     }
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
@@ -56,14 +59,14 @@ router.get('/oauth2callback', async (req, res) => {
     try {
       await updatePhotoData(oauth2Client);
       logger.info('Photo data updated.');
-      logger.debug('Photo data updated with oauth2Client:', oauth2Client)
+      logger.debug(`Photo data updated with oauth2Client: ${oauth2Client}`);
     } catch (error) {
-      logger.error('Failed to update photo data:', error);
+      logger.error(`Failed to update photo data: ${error}`);
     }
     
     res.redirect('/dashboard');
   } catch (error) {
-    logger.error('ERROR in /oauth2callback:', error);
+    logger.error(`ERROR in /oauth2callback: ${error}`);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }
 });
@@ -82,7 +85,7 @@ const checkTokenValidity = async (accessToken) => {
       logger.info('Token is invalid.');
       return false;
     }
-    logger.error('Error while checking token validity:', error);
+    logger.error(`Error while checking token validity: ${error}`);
     throw error;
   }
 };
@@ -106,7 +109,7 @@ router.get('/google-check', async (req, res) => {
       res.json({ isGoogleAuthenticated: false });
     }
   } catch (error) {
-    logger.error('Error checking Google authentication:', error);
+    logger.error(`Error checking Google authentication: ${error}`);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }});
 

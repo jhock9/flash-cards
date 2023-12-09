@@ -44,7 +44,7 @@ const getPhotoTags = async () => {
     filteredTags.sort();
     return filteredTags;
   } catch (error) {
-    logger.error('Error getting photo tags:', error);
+    logger.error(`Error getting photo tags: ${error}`);
     return [];
   }
 };
@@ -55,7 +55,7 @@ const getSelectedPhotos = async (tags) => {
     const selectedPhotos = await Photo.find({ tagsFromGoogle: { $in: tags } });
     return selectedPhotos;
   } catch (error) {
-    logger.error('ERROR getting selected photos:', error);
+    logger.error(`ERROR getting selected photos: ${error}`);
     return [];
   }
 };
@@ -77,7 +77,7 @@ const getAllPhotos = async () => {
     const photos = await Photo.find({});
     return photos;
   } catch (error) {
-    logger.error('ERROR getting all photos:', error);
+    logger.error(`ERROR getting all photos: ${error}`);
     return [];
   }
 };

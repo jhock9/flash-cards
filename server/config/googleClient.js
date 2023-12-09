@@ -24,30 +24,31 @@ logger.info('OAuth2 client CREATED...');
       oauth2Client.setCredentials({ refresh_token: tokenDoc.refreshToken });
     }
   } catch (err) {
-    logger.error('Failed to fetch refresh token from database:', err);
+    logger.error(`Failed to fetch refresh token from database: ${err}`);
   }
 })();
 
 // Listen for the "tokens" event for refreshing the access token when expired
 oauth2Client.on('tokens', (tokens) => {
   if (tokens.refresh_token) {
-    logger.info('New tokens:', tokens);
+    logger.info(`New tokens: ${tokens}`);
     // Update the refresh token in the database
     Token.findOneAndUpdate({}, { refreshToken: tokens.refresh_token }, { upsert: true })
       .then(() => logger.info('Refresh token updated in database'))
-      .catch(err => logger.error('Failed to update refresh token in database:', err));
+      .catch(err => logger.error(`Failed to update refresh token in database: ${err}`));  
   }
 });
 
 // Initialize the OAuth2 client with the refresh token
 const initializeOauthClient = async () => {
+  logger.info('Initializing OAuth2 client...');
   try {
     const tokenDoc = await Token.findOne({});
     if (tokenDoc) {
       oauth2Client.setCredentials({ refresh_token: tokenDoc.refreshToken });
     }
   } catch (err) {
-    logger.error('Failed to fetch refresh token from database:', err);
+    logger.error(`Failed to fetch refresh token from database: ${err}`);
     await Token.findOneAndUpdate({}, { isGoogleAuthenticated: false });
   }
   return oauth2Client;

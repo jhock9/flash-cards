@@ -75,7 +75,7 @@ mongoose.connect(MONGO_URI)
 .then(() => {
   logger.info('Connected to MongoDB Atlas');
 })
-.catch(err => logger.error('Could not connect to MongoDB Atlas', err));
+.catch(err => logger.error(`Could not connect to MongoDB Atlas: ${err}`));
 
 mongoose.set('debug', true);
 

@@ -37,7 +37,7 @@ router.post('/register', async (req, res) => {
     await user.save();
     res.status(201).json({ success: true });
   } catch (error) {
-    logger.error('ERROR saving user to database:', error)
+    logger.error(`ERROR saving user to database: ${error}`);
     if (error.code === 11000) {
       res.status(400).json({ error: 'Username already exists.' });
     } else { 
@@ -65,7 +65,7 @@ router.post('/login', (req, res, next) => {
       };
       req.session.isAuthenticated = true;
       
-      logger.info('req.session.user:', req.session.user);
+      logger.info(`req.session.user:, ${req.session.user}`);
       return res.json({ success: true, role: user.role });
     });
   })(req, res, next);
