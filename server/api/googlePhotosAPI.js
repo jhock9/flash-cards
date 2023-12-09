@@ -27,7 +27,6 @@ const fetchGooglePhotos = async (oauth2Client) => {
           },
         });
         logger.debug(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
-        logger.debug(`API response: ${JSON.stringify(response.data)}`);
       } catch (error) {
         logger.error(`Error getting photos: ${error.message}`);
         if (error.response && error.response.status === 401) { // If the token is expired
