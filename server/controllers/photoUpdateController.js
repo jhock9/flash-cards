@@ -1,4 +1,4 @@
-import fs from 'fs';
+const fs = require('fs');
 
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
