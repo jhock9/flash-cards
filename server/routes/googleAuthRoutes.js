@@ -42,7 +42,6 @@ router.get('/oauth2callback', async (req, res) => {
     
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.debug(`Received tokens of type: ${typeof tokens}`);
-    logger.debug(`Token model: ${Token}`);
     logger.debug(`Tokens: ${JSON.stringify(tokens)}`);
     
     // Save the refresh token to your database

@@ -76,7 +76,6 @@ const fetchGooglePhotos = async (oauth2Client) => {
           }
         }
       }
-    i++;
     } while (nextPageToken);
     
     return response ? response.data.mediaItems : [];
