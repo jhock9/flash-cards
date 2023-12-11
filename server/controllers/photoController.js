@@ -6,22 +6,29 @@ const savePhoto = async (mappedPhotoData, logCounter) => {
   if (mappedPhotoData.tagsFromGoogle) {
     const existingPhoto = await Photo.findOne({ googleId: mappedPhotoData.googleId });
     if (existingPhoto) {
-      // Photo with the same googleId already exists, update it with the new data
-      existingPhoto.baseUrl = mappedPhotoData.baseUrl;
-      existingPhoto.tagsFromGoogle = mappedPhotoData.tagsFromGoogle;
-      await existingPhoto.save();
-      if (logCounter < 2) {
-        logger.debug(`Updated existing photo: ${mappedPhotoData.googleId}`);
+      // Photo already exists in the database, update it
+      if (existingPhoto.baseUrl !== mappedPhotoData.baseUrl || !arraysAreEqual(existingPhoto.tagsFromGoogle, mappedPhotoData.tagsFromGoogle)) {
+        existingPhoto.baseUrl = mappedPhotoData.baseUrl;
+        existingPhoto.tagsFromGoogle = mappedPhotoData.tagsFromGoogle;
+        await existingPhoto.save();
+        if (logCounter < 2) {
+          logger.debug(`Updated existing photo: ${mappedPhotoData.googleId}`);
+        }
       }
     } else {
-      // Photo with the same googleId does not exist, insert a new photo
+      // Photo has a unique googleId, insert it into the database
       const photo = new Photo(mappedPhotoData);
       await photo.save();
-      if (logCounter < 5) { 
+      if (logCounter < 2) { 
         logger.debug(`Inserted new photo: ${mappedPhotoData.googleId}`);
       }
     }
   }
+};
+
+// Helper function to check if two arrays are equal
+const arraysAreEqual = (arr1, arr2) => {
+  return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 };
 
 // Get tags to be displayed from database
@@ -90,7 +97,7 @@ const getAllPhotos = async () => {
 
 // Export to photoDBRoutes.js for CRUD routes, except savePhoto
 module.exports = {
-  savePhoto, // Export savePhoto(mappedPhotoData) to googlePhotosAPI.js 
+  savePhoto, // Export savePhoto(mappedPhotoData) to googlePhotosAPI.js and photoUpdateController.js
   getPhotoTags,
   getSelectedPhotos, // getSelectedPhotos(tags)
   getPhotoById, // getPhotoById(id)
