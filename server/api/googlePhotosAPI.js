@@ -57,6 +57,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
       logger.info('Received media items...');
       
       // Save photo data to database
+      let logCounter = 0;
       for (const photoData of response.data.mediaItems) {
         if (photoData.description) { // Only process photos with a description
           if (!photoData.id) {
@@ -69,9 +70,13 @@ const fetchGooglePhotos = async (oauth2Client) => {
             tagsFromGoogle: photoData.description.split(' ').filter(Boolean),
           };  
           try {
-            await photoController.savePhoto(mappedPhotoData);
+            if (logCounter < 2) {
+              logger.debug(`Saving photo to database: ${JSON.stringify(mappedPhotoData)}`);
+              logCounter++;
+            }
+            await photoController.savePhoto(mappedPhotoData, logCounter);
           } catch (error) {
-            logger.error(`Error saving photo to database: ${error.message}, Photo data: ${mappedPhotoData}`);
+            logger.error(`Error saving photo to database: ${error.message}, Photo data: ${JSON.stringify(mappedPhotoData)}`);
             throw error; // This will stop the execution of fetchGooglePhotos
           }
         }

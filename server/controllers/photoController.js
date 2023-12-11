@@ -2,18 +2,24 @@ const logger = require('../config/winston.js');
 const Photo = require('../models/photoModel.js');
 
 // Save photo to database
-const savePhoto = async (photoData) => {
-  if (photoData.tagsFromGoogle) {
-    const existingPhoto = await Photo.findOne({ googleId: photoData.googleId });
+const savePhoto = async (mappedPhotoData, logCounter) => {
+  if (mappedPhotoData.tagsFromGoogle) {
+    const existingPhoto = await Photo.findOne({ googleId: mappedPhotoData.googleId });
     if (existingPhoto) {
       // Photo with the same googleId already exists, update it with the new data
-      existingPhoto.baseUrl = photoData.baseUrl;
-      existingPhoto.tagsFromGoogle = photoData.tagsFromGoogle;
+      existingPhoto.baseUrl = mappedPhotoData.baseUrl;
+      existingPhoto.tagsFromGoogle = mappedPhotoData.tagsFromGoogle;
       await existingPhoto.save();
+      if (logCounter < 2) {
+        logger.debug(`Updated existing photo: ${mappedPhotoData.googleId}`);
+      }
     } else {
       // Photo with the same googleId does not exist, insert a new photo
-      const photo = new Photo(photoData);
+      const photo = new Photo(mappedPhotoData);
       await photo.save();
+      if (logCounter < 5) { 
+        logger.debug(`Inserted new photo: ${mappedPhotoData.googleId}`);
+      }
     }
   }
 };
@@ -84,7 +90,7 @@ const getAllPhotos = async () => {
 
 // Export to photoDBRoutes.js for CRUD routes, except savePhoto
 module.exports = {
-  savePhoto, // Export savePhoto(photoData) to googlePhotosAPI.js 
+  savePhoto, // Export savePhoto(mappedPhotoData) to googlePhotosAPI.js 
   getPhotoTags,
   getSelectedPhotos, // getSelectedPhotos(tags)
   getPhotoById, // getPhotoById(id)
