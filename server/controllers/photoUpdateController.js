@@ -3,6 +3,7 @@ const fs = require('fs');
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
 const fetchGooglePhotos = require('../api/googlePhotosAPI'); // fetchGooglePhotos(oauth2Client)
+const photoController = require('../controllers/photoController'); // savePhoto(photoData)
 
 // Update photo data in database
 const updatePhotoData = async (oauth2Client) => {
@@ -33,10 +34,11 @@ const updatePhotoData = async (oauth2Client) => {
       }
     }
     logger.debug(`Prepared photos to add: ${photosToAdd.length}`);
+    logger.debug(`First photo to add: ${JSON.stringify(photosToAdd[0])}`);
 
     // Add photo data
     for (const photo of photosToAdd) {
-      await Photo.create(photo);
+      await photoController.savePhoto(photo);
     }
     logger.debug(`Added photos to database: ${photosToAdd.length}`);
   } catch (error) {
