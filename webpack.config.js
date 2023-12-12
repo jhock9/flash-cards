@@ -9,7 +9,7 @@ module.exports = {
   entry: {
     app: './src/app.js',
     login: './src/js/login.js',
-    dashboard: './src/js/dashboard.js',
+    dashboard: './src/js/dashboard/dashboard.js',
     flashcards: './src/js/flashcards.js',
   },
   mode: 'development',

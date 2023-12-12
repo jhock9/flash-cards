@@ -112,7 +112,7 @@ app.get('/flashcards', (req, res) => {
 
 // Serve dashboard.html
 app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, '../src/', 'dashboard.html'));
+  res.sendFile(path.join(__dirname, '../src/', 'dashboard/dashboard.html'));
 });
 
 app.get('/config', (req, res) => {

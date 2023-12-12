@@ -664,5 +664,5 @@ dashboardBtnBtn.addEventListener('click', async (e) => {
   
   //!! save current selections and state to database?
   
-  window.location.href = '/dashboard.html';
+  window.location.href = '/dashboard/dashboard.html';
 });
