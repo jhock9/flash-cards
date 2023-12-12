@@ -6,18 +6,20 @@ const newUserBtn = document.querySelector('#new-user-btn');
 const registerBtn = document.querySelector('#register-btn');
 const backBtn = document.querySelector('#back-btn');
 const modals = document.querySelectorAll('.modal');
-const togglePasswordButtons = document.querySelectorAll('.toggle-password');
 const incorrectModal = document.querySelector('#incorrect-modal');
 const successModal = document.querySelector('#success-modal');
 const unavailableModal = document.querySelector('#unavailable-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
 const passwordReqModal = document.querySelector('#password-req-modal');
 
+import { togglePasswordVisibility } from './helpers/password.js';
+
 //**   ON LOAD / UNLOAD  **//
 
 window.addEventListener('load', () => {
   console.log('Login window loaded, checking authentication...');
   checkAuthentication();
+  togglePasswordVisibility();
 });
 
 // Check if user is authenticated; redirect to dashboard page
@@ -168,26 +170,6 @@ newUserBtn.addEventListener('click', () => {
 backBtn.addEventListener('click', () => {
   console.log('Back button to go to login form clicked...');
   shiftFormsToLogin();
-});
-
-togglePasswordButtons.forEach(function(button) {
-  button.addEventListener('click', function() {
-    const wrapper = this.parentElement;
-    const passwordInput = wrapper.querySelector('input[type=password], input[type=text]');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    
-    const slashIcon = wrapper.querySelector('.fa-regular.fa-eye-slash');
-    const eyeIcon = wrapper.querySelector('.fa-solid.fa-eye');
-    
-    if (type === 'text') {
-      slashIcon.classList.add('hide');
-      eyeIcon.classList.remove('hide');
-    } else {
-      slashIcon.classList.remove('hide');
-      eyeIcon.classList.add('hide');
-    }
-  });
 });
 
 

@@ -5,11 +5,11 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
-import { fetchConfig, checkGoogleAuthentication } from './googleAuth.js';
-import { fetchAccountData } from './myAccount.js';
+import { togglePasswordVisibility } from './helpers/password.js';
+import { fetchAccountData } from './account.js';
 import { } from './users.js';
 import { } from './clients.js';
-
+import { fetchConfig, checkGoogleAuthentication } from './google.js';
 
 // Show or hide elements based on the user's role
 const updateDashNav = async () => {
@@ -22,7 +22,6 @@ const updateDashNav = async () => {
     const data = await response.json();
     const userRole = data.user ? data.user.role : null;
     
-    console.log('In updateDashNav, userRole:', userRole);
     for (let view of adminViews) {
       if (userRole === 'admin') {
         view.classList.remove('hide');
@@ -56,6 +55,7 @@ const logout = async () => {
 window.addEventListener('load', async () => {
   console.log('Dashboard window loaded, checking authentication...');
   updateDashNav();
+  togglePasswordVisibility();
   
   // Fetch user data and update welcome message
   const user = await fetchAccountData();
