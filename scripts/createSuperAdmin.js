@@ -1,5 +1,4 @@
-require('dotenv').config();
-const logger = require('../server/config/winston');
+require('dotenv').config({ path: '../.env' });
 const mongoose = require('mongoose');
 const User = require('../server/models/userModel');
 
@@ -10,6 +9,7 @@ const createSuperAdmin = async () => {
   await mongoose.connect(MONGO_URI);
   
   const superAdmin = new User({
+    fullname: 'Super Admin',
     username: 'SuperAdmin',
     password: SUPER_ADMIN_PASS,
     role: 'admin',
@@ -17,7 +17,7 @@ const createSuperAdmin = async () => {
   
   await superAdmin.save();
   
-  logger.info('SuperAdmin user created successfully');
+  console.log('SuperAdmin user created successfully');
   process.exit();
 }
 
