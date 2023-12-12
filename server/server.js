@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/../.env' });
 const path = require('path');
 const express = require('express');
 const app = express();
@@ -10,21 +10,27 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const cron = require('node-cron');
 
-const morganMiddleware = require('./config/morgan');
-const logger = require('./config/winston');
-
-const localPassport = require('./config/passport');
-require('./config/passport')(passport);
-
-const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
-const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Google authentication
-const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
-const { GOOGLE_CLIENT_ID, initializeOauthClient } = require('./config/googleClient'); // Google client ID for /config route, initializeOauthClient() for cron job
-const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
-
 const NODE_ENV = process.env.NODE_ENV;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const MONGO_URI = process.env.MONGO_URI;
+
+// Config
+const { GOOGLE_CLIENT_ID, initializeOauthClient } = require('./config/googleClient'); // Google client ID for /config route, initializeOauthClient() for cron job
+const morganMiddleware = require('./config/morgan');
+const logger = require('./config/winston');
+const localPassport = require('./config/passport');
+require('./config/passport')(passport);
+
+// Routes
+const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
+const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Google authentication
+const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
+const accountRoutes = require('./routes/accountRoutes'); // Routes for account management
+const userRoutes = require('./routes/userRoutes'); // Routes for user management
+const clientRoutes = require('./routes/clientRoutes'); // Routes for client management
+
+// Controllers
+const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
 
 // Enforce HTTPS redirection in production
 if (NODE_ENV === 'production') {
@@ -100,6 +106,9 @@ app.use(morganMiddleware);
 // Serve static files
 app.use(express.static(path.join(__dirname, '../src/')));
 
+// Serve favicon
+app.use('/favicon.ico', express.static(path.join(__dirname, '../src/assets/favicon.ico')));
+
 // Serve login.html at root
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/', 'login.html'));
@@ -132,6 +141,9 @@ localPassport(passport);
 app.use('/auth', authRoutes);
 app.use('/google-auth', googleAuthRoutes);
 app.use('/photos', photoDBRoutes);
+app.use('/account', accountRoutes);
+app.use('/users', userRoutes);
+app.use('/clients', clientRoutes);
 
 // Update photo data in database at 2:00 AM every day
 initializeOauthClient().then((oauth2Client) => {
