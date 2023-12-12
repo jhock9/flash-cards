@@ -16,7 +16,6 @@ logger.info('OAuth2 client AUTH URL generated...');
 
 // Redirect to Google's OAuth 2.0 server
 router.get('/authorize', (req, res) => {
-  logger.debug('Received request for /authorize...')
   logger.info('Received request for /authorize...');
   res.redirect(authUrl);
   logger.info("Redirected to Google's OAuth 2.0 server...");
@@ -26,7 +25,7 @@ router.get('/authorize', (req, res) => {
 
 // Exchange authorization code for access and refresh tokens
 router.get('/oauth2callback', async (req, res) => {
-  logger.debug(`Received OAuth2 callback with URL: ${req.url}`);
+  logger.info('Received request for /oauth2callback...');
   try {
     logger.info('Received request for /oauth2callback...');
     const q = url.parse(req.url, true).query;
@@ -41,13 +40,12 @@ router.get('/oauth2callback', async (req, res) => {
     logger.info('Attempting to get tokens with code...');
     
     const { tokens } = await oauth2Client.getToken(q.code);
-    logger.debug(`Received tokens of type: ${typeof tokens}`);
-    logger.debug(`Tokens: ${JSON.stringify(tokens)}`);
+    logger.info('Tokens received...');
     
     // Save the refresh token to your database
     if (tokens.refresh_token) {
       const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
-      logger.debug(`Tokens saved to database: ${tokenDoc}`);
+      logger.info('Token document updated...');
     }
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
@@ -56,7 +54,6 @@ router.get('/oauth2callback', async (req, res) => {
     try {
       await updatePhotoData(oauth2Client);
       logger.info('Photo data updated.');
-      logger.debug('Photo data updated with oauth2Client...');
     } catch (error) {
       logger.error(`Failed to update photo data: ${error}`);
     }
@@ -75,7 +72,7 @@ const checkTokenValidity = async (accessToken) => {
     oauth2Client.setCredentials({ access_token: accessToken });
     const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
     const isValid = Date.now() < tokenInfo.expiry_date;
-    logger.debug(`Token is valid: ${isValid}`);
+    logger.info(`Token validity: ${isValid}`);
     return isValid;
   } catch (error) {
     if (error.message === 'invalid_token') {
@@ -95,7 +92,7 @@ router.get('/google-check', async (req, res) => {
     if (tokenDoc) {
       // Check if the access token is valid
       const isValid = await checkTokenValidity(tokenDoc.accessToken);
-      logger.debug(`Token validity: ${isValid}`);
+      logger.info(`Token validity: ${isValid}`);
       if (isValid) {
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
       } else {

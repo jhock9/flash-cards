@@ -2,7 +2,7 @@ const logger = require('../config/winston.js');
 const Photo = require('../models/photoModel.js');
 
 // Save photo to database
-const savePhoto = async (mappedPhotoData, logCounter) => {
+const savePhoto = async (mappedPhotoData) => {
   if (mappedPhotoData.tagsFromGoogle) {
     const existingPhoto = await Photo.findOne({ googleId: mappedPhotoData.googleId });
     if (existingPhoto) {
@@ -11,17 +11,11 @@ const savePhoto = async (mappedPhotoData, logCounter) => {
         existingPhoto.baseUrl = mappedPhotoData.baseUrl;
         existingPhoto.tagsFromGoogle = mappedPhotoData.tagsFromGoogle;
         await existingPhoto.save();
-        if (logCounter < 2) {
-          logger.debug(`Updated existing photo: ${mappedPhotoData.googleId}`);
-        }
       }
     } else {
       // Photo has a unique googleId, insert it into the database
       const photo = new Photo(mappedPhotoData);
       await photo.save();
-      if (logCounter < 2) { 
-        logger.debug(`Inserted new photo: ${mappedPhotoData.googleId}`);
-      }
     }
   }
 };

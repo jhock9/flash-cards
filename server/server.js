@@ -135,6 +135,7 @@ app.use('/photos', photoDBRoutes);
 
 // Update photo data in database at 2:00 AM every day
 initializeOauthClient().then((oauth2Client) => {
+  logger.info ('Cron job initialized.')
   cron.schedule('0 2 * * *', () => updatePhotoData(oauth2Client));
 });
 
