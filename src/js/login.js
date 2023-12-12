@@ -140,7 +140,7 @@ registerBtn.addEventListener('click', (event) => {
       showSuccessModal();
       
       setTimeout(() => {
-        hideSuccessModal();
+        hideModal();
         shiftFormsToLogin();
       }, 2000);
     } else if (data.error) {
@@ -196,9 +196,15 @@ togglePasswordButtons.forEach(function(button) {
 modals.forEach(modal => {
   modal.addEventListener('click', event => {
     event.stopPropagation();
-    modal.classList.add('hide');
+    hideModal();
   });
 });
+
+const hideModal = () => {
+  modals.forEach(modal => {
+    modal.classList.add('hide');
+  });
+}
 
 const showIncorrectModal = () => {
   incorrectModal.classList.remove('hide');
@@ -219,7 +225,6 @@ const showPasswordMismatchModal = () => {
 const showPasswordReqModal = () => {
   passwordReqModal.classList.remove('hide');
 };
-
 
 //**   HELPER FUNCTIONS   **//
 
