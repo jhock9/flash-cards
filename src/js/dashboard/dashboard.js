@@ -24,6 +24,7 @@ const updateDashNav = async () => {
     
     for (let view of adminViews) {
       if (userRole === 'admin') {
+        console.log ('User is admin. Checking Google authentication...');
         view.classList.remove('hide');
         await fetchConfig();
         await checkGoogleAuthentication();
@@ -53,7 +54,7 @@ const logout = async () => {
 //**   ON LOAD / UNLOAD  **//
 
 window.addEventListener('load', async () => {
-  console.log('Dashboard window loaded, checking authentication...');
+  console.log('Dashboard window loaded...');
   updateDashNav();
   togglePasswordVisibility();
   
