@@ -61,6 +61,7 @@ router.post('/login', (req, res, next) => {
         return next(err);
       }
       req.session.user = {
+        username: user.username,
         role: user.role,
       };
       req.session.isAuthenticated = true;
