@@ -83,27 +83,20 @@
             <th>Password:</th>
               <td><span id="acct-password"></span></td>
                 <!-- Todo: hide password by default 
-                  hide the password with asterisks, use eye icon to reveal    
-                  pull toggle-password class from login.js (move to localAuth.js?)        
-                  <i class="toggle-password fa-regular fa-eye-slash"></i>
-                  <i class="toggle-password hide fa-solid fa-eye"></i>
+                  hide the password with asterisks, use eye icon to reveal, like we did on login page code below 
+
+                  <div class="password-wrapper center">
+                    <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+                    <i class="toggle-password fa-regular fa-eye-slash"></i>
+                    <i class="toggle-password hide fa-solid fa-eye"></i>
+                  </div>
+
                 -->
-            </tr>
-            <tr>
-              <th>Role:</th>
-              <td><span id="acct-role"></span></td>
             </tr>
           </table>
             
-            <!-- Todo: Actions - links via icons, opens modal for the update-account-form below
-              1. icon to edit account
-              <i class="fa-solid fa-pen-to-square"></i>
-                - Update data
-                - Reset password
-                - Delete user 
-            -->
-          <div class="form-wrapper hide center">
-            <h2>Update Login Information</h2>
+          <div class="form-wrapper center">
+            <div id="update-account-btn" class="wide-btn btn center">Update Info</div>
             <form id="update-account-form">
               <label for="new-username">Username:</label>
               <input type="text" id="new-username" class="input-field" placeholder="Enter New Username" name="username">
