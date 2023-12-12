@@ -88,6 +88,7 @@ loginBtn.addEventListener('click', (event) => {
 
 registerBtn.addEventListener('click', (event) => {
   event.preventDefault(); 
+  const fullname = document.querySelector('#register-fullname').value;
   const username = document.querySelector('#register-username').value;
   const password = document.querySelector('#register-password').value;
   const confirmPassword = document.querySelector('#confirm-password').value;
@@ -115,6 +116,7 @@ registerBtn.addEventListener('click', (event) => {
   };
   
   const userData = {
+    fullname,
     username,
     password,
     confirmPassword,

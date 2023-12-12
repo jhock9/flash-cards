@@ -6,11 +6,11 @@ const User = require('../models/userModel');
 // Register route
 router.post('/register', async (req, res) => {
   logger.info('Received request for /register...');
-  const { username, password, confirmPassword } = req.body;
+  const { fullname, username, password, confirmPassword } = req.body;
   
-  // Username & Password validation
-  if (!username || !password) {
-    return res.status(400).json({ error: 'Username and password are required' });
+  // Validation checks
+  if (!fullname || !username || !password) {
+    return res.status(400).json({ error: 'Full name, username, and password are required' });
   }
   
   if (password !== confirmPassword) {
@@ -33,7 +33,7 @@ router.post('/register', async (req, res) => {
   // }
   logger.info('Username and password validated...');
   try {
-    const user = new User(req.body);
+    const user = new User({ fullname, username, password });
     await user.save();
     res.status(201).json({ success: true });
   } catch (error) {
