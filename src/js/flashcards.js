@@ -42,7 +42,7 @@ const logout = async () => {
       throw new Error('Logout failed');
     }
     console.log('User signed out.');
-    window.location.href = '/login';
+    window.location.href = '/';
   } catch (error) {
     console.error('Error during logout:', error);
   }
