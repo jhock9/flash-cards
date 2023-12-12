@@ -5,8 +5,11 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
-
 import { fetchConfig, checkGoogleAuthentication } from './googleAuth.js';
+import { fetchAccountData } from './myAccount.js';
+import { } from './users.js';
+import { } from './clients.js';
+
 
 // Show or hide elements based on the user's role
 const updateDashNav = async () => {
@@ -41,7 +44,7 @@ const logout = async () => {
     if (!response.ok) {
       throw new Error('Logout failed');
     }
-    window.location.href = '/login.html';
+    window.location.href = '/login';
   } catch (error) {
     console.error('Error during logout:', error);
   }
@@ -50,9 +53,15 @@ const logout = async () => {
 
 //**   ON LOAD / UNLOAD  **//
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
   console.log('Dashboard window loaded, checking authentication...');
   updateDashNav();
+  
+  // Fetch user data and update welcome message
+  const user = await fetchAccountData();
+  if (user) {
+    document.querySelector('#username').textContent = user.fullname;
+  }
   
   // Add event listeners to remove the 'clicked' class
   document.querySelectorAll('.nav-tab a').forEach(tab => {
