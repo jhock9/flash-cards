@@ -137,8 +137,6 @@ registerBtn.addEventListener('click', (event) => {
   })
   .then(data => {
     if (data.success) {
-      window.location.href = '/login.html';
-      
       showSuccessModal();
       
       setTimeout(() => {
