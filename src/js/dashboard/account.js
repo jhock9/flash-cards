@@ -1,3 +1,4 @@
+
 const fetchAccountData = async () => {
   try {
     const response = await fetch('/account/account-data', { credentials: 'include' });
