@@ -42,7 +42,7 @@ const logout = async () => {
       throw new Error('Logout failed');
     }
     console.log('User signed out.');
-    window.location.href = '/login.html';
+    window.location.href = '/login';
   } catch (error) {
     console.error('Error during logout:', error);
   }
@@ -658,11 +658,11 @@ removeBtns.forEach((btn) => {
   });
 });
 
-dashboardBtnBtn.addEventListener('click', async (e) => {
+dashboardBtn.addEventListener('click', async (e) => {
   console.log('Dashboard button clicked...');
   e.preventDefault();
   
   //!! save current selections and state to database?
   
-  window.location.href = '/dashboard/dashboard.html';
+  window.location.href = '/dashboard';
 });

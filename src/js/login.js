@@ -32,7 +32,7 @@ const checkAuthentication = async () => {
         
     if (data.isAuthenticated) {
       console.log('User is authenticated. Redirecting to dashboard...');
-      window.location.href = './dashboard/dashboard.html';
+      window.location.href = './dashboard';
     }
   } catch (error) {
     console.error('Error checking authentication:', error);
@@ -70,7 +70,7 @@ loginBtn.addEventListener('click', (event) => {
   .then(data => {
     console.log('After login, response data:', data);
     if (data.success) {
-      window.location.href = '/dashboard/dashboard.html';
+      window.location.href = '/dashboard';
     }
   })
   .catch(error => {
