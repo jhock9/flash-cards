@@ -5,7 +5,7 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
-import { togglePasswordVisibility } from './helpers/password.js';
+import { togglePasswordVisibility } from '../helpers/password.js';
 import { fetchAccountData } from './account.js';
 import { } from './users.js';
 import { } from './clients.js';
