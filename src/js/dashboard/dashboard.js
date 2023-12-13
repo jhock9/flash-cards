@@ -90,11 +90,11 @@ navLinks.forEach((link) => {
       section.classList.remove('hide');
       
       // Show the flashcards modal if not authenticated with Google
-      if (sectionId === 'flashcards') {
+      if (sectionId === 'flashcards-tab') {
         checkGoogleAuthentication().then(response => {
           if (!response.isGoogleAuthenticated) {
             showFlashcardsModal();
-            setTimeout(hideModal, 2000);
+            setTimeout(hideModal, 3000);
           }
         });
       }
