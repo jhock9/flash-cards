@@ -22,12 +22,11 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--second-color);
-  border-right: .3rem solid var(--border-color);
+  /* border-right: .3rem solid var(--border-color); */
 }
 
 figure {
   width: 100%;
-  /* border-bottom: .3rem solid var(--primary-color); */
 }
 
 figure .logo {
@@ -63,11 +62,15 @@ figure .logo img {
   justify-content: flex-start;
 }
 
-.nav-tab a:hover,
-.nav-tab a:active,
+
+.nav-tab a:hover {
+  color: var(--white);
+  background-color: var(--border-color);
+}
+
 .nav-tab a.clicked {
   color: var(--white);
-  background-color: var(--third-color);
+  background-color: var(--primary-color);
 }
 
 #logout-container {

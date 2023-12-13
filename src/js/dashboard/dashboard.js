@@ -20,13 +20,13 @@ const updateDashNav = async (currentUser) => {
       for (let view of adminViews) {
       view.classList.remove('hide');
       }
-      document.querySelector('#users').classList.remove('hide');
+      document.querySelector('#users-tab').click();
     } else {  
       console.log('User is not admin. Hiding admin views...');
       for (let view of adminViews) {
         view.classList.add('hide');
       }
-      document.querySelector('#clients').classList.remove('hide');
+      document.querySelector('#clients-tab').click();
     }
   } catch (error) {
     console.error('Error updating dashboard navigation:', error);
@@ -40,16 +40,16 @@ window.addEventListener('load', async () => {
   await fetchConfig();
   await checkGoogleAuthentication();
   
-  // Fetch user data
-  currentUser = await fetchAccountData();
-  updateDashNav(currentUser);
-  
   // Add event listeners to remove the 'clicked' class
   document.querySelectorAll('.nav-tab a').forEach(tab => {
     tab.addEventListener('click', () => {
       googleTab.classList.remove('clicked');
     });
   });
+
+  // Fetch user data
+  currentUser = await fetchAccountData();
+  updateDashNav(currentUser);
   
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
@@ -84,6 +84,14 @@ navLinks.forEach((link) => {
       sections.forEach((section) => {
         section.classList.add('hide');
       });
+      
+      // Remove 'clicked' class from all nav tabs
+      navLinks.forEach((link) => {
+        link.classList.remove('clicked');
+      });
+      
+      // Add 'clicked' class to clicked nav tab
+      link.classList.add('clicked');
       
       // Show the clicked section
       const sectionId = href.slice(1);
