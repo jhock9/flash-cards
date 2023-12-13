@@ -21,12 +21,11 @@ const updateDashNav = async (currentUser) => {
       view.classList.remove('hide');
       }
       document.querySelector('#users-tab').click();
+      document.querySelector('#users').classList.remove('hide');
     } else {  
-      console.log('User is not admin. Hiding admin views...');
-      for (let view of adminViews) {
-        view.classList.add('hide');
-      }
+      console.log('User is not admin. Showing user views...');
       document.querySelector('#clients-tab').click();
+      document.querySelector('#clients').classList.remove('hide');
     }
   } catch (error) {
     console.error('Error updating dashboard navigation:', error);
@@ -92,19 +91,12 @@ navLinks.forEach((link) => {
 // Executes when the window loads
 window.addEventListener('load', async () => {
   console.log('Dashboard window loaded...');
-  await fetchConfig();
-  await checkGoogleAuthentication();
-  
-  // Add event listeners to remove the 'clicked' class
-  document.querySelectorAll('.nav-tab a').forEach(tab => {
-    tab.addEventListener('click', () => {
-      googleTab.classList.remove('clicked');
-    });
-  });
-  
   // Fetch user data
   currentUser = await fetchAccountData();
   updateDashNav(currentUser);
+
+  await fetchConfig();
+  await checkGoogleAuthentication();
   
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
