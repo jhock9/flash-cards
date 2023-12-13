@@ -12,7 +12,12 @@ router.get('/account-data', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     
-    res.json({ user });
+    const userResponse = {
+      username: user.username,
+      role: user.role,
+    };
+    
+    res.json({ user: userResponse });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
