@@ -6,9 +6,9 @@ const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 import { fetchAccountData } from './account.js';
-import { } from './users.js';
 import { } from './clients.js';
-import { fetchConfig, checkGoogleAuthentication } from './google.js';
+import { checkGoogleAuthentication, fetchConfig } from './google.js';
+import { } from './users.js';
 
 let currentUser;
 
@@ -33,35 +33,14 @@ const updateDashNav = async (currentUser) => {
   }
 };
 
-//**   ON LOAD / UNLOAD  **//
-
-window.addEventListener('load', async () => {
-  console.log('Dashboard window loaded...');
-  await fetchConfig();
-  await checkGoogleAuthentication();
-  
-  // Add event listeners to remove the 'clicked' class
-  document.querySelectorAll('.nav-tab a').forEach(tab => {
-    tab.addEventListener('click', () => {
-      googleTab.classList.remove('clicked');
-    });
-  });
-
-  // Fetch user data
-  currentUser = await fetchAccountData();
-  updateDashNav(currentUser);
-  
-  // Logout after 12 hours
-  setTimeout(logout, 12 * 60 * 60 * 1000);
-});
-
 const logout = async () => {
   try {
     console.log('Sending logout request...');
-    const response = await fetch('/auth/logout', { method: 'GET' });
+    const response = await fetch('/auth/logout', { method: 'GET', credentials: 'include' });
     if (!response.ok) {
       throw new Error('Logout failed');
     }
+    console.log('Logout successful.');
     window.location.href = '/';
   } catch (error) {
     console.error('Error during logout:', error);
@@ -110,12 +89,35 @@ navLinks.forEach((link) => {
   });
 });
 
+// Executes when the window loads
+window.addEventListener('load', async () => {
+  console.log('Dashboard window loaded...');
+  await fetchConfig();
+  await checkGoogleAuthentication();
+  
+  // Add event listeners to remove the 'clicked' class
+  document.querySelectorAll('.nav-tab a').forEach(tab => {
+    tab.addEventListener('click', () => {
+      googleTab.classList.remove('clicked');
+    });
+  });
+  
+  // Fetch user data
+  currentUser = await fetchAccountData();
+  updateDashNav(currentUser);
+  
+  // Logout after 12 hours
+  setTimeout(logout, 12 * 60 * 60 * 1000);
+});
+
+// Add event listeners to the flashcards modal
 flashcardsModal.addEventListener('click', event => {
   event.stopPropagation();
   flashcardsModal.classList.add('hide');
   window.location.href = '/flashcards.html';
 });
 
+// Closes the flashcards modal if the user clicks outside of it
 window.onclick = (event) => {
   if (event.target === flashcardsModal) {
     flashcardsModal.classList.add('hide');
