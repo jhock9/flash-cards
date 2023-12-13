@@ -3,12 +3,12 @@ const User = require('../models/userModel');
 
 router.get('/account-data', async (req, res) => {
   try {
-    if (!req.session.user || !req.session.user.username) {
+    if (!req.user || !req.user.username) {
       return res.status(401).json({ message: 'Not authenticated' });
     }
     
     // Find the user in the database
-    const user = await User.findOne({ username: req.session.user.username });
+    const user = await User.findOne({ username: req.user.username });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

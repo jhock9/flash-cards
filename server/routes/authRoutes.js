@@ -60,13 +60,8 @@ router.post('/login', (req, res, next) => {
       if (err) {
         return next(err);
       }
-      req.session.user = {
-        username: user.username,
-        role: user.role,
-      };
-      req.session.isAuthenticated = true;
       
-      logger.info(`req.session.user:, ${req.session.user}`);
+      logger.info(`User logged in: ${user.username}`);
       return res.json({ success: true, role: user.role });
     });
   })(req, res, next);
@@ -75,19 +70,16 @@ router.post('/login', (req, res, next) => {
 // Logout route
 router.get('/logout', (req, res) => {
   logger.info('Received request for /logout...');
-  req.logOut(() => { // Pass an empty callback function
-    req.session.destroy(() => {
-      logger.info('User logged out.');
-      res.status(200).json({ message: 'Logged out' });
-    });
-  });
+  req.logout();
+  logger.info('User logged out.');
+  res.status(200).json({ message: 'Logged out' });
 });
 
-// Check if user is authenticated with session
+// Check if user is authenticated with Passport.js
 router.get('/local-check', (req, res) => {
   logger.info('Received request for /local-check...');
-  if (req.session && req.session.isAuthenticated) {
-    res.status(200).json({ isAuthenticated: true, user: req.session.user });
+  if (req.user) {
+    res.status(200).json({ isAuthenticated: true, user: req.user });
   } else {
     res.status(200).json({ isAuthenticated: false });
   }
