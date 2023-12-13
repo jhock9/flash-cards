@@ -37,17 +37,17 @@ window.addEventListener('load', () => {
 // The logout function //!! repeated function in dashboard.js
 const logout = async () => {
   try {
-    const response = await fetch('/auth/logout', { method: 'GET' });
+    console.log('Sending logout request...');
+    const response = await fetch('/auth/logout', { method: 'GET', credentials: 'include' });
     if (!response.ok) {
       throw new Error('Logout failed');
     }
-    console.log('User signed out.');
+    console.log('Logout successful.');
     window.location.href = '/';
   } catch (error) {
     console.error('Error during logout:', error);
   }
 };
-
 //**   FETCH AND DISPLAY PHOTO TAGS   **//
 
 // Fetch tags data from database
