@@ -21,12 +21,12 @@ const updateDashNav = async (currentUser) => {
       for (let view of adminViews) {
       view.classList.remove('hide');
       }
-      document.querySelector('#users-tab').click();
-      document.querySelector('#users').classList.remove('hide');
+      // document.querySelector('#users-tab').click();
+      // document.querySelector('#users').classList.remove('hide');
     } else {  
       console.log('User is not admin. Showing user views...');
-      document.querySelector('#clients-tab').click();
-      document.querySelector('#clients').classList.remove('hide');
+      // document.querySelector('#clients-tab').click();
+      // document.querySelector('#clients').classList.remove('hide');
     }
   } catch (error) {
     console.error('Error updating dashboard navigation:', error);
