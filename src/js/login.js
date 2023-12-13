@@ -3,8 +3,8 @@ const loginForm = document.querySelector('#login-form');
 const registerForm = document.querySelector('#register-form');
 const newUserBtn = document.querySelector('#new-user-btn');
 const backBtn = document.querySelector('#back-btn');
-const togglePasswordButtons = document.querySelectorAll('.toggle-password');
 
+import { togglePasswordVisibility } from './helpers/password.js';
 import { 
   addModalEventListeners,
   hideModal,
@@ -21,8 +21,9 @@ import {
 window.addEventListener('load', () => {
   console.log('Login window loaded, checking authentication...');
   checkAuthentication();
+  togglePasswordVisibility();
   addModalEventListeners();
-});
+  });
 
 // Check if user is authenticated; redirect to dashboard page
 const checkAuthentication = async () => {
@@ -160,25 +161,6 @@ backBtn.addEventListener('click', () => {
   shiftFormsToLogin();
 });
 
-togglePasswordButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const wrapper = button.parentElement;
-    const passwordInput = wrapper.querySelector('input[type=password], input[type=text]');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    
-    const slashIcon = wrapper.querySelector('.fa-regular.fa-eye-slash');
-    const eyeIcon = wrapper.querySelector('.fa-solid.fa-eye');
-    
-    if (type === 'text') {
-      slashIcon.classList.add('hide');
-      eyeIcon.classList.remove('hide');
-    } else {
-      slashIcon.classList.remove('hide');
-      eyeIcon.classList.add('hide');
-    }
-  });
-});
 
 
 //**   HELPER FUNCTIONS   **//

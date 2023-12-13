@@ -6,9 +6,10 @@ const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 import { fetchAccountData } from './account.js';
+import { } from './users.js';
 import { } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js';
-import { } from './users.js';
+import { togglePasswordVisibility } from './helpers/password.js';
 import { 
   addModalEventListeners,
   hideModal,
@@ -35,7 +36,7 @@ const updateDashNav = async (currentUser) => {
       document.querySelector('#account').classList.add('hide');
       document.querySelector('#google').classList.remove('hide');
       showGoogleSignInModal();
-      setTimeout(hideModal, 2000);
+      setTimeout(hideModal, 4000);
     } else {  
       console.log('User is not admin. Showing user views...');
     }
@@ -115,6 +116,7 @@ window.addEventListener('load', async () => {
   currentUser = await fetchAccountData();
   updateDashNav(currentUser);
   await fetchConfig();
+  togglePasswordVisibility();
   addModalEventListeners();
   
   // Logout after 12 hours
