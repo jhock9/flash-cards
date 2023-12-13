@@ -1,3 +1,4 @@
+const logger = require('../config/winston');
 const router = require('express').Router();
 const User = require('../models/userModel');
 
@@ -9,7 +10,7 @@ router.get('/account-data', async (req, res) => {
       return res.status(401).json({ message: 'Not authenticated' });
     }
     
-    const user = await User.findById(req.session.user.username);
+    const user = await User.findOne(req.session.user.username);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
