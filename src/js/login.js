@@ -1,9 +1,7 @@
 const formContainer = document.querySelector('#form-container');
 const loginForm = document.querySelector('#login-form');
 const registerForm = document.querySelector('#register-form');
-const loginBtn = document.querySelector('#login-submit-btn');
 const newUserBtn = document.querySelector('#new-user-btn');
-const registerBtn = document.querySelector('#register-btn');
 const backBtn = document.querySelector('#back-btn');
 const modals = document.querySelectorAll('.modal');
 const togglePasswordButtons = document.querySelectorAll('.toggle-password');
@@ -41,9 +39,9 @@ const checkAuthentication = async () => {
 };
 
 
-//**   BUTTONS   **/
+//**   FORMS   **/
 
-loginBtn.addEventListener('click', (event) => {
+loginForm.addEventListener('submit', (event) => {
   event.preventDefault(); // prevent the form from submitting normally
   const username = document.querySelector('#login-username').value;
   const password = document.querySelector('#login-password').value;
@@ -87,7 +85,7 @@ loginBtn.addEventListener('click', (event) => {
   });
 });
 
-registerBtn.addEventListener('click', (event) => {
+registerForm.addEventListener('submit', (event) => {
   event.preventDefault(); 
   const fullname = document.querySelector('#register-fullname').value;
   const username = document.querySelector('#register-username').value;
@@ -160,6 +158,9 @@ registerBtn.addEventListener('click', (event) => {
     console.error('There has been a problem with your fetch operation:', error);
   });
 });
+
+
+//**   BUTTONS   **//
 
 newUserBtn.addEventListener('click', () => {
   console.log('Add new user form button clicked...');
