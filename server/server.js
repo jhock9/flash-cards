@@ -134,7 +134,7 @@ app.get('/config', (req, res) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Configure passport-local to use user model for authentication
+// Configure passport to use user model for authentication
 localPassport(passport);
 
 // Routes

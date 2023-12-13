@@ -7,6 +7,7 @@ router.get('/account-data', async (req, res) => {
       return res.status(401).json({ message: 'Not authenticated' });
     }
     
+    // Find the user in the database
     const user = await User.findOne({ username: req.session.user.username });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

@@ -13,6 +13,7 @@ const unavailableModal = document.querySelector('#unavailable-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
 const passwordReqModal = document.querySelector('#password-req-modal');
 
+
 //**   ON LOAD / UNLOAD  **//
 
 window.addEventListener('load', () => {
