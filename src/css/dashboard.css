@@ -89,30 +89,125 @@ main {
   height: 100vh;
   flex-grow: 1;
 }
-
-#welcome {
+/* 
+table {
   width: 100%;
-  margin: -5rem 0 0 0;
+  margin: 0;
+} */
+
+table th {
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: left;
+  color: var(--black);
+  background-color: var(--white);
 }
 
-#welcome h3 {
-  font-size: 3.5rem;
+table td {
+  padding: 1rem 2rem;
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-align: left;
+  color: var(--black);
+  background-color: var(--white);
+}
+
+table td a {
+  color: var(--black);
+}
+
+table td a:hover {
+  color: var(--third-color);
+}
+
+form {
+  width: 100%;
+  margin: 0;
+}
+
+form label {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: left;
+  color: var(--black);
+  background-color: var(--white);
+}
+
+form input {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-align: left;
+  color: var(--black);
+  background-color: var(--white);
+}
+/* 
+form input[type="submit"] {
+  width: 100%;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--white);
+  background-color: var(--third-color);
+  border: none;
+} */
+/* 
+form input[type="submit"]:hover,
+form input[type="submit"]:active {
+  color: var(--black);
+  background-color: var(--white);
+  border: 1px solid var(--black);
+} */
+
+/* Account */
+#account-wrapper {
+  width: 100%;
+  flex-direction: column;
 }
 
 figure {
-  width: 100%;
+  /* width: 100%; */
 }
 
 figure .logo img {
-  max-width: 40rem;
-  margin-bottom: 5rem;
+  max-width: 30rem;
 }
 
-
-#g_id_onload,
-#google-signin {
-  margin: 6rem 0;
+#account-info {
+  width: 100%;
+  margin: 10rem 0 5rem 0;
+  padding: 0;
 }
+
+.form-wrapper {
+  margin-top: 2rem;
+  padding: 2rem 4rem;
+  border: 2px solid var(--border-color);
+}
+
+h4 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+#update-password-form,
+.form-wrapper {
+  flex-direction: column;
+}
+
+/* Users */
+
+
+/* Clients */
+
+
+/* Google */
+
 
 /*=====================================================================================
   Media Queries for Responsive Design     
