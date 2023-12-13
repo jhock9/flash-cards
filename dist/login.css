@@ -93,14 +93,6 @@ figure .logo img {
   pointer-events: auto;
 }
 
-.input-field {
-  width: 21.5rem;
-  height: 3rem;
-  font-size: 2rem;
-  margin: 1rem 0;
-  padding: .2rem 1rem;
-}
-
 #login-submit-btn,
 #register-btn {
   color: var(--white);
@@ -135,31 +127,6 @@ figure .logo img {
 #back-btn:active {
   color: var(--white);
   border-color: var(--white);
-}
-
-.password-wrapper {
-  position: relative;
-}
-
-input[type=password] {
-  width: 21.5rem;
-  padding-right: 4rem; 
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  font-size: 1.5rem;
-  background: none;
-  border: none;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-
-#g_id_onload,
-#google-signin {
-  margin: 6rem 0;
 }
 
 footer {
