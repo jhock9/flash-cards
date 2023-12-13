@@ -22,19 +22,25 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--second-color);
+  border-right: .3rem solid var(--border-color);
+}
+
+figure {
+  width: 100%;
+  /* border-bottom: .3rem solid var(--primary-color); */
+}
+
+figure .logo {
+  width: 100%;
+  margin: 2rem 0;
+}
+
+figure .logo img {
+  width: 60%;
 }
 
 #dash-nav {
   width: 100%;
-}
-
-#dash-nav h1 {
-  width: 100%;
-  padding: 3rem 4rem;
-  letter-spacing: 0.3rem;
-  text-transform: uppercase;
-  color: var(--white);
-  background-color: var(--primary-color);
 }
 
 #dash-nav-list {
@@ -170,24 +176,15 @@ form input[type="submit"]:active {
   flex-direction: column;
 }
 
-figure {
-  /* width: 100%; */
-}
-
-figure .logo img {
-  max-width: 30rem;
-}
-
 #account-info {
   width: 100%;
-  margin: 10rem 0 5rem 0;
+  margin: 8rem 0 5rem 0;
   padding: 0;
 }
 
 .form-wrapper {
-  margin-top: 2rem;
   padding: 2rem 4rem;
-  border: 2px solid var(--border-color);
+  border: .5rem solid var(--border-color);
 }
 
 h4 {
