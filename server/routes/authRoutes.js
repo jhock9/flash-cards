@@ -69,10 +69,15 @@ router.post('/login', (req, res, next) => {
 
 // Logout route
 router.get('/logout', (req, res) => {
-  logger.info('Received request for /logout...');
-  req.logout();
-  logger.info('User logged out.');
-  res.status(200).json({ message: 'Logged out' });
+  req.logout((err) => {
+    if (err) {
+      console.error('Logout error:', err);
+      res.status(500).json({ message: 'Logout failed' });
+    } else {
+      console.log('User logged out.');
+      res.status(200).json({ message: 'Logged out' });
+    }
+  });
 });
 
 // Check if user is authenticated with Passport.js
