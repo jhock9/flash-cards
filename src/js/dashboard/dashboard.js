@@ -5,37 +5,55 @@ const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
-import { togglePasswordVisibility } from '../helpers/password.js';
 import { fetchAccountData } from './account.js';
 import { } from './users.js';
 import { } from './clients.js';
 import { fetchConfig, checkGoogleAuthentication } from './google.js';
 
+let currentUser;
+
 // Show or hide elements based on the user's role
-const updateDashNav = async () => {
+const updateDashNav = async (currentUser) => {
   try {
-    const response = await fetch('/auth/local-check', { credentials: 'include' });
-    if (!response.ok) {
-      console.error(`Server responded with status: ${response.status}`);
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-    const data = await response.json();
-    const userRole = data.user ? data.user.role : null;
-    
-    for (let view of adminViews) {
-      if (userRole === 'admin') {
-        console.log ('User is admin. Checking Google authentication...');
-        view.classList.remove('hide');
-        await fetchConfig();
-        await checkGoogleAuthentication();
-      } else {
+    if (currentUser.role === 'admin') {
+      console.log ('User is admin. Showing admin views...');
+      for (let view of adminViews) {
+      view.classList.remove('hide');
+      }
+      document.querySelector('#users').classList.remove('hide');
+    } else {  
+      console.log('User is not admin. Hiding admin views...');
+      for (let view of adminViews) {
         view.classList.add('hide');
       }
+      document.querySelector('#clients').classList.remove('hide');
     }
   } catch (error) {
     console.error('Error updating dashboard navigation:', error);
   }
 };
+
+//**   ON LOAD / UNLOAD  **//
+
+window.addEventListener('load', async () => {
+  console.log('Dashboard window loaded...');
+  await fetchConfig();
+  await checkGoogleAuthentication();
+  
+  // Fetch user data
+  currentUser = await fetchAccountData();
+  updateDashNav(currentUser);
+  
+  // Add event listeners to remove the 'clicked' class
+  document.querySelectorAll('.nav-tab a').forEach(tab => {
+    tab.addEventListener('click', () => {
+      googleTab.classList.remove('clicked');
+    });
+  });
+  
+  // Logout after 12 hours
+  setTimeout(logout, 12 * 60 * 60 * 1000);
+});
 
 const logout = async () => {
   try {
@@ -49,32 +67,6 @@ const logout = async () => {
     console.error('Error during logout:', error);
   }
 };
-
-
-//**   ON LOAD / UNLOAD  **//
-
-window.addEventListener('load', async () => {
-  console.log('Dashboard window loaded...');
-  updateDashNav();
-  togglePasswordVisibility();
-  
-  // Fetch user data and update welcome message
-  const user = await fetchAccountData();
-  if (user) {
-    document.querySelector('#username').textContent = user.fullname;
-  }
-  
-  // Add event listeners to remove the 'clicked' class
-  document.querySelectorAll('.nav-tab a').forEach(tab => {
-    tab.addEventListener('click', () => {
-      googleTab.classList.remove('clicked');
-    });
-  });
-  
-  // Logout after 12 hours
-  setTimeout(logout, 12 * 60 * 60 * 1000);
-});
-
 
 //**   NAV BAR  **//
 
