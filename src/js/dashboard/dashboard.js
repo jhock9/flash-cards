@@ -1,6 +1,7 @@
 const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const googleTab = document.querySelector('#google');
+const updatePassword = document.querySelector('#update-password-form');
 const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
@@ -128,8 +129,56 @@ logoutBtn.addEventListener('click', async (e) => {
 
 //**   ACCOUNT   **//
 
-document.querySelector('#update-password-form').addEventListener('submit', updatePassword);
-
+updatePassword.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const currentPassword = document.querySelector('#current-password').value;
+  const newPassword = document.querySelector('#new-password').value;
+  const confirmNewPassword = document.querySelector('#confirm-new-password').value;
+  
+  if (!/^\d{4}$/.test(newPassword)) {
+    showPasswordReqModal();
+    setTimeout(hidePasswordReqModal, 2000);
+    return;
+  }
+  
+  if (newPassword !== confirmNewPassword) {
+    showPasswordMismatchModal();
+    setTimeout(hideModal, 2000);
+    return;
+  }
+  
+  const passwordData = {
+    currentPassword,
+    newPassword,
+  };
+  
+  fetch('/auth/update-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(passwordData),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showSuccessModal();
+      setTimeout(() => {
+        hideModal();
+      }, 2000);
+    } else if (data.error) {
+      if (data.error === 'Current password is incorrect') {
+        showCurrentPasswordIncorrectModal();
+      } else {
+        console.log(data.error);
+      }
+    }
+  })
+    .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
+});
 
 // Hide the password column
 document.querySelectorAll('#users-table tbody td:nth-child(2)').forEach(td => {
