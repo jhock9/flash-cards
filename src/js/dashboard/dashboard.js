@@ -8,6 +8,7 @@ const passwordReqModal = document.querySelector('#password-req-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
 const currentPasswordIncorrectModal = document.querySelector('#current-password-incorrect-modal');
 const passwordUpdatedModal = document.querySelector('#password-updated-modal');
+const googleSignInModal = document.querySelector('#google-signin-modal');
 
 import { fetchAccountData } from './account.js';
 import { } from './clients.js';
@@ -28,6 +29,8 @@ const updateDashNav = async (currentUser) => {
       document.querySelector('#google').click();
       document.querySelector('#account').classList.add('hide');
       document.querySelector('#google').classList.remove('hide');
+      showGoogleSignInModal();
+      setTimeout(hideModal, 2000);
     } else {  
       console.log('User is not admin. Showing user views...');
     }
@@ -84,7 +87,8 @@ navLinks.forEach((link) => {
       if (sectionId === 'flashcards') {
         checkGoogleAuthentication().then(response => {
           if (!response.isGoogleAuthenticated) {
-            flashcardsModal.classList.remove('hide');
+            showFlashcardsModal();
+            setTimeout(hideModal, 2000);
           }
         });
       }
@@ -96,11 +100,10 @@ navLinks.forEach((link) => {
 window.addEventListener('load', async () => {
   console.log('Dashboard window loaded...');
   document.querySelector('#account-tab').click();
-
+  
   currentUser = await fetchAccountData();
   updateDashNav(currentUser);
   await fetchConfig();
-  await checkGoogleAuthentication();
   
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
@@ -134,7 +137,7 @@ updatePassword.addEventListener('submit', async (e) => {
   
   if (!/^\d{4}$/.test(newPassword)) {
     showPasswordReqModal();
-    setTimeout(hidePasswordReqModal, 2000);
+    setTimeout(hideModal, 2000);
     return;
   }
   
@@ -160,18 +163,17 @@ updatePassword.addEventListener('submit', async (e) => {
   .then(data => {
     if (data.success) {
       showPasswordUpdatedModal();
-      setTimeout(() => {
-        hideModal();
-      }, 2000);
+      setTimeout(hideModal, 2000);
     } else if (data.error) {
       if (data.error === 'Current password is incorrect') {
         showCurrentPasswordIncorrectModal();
+        setTimeout(hideModal, 2000);
       } else {
         console.log(data.error);
       }
     }
   })
-    .catch(error => {
+  .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);
   });
 });
@@ -261,12 +263,6 @@ const hideModal = () => {
   });
 }
 
-flashcardsModal.addEventListener('click', event => {
-  event.stopPropagation();
-  hideModal();
-  window.location.href = '/flashcards.html';
-});
-
 const showPasswordReqModal = () => {
   passwordReqModal.classList.remove('hide');
 };
@@ -282,3 +278,17 @@ const showPasswordUpdatedModal = () => {
 const showCurrentPasswordIncorrectModal = () => {
   currentPasswordIncorrectModal.classList.remove('hide');
 }
+
+const showGoogleSignInModal = () => {
+  googleSignInModal.classList.remove('hide');
+};
+
+const showFlashcardsModal = () => {
+  flashcardsModal.classList.remove('hide');
+}
+
+flashcardsModal.addEventListener('click', event => {
+  event.stopPropagation();
+  hideModal();
+  window.location.href = '/flashcards.html';
+});
