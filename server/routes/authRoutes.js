@@ -54,7 +54,7 @@ router.post('/login', (req, res, next) => {
       return next(err);
     }
     if (!user) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ error: info.message });
     }
     req.logIn(user, (err) => {
       if (err) {

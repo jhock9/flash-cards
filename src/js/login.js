@@ -5,7 +5,8 @@ const newUserBtn = document.querySelector('#new-user-btn');
 const backBtn = document.querySelector('#back-btn');
 const modals = document.querySelectorAll('.modal');
 const togglePasswordButtons = document.querySelectorAll('.toggle-password');
-const incorrectModal = document.querySelector('#incorrect-modal');
+const incorrectUsernameModal = document.querySelector('#incorrect-username-modal');
+const incorrectPasswordModal = document.querySelector('#incorrect-password-modal');
 const successModal = document.querySelector('#success-modal');
 const unavailableModal = document.querySelector('#unavailable-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
@@ -58,30 +59,23 @@ loginForm.addEventListener('submit', (event) => {
     },
     body: JSON.stringify(userData),
   })
-  .then(response => {
-    if (response.status === 401) {
-      throw new Error('Invalid username or password');
-    } else if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
+  .then(response => response.json())
   .then(data => {
-    console.log('After login, response data:', data);
-    if (data.success) {
+    if (data.error) {
+      if (data.error === 'Invalid username') {
+        showIncorrectUsernameModal();
+      } else if (data.error === 'Invalid password') {
+        showIncorrectPasswordModal();
+      }
+      setTimeout(() => {
+        hideModal();
+      }, 2000);
+    } else if (data.success) {
       window.location.href = '/dashboard';
     }
   })
   .catch(error => {
-    if (error.message === 'Invalid username or password') {
-      showIncorrectModal();
-      
-      setTimeout(() => {
-        hideModal();
-      }, 2000);
-    } else {
-      console.log(error.message);
-    };
+    console.log(error.message);
   });
 });
 
@@ -208,9 +202,13 @@ const hideModal = () => {
   });
 }
 
-const showIncorrectModal = () => {
-  incorrectModal.classList.remove('hide');
-};
+const showIncorrectUsernameModal = () => {
+  incorrectUsernameModal.classList.remove('hide');
+}
+
+const showIncorrectPasswordModal = () => {
+  incorrectPasswordModal.classList.remove('hide');
+}
 
 const showSuccessModal = () => {
   successModal.classList.remove('hide');

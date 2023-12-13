@@ -6,8 +6,11 @@ const localPassport = (passport) => {
     async (username, password, done) => {
       try {
         const user = await User.findOne({ username });
-        if (!user || !(await user.comparePassword(password))) {
-          return done(null, false, { message: 'Incorrect username or password.' });
+        if (!user) {
+          return done(null, false, { message: 'Invalid username' });
+        }
+        if (!(await user.comparePassword(password))) {
+          return done(null, false, { message: 'Invalid password' });
         }
         return done(null, user);
       } catch (err) {
