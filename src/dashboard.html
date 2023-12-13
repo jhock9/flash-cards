@@ -57,59 +57,52 @@
         </div>
       </aside>
       
-      <main class="center">        
-        <section id="welcome" class="center">
-          <figure class="center">
-            <div class="logo center">
-              <img src="assets/ABA+Red+Logo.png" alt="Logo of ABA Co-op, a cooperative organization for Applied Behavior Analysis">
-            </div>  
-          </figure>
-          
-          <!-- name taken from userModel fullname -->
-          <h3 class="center">Welcome,&nbsp;<span id="username"></span>!</h3>
-        </section>
-        
-        <section id="account" class="hide center">          
-          <table id="account-info" class="center">
-            <tr>
-              <th>Name:</th>
-              <td><span id="acct-name"></span></td>
-            </tr>
-            <tr>
-              <th>Username:</th>
-              <td><span id="acct-username"></span></td>
-            </tr>
-            <tr>
-            <th>Password:</th>
-              <td><span id="acct-password"></span></td>
-                <!-- Todo: hide password by default 
-                  hide the password with asterisks, use eye icon to reveal, like we did on login page code below 
-
-                  <div class="password-wrapper center">
-                    <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" required>
-                    <i class="toggle-password fa-regular fa-eye-slash"></i>
-                    <i class="toggle-password hide fa-solid fa-eye"></i>
-                  </div>
-
-                -->
-            </tr>
-          </table>
+      <main class="center">   
+        <section id="account" class="center">  
+          <div id="account-wrapper" class="center">        
+            <figure class="center">
+              <div class="logo center">
+                <img src="assets/ABA+Red+Logo.png" alt="Logo of ABA Co-op, a cooperative organization for Applied Behavior Analysis">
+              </div>  
+            </figure>
             
-          <div class="form-wrapper center">
-            <div id="update-account-btn" class="wide-btn btn center">Update Info</div>
-            <form id="update-account-form">
-              <label for="new-username">Username:</label>
-              <input type="text" id="new-username" class="input-field" placeholder="Enter New Username" name="username">
+            <!-- <h3 class="center">Welcome,&nbsp;<span id="username"></span>!</h3> -->
+            
+            <table id="account-info" class="center">
+              <tr>
+                <th>Name:</th>
+                <td><span id="acct-name"></span></td>
+              </tr>
+              <tr>
+                <th>Username:</th>
+                <td><span id="acct-username"></span></td>
+              </tr>
+            </table>
               
-              <label for="new-password">Password:</label>
-              <input type="password" id="new-password" class="input-field" placeholder="Enter new 4-Digit Code" name="password">
-              
-              <label for="confirm-new-password">Confirm Password:</label>
-              <input type="password" id="confirm-new-password" class="input-field" placeholder="Confirm new 4-Digit Code" name="confirmPassword">
-              
-              <input type="submit" value="Update Login Info">
-              <button type="submit" id="update-login-btn" class="wide-btn btn">Update</button>
-            </form>
+            <div class="form-wrapper center">
+              <h4>Update 4-Digit Pass Code?</h4>
+              <form id="update-password-form" class="center">
+                <div class="password-wrapper center">
+                  <input type="password" id="current-password" class="input-field" name="currentPassword" placeholder="Current Code" required>
+                  <i class="toggle-password fa-regular fa-eye-slash"></i>
+                  <i class="toggle-password hide fa-solid fa-eye"></i>
+                </div>
+                
+                <div class="password-wrapper center">
+                  <input type="password" id="new-password" class="input-field" name="password" placeholder="New Code" required>
+                  <i class="toggle-password fa-regular fa-eye-slash"></i>
+                  <i class="toggle-password hide fa-solid fa-eye"></i>
+                </div>
+                
+                <div class="password-wrapper center">
+                  <input type="password" id="confirm-new-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" required>
+                  <i class="toggle-password fa-regular fa-eye-slash"></i>
+                  <i class="toggle-password hide fa-solid fa-eye"></i>
+                </div>
+                
+                <button type="submit" id="update-login-btn" class="wide-btn btn center">Update</button>
+              </form>
+            </div>
           </div>
         </section>
         
