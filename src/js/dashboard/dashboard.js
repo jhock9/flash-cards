@@ -9,7 +9,7 @@ import { fetchAccountData } from './account.js';
 import { } from './users.js';
 import { } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js';
-import { togglePasswordVisibility } from './helpers/password.js';
+import { togglePasswordVisibility } from '../components/password.js';
 import { 
   addModalEventListeners,
   hideModal,

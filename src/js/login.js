@@ -4,7 +4,7 @@ const registerForm = document.querySelector('#register-form');
 const newUserBtn = document.querySelector('#new-user-btn');
 const backBtn = document.querySelector('#back-btn');
 
-import { togglePasswordVisibility } from './helpers/password.js';
+import { togglePasswordVisibility } from './components/password.js';
 import { 
   addModalEventListeners,
   hideModal,
