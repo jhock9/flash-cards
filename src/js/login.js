@@ -86,27 +86,17 @@ registerForm.addEventListener('submit', (event) => {
   const password = document.querySelector('#register-password').value;
   const confirmPassword = document.querySelector('#confirm-password').value;
   
-    if (!/^\d{4}$/.test(password)) {
-    event.preventDefault();
+  if (!/^\d{4}$/.test(newPassword)) {
     showPasswordReqModal();
-    
-    setTimeout(() => {
-      hidePasswordReqModal();
-    }, 2000);
-    
+    setTimeout(hideModal, 2000);
     return;
-  };
+  }
   
-  if (password !== confirmPassword) {
-    event.preventDefault();
+  if (newPassword !== confirmNewPassword) {
     showPasswordMismatchModal();
-    
-    setTimeout(() => {
-      hideModal();
-    }, 2000);
-    
+    setTimeout(hideModal, 2000);
     return;
-  };
+  }
   
   const userData = {
     fullname,
