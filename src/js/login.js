@@ -3,21 +3,25 @@ const loginForm = document.querySelector('#login-form');
 const registerForm = document.querySelector('#register-form');
 const newUserBtn = document.querySelector('#new-user-btn');
 const backBtn = document.querySelector('#back-btn');
-const modals = document.querySelectorAll('.modal');
 const togglePasswordButtons = document.querySelectorAll('.toggle-password');
-const incorrectUsernameModal = document.querySelector('#incorrect-username-modal');
-const incorrectPasswordModal = document.querySelector('#incorrect-password-modal');
-const successModal = document.querySelector('#success-modal');
-const unavailableModal = document.querySelector('#unavailable-modal');
-const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
-const passwordReqModal = document.querySelector('#password-req-modal');
 
+import { 
+  addModalEventListeners,
+  hideModal,
+  showIncorrectUsernameModal,
+  showIncorrectPasswordModal,
+  showSuccessModal,
+  showUnavailableModal,
+  showPasswordReqModal,
+  showPasswordMismatchModal
+} from './components/modals.js';
 
 //**   ON LOAD / UNLOAD  **//
 
 window.addEventListener('load', () => {
   console.log('Login window loaded, checking authentication...');
   checkAuthentication();
+  addModalEventListeners();
 });
 
 // Check if user is authenticated; redirect to dashboard page
@@ -176,45 +180,6 @@ togglePasswordButtons.forEach(button => {
   });
 });
 
-
-//**   MODAL FUNCTIONS   **//
-
-modals.forEach(modal => {
-  modal.addEventListener('click', event => {
-    event.stopPropagation();
-    hideModal();
-  });
-});
-
-const hideModal = () => {
-  modals.forEach(modal => {
-    modal.classList.add('hide');
-  });
-}
-
-const showIncorrectUsernameModal = () => {
-  incorrectUsernameModal.classList.remove('hide');
-}
-
-const showIncorrectPasswordModal = () => {
-  incorrectPasswordModal.classList.remove('hide');
-}
-
-const showSuccessModal = () => {
-  successModal.classList.remove('hide');
-};
-
-const showUnavailableModal = () => {
-  unavailableModal.classList.remove('hide');
-};
-
-const showPasswordMismatchModal = () => {
-  passwordMismatchModal.classList.remove('hide');
-};
-
-const showPasswordReqModal = () => {
-  passwordReqModal.classList.remove('hide');
-};
 
 //**   HELPER FUNCTIONS   **//
 

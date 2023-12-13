@@ -4,16 +4,21 @@ const updatePassword = document.querySelector('#update-password-form');
 const logoutBtn = document.querySelector('#logout-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
-const passwordReqModal = document.querySelector('#password-req-modal');
-const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
-const currentPasswordIncorrectModal = document.querySelector('#current-password-incorrect-modal');
-const passwordUpdatedModal = document.querySelector('#password-updated-modal');
-const googleSignInModal = document.querySelector('#google-signin-modal');
 
 import { fetchAccountData } from './account.js';
 import { } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js';
 import { } from './users.js';
+import { 
+  addModalEventListeners,
+  hideModal,
+  showPasswordReqModal, 
+  showPasswordMismatchModal,
+  showPasswordUpdatedModal,
+  showCurrentPasswordIncorrectModal,
+  showGoogleSignInModal,
+  showFlashcardsModal
+} from '../components/modals.js';
 
 let currentUser;
 
@@ -26,7 +31,7 @@ const updateDashNav = async (currentUser) => {
       view.classList.remove('hide');
       }
       await checkGoogleAuthentication();
-      document.querySelector('#google').click();
+      document.querySelector('#google-tab').click();
       document.querySelector('#account').classList.add('hide');
       document.querySelector('#google').classList.remove('hide');
       showGoogleSignInModal();
@@ -96,6 +101,12 @@ navLinks.forEach((link) => {
   });
 });
 
+flashcardsModal.addEventListener('click', event => {
+  event.stopPropagation();
+  hideModal();
+  window.location.href = '/flashcards.html';
+});
+
 // Executes when the window loads
 window.addEventListener('load', async () => {
   console.log('Dashboard window loaded...');
@@ -104,6 +115,7 @@ window.addEventListener('load', async () => {
   currentUser = await fetchAccountData();
   updateDashNav(currentUser);
   await fetchConfig();
+  addModalEventListeners();
   
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
@@ -246,49 +258,5 @@ const sortTable = (columnIndex) => {
       direction = direction === 'asc' ? 'desc' : 'asc';
     }
   }
-}
-
-//**   MODALS   **//
-
-modals.forEach(modal => {
-  modal.addEventListener('click', event => {
-    event.stopPropagation();
-    hideModal();
-  });
-});
-
-const hideModal = () => {
-  modals.forEach(modal => {
-    modal.classList.add('hide');
-  });
-}
-
-const showPasswordReqModal = () => {
-  passwordReqModal.classList.remove('hide');
 };
 
-const showPasswordMismatchModal = () => {
-  passwordMismatchModal.classList.remove('hide');
-};
-
-const showPasswordUpdatedModal = () => {
-  passwordUpdatedModal.classList.remove('hide');
-};
-
-const showCurrentPasswordIncorrectModal = () => {
-  currentPasswordIncorrectModal.classList.remove('hide');
-}
-
-const showGoogleSignInModal = () => {
-  googleSignInModal.classList.remove('hide');
-};
-
-const showFlashcardsModal = () => {
-  flashcardsModal.classList.remove('hide');
-}
-
-flashcardsModal.addEventListener('click', event => {
-  event.stopPropagation();
-  hideModal();
-  window.location.href = '/flashcards.html';
-});
