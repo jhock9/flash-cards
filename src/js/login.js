@@ -47,8 +47,8 @@ const checkAuthentication = async () => {
 
 //**   FORMS   **/
 
-loginForm.addEventListener('submit', (event) => {
-  event.preventDefault(); // prevent the form from submitting normally
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault(); // prevent the form from submitting normally
   const username = document.querySelector('#login-username').value;
   const password = document.querySelector('#login-password').value;
   
