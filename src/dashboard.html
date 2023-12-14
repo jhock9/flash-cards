@@ -62,19 +62,19 @@
       <main class="center">   
         <section id="account" class="center">  
           <div id="account-wrapper" class="center">        
-            <table id="account-info" class="center">
+            <table id="account-table" class="center">
               <tr>
                 <th>Name:</th>
-                <td><span id="acct-name"></span></td>
+                <td><span id="acct-name">Super Admin</span></td>
               </tr>
               <tr>
                 <th>Username:</th>
-                <td><span id="acct-username"></span></td>
+                <td><span id="acct-username">SuperAdmin</span></td>
               </tr>
             </table>
               
             <div class="form-wrapper center">
-              <h4>Update 4-Digit Pass Code?</h4>
+              <h4>Update 4-Digit Passcode?</h4>
               <form id="update-password-form" class="center">
                 <div class="password-wrapper center">
                   <input type="password" id="current-password" class="input-field" name="currentPassword" placeholder="Current Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
@@ -101,52 +101,70 @@
         </section>
         
         <section id="users" class="hide center">
-          <table id="users-table" class="center">
-            <thead>
-              <!-- Todo: Sortable table -->
-              <tr>
-                <th>Name</th>
-                <th>Username</th>
-                <th>Password</th> 
-                <th>Role</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            
-            <tbody id="users-table-body">
-              <!-- First row is a form to create a new user -->
-              <tr>
-                <td><input type="text" id="new-user-name" placeholder="Name" required></td>
-                <td><input type="text" id="new-user-username" placeholder="Username" required></td>
-                <td class="password-wrapper">
-                  <input type="password" id="new-user-password" placeholder="Password" pattern="\d{4}" title="Password must be a 4-digit code" required>
-                  <i class="toggle-password fa-regular fa-eye-slash"></i>
-                  <i class="toggle-password hide fa-solid fa-eye"></i>
-                </td>
-                <td>
-                  <select id="new-user-role" required>
-                    <option value="">Select role</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                  </select>
-                </td>
-                <td>
-                  <button type="submit" id="create-user-btn" class="form-btn">Create</button>
-                </td>
-              </tr>
+            <table id="users-table">
+              <thead id="users-table-head">
+                <!-- Todo: Sortable table -->
+                <tr>
+                  <th>Name</th>
+                  <th>Username</th>
+                  <th>Passcode</th> 
+                  <th>Role</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
               
-              <!-- All remaining rows are generated dynamically from the database -->
-            </tbody>
-          </table>
-            <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
-              1. icon to edit user
-              <i class="fa-solid fa-pen-to-square"></i>
-                - Update data
-                - Reset password
-                - Delete user 
-              2. icon to view clients
-                <i class="fa-solid fa-user-group"></i>
-            -->
+              <tbody id="users-table-body">
+                <!-- First row is a form to create a new user -->
+                <tr>
+                  <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
+                  <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
+                  <td><input type="password" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
+                  <td>
+                    <select id="new-user-role" required>
+                      <option value="">Select role</option>
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button type="submit" id="create-user-btn" class="form-btn">Create</button>
+                  </td>
+                </tr>
+                <tr id="empty-row"></tr>
+                <!-- //!! FOR TESTING -->
+                <!-- <tr>
+                  <td>John Doe</td>
+                  <td>johndoe</td>
+                  <td>****</td>
+                  <td>Admin</td>
+                  <td>
+                    <i class="table-icon fa-solid fa-pen-to-square"></i>
+                    <i class="table-icon fa-solid fa-user-group"></i>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Jane Smith</td>
+                  <td>janesmith</td>
+                  <td>****</td>
+                  <td>User</td>
+                  <td>
+                    <i class="table-icon fa-solid fa-pen-to-square"></i>
+                    <i class="table-icon fa-solid fa-user-group"></i>
+                  </td>
+                </tr> -->
+                <!--//!! FOR TESTING -->
+                <!-- All remaining rows are generated dynamically from the database -->
+              </tbody>
+            </table>
+              <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
+                1. icon to edit user
+                <i class="fa-solid fa-pen-to-square"></i>
+                  - Update data
+                  - Reset password
+                  - Delete user 
+                2. icon to view clients
+                  <i class="fa-solid fa-user-group"></i>
+              -->
         </section>
         
         <section id="clients" class="hide center">

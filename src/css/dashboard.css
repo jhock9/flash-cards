@@ -2,11 +2,11 @@
   Mobile Styles
   ========================================================================== */
 
+/* Base Styles */
+
 #dash-page {
   width: 100%;
   height: 100%;
-  flex-direction: column;
-  justify-content: flex-start;
 }
 
 #dash-content-wrapper {
@@ -15,14 +15,35 @@
   justify-content: flex-start;
 }
 
-/* Nav Panel */
+main {
+  height: 100vh;
+  flex-grow: 1;
+}
+
+/* Table Base */
+table th,
+table td {
+  padding: 1rem 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+table td {
+  font-weight: 400;
+}
+
+table #empty-row {
+  height: 2rem;
+}
+
+/* Nav panel */
 #dash-panel {
   width: 100%;
   height: 100vh;
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--second-color);
-  /* border-right: .3rem solid var(--border-color); */
 }
 
 figure {
@@ -62,7 +83,6 @@ figure .logo img {
   justify-content: flex-start;
 }
 
-
 .nav-tab a:hover {
   color: var(--white);
   background-color: var(--border-color);
@@ -93,98 +113,14 @@ figure .logo img {
   border-color: var(--black);
 }
 
-/* Section Styles */
-main {
-  height: 100vh;
-  flex-grow: 1;
-}
-
-/* Tables */
-/* 
-table {
-  width: 100%;
-  margin: 0;
-} */
-
-table th {
-  padding: 1rem 2rem;
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: left;
-  color: var(--black);
-  background-color: var(--white);
-}
-
-table td {
-  padding: 1rem 2rem;
-  font-size: 1.8rem;
-  font-weight: 400;
-  text-align: left;
-  color: var(--black);
-  background-color: var(--white);
-}
-
-table td a {
-  color: var(--black);
-}
-
-table td a:hover {
-  color: var(--third-color);
-}
-
-/* Forms */
-form {
-  width: 100%;
-  margin: 0;
-}
-
-form label {
-  width: 100%;
-  padding: 1rem 2rem;
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: left;
-  color: var(--black);
-  background-color: var(--white);
-}
-
-form input {
-  width: 100%;
-  padding: 1rem 2rem;
-  font-size: 1.8rem;
-  font-weight: 400;
-  text-align: left;
-  color: var(--black);
-  background-color: var(--white);
-}
-/* 
-form input[type="submit"] {
-  width: 100%;
-  padding: 1rem 2rem;
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  color: var(--white);
-  background-color: var(--third-color);
-  border: none;
-} */
-/* 
-form input[type="submit"]:hover,
-form input[type="submit"]:active {
-  color: var(--black);
-  background-color: var(--white);
-  border: 1px solid var(--black);
-} */
-
-/* Account */
+/* Account Section */
 #account-wrapper {
   width: 100%;
   flex-direction: column;
 }
 
-#account-info {
-  width: 100%;
-  margin: 8rem 0 5rem 0;
+#account-table {
+  margin-bottom: 5rem;
   padding: 0;
 }
 
@@ -193,7 +129,7 @@ form input[type="submit"]:active {
   border: .5rem solid var(--border-color);
 }
 
-h4 {
+#account h4 {
   font-size: 2rem;
   margin-bottom: 2rem;
 }
@@ -203,7 +139,110 @@ h4 {
   flex-direction: column;
 }
 
-/* Users */
+/* Users & Clients Sections */
+#users-table,
+#clients-table {
+  width: 80%;
+  margin: 5rem;
+  padding: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+} 
+
+#users-table-head,
+#clients-table-head {
+  color: var(--white);
+  background-color: var(--third-color);
+  border: .3rem solid var(--third-color);
+}
+
+#users-table-body tr:first-child td,
+#clients-table-body tr:first-child td {
+  border: .3rem solid var(--third-color);
+}
+
+#users-table-body td,
+#clients-table-body td {
+  border: .3rem solid var(--border-color);
+}
+
+/** Total width of all columns must equal 100% **/
+/* Width of Name column */
+#users-table th:nth-child(1),
+#users-table td:nth-child(1) {
+  width: 23%;
+}
+
+/* Width of Username column */
+#users-table th:nth-child(2),
+#users-table td:nth-child(2) {
+  width: 23%;
+}
+/* Width of Password column */
+#users-table th:nth-child(3),
+#users-table td:nth-child(3) {
+  width: 23%;
+}
+
+/* Width of Role column */
+#users-table th:nth-child(4),
+#users-table td:nth-child(4) {
+  width: 17%;
+}
+
+/* Width of Action column */
+#users-table th:nth-child(5),
+#users-table td:nth-child(5) {
+  width: 13%;
+  text-align: center;
+}
+
+.table-icon {
+  margin: 0 1rem;
+  cursor: pointer;
+  color: var(--third-color);
+}
+
+.table-icon:hover,
+.table-icon.clicked {
+  color: var(--primary-color);
+}
+
+/* New User Form Styles */
+#new-user-name,
+#new-user-username,
+#new-user-password {
+  width: 95%;
+  font-size: 2rem;
+  font-weight: 400;
+  font-style: italic;
+  border: none;
+}
+
+#new-user-role {
+
+}
+
+#new-user-password[type=password] {
+  padding-right: 0;
+}
+
+.toggle-password {
+  font-size: 2rem;
+  margin-left: 0.5rem;
+}
+
+#new-user-role {
+  font-size: 2rem;
+  /* font-weight: 400; */
+  padding: 0.5rem;
+}
+
+#create-user-btn {
+  margin: auto;
+  display: block;
+}
+
 /* .password-wrapper {
   position: relative;
 }
