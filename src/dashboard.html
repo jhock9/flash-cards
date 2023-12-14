@@ -77,19 +77,19 @@
               <h4>Update 4-Digit Pass Code?</h4>
               <form id="update-password-form" class="center">
                 <div class="password-wrapper center">
-                  <input type="password" id="current-password" class="input-field" name="currentPassword" placeholder="Current Code" required>
+                  <input type="password" id="current-password" class="input-field" name="currentPassword" placeholder="Current Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
                   <i class="toggle-password fa-regular fa-eye-slash"></i>
                   <i class="toggle-password hide fa-solid fa-eye"></i>
                 </div>
                 
                 <div class="password-wrapper center">
-                  <input type="password" id="new-password" class="input-field" name="password" placeholder="New Code" required>
+                  <input type="password" id="new-password" class="input-field" name="password" placeholder="New Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
                   <i class="toggle-password fa-regular fa-eye-slash"></i>
                   <i class="toggle-password hide fa-solid fa-eye"></i>
                 </div>
                 
                 <div class="password-wrapper center">
-                  <input type="password" id="confirm-new-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" required>
+                  <input type="password" id="confirm-new-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
                   <i class="toggle-password fa-regular fa-eye-slash"></i>
                   <i class="toggle-password hide fa-solid fa-eye"></i>
                 </div>
@@ -114,55 +114,39 @@
             </thead>
             
             <tbody id="users-table-body">
-              <!-- Todo: hide password by default 
-                hide the password with asterisks, use eye icon to reveal    
-                pull toggle-password class from login.js (move to localAuth.js?)        
-                <i class="toggle-password fa-regular fa-eye-slash"></i>
-                <i class="toggle-password hide fa-solid fa-eye"></i>
-              -->
+              <!-- First row is a form to create a new user -->
+              <tr>
+                <td><input type="text" id="new-user-name" placeholder="Name" required></td>
+                <td><input type="text" id="new-user-username" placeholder="Username" required></td>
+                <td class="password-wrapper">
+                  <input type="password" id="new-user-password" placeholder="Password" pattern="\d{4}" title="Password must be a 4-digit code" required>
+                  <i class="toggle-password fa-regular fa-eye-slash"></i>
+                  <i class="toggle-password hide fa-solid fa-eye"></i>
+                </td>
+                <td>
+                  <select id="new-user-role" required>
+                    <option value="">Select role</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                  </select>
+                </td>
+                <td>
+                  <button type="submit" id="create-user-btn" class="form-btn">Create</button>
+                </td>
+              </tr>
               
-              <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
-                1. icon to edit user
-                <i class="fa-solid fa-pen-to-square"></i>
-                  - Update data
-                  - Reset password
-                  - Delete user 
-                2. icon to view clients
-                  <i class="fa-solid fa-user-group"></i>
-              -->
+              <!-- All remaining rows are generated dynamically from the database -->
             </tbody>
           </table>
-            
-          <div class="form-wrapper hide center">
-            <h2>Create New User</h2>
-            <form id="create-user-form">
-              <label for="new-name">Name:</label>
-              <input type="text" id="new-name" name="name">
-              
-              <label for="new-username">Username:</label>
-              <input type="text" id="new-user-name" name="username">
-              
-              <label for="new-password">Password:</label>
-              <input type="password" id="new-user-pass" name="password">
-              
-              <label for="confirm-new-password">Confirm Password:</label>
-              <input type="password" id="confirm-new-user-pass" name="password">
-              
-              <label>Role:</label>
-                <label for="role-user">
-                  User
-                  <input type="radio" id="role-user" name="role" value="user">
-                </label>
-                
-                <label for="role-admin">
-                  Admin
-                  <input type="radio" id="role-admin" name="role" value="admin">
-                </label>
-              
-              <input type="submit" value="Create User">
-              <button type="submit" id="create-user-btn" class="wide-btn btn">Create User</button>
-            </form>
-          </div>
+            <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
+              1. icon to edit user
+              <i class="fa-solid fa-pen-to-square"></i>
+                - Update data
+                - Reset password
+                - Delete user 
+              2. icon to view clients
+                <i class="fa-solid fa-user-group"></i>
+            -->
         </section>
         
         <section id="clients" class="hide center">
@@ -185,7 +169,7 @@
                   - show only clients assigned to user
                   - hide first header & column (Therapist Name)
               --> 
-
+              
               <!-- Todo: Actions - links via icons, opens modal for the new-client-form below
                 1. icon to edit client
                   <i class="fa-solid fa-pen-to-square"></i>
@@ -249,25 +233,6 @@
   </div>
   
   <!-- Modals -->
-
-  <div id="google-signin-modal" class="modal hide center">
-    <div class="modal-content center">
-      <h2 class="center">Looks like we got disconnected from Google.</h2>
-      <i class="fa-regular fa-face-grin-beam-sweat"></i>
-      <p class="center">Please sign back into the ABA Co-op Google account so the photo library can stay updated!</p>
-      <h3 class="center">Thanks!</h3>
-    </div>
-
-  <div id="flashcards-modal" class="modal hide center">
-    <div class="modal-content center">
-      <h2 class="center">Whoops...the photo library missed an update!</h2>
-      <i class="fa-regular fa-face-grin-beam-sweat"></i>
-      <p class="center">Its ok though, you can still access the flashcards page.
-      Make sure to let an Admin know to reconnect to the photo library soon.</p>
-      <h3 class="center">Thanks!</h3>
-    </div>
-  </div>
-  
   <div id="password-req-modal" class="modal hide center">
     <div class="modal-content center">
       <h2 class="center">Oops, your new passcode doesn't meet the requirements.</h2>
@@ -297,6 +262,49 @@
       <h2 class="center">Your passcode has been updated!</h2>
       <i class="fa-regular fa-face-grin-beam"></i>
       <p class="center">Please use your new passcode to log in.</p>
+    </div>
+  </div>
+  
+  <div id="unavailable-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">Sorry, that username is already taken.</h2>
+      <i class="fa-regular fa-face-grimace"></i>
+      <p class="center">Please try again!</p>
+    </div>
+  </div>
+  
+  <div id="user-created-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">New user created.</h2>
+      <i class="fa-regular fa-thumbs-up"></i>
+      <p class="center">Cheers!</p>
+    </div>
+  </div>
+  
+  <div id="new-client-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">New client account created.</h2>
+      <i class="fa-regular fa-thumbs-up"></i>
+      <p class="center">Cheers!</p>
+    </div>
+  </div>
+  
+  <div id="google-signin-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">Looks like we got disconnected from Google.</h2>
+      <i class="fa-regular fa-face-grin-beam-sweat"></i>
+      <p class="center">Please sign back into the ABA Co-op Google account so the photo library can stay updated!</p>
+      <h3 class="center">Thanks!</h3>
+    </div>
+  </div>
+  
+  <div id="flashcards-modal" class="modal hide center">
+    <div class="modal-content center">
+      <h2 class="center">Whoops...the photo library missed an update!</h2>
+      <i class="fa-regular fa-face-grin-beam-sweat"></i>
+      <p class="center">Its ok though, you can still access the flashcards page.
+      Make sure to let an Admin know to reconnect to the photo library soon.</p>
+      <h3 class="center">Thanks!</h3>
     </div>
   </div>
   
