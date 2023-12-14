@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.ico?a987a06adb51ef4577ad"></head>
+<link rel="icon" href="favicon.ico?fe39bf75be286bda84f8"></head>
 
 
 <body class="center">
@@ -44,7 +44,7 @@
             <form id="login-form" class="center" action="/auth/login" method="post">
               <input type="text" id="login-username" class="input-field" placeholder="Username" name="username" required>
               <div class="password-wrapper center">
-                <input type="password" id="login-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+                <input type="password" id="login-password" class="input-field" name="password" placeholder="4-Digit Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
                 <i class="toggle-password fa-regular fa-eye-slash"></i>
                 <i class="toggle-password hide fa-solid fa-eye"></i>
               </div>
@@ -57,13 +57,13 @@
               <input type="text" id="register-fullname" class="input-field" placeholder="Full Name" name="fullname" required>
               <input type="text" id="register-username" class="input-field" placeholder="Username" name="username" required>
               <div class="password-wrapper center">
-                <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+                <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
                 <i class="toggle-password fa-regular fa-eye-slash"></i>
                 <i class="toggle-password hide fa-solid fa-eye"></i>
               </div>
 
               <div class="password-wrapper center">
-                <input type="password" id="confirm-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" required>
+                <input type="password" id="confirm-password" class="input-field" name="confirmPassword" placeholder="Confirm Code"pattern="\d{4}" title="Password must be a 4-digit code" required>
                 <i class="toggle-password fa-regular fa-eye-slash"></i>
                 <i class="toggle-password hide fa-solid fa-eye"></i>
               </div>
@@ -141,5 +141,5 @@
   </div>
   
   <script type="module" src="js/login.js"></script>
-<script defer src="app.bundle.js?a987a06adb51ef4577ad"></script><script defer src="login.bundle.js?a987a06adb51ef4577ad"></script><script defer src="dashboard.bundle.js?a987a06adb51ef4577ad"></script><script defer src="flashcards.bundle.js?a987a06adb51ef4577ad"></script></body> 
+<script defer src="app.bundle.js?fe39bf75be286bda84f8"></script><script defer src="login.bundle.js?fe39bf75be286bda84f8"></script><script defer src="dashboard.bundle.js?fe39bf75be286bda84f8"></script><script defer src="flashcards.bundle.js?fe39bf75be286bda84f8"></script></body> 
 </html>
