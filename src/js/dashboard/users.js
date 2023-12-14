@@ -234,8 +234,8 @@ const createUser = async (event) => {
 module.exports = {
   refreshUsersTable,
   createUser,
-  editUser,
-  resetPassword,
-  deleteUser,
-  viewClients,
+  // editUser,
+  // resetPassword,
+  // deleteUser,
+  // viewClients,
 };
