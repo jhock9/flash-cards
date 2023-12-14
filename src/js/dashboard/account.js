@@ -1,10 +1,10 @@
-const { 
+import { 
   hideModal,
   showPasswordReqModal, 
   showPasswordMismatchModal,
   showPasswordUpdatedModal,
   showCurrentPasswordIncorrectModal,
-} = require('../components/modals.js');
+} from '../components/modals.js';
 
 const fetchAccountData = async () => { 
   try {
