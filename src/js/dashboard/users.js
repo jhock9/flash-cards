@@ -5,6 +5,7 @@ import {
 } from '../components/modals.js';
 
 const refreshUsersTable = async () => {
+  console.log('refreshUsersTable called');
   try {
     const response = await fetch('/users/refresh-users', {
       method: 'GET',
@@ -15,8 +16,10 @@ const refreshUsersTable = async () => {
     };
     
     const users = await response.json();
+    console.log(users);  
     
     const tableBody = document.querySelector('#users-table-body');
+    console.log(tableBody);
     tableBody.innerHTML = '';
     
     // Populate the users table with the users' data

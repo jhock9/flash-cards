@@ -60,6 +60,8 @@ const logout = async () => {
 // Add event listeners to the navigation links
 navLinks.forEach((link) => {
   link.addEventListener('click', (event) => {
+    console.log('nav link clicked'); 
+    
     const href = link.getAttribute('href');
     
     // Only handle links that navigate to a section on the current page
@@ -82,10 +84,12 @@ navLinks.forEach((link) => {
       
       // Show the clicked section
       const sectionId = href.slice(1);
+      console.log('sectionId:', sectionId);
       const section = document.querySelector(`#${sectionId}`);
       section.classList.remove('hide');
       
       if (sectionId === 'users-tab') {
+        console.log('users-tab clicked');
         refreshUsersTable();
       };
       
@@ -115,6 +119,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   currentUser = await fetchAccountData();
   updateDashNav(currentUser);
+  
+  // Update the HTML to display the user's name and username
+  document.querySelector('#acct-name').textContent = currentUser.name;
+  document.querySelector('#acct-username').textContent = currentUser.username;
   
   await fetchConfig();
   
