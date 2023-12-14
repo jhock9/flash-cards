@@ -93,11 +93,13 @@ figure .logo img {
   border-color: var(--black);
 }
 
-/* Section styles */
+/* Section Styles */
 main {
   height: 100vh;
   flex-grow: 1;
 }
+
+/* Tables */
 /* 
 table {
   width: 100%;
@@ -130,6 +132,7 @@ table td a:hover {
   color: var(--third-color);
 }
 
+/* Forms */
 form {
   width: 100%;
   margin: 0;
@@ -201,7 +204,26 @@ h4 {
 }
 
 /* Users */
+/* .password-wrapper {
+  position: relative;
+}
 
+.toggle-password {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.action-icon {
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.action-icon:hover {
+  color: var(--third-color);
+} */
 
 /* Clients */
 
