@@ -7,7 +7,6 @@ const flashcardsModal = document.querySelector('#flashcards-modal');
 
 import { fetchAccountData, updatePassword } from './account.js';
 import { refreshUsersTable, createUser } from './users.js';
-import { } from './users.js';
 import { } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js';
 import { togglePasswordVisibility } from '../components/password.js';
