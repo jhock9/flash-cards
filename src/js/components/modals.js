@@ -1,8 +1,7 @@
-//**   ALL   **//
+//**  GENERAL   **//
 const modals = document.querySelectorAll('.modal');
 const passwordReqModal = document.querySelector('#password-req-modal');
 const passwordMismatchModal = document.querySelector('#password-mismatch-modal');
-
 
 const addModalEventListeners = () => {
   modals.forEach(modal => {
@@ -56,6 +55,8 @@ const flashcardsModal = document.querySelector('#flashcards-modal');
 const currentPasswordIncorrectModal = document.querySelector('#current-password-incorrect-modal');
 const passwordUpdatedModal = document.querySelector('#password-updated-modal');
 const googleSignInModal = document.querySelector('#google-signin-modal');
+const newUserModal = document.querySelector('#new-user-modal');
+const newClientModal = document.querySelector('#new-client-modal');
 
 const showPasswordUpdatedModal = () => {
   passwordUpdatedModal.classList.remove('hide');
@@ -63,6 +64,14 @@ const showPasswordUpdatedModal = () => {
 
 const showCurrentPasswordIncorrectModal = () => {
   currentPasswordIncorrectModal.classList.remove('hide');
+};
+
+const showNewUserModal = () => {
+  newUserModal.classList.remove('hide');
+};
+
+const showNewClientModal = () => {
+  newClientModal.classList.remove('hide');
 };
 
 const showGoogleSignInModal = () => {
@@ -73,18 +82,21 @@ const showFlashcardsModal = () => {
   flashcardsModal.classList.remove('hide');
 };
 
-// export to login.js and dashboard.js
+
+// Export to various files
 export { 
-  addModalEventListeners, // both
-  hideModal, // both
+  addModalEventListeners, // login.js, dashboard.js
+  hideModal, // login.js, dashboard.js, account.js
   showIncorrectUsernameModal, // login.js
   showIncorrectPasswordModal, // login.js
   showSuccessModal, // login.js
-  showUnavailableModal, // login.js
-  showPasswordReqModal, // both
-  showPasswordMismatchModal, // both
-  showPasswordUpdatedModal, // dashboard.js
-  showCurrentPasswordIncorrectModal, // dashboard.js
+  showUnavailableModal, // login.js, users.js
+  showPasswordReqModal, // login.js, account.js
+  showPasswordMismatchModal, // login.js, account.js
+  showPasswordUpdatedModal, // account.js
+  showCurrentPasswordIncorrectModal, // account.js
+  showNewUserModal, // users.js
+  showNewClientModal, // clients.js
   showGoogleSignInModal, // dashboard.js
   showFlashcardsModal // dashboard.js
 };
