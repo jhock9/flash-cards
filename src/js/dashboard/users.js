@@ -1,8 +1,8 @@
-const { 
+import { 
   hideModal,
   showNewUserModal,
   showUnavailableModal,
-} = require('../components/modals.js');
+} from '../components/modals.js';
 
 const refreshUsersTable = async () => {
   try {
