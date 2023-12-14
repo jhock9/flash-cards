@@ -29,7 +29,7 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
 });
