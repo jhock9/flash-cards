@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateDashNav(currentUser);
   
   // Update the HTML to display the user's name and username
-  document.querySelector('#acct-name').textContent = currentUser.name;
+  document.querySelector('#acct-name').textContent = currentUser.fullname;
   document.querySelector('#acct-username').textContent = currentUser.username;
   
   await fetchConfig();
