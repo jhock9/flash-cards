@@ -231,7 +231,7 @@ const createUser = async (event) => {
 // };
 
 // Export to dashboard.js
-module.exports = {
+export {
   refreshUsersTable,
   createUser,
   // editUser,
