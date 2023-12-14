@@ -18,7 +18,7 @@ import {
 
 //**   ON LOAD / UNLOAD  **//
 
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
   console.log('Login window loaded, checking authentication...');
   checkAuthentication();
   togglePasswordVisibility();
