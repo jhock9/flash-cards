@@ -52,10 +52,12 @@ const refreshUsersTable = async () => {
         
         const editIcon = document.createElement('i');
         editIcon.className = 'action-icon fa-solid fa-pen-to-square';
+        editIcon.classList.add('table-icon');
         iconDiv.appendChild(editIcon);
         
         const viewClientsIcon = document.createElement('i');
         viewClientsIcon.className = 'action-icon fa-solid fa-user-group';
+        editIcon.classList.add('table-icon');
         iconDiv.appendChild(viewClientsIcon);
         
         actionCell.appendChild(iconDiv);
