@@ -88,13 +88,13 @@ navLinks.forEach((link) => {
       const section = document.querySelector(`#${sectionId}`);
       section.classList.remove('hide');
       
-      if (sectionId === 'users-tab') {
+      if (sectionId === 'users') {
         console.log('users-tab clicked');
         refreshUsersTable();
       };
       
       // Show the flashcards modal if not authenticated with Google
-      if (sectionId === 'flashcards-tab') {
+      if (sectionId === 'flashcards') {
         checkGoogleAuthentication().then(response => {
           if (!response.isGoogleAuthenticated) {
             showFlashcardsModal();
