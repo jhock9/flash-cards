@@ -139,6 +139,11 @@ figure .logo img {
   flex-direction: column;
 }
 
+.toggle-password {
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+}
+
 /* Users & Clients Sections */
 #users-table,
 #clients-table {
@@ -198,7 +203,7 @@ figure .logo img {
 }
 
 .table-icon {
-  margin: 0 1rem;
+  margin: 1rem;
   cursor: pointer;
   color: var(--third-color);
 }
@@ -217,30 +222,34 @@ figure .logo img {
   font-weight: 400;
   font-style: italic;
   border: none;
-}
-
-#new-user-role {
-
+  padding: 1rem;
 }
 
 #new-user-password[type=password] {
   padding-right: 0;
 }
 
-.toggle-password {
-  font-size: 2rem;
-  margin-left: 0.5rem;
-}
-
 #new-user-role {
+  width: 90%;
   font-size: 2rem;
-  /* font-weight: 400; */
-  padding: 0.5rem;
+  padding: 1rem .25rem;
+  border: none;
+  font-style: italic;
 }
 
-#create-user-btn {
-  margin: auto;
-  display: block;
+
+#create-user-icon {
+  font-size: 3rem;
+  color: var(--third-color);
+  background-color: var(--white);
+  border: none;
+  cursor: pointer;
+}
+
+#create-user-btn:hover,
+#create-user-btn:active {
+  color: var(--primary-color);
+  /* background-color: var(--second-color); */
 }
 
 /* .password-wrapper {
