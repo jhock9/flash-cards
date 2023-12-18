@@ -20,234 +20,243 @@
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="center">
-  <div id="dash-page" class="">
-    <div id="dash-content-wrapper" class="content-wrapper center">
-      <aside id="dash-panel" class="center"> 
-        <nav id="dash-nav" class="center">
-            <figure class="center">
-              <div class="logo center">
-                <img src="assets/ABA+Red+Logo.png" alt="Logo of ABA Co-op, a cooperative organization for Applied Behavior Analysis">
-              </div>  
-            </figure>
-          
-          <ul id="dash-nav-list" class="center">            
-            <li class="nav-tab center">
-              <a id="account-tab" class="center" href="#account">My Account</a>
-            </li>
-            
-            <li class="admin-view nav-tab hide center">
-              <a id="users-tab" class="center" href="#users">Users</a>
-            </li>
-            
-            <li class="nav-tab center">
-              <a id="clients-tab" class="center" href="#clients">Clients</a>
-            </li>
-            
-            <li class="admin-view nav-tab hide center">
-              <a id="google-tab" class="center" href="#google">Google Account</a>
-            </li>
-            
-            <li class="nav-tab center">
-              <a id="flashcards-tab" class="center" href="./flashcards.html">Flashcards App</a>
-            </li>
-          </ul>
-        </nav>
+<body id="dash-page" class="center">
+  <div id="dash-content-wrapper" class="content-wrapper center">
+    <aside id="dash-panel" class="center"> 
+      <nav id="dash-nav" class="center">
+        <figure class="center">
+          <img src="assets/ABA+Red+Logo.png" alt="Logo of ABA Co-op, a cooperative organization for Applied Behavior Analysis">
+        </figure>
         
-        <div id="logout-container" class="center">
-          <button id="logout-btn" class="wide-btn btn center">Log Out</button>
-        </div>
-      </aside>
+        <ul id="dash-nav-list" class="center">            
+          <li class="admin-view nav-tab center">
+            <a id="users-tab" class="center" href="#users">Users</a>
+          </li>
+          
+          <li class="nav-tab center">
+            <a id="clients-tab" class="center" href="#clients">Clients</a>
+          </li>
+          
+          <li class="nav-tab center">
+            <a id="flashcards-tab" class="center" href="./flashcards.html">Flashcards App</a>
+          </li>
+          
+          <li class="admin-view nav-tab center">
+            <a id="google-tab" class="center" href="#google">Google Account</a>
+          </li>
+          
+          <li class="nav-tab center">
+            <a id="account-tab" class="center" href="#account">My Account</a>
+          </li>
+        </ul>
+      </nav>
       
-      <main class="center">   
-        <section id="account" class="center">  
-          <div id="account-wrapper" class="center">        
-            <table id="account-table" class="center">
-              <tr>
-                <th>Name:</th>
-                <td><span id="acct-name">Super Admin</span></td>
-              </tr>
-              <tr>
-                <th>Username:</th>
-                <td><span id="acct-username">SuperAdmin</span></td>
-              </tr>
-            </table>
-              
-            <div class="form-wrapper center">
-              <h4>Update 4-Digit Passcode?</h4>
-              <form id="update-password-form" class="center">
-                <div class="password-wrapper center">
-                  <input type="password" id="current-password" class="input-field" name="currentPassword" placeholder="Current Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
-                  <i class="toggle-password fa-regular fa-eye-slash"></i>
-                  <i class="toggle-password hide fa-solid fa-eye"></i>
-                </div>
-                
-                <div class="password-wrapper center">
-                  <input type="password" id="new-password" class="input-field" name="password" placeholder="New Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
-                  <i class="toggle-password fa-regular fa-eye-slash"></i>
-                  <i class="toggle-password hide fa-solid fa-eye"></i>
-                </div>
-                
-                <div class="password-wrapper center">
-                  <input type="password" id="confirm-new-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
-                  <i class="toggle-password fa-regular fa-eye-slash"></i>
-                  <i class="toggle-password hide fa-solid fa-eye"></i>
-                </div>
-                
-                <button type="submit" id="update-password-btn" class="wide-btn btn center">Update</button>
-              </form>
-            </div>
-          </div>
-        </section>
-        
-        <section id="users" class="hide center">
-            <table id="users-table">
-              <thead id="users-table-head">
-                <!-- Todo: Sortable table -->
-                <tr>
-                  <th>Name</th>
-                  <th>Username</th>
-                  <th>Passcode</th> 
-                  <th>Role</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              
-              <tbody id="users-table-body">
-                <!-- First row is a form to create a new user -->
-                <tr>
-                  <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
-                  <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
-                  <td><input type="password" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
-                  <td>
-                    <select id="new-user-role" required>
-                      <option value="">Select role</option>
-                      <option value="admin">Admin</option>
-                      <option value="user">User</option>
-                    </select>
-                  </td>
-                  <td>
-                    <button type="submit" id="create-user-btn" class="form-btn">Create</button>
-                  </td>
-                </tr>
-                <tr id="empty-row"></tr>
-                <!-- //!! FOR TESTING -->
-                <!-- <tr>
-                  <td>John Doe</td>
-                  <td>johndoe</td>
-                  <td>****</td>
-                  <td>Admin</td>
-                  <td>
-                    <i class="table-icon fa-solid fa-pen-to-square"></i>
-                    <i class="table-icon fa-solid fa-user-group"></i>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Jane Smith</td>
-                  <td>janesmith</td>
-                  <td>****</td>
-                  <td>User</td>
-                  <td>
-                    <i class="table-icon fa-solid fa-pen-to-square"></i>
-                    <i class="table-icon fa-solid fa-user-group"></i>
-                  </td>
-                </tr> -->
-                <!--//!! FOR TESTING -->
-                <!-- All remaining rows are generated dynamically from the database -->
-              </tbody>
-            </table>
-              <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
-                1. icon to edit user
-                <i class="fa-solid fa-pen-to-square"></i>
-                  - Update data
-                  - Reset password
-                  - Delete user 
-                2. icon to view clients
-                  <i class="fa-solid fa-user-group"></i>
-              -->
-        </section>
-        
-        <section id="clients" class="hide center">
-          <table id="clients-table" class="center">
-            <thead>
-              <!-- Todo: Sortable table -->
-              <tr>
-                <th>Therapist Name</th>
-                <th>Client ID</th>
-                <th>Client Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            
-            <tbody id="clients-table-body">       
-              <!-- Todo: Filter whats displayed by role
-                1. Admin
-                  - show all clients
-                2. User
-                  - show only clients assigned to user
-                  - hide first header & column (Therapist Name)
-              --> 
-              
-              <!-- Todo: Actions - links via icons, opens modal for the new-client-form below
-                1. icon to edit client
-                  <i class="fa-solid fa-pen-to-square"></i>
-                  - Update data
-                  - Delete user
-                2. icon to view last saved session
-                  <i class="fa-regular fa-folder-open"></i>
-              -->
-              </tbody> 
-          </table>
-          
-          <div class="form-wrapper hide center">
-            <h2>Create New Client</h2>
-            <form id="new-client-form">
-              <label for="therapist-name">Therapist Name:</label>
-              <input type="text" id="therapist-name" class="input-field" placeholder="Enter Therapist Name" name="therapistName">
-              
-              <label for="client-id">Client ID:</label>
-              <input type="text" id="client-id" class="input-field" placeholder="Enter Client ID" name="clientID">
-                <!-- Todo: should Client ID be auto-generated? 
-                  This is an unique identifier, and links the client to the therapist
-                  Or, does Jeremy have an identifier already for this on paper? 
-                -->
-              <label for="client-name">Client Name:</label>
-              <input type="text" id="client-name" class="input-field" placeholder="Enter Client Name" name="clientName">
-              
-              <input type="submit" value="Create Client">
-              <button type="submit" id="create-client-btn" class="wide-btn btn">Create Client</button>
-            </form>
-          </div>
-        </section>
-        
-        <section id="google" class="hide center">
-          <div id="signed-in-wrapper" class="hide center">
-            <i class="fa-regular fa-circle-check"></i>
-            <h2>Nothing to do here!</h2>
-            <p>You're all signed in and have <br>
-              authorized access to your Google Photos library.</p>
-          </div>
-          <div id="google-signin-wrapper" class="hide center">
-            <div id="g_id_onload"
-              data-client_id=""
-              data-context="use"
-              data-ux_mode="popup"
-              data-login_uri="https://abacoop-flashcards-8fb5e3fd1eda.herokuapp.com/oauth2callback" 
-              data-auto_prompt="false">
-            </div>
-            
-            <div id="google-signin" class="g_id_signin"
-              data-type="standard"
-              data-shape="rectangular"
-              data-theme="outline"
-              data-text="signin_with"
-              data-size="large"
-              data-logo_alignment="left">
-            </div>
-          </div>
-        </section>
-      </main>
+      <div id="logout-container" class="center">
+        <button id="logout-btn" class="wide-btn btn center">Log Out</button>
+      </div>
+    </aside>
+    
+    <div id="menu-btns"> 
+      <button id="nav-open-btn" class="square-btn btn open-btn center"><i class="fa-solid fa-bars"></i></button>
     </div>
+    
+    <main id="section-wrapper" class="center">
+      <!-- USERS SECTION -->
+      <section id="users" class="hide center">
+        <table id="users-table">
+          <!-- Todo: create table for mobile with only 2 columns: Name & Actions -->
+          <!-- Todo: make "create new user form" a modal/form popup -->
+          
+          <thead id="users-table-head">
+            <!-- Todo: Sortable table -->
+            <tr>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Passcode</th> 
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          
+          <tbody id="users-table-body">
+            <!-- First row is a form to create a new user -->
+            <tr>
+              <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
+              <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
+              <td><input type="password" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
+              <td>
+                <select id="new-user-role" required>
+                  <option value="">Select</option>
+                  <option value="admin">Admin</option>
+                  <option value="user">User</option>
+                </select>
+              </td>
+              <td>
+                <button type="submit" id="create-user-icon"><i class="table-icon fa-regular fa-square-plus"></i></button>
+              </td>
+            </tr>
+            <tr id="empty-row"></tr>
+            <!-- All remaining rows are generated dynamically from the database -->
+            <!-- //!! FOR TESTING -->
+            <tr>
+              <td>John Doe</td>
+              <td>johndoe</td>
+              <td>****</td>
+              <td>Admin</td>
+              <td>
+                <i class="table-icon fa-solid fa-pen-to-square"></i>
+                <i class="table-icon fa-solid fa-user-group"></i>
+              </td>
+            </tr>
+            <tr>
+              <td>Jane Smith</td>
+              <td>janesmith</td>
+              <td>****</td>
+              <td>User</td>
+              <td>
+                <i class="table-icon fa-solid fa-pen-to-square"></i>
+                <i class="table-icon fa-solid fa-user-group"></i>
+              </td>
+            </tr>
+            <!--//!! FOR TESTING -->
+          </tbody>
+        </table>
+          <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
+            1. icon to edit user
+            <i class="fa-solid fa-pen-to-square"></i>
+              - Update data
+              - Reset password
+              - Delete user 
+            2. icon to view clients
+              <i class="fa-solid fa-user-group"></i>
+          -->
+      </section>
+      
+      <!-- CLIENTS SECTION -->
+      <section id="clients" class="hide center">
+        <table id="clients-table" class="center">
+          <thead>
+            <!-- Todo: Sortable table -->
+            <tr>
+              <th>Therapist Name</th>
+              <th>Client ID</th>
+              <th>Client Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          
+          <tbody id="clients-table-body">       
+            <!-- Todo: Filter whats displayed by role
+              1. Admin
+                - show all clients
+              2. User
+                - show only clients assigned to user
+                - hide first header & column (Therapist Name)
+            --> 
+            
+            <!-- Todo: Actions - links via icons, opens modal for the new-client-form below
+              1. icon to edit client
+                <i class="fa-solid fa-pen-to-square"></i>
+                - Update data
+                - Delete user
+              2. icon to view last saved session
+                <i class="fa-regular fa-folder-open"></i>
+            -->
+            </tbody> 
+        </table>
+        
+        <div class="form-wrapper hide center">
+          <h2>Create New Client</h2>
+          <form id="new-client-form">
+            <label for="therapist-name">Therapist Name:</label>
+            <input type="text" id="therapist-name" class="input-field" placeholder="Enter Therapist Name" name="therapistName">
+            
+            <label for="client-id">Client ID:</label>
+            <input type="text" id="client-id" class="input-field" placeholder="Enter Client ID" name="clientID">
+              <!-- Todo: should Client ID be auto-generated? 
+                This is an unique identifier, and links the client to the therapist
+                Or, does Jeremy have an identifier already for this on paper? 
+              -->
+            <label for="client-name">Client Name:</label>
+            <input type="text" id="client-name" class="input-field" placeholder="Enter Client Name" name="clientName">
+            
+            <input type="submit" value="Create Client">
+            <button type="submit" id="create-client-btn" class="wide-btn btn">Create Client</button>
+          </form>
+        </div>
+      </section>
+      
+      <!-- FLASHCARDS SECTION - EXTERNAL PAGE
+      <section id="flashcards" class="hide center">
+      </section> -->
+      
+      <!-- GOOGLE SECTION -->
+      <section id="google" class="hide center">
+        <div id="signed-in-wrapper" class="hide center">
+          <i class="fa-regular fa-circle-check"></i>
+          <h2>Nothing to do here!</h2>
+          <p>You're all signed in and have <br>
+            authorized access to your Google Photos library.</p>
+        </div>
+        <div id="google-signin-wrapper" class="hide center">
+          <div id="g_id_onload"
+            data-client_id=""
+            data-context="use"
+            data-ux_mode="popup"
+            data-login_uri="https://abacoop-flashcards-8fb5e3fd1eda.herokuapp.com/oauth2callback" 
+            data-auto_prompt="false">
+          </div>
+          
+          <div id="google-signin" class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large"
+            data-logo_alignment="left">
+          </div>
+        </div>
+      </section>
+      
+      <!-- ACCOUNT SECTION -->
+      <section id="account" class="hide center">  
+        <table id="account-table" class="center">
+          <tr>
+            <th>Name:</th>
+            <td><span id="acct-name">Super Admin</span></td>
+          </tr>
+          <tr>
+            <th>Username:</th>
+            <td><span id="acct-username">SuperAdmin</span></td>
+          </tr>
+        </table>
+          
+        <div class="form-wrapper center">
+          <h4>Update 4-Digit Passcode?</h4>
+          <form id="update-password-form" class="center">
+            <div class="password-wrapper center">
+              <input type="password" id="current-password" class="input-field" name="currentPassword" placeholder="Current Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
+              <i class="toggle-password fa-regular fa-eye-slash"></i>
+              <i class="toggle-password hide fa-solid fa-eye"></i>
+            </div>
+            
+            <div class="password-wrapper center">
+              <input type="password" id="new-password" class="input-field" name="password" placeholder="New Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
+              <i class="toggle-password fa-regular fa-eye-slash"></i>
+              <i class="toggle-password hide fa-solid fa-eye"></i>
+            </div>
+            
+            <div class="password-wrapper center">
+              <input type="password" id="confirm-new-password" class="input-field" name="confirmPassword" placeholder="Confirm Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
+              <i class="toggle-password fa-regular fa-eye-slash"></i>
+              <i class="toggle-password hide fa-solid fa-eye"></i>
+            </div>
+            
+            <button type="submit" id="update-password-btn" class="wide-btn btn center">Update</button>
+          </form>
+        </div>
+      </section>
+    </main>
   </div>
   
   <!-- Modals -->
