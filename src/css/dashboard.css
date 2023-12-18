@@ -2,25 +2,18 @@
   Mobile Styles
   ========================================================================== */
 
-/* Base Styles */
-
-#dash-page {
-  width: 100%;
-  height: 100%;
-}
-
+/* Base styles */
 #dash-content-wrapper {
   width: 100%;
   height: 100%;
-  justify-content: flex-start;
+  flex-direction: column;
 }
 
 main {
-  height: 100vh;
-  flex-grow: 1;
+  margin: 5rem;
 }
 
-/* Table Base */
+/* Base table */
 table th,
 table td {
   padding: 1rem 2rem;
@@ -37,30 +30,36 @@ table #empty-row {
   height: 2rem;
 }
 
-/* Nav panel */
+/* Dash-panel NAV */
 #dash-panel {
-  width: 100%;
-  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--second-color);
+  transform: translateX(-100%); 
+  transition: transform 0.8s; 
+  z-index: 3;
+}
+
+#dash-panel.open {
+  transform: translateX(0);
+}
+
+#dash-nav {
+  width: 100%;
 }
 
 figure {
   width: 100%;
 }
 
-figure .logo {
-  width: 100%;
-  margin: 2rem 0;
-}
-
-figure .logo img {
-  width: 60%;
-}
-
-#dash-nav {
-  width: 100%;
+figure img {
+  max-width: 20rem;
+  margin: 4rem 0;
 }
 
 #dash-nav-list {
@@ -113,42 +112,22 @@ figure .logo img {
   border-color: var(--black);
 }
 
-/* Account Section */
-#account-wrapper {
-  width: 100%;
-  flex-direction: column;
+/* Menu button styles */
+#nav-open-btn {
+  position: fixed;
+  top: 2rem;
+  left: 0;
 }
 
-#account-table {
-  margin-bottom: 5rem;
-  padding: 0;
+/* USERS & CLIENTS sections */
+#users {
+    width: 100%;
 }
 
-.form-wrapper {
-  padding: 2rem 4rem;
-  border: .5rem solid var(--border-color);
-}
-
-#account h4 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-}
-
-#update-password-form,
-.form-wrapper {
-  flex-direction: column;
-}
-
-.toggle-password {
-  font-size: 1.5rem;
-  margin-left: 0.5rem;
-}
-
-/* Users & Clients Sections */
 #users-table,
 #clients-table {
-  width: 80%;
-  margin: 5rem;
+  width: 95%;
+  margin: 0;
   padding: 0;
   table-layout: fixed;
   border-collapse: collapse;
@@ -171,6 +150,7 @@ figure .logo img {
   border: .3rem solid var(--border-color);
 }
 
+/* USERS section */
 /** Total width of all columns must equal 100% **/
 /* Width of Name column */
 #users-table th:nth-child(1),
@@ -213,7 +193,7 @@ figure .logo img {
   color: var(--primary-color);
 }
 
-/* New User Form Styles */
+/* New User form styles */
 #new-user-name,
 #new-user-username,
 #new-user-password {
@@ -236,7 +216,6 @@ figure .logo img {
   border: none;
   font-style: italic;
 }
-
 
 #create-user-icon {
   font-size: 3rem;
@@ -273,11 +252,44 @@ figure .logo img {
   color: var(--third-color);
 } */
 
-/* Clients */
 
 
-/* Google */
+/* CLIENTS section */
 
+
+/* GOOGLE section */
+
+
+/* ACCOUNT section */
+#account {
+  width: 100%;
+  flex-direction: column;
+}
+
+#account-table {
+  margin-bottom: 5rem;
+  padding: 0;
+}
+
+.form-wrapper {
+  padding: 2rem 4rem;
+  border: .5rem solid var(--border-color);
+}
+
+#account h4 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+#update-password-form,
+.form-wrapper {
+  flex-direction: column;
+}
+
+.toggle-password {
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+}
 
 /*=====================================================================================
   Media Queries for Responsive Design     
@@ -286,10 +298,30 @@ figure .logo img {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
   
+  /* Dash-panel NAV */
   #dash-panel {
+    /* position: fixed;
+    top: 0;
     left: 0;
+    bottom: 0; */
     width: 30rem;
+    transform: translateX(0); 
+    /* transition: transform 0.8s;  */
+    /* z-index: 3; */
   }
+  
+  /* #dash-panel.open {
+    transform: translateX(0);
+  } */
+  
+  #nav-open-btn {
+    display: none;
+  }
+  
+  main {
+    margin: 5rem 5rem 5rem 35rem;
+  }
+}
 
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
