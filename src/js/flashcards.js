@@ -1,4 +1,3 @@
-const contentWrapper = document.querySelector('#flash-content-wrapper');
 const mobileOpenBtn = document.querySelector('#mobile-open-btn');
 const tabletOpenBtn = document.querySelector('#tablet-open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
