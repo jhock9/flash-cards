@@ -63,11 +63,11 @@
     <main id="section-wrapper" class="center">
       <!-- USERS SECTION -->
       <section id="users" class="hide center">
-        <table id="users-table">
+        <table id="users-header">
           <!-- Todo: create table for mobile with only 2 columns: Name & Actions -->
           <!-- Todo: make "create new user form" a modal/form popup -->
           
-          <thead id="users-table-head">
+          <thead id="users-labels">
             <!-- Todo: Sortable table -->
             <tr>
               <th>Name</th>
@@ -78,12 +78,12 @@
             </tr>
           </thead>
           
-          <tbody id="users-table-body">
+          <tbody id="users-create">
             <!-- First row is a form to create a new user -->
-            <tr>
+            <tr id="create-user-row">
               <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
               <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
-              <td><input type="password" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
+              <td><input type="text" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
               <td>
                 <select id="new-user-role" required>
                   <option value="">Select</option>
@@ -95,32 +95,177 @@
                 <button type="submit" id="create-user-icon"><i class="table-icon fa-regular fa-square-plus"></i></button>
               </td>
             </tr>
-            <tr id="empty-row"></tr>
-            <!-- All remaining rows are generated dynamically from the database -->
-            <!-- //!! FOR TESTING -->
-            <tr>
-              <td>John Doe</td>
-              <td>johndoe</td>
-              <td>****</td>
-              <td>Admin</td>
-              <td>
-                <i class="table-icon fa-solid fa-pen-to-square"></i>
-                <i class="table-icon fa-solid fa-user-group"></i>
-              </td>
-            </tr>
-            <tr>
-              <td>Jane Smith</td>
-              <td>janesmith</td>
-              <td>****</td>
-              <td>User</td>
-              <td>
-                <i class="table-icon fa-solid fa-pen-to-square"></i>
-                <i class="table-icon fa-solid fa-user-group"></i>
-              </td>
-            </tr>
-            <!--//!! FOR TESTING -->
           </tbody>
         </table>
+        
+        <!-- Table content dynamically generated from database -->
+        <div id="users-table-wrapper" class="center">
+          <table id="users-table">
+            <tbody id="users-table-body">
+              <!-- //!! FOR TESTING -->
+              <!-- <tr>
+                <td>John Doe</td>
+                <td>johndoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Jane Smith</td>
+                <td>janesmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Mark Doe</td>
+                <td>markdoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Mary Smith</td>
+                <td>Marysmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Luke Doe</td>
+                <td>lukedoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Lucy Smith</td>
+                <td>lucysmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Matthew Doe</td>
+                <td>matthewdoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Martha Smith</td>
+                <td>marthasmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>John Doe</td>
+                <td>johndoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Jane Smith</td>
+                <td>janesmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Mark Doe</td>
+                <td>markdoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Mary Smith</td>
+                <td>Marysmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Luke Doe</td>
+                <td>lukedoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Lucy Smith</td>
+                <td>lucysmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Matthew Doe</td>
+                <td>matthewdoe</td>
+                <td>****</td>
+                <td>Admin</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>Martha Smith</td>
+                <td>marthasmith</td>
+                <td>****</td>
+                <td>User</td>
+                <td>
+                  <i class="table-icon fa-solid fa-pen-to-square"></i>
+                  <i class="table-icon fa-solid fa-user-group"></i>
+                </td>
+              </tr> -->
+            </tbody>
+          </table>
+        </div>
           <!-- Todo: Actions - links via icons, opens modal for the create-user-form below
             1. icon to edit user
             <i class="fa-solid fa-pen-to-square"></i>

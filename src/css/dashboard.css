@@ -124,7 +124,9 @@ figure img {
     width: 100%;
 }
 
+#users-header,
 #users-table,
+#clients-header,
 #clients-table {
   width: 95%;
   margin: 0;
@@ -133,50 +135,69 @@ figure img {
   border-collapse: collapse;
 } 
 
-#users-table-head,
-#clients-table-head {
+#users-header,
+#clients-header {
+  margin-bottom: 4rem;
+}
+
+#users-labels,
+#clients-labels {
   color: var(--white);
   background-color: var(--third-color);
   border: .3rem solid var(--third-color);
 }
 
-#users-table-body tr:first-child td,
-#clients-table-body tr:first-child td {
-  border: .3rem solid var(--third-color);
+#users-create,
+#clients-create {
+
 }
 
+#users-header td,
 #users-table-body td,
+#clients-header td,
 #clients-table-body td {
   border: .3rem solid var(--border-color);
+}
+
+#users-table-wrapper {
+  max-height: 70rem;
+  overflow-y: auto;
+  width: calc(100% + 2rem); /* adjust this value to suit your needs */
+
 }
 
 /* USERS section */
 /** Total width of all columns must equal 100% **/
 /* Width of Name column */
-#users-table th:nth-child(1),
+#users-header th:nth-child(1),
+#users-header td:nth-child(1),
 #users-table td:nth-child(1) {
   width: 23%;
 }
 
 /* Width of Username column */
-#users-table th:nth-child(2),
+#users-header th:nth-child(2),
+#users-header td:nth-child(2),
 #users-table td:nth-child(2) {
   width: 23%;
 }
 /* Width of Password column */
-#users-table th:nth-child(3),
+#users-header th:nth-child(3),
+#users-header td:nth-child(3),
 #users-table td:nth-child(3) {
   width: 23%;
 }
 
 /* Width of Role column */
-#users-table th:nth-child(4),
+#users-header th:nth-child(4),
+#users-header td:nth-child(4),
 #users-table td:nth-child(4) {
   width: 17%;
 }
 
 /* Width of Action column */
-#users-table th:nth-child(5),
+#users-header th:nth-child(5),
+#users-header td:nth-child(5),
 #users-table td:nth-child(5) {
   width: 13%;
   text-align: center;
