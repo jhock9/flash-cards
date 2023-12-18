@@ -9,6 +9,8 @@ const createUserBtn = document.querySelector('#create-user-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
+let currentUser;
+
 // TODO: Admin default login to users section, unless google acct not authenticated
 // TODO: User default login to clients section
 // TODO: Prob need to have JS auto populate all the sections instead of hard coding...
@@ -21,11 +23,8 @@ import { togglePasswordVisibility } from '../components/password.js';
 import { 
   addModalEventListeners,
   hideModal,
-  showGoogleSignInModal,
   showFlashcardsModal
 } from '../components/modals.js';
-
-let currentUser;
 
 // Show or hide elements based on the user's role
 const updateDashNav = async (currentUser) => {
@@ -35,14 +34,15 @@ const updateDashNav = async (currentUser) => {
       for (let view of adminViews) {
       view.classList.remove('hide');
       }
+      
+      // Show the users tab by default
+      document.querySelector('#users-tab').click();
+      refreshUsersTable();
+      
       await checkGoogleAuthentication();
-      document.querySelector('#google-tab').click();
-      document.querySelector('#account').classList.add('hide');
-      document.querySelector('#google').classList.remove('hide');
-      showGoogleSignInModal();
-      setTimeout(hideModal, 4000);
     } else {  
       console.log('User is not admin. Showing user views...');
+      document.querySelector('#clients-tab').click();
     }
   } catch (error) {
     console.error('Error updating dashboard navigation:', error);
@@ -129,7 +129,6 @@ navLinks.forEach((link) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
-  document.querySelector('#account-tab').click();
   
   currentUser = await fetchAccountData();
   updateDashNav(currentUser);
