@@ -1,7 +1,11 @@
-const googleTab = document.querySelector('#google');
 const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientID; 
+
+import { 
+  hideModal,
+  showGoogleSignInModal
+} from '../components/modals.js';
 
 // Fetch Google Client ID from server
 const fetchConfig = async () => {
@@ -76,10 +80,17 @@ const checkGoogleAuthentication = async () => {
       googleSignIn.classList.add('hide');
     } else {
       console.log('Admin is not authenticated with Google. Sign in again.');
-      googleTab.click();
+      document.querySelector('#google-tab').click();
       googleTab.classList.add('clicked');
+      
+      document.querySelector('#account').classList.add('hide');
+      document.querySelector('#google').classList.remove('hide');
+      
       signedIn.classList.add('hide');
       googleSignIn.classList.remove('hide');
+      
+      showGoogleSignInModal();
+      setTimeout(hideModal, 4000);
 } 
   } catch (error) {
     console.error('Error checking Google authentication:', error);
