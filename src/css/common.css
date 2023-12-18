@@ -163,6 +163,12 @@ input[type=password] {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
   
+  .square-btn {
+    width: 8rem;
+    margin: 1rem 1.75rem;
+    font-size: 4rem;
+  }
+  
   .modal-content h2, h3 {
     font-size: 3.5rem;
   }
