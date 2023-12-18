@@ -1,9 +1,17 @@
+const dashPanel = document.querySelector('#dash-panel');
+const navOpenBtn = document.querySelector('#nav-open-btn');
+
 const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
+
 const createUserBtn = document.querySelector('#create-user-btn');
 const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
+
+// TODO: Admin default login to users section, unless google acct not authenticated
+// TODO: User default login to clients section
+// TODO: Prob need to have JS auto populate all the sections instead of hard coding...
 
 import { fetchAccountData, updatePassword } from './account.js';
 import { refreshUsersTable, createUser } from './users.js';
@@ -55,7 +63,8 @@ const logout = async () => {
   }
 };
 
-//**   NAV BAR  **//
+
+//**   NAV  **//
 
 // Add event listeners to the navigation links
 navLinks.forEach((link) => {
@@ -67,6 +76,7 @@ navLinks.forEach((link) => {
     // Only handle links that navigate to a section on the current page
     if (href.startsWith('#')) {
       event.preventDefault();
+      toggleNav();
       
       // Hide all sections
       const sections = document.querySelectorAll('main section');
@@ -106,13 +116,17 @@ navLinks.forEach((link) => {
   });
 });
 
-flashcardsModal.addEventListener('click', event => {
-  event.stopPropagation();
-  hideModal();
-  window.location.href = '/flashcards.html';
-});
 
-// Executes when the window loads
+//**   USERS   **//
+
+
+
+//**   CLIENTS   **//
+
+
+
+//**   WINDOW LOAD EVENTS   **/
+
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
   document.querySelector('#account-tab').click();
@@ -134,24 +148,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   setTimeout(logout, 12 * 60 * 60 * 1000);
 });
 
-logoutBtn.addEventListener('click', async (e) => {
-  console.log('Sign out button clicked...');
-  e.preventDefault();
-  await logout();
-});
-
-
-/*=====================================================================================
-  MAIN SECTION     
-=====================================================================================*/
-
-
-// Create and update users
-createUserBtn.addEventListener('click', () => {  
-  createUser();
-  refreshUsersTable();
-});
-
 // Closes the flashcards modal if the user clicks outside of it
 window.onclick = (event) => {
   if (event.target === flashcardsModal) {
@@ -159,3 +155,37 @@ window.onclick = (event) => {
     window.location.href = '/flashcards.html';
   }
 };
+
+
+//**   TOGGLES   **// 
+
+//!! Toggle the navigation menu when in mobile view only
+const toggleNav = () => {
+  console.log('Toggling nav...');
+  navOpenBtn.classList.toggle('open');
+  dashPanel.classList.toggle('open');
+};
+
+
+//**   BUTTONS   **//
+
+navOpenBtn.addEventListener('click', async () => {
+  console.log('Open button clicked...');
+  try {
+    toggleNav();
+  } catch (error) {
+    console.error('Error on open button click:', error);
+  }
+});
+
+logoutBtn.addEventListener('click', async (e) => {
+  console.log('Sign out button clicked...');
+  e.preventDefault();
+  await logout();
+});
+
+// Create and update users
+createUserBtn.addEventListener('click', () => {  
+  createUser();
+  refreshUsersTable();
+});
