@@ -181,7 +181,7 @@ logoutBtn.addEventListener('click', async (e) => {
 });
 
 // Create and update users
-createUserBtn.addEventListener('click', () => {  
-  createUser();
+createUserBtn.addEventListener('click', (event) => {  
+  createUser(event);
   refreshUsersTable();
 });
