@@ -28,12 +28,12 @@ const updateDashNav = async (currentUser) => {
   try {
     if (currentUser.role === 'admin') {
       console.log ('User is admin. Showing admin views...');
-      await checkGoogleAuthentication();
+      const isAuthenticated = await checkGoogleAuthentication();
       
-      if (isAuthenticated) {
+      if (isAuthenticated === true) {
         document.querySelector('#users-tab').click();
       }
-
+      
       for (let view of adminViews) {
       view.classList.remove('hide');
       }
