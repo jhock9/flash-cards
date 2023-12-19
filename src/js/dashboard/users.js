@@ -130,6 +130,14 @@ const createEditUserBtn = () => {
   return editUserBtn;
 };
 
+
+const appendToNewDiv = (classList, elements) => {
+  const newDiv = document.createElement('div');
+  newDiv.classList.add(...classList.split(' '));
+  elements.forEach(el => newDiv.appendChild(el));
+  return newDiv;
+};
+
 const createViewClientsBtn = () => {
   const viewClientsBtn = document.createElement('button');
   viewClientsBtn.type = 'button';
@@ -148,7 +156,6 @@ const createViewClientsBtn = () => {
   
   return viewClientsBtn;
 };
-
 
 const createUser = async (event) => {
   console.log('createUser called...');
