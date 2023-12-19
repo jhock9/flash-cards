@@ -76,10 +76,10 @@ const refreshUsersTable = async () => {
 const createEditUserBtn = () => {
   const editUserBtn = document.createElement('button');
   editUserBtn.type = 'button';
-  editUserBtn.classList.add('remove-btn', 'center');
+  editUserBtn.classList.add('table-icon');
   
   const editIcon = document.createElement('i');
-  editIcon.classList.add ('table-icon', 'fa-solid', 'fa-pen-to-square');
+  editIcon.classList.add ('fa-solid', 'fa-pen-to-square');
   editUserBtn.appendChild(editIcon);
   
   //!! NOT MVP 
@@ -141,10 +141,10 @@ const appendToNewDiv = (classList, elements) => {
 const createViewClientsBtn = () => {
   const viewClientsBtn = document.createElement('button');
   viewClientsBtn.type = 'button';
-  viewClientsBtn.classList.add('remove-btn', 'center');
+  viewClientsBtn.classList.add('table-icon');
   
   const viewClientsIcon = document.createElement('i');
-  viewClientsIcon.classList.add('table-icon', 'fa-solid', 'fa-user-group');
+  viewClientsIcon.classList.add('fa-solid', 'fa-user-group');
   viewClientsBtn.appendChild(viewClientsIcon);
   
   viewClientsBtn.addEventListener('click', () => {

@@ -34,7 +34,8 @@ table #empty-row {
   font-size: 2.3rem;
   margin: 1rem;
   color: var(--third-color);
-  background-color: none;
+  background-color: var(--white);
+  border: none;
   cursor: pointer;
 }
 
@@ -241,11 +242,6 @@ figure img {
   padding: 0.5rem 2rem;
   border: none;
   font-style: italic;
-}
-
-#create-user-btn {
-  background-color: var(--white);
-  border: none;
 }
 
 #create-user-btn i {
