@@ -30,10 +30,13 @@ const updateDashNav = async (currentUser) => {
       console.log ('User is admin. Showing admin views...');
       await checkGoogleAuthentication();
       
+      if (isAuthenticated) {
+        document.querySelector('#users-tab').click();
+      }
+
       for (let view of adminViews) {
       view.classList.remove('hide');
       }
-      document.querySelector('#users-tab').click();
       } else {  
       console.log('User is not admin. Showing user views...');
       document.querySelector('#clients-tab').click();
