@@ -1,3 +1,4 @@
+const googleTab = document.querySelector('#google-tab');
 const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientID; 
@@ -80,7 +81,7 @@ const checkGoogleAuthentication = async () => {
       googleSignIn.classList.add('hide');
     } else {
       console.log('Admin is not authenticated with Google. Sign in again.');
-      document.querySelector('#google-tab').click();
+      googleTab.click();
       googleTab.classList.add('clicked');
       
       document.querySelector('#account').classList.add('hide');
