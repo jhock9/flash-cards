@@ -30,6 +30,19 @@ table #empty-row {
   height: 2rem;
 }
 
+.table-icon {
+  font-size: 2.3rem;
+  margin: 1rem;
+  color: var(--third-color);
+  background-color: none;
+  cursor: pointer;
+}
+
+.table-icon:hover,
+.table-icon.clicked {
+  color: var(--primary-color);
+}
+
 /* Dash-panel NAV */
 #dash-panel {
   position: fixed;
@@ -120,6 +133,8 @@ figure img {
 }
 
 /* USERS & CLIENTS sections */
+
+/* Table layout styles */
 #users {
     width: 100%;
 }
@@ -147,13 +162,12 @@ figure img {
   border: .3rem solid var(--third-color);
 }
 
-#users-create,
-#clients-create {
-
+#users-labels th:nth-child(4) {
+  text-align: center;
 }
 
-#users-header td,
-#clients-header td {
+#users-create td,
+#clients-create td {
   border: .3rem solid var(--border-color);
 }
 
@@ -205,18 +219,7 @@ figure img {
   text-align: center;
 }
 
-.table-icon {
-  margin: 1rem;
-  cursor: pointer;
-  color: var(--third-color);
-}
-
-.table-icon:hover,
-.table-icon.clicked {
-  color: var(--primary-color);
-}
-
-/* New User form styles */
+/* Create User row styles */
 #new-user-name,
 #new-user-username,
 #new-user-password {
@@ -235,17 +238,18 @@ figure img {
 #new-user-role {
   width: 90%;
   font-size: 2rem;
-  padding: 1rem .25rem;
+  padding: 0.5rem 2rem;
   border: none;
   font-style: italic;
 }
 
-#create-user-icon {
-  font-size: 3rem;
-  color: var(--third-color);
+#create-user-btn {
   background-color: var(--white);
   border: none;
-  cursor: pointer;
+}
+
+#create-user-btn i {
+  font-size: 2.7rem;
 }
 
 #create-user-btn:hover,

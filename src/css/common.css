@@ -88,6 +88,22 @@ body {
   padding: .2rem 1rem;
 }
 
+/* Modern browser support */
+::placeholder {
+  color: var(--border-color);
+}
+
+/* IE, MS Edge support */
+:-ms-input-placeholder {
+  color: var(--border-color);
+}
+
+/* Firefox 18- support */
+::-moz-placeholder {
+  color: var(--border-color);
+  opacity: 1;
+}
+
 .password-wrapper {
   position: relative;
 }
