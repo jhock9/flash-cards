@@ -153,17 +153,19 @@ figure img {
 }
 
 #users-header td,
-#users-table-body td,
-#clients-header td,
-#clients-table-body td {
+#clients-header td {
   border: .3rem solid var(--border-color);
 }
 
-#users-table-wrapper {
+#users-table-body td,
+#clients-table-body td {
+  /* border: .3rem solid var(--border-color); */
+}
+
+#users-table-wrapper,
+#clients-table-wrapper {
   max-height: 70rem;
   overflow-y: auto;
-  width: calc(100% + 2rem); /* adjust this value to suit your needs */
-
 }
 
 /* USERS section */
