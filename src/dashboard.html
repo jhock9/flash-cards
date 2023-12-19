@@ -63,41 +63,43 @@
     <main id="section-wrapper" class="center">
       <!-- USERS SECTION -->
       <section id="users" class="hide center">
-        <table id="users-header">
-          <!-- Todo: create table for mobile with only 2 columns: Name & Actions -->
-          <!-- Todo: make "create new user form" a modal/form popup -->
-          
-          <thead id="users-labels">
-            <!-- Todo: Sortable table -->
-            <tr>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Passcode</th> 
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          
-          <tbody id="users-create">
-            <!-- First row is a form to create a new user -->
-            <tr id="create-user-row">
-              <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
-              <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
-              <td><input type="text" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
-              <td>
-                <select id="new-user-role" required>
-                  <option value="">Select</option>
-                  <option value="admin">Admin</option>
-                  <option value="user">User</option>
-                </select>
-              </td>
-              <td>
-                <button type="submit" id="create-user-icon"><i class="table-icon fa-regular fa-square-plus"></i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        
+        <div id="users-header-wrapper">
+          <table id="users-header">
+            <!-- Todo: create table for mobile with only 2 columns: Name & Actions -->
+            <!-- Todo: make "create new user form" a modal/form popup -->
+            
+            <thead id="users-labels">
+              <!-- Todo: Sortable table -->
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Passcode</th> 
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            
+            <tbody id="users-create">
+              <!-- First row is a form to create a new user -->
+              <tr id="create-user-row">
+                <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
+                <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
+                <td><input type="text" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
+                <td>
+                  <select id="new-user-role" required>
+                    <option value="">Select</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                  </select>
+                </td>
+                <td>
+                  <button type="submit" id="create-user-icon"><i class="table-icon fa-regular fa-square-plus"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <!-- Table content dynamically generated from database -->
         <div id="users-table-wrapper" class="center">
           <table id="users-table">
@@ -228,36 +230,6 @@
                 <td>lukedoe</td>
                 <td>****</td>
                 <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Lucy Smith</td>
-                <td>lucysmith</td>
-                <td>****</td>
-                <td>User</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Matthew Doe</td>
-                <td>matthewdoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Martha Smith</td>
-                <td>marthasmith</td>
-                <td>****</td>
-                <td>User</td>
                 <td>
                   <i class="table-icon fa-solid fa-pen-to-square"></i>
                   <i class="table-icon fa-solid fa-user-group"></i>
