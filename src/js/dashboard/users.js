@@ -44,21 +44,25 @@ const refreshUsersTable = async () => {
       
       // Action icons
       const actionCell = document.createElement('td');
-        
-        const iconDiv = document.createElement('div');
-        iconDiv.className = 'action-icons';
-        
-        const editIcon = document.createElement('i');
-        editIcon.className = 'action-icon fa-solid fa-pen-to-square';
-        editIcon.classList.add('table-icon');
-        iconDiv.appendChild(editIcon);
-        
-        const viewClientsIcon = document.createElement('i');
-        viewClientsIcon.className = 'action-icon fa-solid fa-user-group';
-        editIcon.classList.add('table-icon');
-        iconDiv.appendChild(viewClientsIcon);
-        
-        actionCell.appendChild(iconDiv);
+      
+      // const editUserBtn = document.createElement('button');
+      // const editIcon = document.createElement('i');
+      // editIcon.classList.add ('table-icon', 'fa-solid', 'fa-pen-to-square');
+      // editUserBtn.appendChild(editIcon);
+      // iconDiv.appendChild(editUserBtn);
+      
+      // const viewClientsBtn = document.createElement('button');
+      // const viewClientsIcon = document.createElement('i');
+      // viewClientsIcon.classList.add('table-icon', 'fa-solid', 'fa-user-group');
+      // viewClientsBtn.appendChild(viewClientsIcon);
+      // iconDiv.appendChild(viewClientsBtn);
+      
+      const editUserBtn = createEditUserBtn();
+      const viewClientsBtn = createViewClientsBtn();
+      
+      const iconDiv = appendToNewDiv('icon-div center', [editUserBtn, viewClientsBtn]);
+      
+      actionCell.appendChild(iconDiv);
       row.appendChild(actionCell);
       
       tableBody.appendChild(row);
@@ -68,6 +72,83 @@ const refreshUsersTable = async () => {
     console.error('Error:', error);
   };
 };
+
+const createEditUserBtn = () => {
+  const editUserBtn = document.createElement('button');
+  editUserBtn.type = 'button';
+  editUserBtn.classList.add('remove-btn', 'center');
+  
+  const editIcon = document.createElement('i');
+  editIcon.classList.add ('table-icon', 'fa-solid', 'fa-pen-to-square');
+  editUserBtn.appendChild(editIcon);
+  
+  //!! NOT MVP 
+  editUserBtn.addEventListener('click', () => {
+
+//!! this todo started like this:
+    // TODO: edit user modal/popup appears
+    //   - Update data
+    //   - Reset password
+    //   - Delete user 
+
+//!! and ended up like this:
+    // TODO: edit user modal/popup appears
+    //  - Change name (input field with placeholder "Enter new name")
+    //  - Change username (input field with placeholder "Enter new username")
+    //  - Reset password checkbox
+    //  - Change role (dropdown with options "Admin" and "User")
+    //  - Delete user checkbox
+    //  - Confirm button
+    //    - if reset password checked:
+    //      - Ask "Are you sure you want to reset this user's password?"
+    //      - Require user to type username to confirm
+    //      - Modal "Password reset to "0000", please have user sign in to update password."
+    //      - Close modal/popup
+    //    - if delete user checked:
+    //      - Ask "Are you sure you want to delete this user? This action cannot be undone. This action WILL NOT delete any of this user's client data."
+    //      - Require user to type username to confirm
+    //      - Once confirmed, user is deleted and cannot be recovered
+    //      - Remove user from database
+    //      - Remove user from user's clients' username connection (DO NOT delete client data)
+    //      - Modal "User has been deleted."
+    //      - Close modal/popup
+    //    - if both checked, follow delete user logic and ignore reset password
+    //    - if neither checked (meaning just name, username or role changed):
+    //      - if name or role are changed, update name and/or role
+    //      - if username is changed, check if new username is available
+    //        - if username is not available, display notAvailableModal
+    //        - if username is available, update username
+    //        - if username is changed, update user's clients' username connection
+    //      - show successModal
+    //      - Close modal/popup
+    //  - Cancel/Back button
+    //    - No changes made, close modal/popup
+    //  - If user is edited or deleted, refresh table
+    //  - If user is edited, deleted, or reset, show error message
+  });
+  
+  return editUserBtn;
+};
+
+const createViewClientsBtn = () => {
+  const viewClientsBtn = document.createElement('button');
+  viewClientsBtn.type = 'button';
+  viewClientsBtn.classList.add('remove-btn', 'center');
+  
+  const viewClientsIcon = document.createElement('i');
+  viewClientsIcon.classList.add('table-icon', 'fa-solid', 'fa-user-group');
+  viewClientsBtn.appendChild(viewClientsIcon);
+  
+  viewClientsBtn.addEventListener('click', () => {
+    document.querySelector('#clients-tab').click();
+    // TODO: add filter to see only this users' clients
+    // guessing I'll need to pass a parameter here? username?
+    // is this a callback function written below? or include in this function?
+  });
+  
+  return viewClientsBtn;
+};
+
 
 const createUser = async (event) => {
   console.log('createUser called...');
