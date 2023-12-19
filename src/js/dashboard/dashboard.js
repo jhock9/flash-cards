@@ -10,8 +10,6 @@ const flashcardsModal = document.querySelector('#flashcards-modal');
 
 let currentUser;
 
-// TODO: Admin default login to users section, unless google acct not authenticated
-// TODO: User default login to clients section
 // TODO: Prob need to have JS auto populate all the sections instead of hard coding...
 
 import { fetchAccountData, updatePassword } from './account.js';
@@ -30,16 +28,13 @@ const updateDashNav = async (currentUser) => {
   try {
     if (currentUser.role === 'admin') {
       console.log ('User is admin. Showing admin views...');
+      await checkGoogleAuthentication();
+      
       for (let view of adminViews) {
       view.classList.remove('hide');
       }
-      
-      // Show the users tab by default
       document.querySelector('#users-tab').click();
-      refreshUsersTable();
-      
-      await checkGoogleAuthentication();
-    } else {  
+      } else {  
       console.log('User is not admin. Showing user views...');
       document.querySelector('#clients-tab').click();
     }
@@ -68,7 +63,7 @@ const logout = async () => {
 // Add event listeners to the navigation links
 navLinks.forEach((link) => {
   link.addEventListener('click', (event) => {
-    console.log('nav link clicked'); 
+    console.log('nav link clicked...'); 
     
     const href = link.getAttribute('href');
     
@@ -98,7 +93,7 @@ navLinks.forEach((link) => {
       section.classList.remove('hide');
       
       if (sectionId === 'users') {
-        console.log('users-tab clicked');
+        console.log('users-tab clicked...');
         refreshUsersTable();
       };
       
