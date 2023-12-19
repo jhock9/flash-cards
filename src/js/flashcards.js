@@ -239,16 +239,16 @@ const createSelectedDiv = (selectedTag) => {
   return selectedDiv;
 };
 
+
+//**   HELPERS FOR SELECTED DIV ELEMENTS   **//
+//!! Move these to a separate file and import
+
 const appendToNewDiv = (classList, elements) => {
   const newDiv = document.createElement('div');
   newDiv.classList.add(...classList.split(' '));
   elements.forEach(el => newDiv.appendChild(el));
   return newDiv;
 };
-
-
-//**   HELPERS FOR SELECTED DIV ELEMENTS   **//
-//!! Move these to a separate file and import
 
 const createSlider = () => {
   const slider = document.createElement('input');
