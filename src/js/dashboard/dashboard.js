@@ -6,7 +6,6 @@ const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 
 const createUserBtn = document.querySelector('#create-user-btn');
-const tableHeaders = document.querySelectorAll('#users-table th');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 let currentUser;
