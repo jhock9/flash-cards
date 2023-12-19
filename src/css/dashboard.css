@@ -268,9 +268,33 @@ figure img {
 
 /* CLIENTS section */
 
-
 /* GOOGLE section */
+#google {
+  width: 100%;
+}
 
+#signed-in-wrapper {
+  width: 80%;
+  flex-direction: column;
+  text-align: center;    
+}
+
+#signed-in-wrapper i {
+  font-size: 10rem;
+  color: var(--primary-color);
+  margin: 0 1rem;
+}
+
+#signed-in-wrapper h2 {
+  font-size: 3rem;
+  font-style: italic;
+  margin: 4rem 0;
+}
+
+#signed-in-wrapper p {
+  font-size: 2.5rem;
+  line-height: 1.5;
+}
 
 /* ACCOUNT section */
 #account {
@@ -332,6 +356,18 @@ figure img {
   
   main {
     margin: 5rem 5rem 5rem 35rem;
+  }
+  
+  #signed-in-wrapper {
+    width: 70%;
+  }
+  
+  #signed-in-wrapper h2 {
+    font-size: 4rem;
+  }
+  
+  #signed-in-wrapper p {
+    font-size: 3rem;
   }
 }
 
