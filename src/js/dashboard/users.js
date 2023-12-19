@@ -5,7 +5,7 @@ import {
 } from '../components/modals.js';
 
 const refreshUsersTable = async () => {
-  console.log('refreshUsersTable called');
+  console.log('refreshUsersTable called...');
   try {
     const response = await fetch('/users/refresh-users', {
       method: 'GET',
@@ -16,10 +16,8 @@ const refreshUsersTable = async () => {
     };
     
     const users = await response.json();
-    console.log(users);  
     
     const tableBody = document.querySelector('#users-table-body');
-    console.log(tableBody);
     tableBody.innerHTML = '';
     
     // Populate the users table with the users' data
@@ -72,18 +70,19 @@ const refreshUsersTable = async () => {
 };
 
 const createUser = async (event) => {
+  console.log('createUser called...');
   event.preventDefault();
   
-  const fullname = document.querySelector('#new-user-name').value;
-  const username = document.querySelector('#new-user-username').value;
-  const password = document.querySelector('#new-user-password').value;
-  const role = document.querySelector('#new-user-role').value;
-  
+  const fullnameInput = document.querySelector('#new-user-name');
+  const usernameInput = document.querySelector('#new-user-username');
+  const passwordInput = document.querySelector('#new-user-password');
+  const roleInput = document.querySelector('#new-user-role');
+
   const userData = {
-    fullname,
-    username,
-    password,
-    role,
+    fullname: fullnameInput.value,
+    username: usernameInput.value,
+    password: passwordInput.value,
+    role: roleInput.value,
   };
   
   fetch('/users/create-user', {
@@ -103,7 +102,13 @@ const createUser = async (event) => {
     if (data.success) {
         showNewUserModal();
         setTimeout(hideModal, 2000);
-        refreshUsersTable();
+        
+        fullnameInput.value = '';
+        usernameInput.value = '';
+        passwordInput.value = '';
+        roleInput.value = '';
+        refreshUsersTable(); 
+        
     } else if (data.error) {
       if (data.error === 'Username already exists.') {
         showUnavailableModal();
