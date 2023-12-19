@@ -1,6 +1,6 @@
 import { 
   hideModal,
-  showNewUserModal,
+  showUserCreatedModal,
   showUnavailableModal,
 } from '../components/modals.js';
 
@@ -188,7 +188,7 @@ const createUser = async (event) => {
   })
   .then(data => {
     if (data.success) {
-        showNewUserModal();
+        showUserCreatedModal();
         setTimeout(hideModal, 2000);
         
         fullnameInput.value = '';
