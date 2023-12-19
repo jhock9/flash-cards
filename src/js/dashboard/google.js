@@ -79,6 +79,7 @@ const checkGoogleAuthentication = async () => {
       console.log('Admin is authenticated with Google.');
       signedIn.classList.remove('hide');
       googleSignIn.classList.add('hide');
+      return true;
     } else {
       console.log('Admin is not authenticated with Google. Sign in again.');
       googleTab.click();
@@ -92,6 +93,7 @@ const checkGoogleAuthentication = async () => {
       
       showGoogleSignInModal();
       setTimeout(hideModal, 4000);
+      return false;
 } 
   } catch (error) {
     console.error('Error checking Google authentication:', error);
