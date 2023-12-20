@@ -136,7 +136,8 @@ figure img {
 /* USERS & CLIENTS sections */
 
 /* Table layout styles */
-#users {
+#users,
+#clients {
     width: 100%;
 }
 
@@ -163,7 +164,8 @@ figure img {
   border: .3rem solid var(--third-color);
 }
 
-#users-labels th:nth-child(4) {
+#users-labels th:nth-child(4),
+#clients-labels th:nth-child(4) {
   text-align: center;
 }
 
@@ -172,19 +174,14 @@ figure img {
   border: .3rem solid var(--border-color);
 }
 
-#users-table-body td,
-#clients-table-body td {
-  /* border: .3rem solid var(--border-color); */
-}
-
 #users-table-wrapper,
 #clients-table-wrapper {
   max-height: 70rem;
   overflow-y: auto;
 }
 
-/* USERS section */
-/** Total width of all columns must equal 100% **/
+/** User Table Width **/
+/* Total width of all columns must equal 100% */
 /* Width of Name column */
 #users-header th:nth-child(1),
 #users-header td:nth-child(1),
@@ -198,6 +195,7 @@ figure img {
 #users-table td:nth-child(2) {
   width: 23%;
 }
+
 /* Width of Password column */
 #users-header th:nth-child(3),
 #users-header td:nth-child(3),
@@ -220,10 +218,44 @@ figure img {
   text-align: center;
 }
 
-/* Create User row styles */
+/** Client Table Width **/
+/* Total width of all columns must equal 100% */
+/* Width of Client Name column */
+#clients-header th:nth-child(1),
+#clients-header td:nth-child(1),
+#clients-table td:nth-child(1) {
+  width: 35%;
+}
+
+/* Width of Therapist/Tech column */
+#clients-header th:nth-child(2),
+#clients-header td:nth-child(2),
+#clients-table td:nth-child(2) {
+  width: 32%;
+}
+
+/* Width of Client ID column */
+#clients-header th:nth-child(3),
+#clients-header td:nth-child(3),
+#clients-table td:nth-child(3) {
+  width: 20%;
+}
+
+/* Width of Action column */
+#clients-header th:nth-child(4),
+#clients-header td:nth-child(4),
+#clients-table td:nth-child(4) {
+  width: 13%;
+  text-align: center;
+}
+
+/* Create User/Client row styles */
 #new-user-name,
 #new-user-username,
-#new-user-password {
+#new-user-password,
+#new-client-name,
+#new-client-tech-name,
+#new-client-id {
   width: 95%;
   font-size: 2rem;
   font-weight: 400;
@@ -244,29 +276,18 @@ figure img {
   font-style: italic;
 }
 
-#create-user-btn i {
+#create-user-btn i,
+#create-client-btn i {
   font-size: 2.7rem;
 }
 
 #create-user-btn:hover,
-#create-user-btn:active {
+#create-user-btn:active,
+#create-client-btn:hover,
+#create-client-btn:active {
   color: var(--primary-color);
   /* background-color: var(--second-color); */
 }
-
-/* .password-wrapper {
-  position: relative;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-}
-
-/* CLIENTS section */
 
 /* GOOGLE section */
 #google {
