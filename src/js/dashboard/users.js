@@ -307,8 +307,4 @@ const createUser = async (event) => {
 export {
   refreshUsersTable,
   createUser,
-  // editUser,
-  // resetPassword,
-  // deleteUser,
-  // viewClients,
 };
