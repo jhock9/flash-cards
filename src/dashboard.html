@@ -65,9 +65,7 @@
       <section id="users" class="hide center">
         <div id="users-header-wrapper" class="center">
           <table id="users-header">
-            <!-- Todo: create table for mobile with only 2 columns: Name & Actions -->
-            <!-- Todo: make "create new user form" a modal/form popup -->
-            
+            <!-- Todo: create table for mobile with only 2 columns: Name & Actions -->     
             <thead id="users-labels">
               <!-- Todo: Sortable table -->
               <tr>
@@ -99,142 +97,52 @@
             </tbody>
           </table>
         </div>
-
+        
         <!-- Table content dynamically generated from database -->
         <div id="users-table-wrapper" class="center">
           <table id="users-table">
+            <!--//!! FOR TESTING -->
+            <tr>
+              <td>Sarah Smith</td>
+              <td>ssmith</td>
+              <td>****</td>
+              <td>User</td>
+              <td>
+                <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="table-icon"><i class="fa-solid fa-user-group"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>James Wilson</td>
+              <td>jwilson</td>
+              <td>****</td>
+              <td>User</td>
+              <td>
+                <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="table-icon"><i class="fa-solid fa-user-group"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Alex Taylor</td>
+              <td>ataylor</td>
+              <td>****</td>
+              <td>User</td>
+              <td>
+                <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="table-icon"><i class="fa-solid fa-user-group"></i></button>
+              </td>
+            </tr>
+            <tr>
+              <td>Emma Jones</td>
+              <td>ejones</td>
+              <td>****</td>
+              <td>User</td>
+              <td>
+                <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="table-icon"><i class="fa-solid fa-user-group"></i></button>
+              </td>
+            </tr>
             <tbody id="users-table-body">
-              <!-- //!! FOR TESTING -->
-              <!-- <tr>
-                <td>John Doe</td>
-                <td>johndoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Jane Smith</td>
-                <td>janesmith</td>
-                <td>****</td>
-                <td>User</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Mark Doe</td>
-                <td>markdoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Mary Smith</td>
-                <td>Marysmith</td>
-                <td>****</td>
-                <td>User</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Luke Doe</td>
-                <td>lukedoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Lucy Smith</td>
-                <td>lucysmith</td>
-                <td>****</td>
-                <td>User</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Matthew Doe</td>
-                <td>matthewdoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Martha Smith</td>
-                <td>marthasmith</td>
-                <td>****</td>
-                <td>User</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>John Doe</td>
-                <td>johndoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Jane Smith</td>
-                <td>janesmith</td>
-                <td>****</td>
-                <td>User</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Mark Doe</td>
-                <td>markdoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Mary Smith</td>
-                <td>Marysmith</td>
-                <td>****</td>
-                <td>User</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>Luke Doe</td>
-                <td>lukedoe</td>
-                <td>****</td>
-                <td>Admin</td>
-                <td>
-                  <i class="table-icon fa-solid fa-pen-to-square"></i>
-                  <i class="table-icon fa-solid fa-user-group"></i>
-                </td>
-              </tr> -->
             </tbody>
           </table>
         </div>
@@ -242,57 +150,133 @@
       
       <!-- CLIENTS SECTION -->
       <section id="clients" class="hide center">
-        <table id="clients-table" class="center">
-          <thead>
-            <!-- Todo: Sortable table -->
-            <tr>
-              <th>Therapist Name</th>
-              <th>Client ID</th>
-              <th>Client Name</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          
-          <tbody id="clients-table-body">       
-            <!-- Todo: Filter whats displayed by role
-              1. Admin
-                - show all clients
-              2. User
-                - show only clients assigned to user
-                - hide first header & column (Therapist Name)
-            --> 
+        <div id="clients-header-wrapper" class="center">
+          <table id="clients-header">
+            <!-- Todo: create table for mobile with only 2 columns: Therapist Name & Actions -->     
+            <thead id="clients-labels">
+              <!-- Todo: Sortable table -->
+              <tr>
+                <th>Client Name</th>
+                <th>Therapist/Tech</th>
+                <th>Client ID</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
             
-            <!-- Todo: Actions - links via icons, opens modal for the new-client-form below
-              1. icon to edit client
-                <i class="fa-solid fa-pen-to-square"></i>
-                - Update data
-                - Delete user
-              2. icon to view last saved session
-                <i class="fa-regular fa-folder-open"></i>
-            -->
-            </tbody> 
-        </table>
-        
-        <div class="form-wrapper hide center">
-          <h2>Create New Client</h2>
-          <form id="new-client-form">
-            <label for="therapist-name">Therapist Name:</label>
-            <input type="text" id="therapist-name" class="input-field" placeholder="Enter Therapist Name" name="therapistName">
-            
-            <label for="client-id">Client ID:</label>
-            <input type="text" id="client-id" class="input-field" placeholder="Enter Client ID" name="clientID">
-              <!-- Todo: should Client ID be auto-generated? 
-                This is an unique identifier, and links the client to the therapist
-                Or, does Jeremy have an identifier already for this on paper? 
-              -->
-            <label for="client-name">Client Name:</label>
-            <input type="text" id="client-name" class="input-field" placeholder="Enter Client Name" name="clientName">
-            
-            <input type="submit" value="Create Client">
-            <button type="submit" id="create-client-btn" class="wide-btn btn">Create Client</button>
-          </form>
+            <tbody id="clients-create">
+              <!-- First row is a form to create a new client -->
+              <tr>
+                <td><input type="text" id="new-client-name" placeholder="Enter client name" required></td>
+                <td><input type="text" id="new-client-tech-name" placeholder="Enter name" required></td>
+                <td><input type="text" id="new-client-id" placeholder="*auto-generated*" disabled></td>
+                <td>
+                  <button type="submit" id="create-client-btn" class="table-icon"><i class="fa-regular fa-square-plus"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </section>
+        
+        <!-- Table content dynamically generated from database -->
+        <div id="clients-table-wrapper" class="center">
+          <table id="clients-table">
+            <tbody id="clients-table-body">
+              <!--//!! FOR TESTING -->
+              <tr>
+                <td>Emily Johnson</td>
+                <td>Sarah Smith</td>
+                <td>1001</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Michael Brown</td>
+                <td>James Wilson</td>
+                <td>1002</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Olivia Martinez</td>
+                <td>Sarah Smith</td>
+                <td>1003</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Sophia Davis</td>
+                <td>Alex Taylor</td>
+                <td>1004</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Lucas Martinez</td>
+                <td>Emma Jones</td>
+                <td>1005</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Isabella Rodriguez</td>
+                <td>Sarah Smith</td>
+                <td>1006</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Mason Lee</td>
+                <td>James Wilson</td>
+                <td>1007</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Mia Gonzalez</td>
+                <td>Emma Jones</td>
+                <td>1008</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Ethan Harris</td>
+                <td>Alex Taylor</td>
+                <td>1009</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td>Ava Clark</td>
+                <td>Emma Jones</td>
+                <td>1010</td>
+                <td>
+                  <button class="table-icon"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="table-icon"><i class="fa-regular fa-folder-open"></i></button>
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </section>    
       
       <!-- FLASHCARDS SECTION - EXTERNAL PAGE
       <section id="flashcards" class="hide center">
