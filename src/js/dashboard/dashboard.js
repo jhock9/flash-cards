@@ -6,6 +6,7 @@ const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 
 const createUserBtn = document.querySelector('#create-user-btn');
+const createClientBtn = document.querySelector('#create-client-btn');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 let currentUser;
@@ -14,7 +15,7 @@ let currentUser;
 
 import { fetchAccountData, updatePassword } from './account.js';
 import { refreshUsersTable, createUser } from './users.js';
-import { } from './clients.js';
+import { refreshClientsTable, createClient } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js';
 import { togglePasswordVisibility } from '../components/password.js';
 import { 
@@ -100,6 +101,11 @@ navLinks.forEach((link) => {
         refreshUsersTable();
       };
       
+      if (sectionId === 'clients') {
+        console.log('clients-tab clicked...');
+        refreshClientsTable();
+      }
+      
       // Show the flashcards modal if not authenticated with Google
       if (sectionId === 'flashcards') {
         checkGoogleAuthentication().then(response => {
@@ -184,4 +190,10 @@ logoutBtn.addEventListener('click', async (e) => {
 createUserBtn.addEventListener('click', (event) => {  
   createUser(event);
   refreshUsersTable();
+});
+
+// Create and update clients
+createClientBtn.addEventListener('click', (event) => {  
+  createClient(event);
+  refreshClientsTable();
 });
