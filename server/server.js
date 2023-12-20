@@ -27,7 +27,7 @@ const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Goo
 const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
 const accountRoutes = require('./routes/accountRoutes'); // Routes for account management
 const userRoutes = require('./routes/userRoutes'); // Routes for user management
-// const clientRoutes = require('./routes/clientRoutes'); // Routes for client management
+const clientRoutes = require('./routes/clientRoutes'); // Routes for client management
 
 // Controllers
 const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
@@ -143,7 +143,7 @@ app.use('/google-auth', googleAuthRoutes);
 app.use('/photos', photoDBRoutes);
 app.use('/account', accountRoutes);
 app.use('/users', userRoutes);
-// app.use('/clients', clientRoutes);
+app.use('/clients', clientRoutes);
 
 // Update photo data in database at 2:00 AM every day
 initializeOauthClient().then((oauth2Client) => {
