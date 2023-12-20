@@ -16,6 +16,7 @@ const refreshUsersTable = async () => {
     };
     
     const users = await response.json();
+    users.sort((a, b) => a.fullname.localeCompare(b.fullname));
     
     const tableBody = document.querySelector('#users-table-body');
     tableBody.innerHTML = '';
@@ -44,19 +45,6 @@ const refreshUsersTable = async () => {
       
       // Action icons
       const actionCell = document.createElement('td');
-      
-      // const editUserBtn = document.createElement('button');
-      // const editIcon = document.createElement('i');
-      // editIcon.classList.add ('table-icon', 'fa-solid', 'fa-pen-to-square');
-      // editUserBtn.appendChild(editIcon);
-      // iconDiv.appendChild(editUserBtn);
-      
-      // const viewClientsBtn = document.createElement('button');
-      // const viewClientsIcon = document.createElement('i');
-      // viewClientsIcon.classList.add('table-icon', 'fa-solid', 'fa-user-group');
-      // viewClientsBtn.appendChild(viewClientsIcon);
-      // iconDiv.appendChild(viewClientsBtn);
-      
       const editUserBtn = createEditUserBtn();
       const viewClientsBtn = createViewClientsBtn();
       
@@ -124,13 +112,12 @@ const createEditUserBtn = () => {
     //  - Cancel/Back button
     //    - No changes made, close modal/popup
     //  - If user is edited or deleted, refresh table
-    //  - If user is edited, deleted, or reset, show error message
   });
   
   return editUserBtn;
 };
 
-
+// Helper function for createEditUserBtn
 const appendToNewDiv = (classList, elements) => {
   const newDiv = document.createElement('div');
   newDiv.classList.add(...classList.split(' '));
@@ -210,18 +197,6 @@ const createUser = async (event) => {
     console.error('There has been a problem with your fetch operation:', error);
   });
 };
-
-
-// TODO -- add sort functionality to table headers
-
-// // Edit user icons
-// document.querySelectorAll('.fa-pen-to-square').forEach(editIcon => {
-//   editIcon.addEventListener('click', editUser);
-// });
-
-// document.querySelectorAll('.fa-user-group').forEach(viewClientsIcon => {
-//   viewClientsIcon.addEventListener('click', viewClients);
-// });
 
 // TODO -- add functionality to edit users
 // const editUser = async (event) => {
