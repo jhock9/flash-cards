@@ -39,10 +39,6 @@ const updateDashNav = async (currentUser) => {
         view.classList.remove('hide');
       }
       } else {
-      for (let view of adminViews) {
-        view.classList.add('hide');
-      }  
-      
       console.log('User is not admin. Showing user views...');
       document.querySelector('#clients-tab').click();
     }
@@ -136,6 +132,9 @@ navLinks.forEach((link) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
+  for (let view of adminViews) {
+    view.classList.add('hide');
+  }
   
   currentUser = await fetchAccountData();
   updateDashNav(currentUser);
