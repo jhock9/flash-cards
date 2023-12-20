@@ -17,78 +17,76 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="favicon.ico?fe39bf75be286bda84f8"></head>
+<link rel="icon" href="favicon.ico?1a7f62935e071b362827"></head>
 
 
-<body class="center">
-  <div id="login-page" class="center">
-    <div id="login-content-wrapper" class="content-wrapper center">
-      <section class="center">
-        <figure class="center">
-          <div class="logo center">
-            <img src="assets/ABA+Red+Logo.png" alt="Logo of ABA Co-op, a cooperative organization for Applied Behavior Analysis">
-          </div>  
-        </figure>
-        
-        <div class="welcome-text center">
-          <h1 class="center">Welcome to the<br>
-            Interactive<br>
-            Flashcard App</h1>
-          <p class ="center">Please sign in to your<br> 
-            Google account<br>
-            to continue.</p>
-        </div>
-        
-        <div id="form-wrapper" class="center">
-          <div id="form-container" class="center">
-            <form id="login-form" class="center" action="/auth/login" method="post">
-              <input type="text" id="login-username" class="input-field" placeholder="Username" name="username" required>
-              <div class="password-wrapper center">
-                <input type="password" id="login-password" class="input-field" name="password" placeholder="4-Digit Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
-                <i class="toggle-password fa-regular fa-eye-slash"></i>
-                <i class="toggle-password hide fa-solid fa-eye"></i>
-              </div>
-
-              <button type="submit" id="login-submit-btn" class="wide-btn btn">Login</button>
-              <button type="button" id="new-user-btn" class="wide-btn btn">New user?</button>
-            </form>
-            
-            <form id="register-form" class="center" action="/auth/register" method="post">
-              <input type="text" id="register-fullname" class="input-field" placeholder="Full Name" name="fullname" required>
-              <input type="text" id="register-username" class="input-field" placeholder="Username" name="username" required>
-              <div class="password-wrapper center">
-                <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
-                <i class="toggle-password fa-regular fa-eye-slash"></i>
-                <i class="toggle-password hide fa-solid fa-eye"></i>
-              </div>
-
-              <div class="password-wrapper center">
-                <input type="password" id="confirm-password" class="input-field" name="confirmPassword" placeholder="Confirm Code"pattern="\d{4}" title="Password must be a 4-digit code" required>
-                <i class="toggle-password fa-regular fa-eye-slash"></i>
-                <i class="toggle-password hide fa-solid fa-eye"></i>
-              </div>
-              
-              <button type="submit" id="register-btn" class="wide-btn btn">Register</button>
-              <button type="button" id="back-btn" class="wide-btn btn">Back</button>
-            </form>
-          </div>
-        </div>
-      </section>
+<body id="login-page" class="center">
+  <div id="login-content-wrapper" class="content-wrapper center">
+    <section class="center">
+      <figure class="center">
+        <div class="logo center">
+          <img src="assets/ABA+Red+Logo.png" alt="Logo of ABA Co-op, a cooperative organization for Applied Behavior Analysis">
+        </div>  
+      </figure>
       
-      <footer>
-        <p class="copyright center">
-          <a href="https://www.abaco-op.org/" target="_blank">
-            &copy;
-            <script>document.write(new Date().getFullYear())</script>
-            ABA Co-op.&nbsp;&nbsp;
-          </a>
-
-          <a href="https://www.okwebstudios.com/" target="_blank">
-            Built by OK Web Studios.
-          </a>
-        </p> 
-      </footer>
-    </div>
+      <div class="welcome-text center">
+        <h1 class="center">Welcome to the<br>
+          Interactive<br>
+          Flashcard App</h1>
+        <p class ="center">Please sign in to your<br> 
+          Google account<br>
+          to continue.</p>
+      </div>
+      
+      <div id="form-wrapper" class="center">
+        <div id="form-container" class="center">
+          <form id="login-form" class="center" action="/auth/login" method="post">
+            <input type="text" id="login-username" class="input-field" placeholder="Username" name="username" required>
+            <div class="password-wrapper center">
+              <input type="password" id="login-password" class="input-field" name="password" placeholder="4-Digit Code" required>
+              <i class="toggle-password fa-regular fa-eye-slash"></i>
+              <i class="toggle-password hide fa-solid fa-eye"></i>
+            </div>
+            
+            <button type="submit" id="login-submit-btn" class="wide-btn btn">Login</button>
+            <button type="button" id="new-user-btn" class="wide-btn btn">New user?</button>
+          </form>
+          
+          <form id="register-form" class="center" action="/auth/register" method="post">
+            <input type="text" id="register-fullname" class="input-field" placeholder="Full Name" name="fullname" required>
+            <input type="text" id="register-username" class="input-field" placeholder="Username" name="username" required>
+            <div class="password-wrapper center">
+              <input type="password" id="register-password" class="input-field" name="password" placeholder="4-Digit Code" pattern="\d{4}" title="Password must be a 4-digit code" required>
+              <i class="toggle-password fa-regular fa-eye-slash"></i>
+              <i class="toggle-password hide fa-solid fa-eye"></i>
+            </div>
+            
+            <div class="password-wrapper center">
+              <input type="password" id="confirm-password" class="input-field" name="confirmPassword" placeholder="Confirm Code"pattern="\d{4}" title="Password must be a 4-digit code" required>
+              <i class="toggle-password fa-regular fa-eye-slash"></i>
+              <i class="toggle-password hide fa-solid fa-eye"></i>
+            </div>
+            
+            <button type="submit" id="register-btn" class="wide-btn btn">Register</button>
+            <button type="button" id="back-btn" class="wide-btn btn">Back</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    
+    <footer>
+      <p class="copyright center">
+        <a href="https://www.abaco-op.org/" target="_blank">
+          &copy;
+          <script>document.write(new Date().getFullYear())</script>
+          ABA Co-op.&nbsp;&nbsp;
+        </a>
+        
+        <a href="https://www.okwebstudios.com/" target="_blank">
+          Built by OK Web Studios.
+        </a>
+      </p> 
+    </footer>
   </div>
   
   <!-- Modals -->
@@ -141,5 +139,5 @@
   </div>
   
   <script type="module" src="js/login.js"></script>
-<script defer src="app.bundle.js?fe39bf75be286bda84f8"></script><script defer src="login.bundle.js?fe39bf75be286bda84f8"></script><script defer src="dashboard.bundle.js?fe39bf75be286bda84f8"></script><script defer src="flashcards.bundle.js?fe39bf75be286bda84f8"></script></body> 
+<script defer src="app.bundle.js?1a7f62935e071b362827"></script><script defer src="login.bundle.js?1a7f62935e071b362827"></script><script defer src="dashboard.bundle.js?1a7f62935e071b362827"></script><script defer src="flashcards.bundle.js?1a7f62935e071b362827"></script></body> 
 </html>

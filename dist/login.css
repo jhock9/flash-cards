@@ -153,7 +153,7 @@ footer p {
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
   
-  #login-page .content-wrapper {
+.content-wrapper {
     min-height: calc(100vh - 3rem); /* Adjust based on tablet/desktop footer height */
     flex-direction: column;
     justify-content: space-between;

@@ -2,7 +2,7 @@
   Mobile Styles
   ========================================================================== */
 
-/* Base Styles */
+/* Base styles */
 :root {
   --primary-color: #e24844;
   --second-color: #f5f5f5;
@@ -88,6 +88,22 @@ body {
   padding: .2rem 1rem;
 }
 
+/* Modern browser support */
+::placeholder {
+  color: var(--border-color);
+}
+
+/* IE, MS Edge support */
+:-ms-input-placeholder {
+  color: var(--border-color);
+}
+
+/* Firefox 18- support */
+::-moz-placeholder {
+  color: var(--border-color);
+  opacity: 1;
+}
+
 .password-wrapper {
   position: relative;
 }
@@ -121,7 +137,7 @@ input[type=password] {
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,0.4);
-  z-index: 1;
+  z-index: 10;
 }
 
 .modal-content h2, h3, i, p {
@@ -162,6 +178,12 @@ input[type=password] {
 
 /**** TABLET STYLES ****/
 @media screen and (min-width: 768px) {
+  
+  .square-btn {
+    width: 8rem;
+    margin: 1rem 1.75rem;
+    font-size: 4rem;
+  }
   
   .modal-content h2, h3 {
     font-size: 3.5rem;
