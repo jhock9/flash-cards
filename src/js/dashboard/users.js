@@ -70,8 +70,8 @@ const createEditUserBtn = () => {
   editIcon.classList.add ('fa-solid', 'fa-pen-to-square');
   editUserBtn.appendChild(editIcon);
   
-  //!! NOT MVP 
   editUserBtn.addEventListener('click', () => {
+  //!! NOT MVP 
 
 //!! this todo started like this:
     // TODO: edit user modal/popup appears
@@ -117,7 +117,7 @@ const createEditUserBtn = () => {
   return editUserBtn;
 };
 
-// Helper function for createEditUserBtn
+// Helper function for create buttons (user/client)
 const appendToNewDiv = (classList, elements) => {
   const newDiv = document.createElement('div');
   newDiv.classList.add(...classList.split(' '));

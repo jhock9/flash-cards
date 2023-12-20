@@ -5,7 +5,7 @@ const User = require('../models/userModel');
 router.post('/create-user', async (req, res) => {
   logger.info('Received request for /create-user...');
   const { fullname, username, password, role } = req.body;
-    
+  
   // Validation checks
   if (!fullname || !username || !password || !role) {
     return res.status(400).json({ error: 'Full name, username, password, and role are required' });
