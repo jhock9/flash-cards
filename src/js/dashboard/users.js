@@ -152,7 +152,7 @@ const createUser = async (event) => {
   const usernameInput = document.querySelector('#new-user-username');
   const passwordInput = document.querySelector('#new-user-password');
   const roleInput = document.querySelector('#new-user-role');
-
+  
   const userData = {
     fullname: fullnameInput.value,
     username: usernameInput.value,
