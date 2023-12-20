@@ -24,7 +24,15 @@ const refreshClientsTable = async () => {
     clients.sort((a, b) => a.fullname.localeCompare(b.fullname));
     
     const tableBody = document.querySelector('#clients-table-body');
-    tableBody.innerHTML = '';
+    // tableBody.innerHTML = '';
+    
+    //! Alternative to innerHTML
+    // Get all rows as an array
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    // Remove all rows except the first 10
+    for (let i = 10; i < rows.length; i++) {
+      tableBody.removeChild(rows[i]);
+    }
     
     // Populate the clients table with the clients' data
     clients.forEach(client => {
