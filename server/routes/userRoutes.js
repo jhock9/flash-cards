@@ -45,5 +45,18 @@ router.get('/refresh-users', async (req, res) => {
   }
 });
 
+router.get('/user-id/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    if (user) {
+      res.json(user._id);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.toString() });
+  }
+});
+
 // Export to server.js
 module.exports = router;
