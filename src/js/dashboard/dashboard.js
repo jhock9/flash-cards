@@ -36,9 +36,13 @@ const updateDashNav = async (currentUser) => {
       }
       
       for (let view of adminViews) {
-      view.classList.remove('hide');
+        view.classList.remove('hide');
       }
-      } else {  
+      } else {
+      for (let view of adminViews) {
+        view.classList.add('hide');
+      }  
+      
       console.log('User is not admin. Showing user views...');
       document.querySelector('#clients-tab').click();
     }
@@ -105,7 +109,7 @@ navLinks.forEach((link) => {
         console.log('clients-tab clicked...');
         refreshClientsTable();
       }
-      
+
       // Show the flashcards modal if not authenticated with Google
       if (sectionId === 'flashcards') {
         checkGoogleAuthentication().then(response => {
