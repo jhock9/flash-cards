@@ -5,8 +5,8 @@ const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 
-const createUserBtn = document.querySelector('#create-user-btn');
-const createClientBtn = document.querySelector('#create-client-btn');
+const createUserForm = document.querySelector('#userForm');
+const createClientForm = document.querySelector('#clientForm');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 let currentUser;
@@ -190,13 +190,15 @@ logoutBtn.addEventListener('click', async (e) => {
 });
 
 // Create and update users
-createUserBtn.addEventListener('click', (event) => {  
+createUserForm.addEventListener('submit', (event) => {
+  event.preventDefault();
   createUser(event);
   refreshUsersTable();
 });
 
 // Create and update clients
-createClientBtn.addEventListener('click', (event) => {  
+createClientForm.addEventListener('submit', (event) => {
+  event.preventDefault();
   createClient(event);
   refreshClientsTable();
 });

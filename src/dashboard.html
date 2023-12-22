@@ -77,24 +77,25 @@
               </tr>
             </thead>
             
-            <tbody id="users-create">
-              <!-- First row is a form to create a new user -->
-              <tr>
-                <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
-                <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
-                <td><input type="text" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
-                <td>
-                  <select id="new-user-role" required>
-                    <option value="">Select</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                  </select>
-                </td>
-                <td>
-                  <button type="submit" id="create-user-btn" class="table-icon"><i class="fa-regular fa-square-plus"></i></button>
-                </td>
-              </tr>
-            </tbody>
+            <form id="user-form">
+              <tbody id="users-create">
+                <tr>
+                  <td><input type="text" id="new-user-name" placeholder="Enter name" required></td>
+                  <td><input type="text" id="new-user-username" placeholder="Enter username" required></td>
+                  <td><input type="text" id="new-user-password" placeholder="Enter passcode" pattern="\d{4}" title="Passcode must be a 4-digit code" required></td>
+                  <td>
+                    <select id="new-user-role" required>
+                      <option value="">Select</option>
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
+                    </select>
+                  </td>
+                  <td>
+                    <button type="submit" id="create-user-btn" class="table-icon"><i class="fa-regular fa-square-plus"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </form>
           </table>
         </div>
         
@@ -163,17 +164,18 @@
               </tr>
             </thead>
             
-            <tbody id="clients-create">
-              <!-- First row is a form to create a new client -->
-              <tr>
-                <td><input type="text" id="new-client-name" placeholder="Enter client name" required></td>
-                <td><input type="text" id="new-client-tech-name" placeholder="Enter name" required></td>
-                <td><input type="text" id="new-client-id" placeholder="*auto-generated*" disabled></td>
-                <td>
-                  <button type="submit" id="create-client-btn" class="table-icon"><i class="fa-regular fa-square-plus"></i></button>
-                </td>
-              </tr>
-            </tbody>
+            <form id="client-form">
+              <tbody id="clients-create">
+                <tr>
+                  <td><input type="text" id="new-client-name" placeholder="Enter client name" required></td>
+                  <td><input type="text" id="new-client-tech-name" placeholder="Enter name" required></td>
+                  <td><input type="text" id="new-client-id" placeholder="*auto-generated*" disabled></td>
+                  <td>
+                    <button type="submit" id="create-client-btn" class="table-icon"><i class="fa-regular fa-square-plus"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </form>
           </table>
         </div>
         
