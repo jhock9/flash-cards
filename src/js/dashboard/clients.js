@@ -148,7 +148,7 @@ const createClient = async (event) => {
   const techNameInput = document.querySelector('#new-client-techName');
   
   // Fetch the user's _id from the server
-  const response = await fetch(`/user-id/${usernameInput.value}`);
+  const response = await fetch(`/users/user-id/${techNameInput.value}`);
   const userId = await response.json();
   
   const clientData = {
