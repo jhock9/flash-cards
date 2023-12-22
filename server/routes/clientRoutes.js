@@ -21,7 +21,7 @@ router.post('/create-client', async (req, res) => {
   logger.info('New client validated...');
   try {
     // Generate a unique clientID
-    const clientID = generateUniqueClientID();
+    const clientID = await generateUniqueClientID();
     
     const client = new Client({ fullname, user: existingUser._id, clientID });
     await client.save();
