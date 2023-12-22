@@ -149,11 +149,16 @@ const createClient = async (event) => {
   
   // Fetch the user's _id from the server
   const response = await fetch(`/users/user-id/${techNameInput.value}`);
-  const userId = await response.json();
-  
+  if (!response.ok) {
+    showNoUsernameModal();
+    setTimeout(hideModal, 2000);
+    console.error('Failed to fetch user ID.');
+    return;
+  }
+    
   const clientData = {
     fullname: fullnameInput.value,
-    user: userId,
+    user: techNameInput.value,
   };
   
   fetch('/clients/create-client', {
@@ -165,7 +170,7 @@ const createClient = async (event) => {
   })
   .then(response => {
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error('Network response was not ok.');
     }
     return response.json();
   })
