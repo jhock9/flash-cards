@@ -2,6 +2,7 @@ import {
   hideModal,
   showClientCreatedModal,
   showUnavailableModal,
+  showNoUsernameModal,
 } from '../components/modals.js';
 // Todo: Filter for who can see what info
             //   1. Admin
@@ -158,7 +159,7 @@ const createClient = async (event) => {
     
   const clientData = {
     fullname: fullnameInput.value,
-    user: techNameInput.value,
+    techName: techNameInput.value,
   };
   
   fetch('/clients/create-client', {
