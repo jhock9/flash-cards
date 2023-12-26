@@ -26,7 +26,7 @@ router.post('/create-client', async (req, res) => {
     const client = new Client({ fullname, user: existingUser._id, clientID });
     await client.save();
     res.status(201).json({ success: true });
-  
+    
   } catch (error) {
     logger.error(`ERROR saving client to database: ${error}`);
     res.status(400).json({ error: error.message });
@@ -55,6 +55,15 @@ router.get('/refresh-clients', async (req, res) => {
   } catch (error) {
     logger.error(`ERROR fetching clients from database: ${error}`);
     res.status(400).json({ error: error.message });
+  }
+});
+
+router.get('/:userId', async (req, res) => {
+  try {
+    const clients = await Client.find({ user: req.params.userId });
+    res.json(clients);
+  } catch (error) {
+    res.status(500).json({ error: error.toString() });
   }
 });
 
