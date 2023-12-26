@@ -103,7 +103,8 @@ navLinks.forEach((link) => {
       
       if (sectionId === 'clients') {
         console.log('clients-tab clicked...');
-        refreshClientsTable();
+        refreshClientsTable(window.selectedUserId);
+        window.selectedUserId = null;
       }
       
       // Show the flashcards modal if not authenticated with Google
