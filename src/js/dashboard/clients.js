@@ -6,12 +6,12 @@ import {
   showNoUsernameModal,
 } from '../components/modals.js';
 
-const refreshClientsTable = async () => {
+const refreshClientsTable = async (userId) => {
   console.log('refreshClientsTable called...');
   console.log('fetchCurrentUserClients:', fetchCurrentUserClients);
   try {
-    const user = await fetchAccountData();
-    const route = user.role === 'admin' ? '/clients/refresh-clients' : `/clients/${user._id}`;
+    const user = userId ? { _id: userId, role: 'user' } : await fetchAccountData();
+    const route = user.role === 'admin' && !userId ? '/clients/refresh-clients' : `/clients/${user._id}`;
     const response = await fetch(route, {
       method: 'GET',
     });
