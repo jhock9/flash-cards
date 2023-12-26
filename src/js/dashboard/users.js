@@ -46,7 +46,7 @@ const refreshUsersTable = async () => {
       // Action icons
       const actionCell = document.createElement('td');
       const editUserBtn = createEditUserBtn();
-      const viewClientsBtn = createViewClientsBtn();
+      const viewClientsBtn = createViewClientsBtn(user._id);
       
       const iconDiv = appendToNewDiv('icon-div center', [editUserBtn, viewClientsBtn]);
       
@@ -125,7 +125,7 @@ const appendToNewDiv = (classList, elements) => {
   return newDiv;
 };
 
-const createViewClientsBtn = () => {
+const createViewClientsBtn = (userId) => {
   const viewClientsBtn = document.createElement('button');
   viewClientsBtn.type = 'button';
   viewClientsBtn.classList.add('table-icon');
@@ -136,9 +136,7 @@ const createViewClientsBtn = () => {
   
   viewClientsBtn.addEventListener('click', () => {
     document.querySelector('#clients-tab').click();
-    // TODO: add filter to see only this users' clients
-    // guessing I'll need to pass a parameter here? username?
-    // is this a callback function written below? or include in this function?
+    window.selectedUserId = userId;
   });
   
   return viewClientsBtn;
