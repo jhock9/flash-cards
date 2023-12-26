@@ -1,19 +1,18 @@
+import { fetchAccountData } from './account.js';
 import { 
   hideModal,
   showClientCreatedModal,
   showUnavailableModal,
   showNoUsernameModal,
 } from '../components/modals.js';
-// Todo: Filter for who can see what info
-            //   1. Admin
-            //     - show all clients
-            //   2. User
-            //     - show only clients assigned to user
 
 const refreshClientsTable = async () => {
   console.log('refreshClientsTable called...');
+  console.log('fetchCurrentUserClients:', fetchCurrentUserClients);
   try {
-    const response = await fetch('/clients/refresh-clients', {
+    const user = await fetchAccountData();
+    const route = user.role === 'admin' ? '/clients/refresh-clients' : `/clients/${user._id}`;
+    const response = await fetch(route, {
       method: 'GET',
     });
     
