@@ -105,7 +105,7 @@ navLinks.forEach((link) => {
         console.log('clients-tab clicked...');
         refreshClientsTable();
       }
-
+      
       // Show the flashcards modal if not authenticated with Google
       if (sectionId === 'flashcards') {
         checkGoogleAuthentication().then(response => {
@@ -118,15 +118,6 @@ navLinks.forEach((link) => {
     }
   });
 });
-
-
-//**   USERS   **//
-
-
-
-//**   CLIENTS   **//
-
-
 
 //**   WINDOW LOAD EVENTS   **/
 
