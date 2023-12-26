@@ -24,9 +24,7 @@ const refreshClientsTable = async () => {
     clients.sort((a, b) => a.fullname.localeCompare(b.fullname));
     
     const tableBody = document.querySelector('#clients-table-body');
-    // tableBody.innerHTML = '';
     
-    //! Alternative to innerHTML
     // Get all rows as an array
     const rows = Array.from(tableBody.querySelectorAll('tr'));
     // Remove all rows except the first 10
