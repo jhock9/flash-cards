@@ -8,7 +8,6 @@ import {
 
 const refreshClientsTable = async (userId) => {
   console.log('refreshClientsTable called...');
-  console.log('fetchCurrentUserClients:', fetchCurrentUserClients);
   try {
     const user = userId ? { _id: userId, role: 'user' } : await fetchAccountData();
     const route = user.role === 'admin' && !userId ? '/clients/refresh-clients' : `/clients/${user._id}`;
