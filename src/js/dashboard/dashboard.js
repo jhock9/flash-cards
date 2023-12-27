@@ -5,8 +5,8 @@ const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 
-const createUserForm = document.querySelector('#userForm');
-const createClientForm = document.querySelector('#clientForm');
+const createUserForm = document.querySelector('#user-form');
+const createClientForm = document.querySelector('#client-form');
 const flashcardsModal = document.querySelector('#flashcards-modal');
 
 let currentUser;
