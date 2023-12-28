@@ -10,6 +10,7 @@ const refreshClientsTable = async (userId) => {
   console.log('refreshClientsTable called...');
   try {
     const user = userId ? { _id: userId, role: 'user' } : await fetchAccountData();
+    console.log('Fetched user data:', user); 
     const route = user.role === 'admin' && !userId ? '/clients/refresh-clients' : `/clients/${user._id}`;
     const response = await fetch(route, {
       method: 'GET',
