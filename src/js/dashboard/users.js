@@ -134,9 +134,10 @@ const createViewClientsBtn = (userId) => {
   viewClientsIcon.classList.add('fa-solid', 'fa-user-group');
   viewClientsBtn.appendChild(viewClientsIcon);
   
-  viewClientsBtn.addEventListener('click', () => {
-    document.querySelector('#clients-tab').click();
+  viewClientsBtn.addEventListener('click', async () => {
     window.selectedUserId = userId;
+    await new Promise(resolve => setTimeout(resolve, 0));
+    document.querySelector('#clients-tab').click();
   });
   
   return viewClientsBtn;
