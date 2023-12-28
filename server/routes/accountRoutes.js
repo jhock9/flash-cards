@@ -14,6 +14,7 @@ router.get('/account-data', async (req, res) => {
     }
     
     const userResponse = {
+      _id: user._id,
       fullname: user.fullname,
       username: user.username,
       role: user.role,
