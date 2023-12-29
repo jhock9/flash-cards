@@ -13,5 +13,5 @@ const appointmentSchema = new mongoose.Schema({
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 
-//!! export to where?
+// Export to appointmentRoutes.js
 module.exports = Appointment;
