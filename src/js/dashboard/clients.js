@@ -10,7 +10,7 @@ const refreshClientsTable = async (userId) => {
   console.log('refreshClientsTable called...');
   try {
     const user = userId ? { _id: userId, role: 'user' } : await fetchAccountData();
-    console.log('Fetched user data:', user); 
+    console.log('Fetched user data...'); 
     const route = user.role === 'admin' && !userId ? '/clients/refresh-clients' : `/clients/${user._id}`;
     const response = await fetch(route, {
       method: 'GET',
@@ -125,6 +125,7 @@ const createViewAppointmentsBtn = (clientId) => {
   viewAppointmentsBtn.appendChild(viewAppointmentsIcon);
 
   viewAppointmentsBtn.addEventListener('click', async () => {
+    console.log('viewAppointmentsBtn clicked...');
     const response = await fetch(`/appointment/${clientId}`);
     const data = await response.json();
     

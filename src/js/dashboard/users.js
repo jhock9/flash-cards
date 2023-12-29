@@ -135,6 +135,7 @@ const createViewClientsBtn = (userId) => {
   viewClientsBtn.appendChild(viewClientsIcon);
   
   viewClientsBtn.addEventListener('click', async () => {
+    console.log('viewClientsBtn clicked...');
     window.selectedUserId = userId;
     await new Promise(resolve => setTimeout(resolve, 0));
     document.querySelector('#clients-tab').click();
