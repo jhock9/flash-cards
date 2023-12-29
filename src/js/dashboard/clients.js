@@ -35,9 +35,10 @@ const refreshClientsTable = async (userId) => {
       row.appendChild(nameCell);
       
       const techNameCell = document.createElement('td');
-      techNameCell.textContent = client.user.username; // Assuming user object is populated
+      techNameCell.textContent = client.user.username;
       row.appendChild(techNameCell);
       
+      // Not to be confused with the client's database _id, which is different
       const clientIDCell = document.createElement('td');
       clientIDCell.textContent = client.clientID;
       row.appendChild(clientIDCell);
@@ -45,9 +46,9 @@ const refreshClientsTable = async (userId) => {
       // Action icons
       const actionCell = document.createElement('td');
       const editClientBtn = createEditClientBtn();
-      const viewSessionsBtn = createViewSessionsBtn();
+      const viewAppointmentsBtn = createViewAppointmentsBtn(client._id);
       
-      const iconDiv = appendToNewDiv('icon-div center', [editClientBtn, viewSessionsBtn]);
+      const iconDiv = appendToNewDiv('icon-div center', [editClientBtn, viewAppointmentsBtn]);
       
       actionCell.appendChild(iconDiv);
       row.appendChild(actionCell);
@@ -114,22 +115,36 @@ const createEditClientBtn = () => {
   return editClientBtn;
 };
 
-const createViewSessionsBtn = () => {
-  const viewSessionsBtn = document.createElement('button');
-  viewSessionsBtn.type = 'button';
-  viewSessionsBtn.classList.add('table-icon');
+const createViewAppointmentsBtn = (clientId) => {
+  const viewAppointmentsBtn = document.createElement('button');
+  viewAppointmentsBtn.type = 'button';
+  viewAppointmentsBtn.classList.add('table-icon');
   
-  const viewSessionsIcon = document.createElement('i');
-  viewSessionsIcon.classList.add('fa-solid', 'fa-user-clock');
-  viewSessionsBtn.appendChild(viewSessionsIcon);
+  const viewAppointmentsIcon = document.createElement('i');
+  viewAppointmentsIcon.classList.add('fa-solid', 'fa-user-clock');
+  viewAppointmentsBtn.appendChild(viewAppointmentsIcon);
 
-  viewSessionsBtn.addEventListener('click', () => {
-    // TODO: add filter/logic to see only this client's last saved session 
-    // guessing I'll need to pass a parameter here? username? 
-    // is this a callback function written below? or include in this function? 
+  viewAppointmentsBtn.addEventListener('click', async () => {
+    const response = await fetch(`/appointment/${clientId}`);
+    const data = await response.json();
+    
+    if (response.status === 404) {
+      // If no appointment is found, create a new appointment
+      const newAppointmentResponse = await fetch(`/appointment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clientId }),
+      });
+      const newAppointmentData = await newAppointmentResponse.json();
+      console.log('New appointment created...');
+      window.location.href = `/flashcards?appointment=${encodeURIComponent(JSON.stringify(newAppointmentData.appointment))}`;
+    } else {
+      console.log('Appointment found...');
+      window.location.href = `/flashcards?appointment=${encodeURIComponent(JSON.stringify(data.appointment))}`;
+    }
   });
   
-  return viewSessionsBtn;
+  return viewAppointmentsBtn;
 };
 
 const createClient = async (event) => {

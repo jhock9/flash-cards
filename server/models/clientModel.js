@@ -9,5 +9,5 @@ const clientSchema = new mongoose.Schema({
 const Client = mongoose.model('Client', clientSchema);
 
 // Export to clientRoutes.js
-// Also used in sessionModel.js
+// Also used in appointmentModel.js
 module.exports = Client;

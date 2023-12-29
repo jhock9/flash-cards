@@ -19,6 +19,11 @@ const filterInput = document.querySelector('#filter-tags');
 const tagsList = document.querySelector('#tags-list');
 const displayedImages = document.querySelector('#images-container');
 
+// Get the appointment data from the URL
+const urlParams = new URLSearchParams(window.location.search);
+const appointmentData = JSON.parse(decodeURIComponent(urlParams.get('appointment')));
+// Use appointmentData to initialize the page
+
 let lastSelectedTagsAndQuantities;
 let selectedTags = [];
 let googleTags;

@@ -24,5 +24,5 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 const User = mongoose.model('User', userSchema);
 
 // Export to createSuperAdmin.js, passport.js, authRoutes.js, and usersRoutes.js
-// Also used in clientModel.js and sessionModel.js
+// Also used in clientModel.js and appointmentModel.js
 module.exports = User;
