@@ -17,6 +17,7 @@ router.get('/appointment/:clientId', async (req, res) => {
   logger.info('Received request for /appointment/:clientId...');
   try {
     const appointment = await Appointment.findOne({ client: req.params.clientId });
+    console.log(`appointment: ${appointment}`);
     if (!appointment) {
       return res.status(404).json({ message: 'Appointment not found' });
     }

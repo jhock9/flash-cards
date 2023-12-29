@@ -136,6 +136,7 @@ const createViewAppointmentsBtn = (clientId) => {
     }
     
     if (response.status === 404) {
+      console.log('No appointment found, creating new appointment...');
       // If no appointment is found, create a new appointment
       const newAppointmentResponse = await fetch(`/appointment`, {
         method: 'POST',
