@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const logger = require('../config/winston');
-const Appointment = require('./appointmentModel');
+const Appointment = require('./models/appointmentModel');
 
 router.post('/appointment', async (req, res) => {
   logger.info('Received request for /appointment...');
