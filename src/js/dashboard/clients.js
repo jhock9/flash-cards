@@ -123,11 +123,17 @@ const createViewAppointmentsBtn = (clientId) => {
   const viewAppointmentsIcon = document.createElement('i');
   viewAppointmentsIcon.classList.add('fa-solid', 'fa-user-clock');
   viewAppointmentsBtn.appendChild(viewAppointmentsIcon);
-
+  
   viewAppointmentsBtn.addEventListener('click', async () => {
     console.log('viewAppointmentsBtn clicked...');
     const response = await fetch(`/appointment/${clientId}`);
     const data = await response.json();
+    
+    //!! just for debugging
+    if (response.status >= 400) {
+      // The server responded with an error
+      console.error(`Server responded with status code ${response.status}`);
+    }
     
     if (response.status === 404) {
       // If no appointment is found, create a new appointment
