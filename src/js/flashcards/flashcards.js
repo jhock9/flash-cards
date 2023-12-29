@@ -120,7 +120,7 @@ remainder.addEventListener('change', () => {
   lastUseRemainder = useRemainder;
 });
 
-//Search and filter tags
+// Search and filter tags
 filterInput.addEventListener("input", function (e) {
   const searchText = e.target.value.toLowerCase();
   const tags = document.querySelectorAll(".tag");
