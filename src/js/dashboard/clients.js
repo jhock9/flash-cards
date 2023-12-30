@@ -21,6 +21,7 @@ const refreshClientsTable = async (userId) => {
     };
     
     const clients = await response.json();
+    console.log(`Fetched clients: ${JSON.stringify(clients)}`); //!! just for debugging
     clients.sort((a, b) => a.fullname.localeCompare(b.fullname));
     
     const tableBody = document.querySelector('#clients-table-body');
@@ -28,6 +29,7 @@ const refreshClientsTable = async (userId) => {
     
     // Populate the clients table with the clients' data
     clients.forEach(client => {
+      console.log(`Adding client to table: ${JSON.stringify(client)}`); //!! just for debugging
       const row = document.createElement('tr');
       
       const nameCell = document.createElement('td');
@@ -126,10 +128,13 @@ const createViewAppointmentsBtn = (clientId) => {
   
   viewAppointmentsBtn.addEventListener('click', async () => {
     console.log('viewAppointmentsBtn clicked...');
+    console.log(`Fetching appointment for client with ID: ${clientId}`); //!! just for debugging
     const response = await fetch(`/appointment/${clientId}`);
     const data = await response.json();
     
     //!! just for debugging
+    console.log(`Server responded with status code: ${response.status}`);
+    console.log(`Response data: ${JSON.stringify(data)}`);
     if (response.status >= 400) {
       // The server responded with an error
       console.error(`Server responded with status code ${response.status}`);
@@ -137,14 +142,19 @@ const createViewAppointmentsBtn = (clientId) => {
     
     if (response.status === 404) {
       console.log('No appointment found, creating new appointment...');
+      console.log(`Sending POST request to /appointment with client ID: ${clientId}`); //!! just for debugging
       // If no appointment is found, create a new appointment
       const newAppointmentResponse = await fetch(`/appointment`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ clientId }),
+        credentials: 'include',
       });
       const newAppointmentData = await newAppointmentResponse.json();
       console.log('New appointment created...');
+      //!! just for debugging
+      console.log(`Server responded with status code: ${newAppointmentResponse.status}`);
+      console.log(`New appointment data: ${JSON.stringify(newAppointmentData)}`);
       window.location.href = `/flashcards?appointment=${encodeURIComponent(JSON.stringify(newAppointmentData.appointment))}`;
     } else {
       console.log('Appointment found...');
