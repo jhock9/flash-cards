@@ -1,17 +1,8 @@
 const fetchAppointment = async (clientId) => {
-  console.log(`Fetching appointment for client with ID: ${clientId}`); //!! just for debugging
+console.log('fetchAppointment called...');
   try {
     const response = await fetch(`/appointment/${clientId}`);
     const data = await response.json();
-    
-    //!! just for debugging
-    console.log(`Server responded with status code: ${response.status}`);
-    console.log(`Response data: ${JSON.stringify(data)}`);
-    
-    if (response.status >= 400) {
-      // The server responded with an error
-      console.error(`Server responded with status code ${response.status}`);
-    }
     
     if (response.status === 404) {
       console.log('No appointment found, creating new appointment...');
@@ -27,8 +18,7 @@ const fetchAppointment = async (clientId) => {
 };
 
 const createAppointment = async (clientId) => {
-  console.log(`Sending POST request to /create-appt with client ID: ${clientId}`); //!! just for debugging
-  const response = await fetch(`/create-appt`, {
+  const response = await fetch(`/appointment/create-appt`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ clientId }),

@@ -29,11 +29,6 @@ const refreshClientsTable = async (userId) => {
     
     // Populate the clients table with the clients' data
     clients.forEach(client => {
-      //!! just for debugging
-      if (client.fullname === 'Darren Fultz') {
-        console.log(`Adding client to table: ${JSON.stringify(client)}`);
-      }
-      
       const row = document.createElement('tr');
       
       const nameCell = document.createElement('td');
@@ -132,7 +127,6 @@ const createViewAppointmentsBtn = (clientId) => {
   
   viewAppointmentsBtn.addEventListener('click', async () => {
     console.log('viewAppointmentsBtn clicked...');
-    console.log(`Fetching appointment for client with ID: ${clientId}`); //!! just for debugging
     await fetchAppointment(clientId);
   });
   
