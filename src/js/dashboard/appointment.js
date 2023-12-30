@@ -1,4 +1,5 @@
 const fetchAppointment = async (clientId) => {
+  console.log(`Fetching appointment for client with ID: ${clientId}`); //!! just for debugging
   try {
     const response = await fetch(`/appointment/${clientId}`);
     const data = await response.json();
