@@ -27,8 +27,8 @@ const fetchAppointment = async (clientId) => {
 };
 
 const createAppointment = async (clientId) => {
-  console.log(`Sending POST request to /appointment with client ID: ${clientId}`); //!! just for debugging
-  const response = await fetch(`/appointment`, {
+  console.log(`Sending POST request to /create-appt with client ID: ${clientId}`); //!! just for debugging
+  const response = await fetch(`/create-appt`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ clientId }),
