@@ -144,7 +144,7 @@ app.use('/photos', photoDBRoutes);
 app.use('/account', accountRoutes);
 app.use('/users', userRoutes);
 app.use('/clients', clientRoutes);
-app.use('/appointments', appointmentRoutes);
+app.use('/appointment', appointmentRoutes);
 
 // Update photo data in database at 2:00 AM every day
 initializeOauthClient().then((oauth2Client) => {
