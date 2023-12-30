@@ -26,9 +26,6 @@ const createAppointment = async (clientId) => {
   });
   const data = await response.json();
   console.log('New appointment created...');
-  //!! just for debugging
-  console.log(`Server responded with status code: ${response.status}`);
-  console.log(`New appointment data: ${JSON.stringify(data)}`);
   return data;
 };
 
