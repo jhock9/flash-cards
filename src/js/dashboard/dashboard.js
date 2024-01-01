@@ -18,11 +18,7 @@ import { refreshUsersTable, createUser } from './users.js';
 import { refreshClientsTable, createClient } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js';
 import { togglePasswordVisibility } from '../components/password.js';
-import { 
-  addModalEventListeners,
-  hideModal,
-  showFlashcardsModal
-} from '../components/modals.js';
+import { addModalEventListeners, hideModal, showFlashcardsModal } from '../components/modals.js';
 
 // Show or hide elements based on the user's role
 const updateDashNav = async (currentUser) => {

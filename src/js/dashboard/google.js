@@ -3,10 +3,7 @@ const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientID; 
 
-import { 
-  hideModal,
-  showGoogleSignInModal
-} from '../components/modals.js';
+import { hideModal, showGoogleSignInModal } from '../components/modals.js';
 
 // Fetch Google Client ID from server
 const fetchConfig = async () => {

@@ -1,8 +1,4 @@
-import { 
-  hideModal,
-  showUserCreatedModal,
-  showUnavailableModal,
-} from '../components/modals.js';
+import { hideModal, showUserCreatedModal, showUnavailableModal } from '../components/modals.js';
 
 const refreshUsersTable = async () => {
   console.log('refreshUsersTable called...');
@@ -304,7 +300,4 @@ const createUser = async (event) => {
 // };
 
 // Export to dashboard.js
-export {
-  refreshUsersTable,
-  createUser,
-};
+export { refreshUsersTable, createUser };
