@@ -96,4 +96,8 @@ const displayPhotos = (photos) => {
   }
 };
 
-export { fetchPhotosData, filterPhotosByTags, displayPhotos };
+export { 
+  fetchPhotosData, // fetchPhotosData(tags)
+  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
+  displayPhotos, // displayPhotos(photos)
+};
