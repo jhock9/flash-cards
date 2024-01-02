@@ -13,7 +13,7 @@ const fetchPhotosData = async (tags) => {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const photos = await response.json();
-    console.log('Photos data fetched:', photos);
+    console.log('Photos data fetched...');
     return photos;
   } catch (error) {
     console.error('Error fetching photos:', error);
