@@ -96,7 +96,14 @@ router.get('/google-check', async (req, res) => {
       if (isValid) {
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
       } else {
-        res.json({ isGoogleAuthenticated: false });
+        // The access token is invalid, so get a new one using the refresh token
+        const { tokens } = await oauth2Client.refreshToken(tokenDoc.refreshToken);
+        // Save the new access token to the database
+        await Token.findOneAndUpdate({}, { accessToken: tokens.access_token });
+        
+        // Fetch the updated document from the database
+        const updatedTokenDoc = await Token.findOne({});
+        res.json({ isGoogleAuthenticated: updatedTokenDoc.isGoogleAuthenticated });
       }
     } else {
       logger.info('No token document found.');
