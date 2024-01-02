@@ -27,6 +27,7 @@ import {
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
+  toggleBorders, // toggleBorders()
 } from './selectedTags.js';
 import { 
   fetchPhotosData, // fetchPhotosData(tags)

@@ -174,5 +174,6 @@ export {
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
+  toggleBorders, // toggleBorders()
 };
 
