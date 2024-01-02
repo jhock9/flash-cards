@@ -4,12 +4,12 @@ let selectedTags = [];
 
 import {
   createSlider, 
-  createTagName, 
-  createLockToggle, 
-  createRemoveBtn, 
-  appendToNewDiv,
+  createTagName, // createTagName(selectedTag)
+  createLockToggle, // createLockToggle(selectedDiv)
+  createRemoveBtn, // createRemoveBtn(selectedDiv)
+  appendToNewDiv, // appendToNewDiv(classList, elements)
 } from './createSelectedTags.js';
-import { lockedTags } from './saveData.js';
+import { lockedTags } from './saveData.js'; // lockedTags(save = true) 
 
 // Load and render locked tags from local storage
 const loadRenderLockedTags = () => {

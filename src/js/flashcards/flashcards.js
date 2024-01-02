@@ -10,7 +10,7 @@ const totalSlider = document.querySelector('#total-slider');
 const totalSliderValue = document.querySelector('#total-slider-value');
 const remainder = document.querySelector('#remainder-checkbox');
 const filterInput = document.querySelector('#filter-tags');
-
+const tagsList = document.querySelector('#tags-list');
 
 let lastSelectedTagsAndQuantities;
 let photos;
@@ -21,14 +21,18 @@ let lastUseRemainder;
 
 import { logout } from '../components/logout.js';
 import { displayTags } from './displayTags.js';
-import { fetchPhotosData, filterPhotosByTags, displayPhotos } from './displayPhotos.js';
 import { 
   loadRenderLockedTags,
-  handleTagSelection,
-  createSelectedDiv,
-  clearSelectedTags,
+  handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
+  createSelectedDiv, // createSelectedDiv(selectedTag)
+  clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect,
 } from './selectedTags.js';
+import { 
+  fetchPhotosData, // fetchPhotosData(tags)
+  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
+  displayPhotos, // displayPhotos(photos)
+} from './displayPhotos.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Logout after 12 hours

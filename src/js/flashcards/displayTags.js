@@ -1,4 +1,3 @@
-const tagsList = document.querySelector('#tags-list');
 let googleTags;
 
 // Fetch tags data from database

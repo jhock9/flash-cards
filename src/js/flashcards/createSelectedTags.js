@@ -1,4 +1,4 @@
-import { lockedTags } from './saveData.js';
+import { lockedTags } from './saveData.js'; // lockedTags(save = true) 
 
 const createSlider = () => {
   const slider = document.createElement('input');
