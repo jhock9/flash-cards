@@ -13,7 +13,7 @@ const fetchTagsData = async () => {
     }
     const responseText = await response.text();
     googleTags = JSON.parse(responseText);
-    console.log('google tags fetched:', googleTags);
+    console.log('google tags fetched...');
     return googleTags;
   } catch (error) {
     console.error('Error fetching google tags:', error);
