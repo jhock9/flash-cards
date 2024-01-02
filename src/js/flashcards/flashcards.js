@@ -20,13 +20,13 @@ let lastTotalPhotos;
 let lastUseRemainder;
 
 import { logout } from '../components/logout.js';
-import { displayTags } from './displayTags.js';
+import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import { 
   loadRenderLockedTags,
   handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
-  resetTagSelect,
+  resetTagSelect, // resetTagSelect(filterInput)
 } from './selectedTags.js';
 import { 
   fetchPhotosData, // fetchPhotosData(tags)
@@ -126,7 +126,7 @@ tagsList.addEventListener('click', (e) => {
     createSelectedDiv(selectedTag);
   }
   
-  resetTagSelect();
+  resetTagSelect(filterInput);
 });
 
 //**   BUTTONS   **//
@@ -134,7 +134,7 @@ tagsList.addEventListener('click', (e) => {
 mobileOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   try {
-    displayTags();
+    displayTags(tagsList);
     toggleNav();
   } catch (error) {
     console.error('Error on open button click:', error);
@@ -144,7 +144,7 @@ mobileOpenBtn.addEventListener('click', async () => {
 tabletOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   try {
-    displayTags();
+    displayTags(tagsList);
     toggleNav();
   } catch (error) {
     console.error('Error on open button click:', error);
@@ -176,7 +176,7 @@ resetBtn.addEventListener('click', () => {
   totalSliderValue.classList.add('gray-out');
   remainder.classList.add('gray-out');
   
-  resetTagSelect();
+  resetTagSelect(filterInput);
   toggleBorders();
 });
 
