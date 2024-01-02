@@ -44,7 +44,7 @@ router.get('/oauth2callback', async (req, res) => {
     
     // Save the refresh token to your database
     if (tokens.refresh_token) {
-      const tokenDoc = await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
+      await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
       logger.info('Token document updated...');
     }
     oauth2Client.setCredentials(tokens);
