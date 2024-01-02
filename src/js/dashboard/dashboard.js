@@ -14,7 +14,7 @@ let currentUser;
 // TODO: Prob need to have JS auto populate all the sections instead of hard coding...
 
 import { addModalEventListeners, hideModal, showFlashcardsModal } from '../components/modals.js';
-import { logout } from './components/logout.js';
+import { logout } from '../components/logout.js';
 import { fetchAccountData, updatePassword } from './account.js';
 import { refreshUsersTable, createUser } from './users.js';
 import { refreshClientsTable, createClient } from './clients.js';

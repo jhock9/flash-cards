@@ -19,7 +19,7 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
-import { logout } from './components/logout.js';
+import { logout } from '../components/logout.js';
 import { displayTags } from './displayTags.js';
 import { fetchPhotosData, filterPhotosByTags, displayPhotos } from './displayPhotos.js';
 import { 
