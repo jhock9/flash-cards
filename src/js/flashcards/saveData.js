@@ -4,8 +4,8 @@ const appointmentData = JSON.parse(decodeURIComponent(urlParams.get('appointment
 // Use appointmentData to initialize the page
 
 // Save or remove locked tags from local storage
-const lockedTags = (save = true) => {
-  console.log('lockedTags called...');
+const saveTags = (save = true) => {
+  console.log('saveTags called...');
   if (save) {
     // Save locked tags to local storage
     const lockedTags = Array.from(document.querySelectorAll('.selected-div'))
@@ -22,4 +22,4 @@ const lockedTags = (save = true) => {
   }
 };
 
-export { lockedTags };
+export { saveTags };
