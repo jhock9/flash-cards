@@ -20,7 +20,7 @@ const fetchTagsData = async () => {
   }
 };
 
-const displayTags = async () => {
+const displayTags = async (tagsList) => {
   console.log('Displaying tags...');
   try {
     const filteredTags = await fetchTagsData();
@@ -43,4 +43,4 @@ const displayTags = async () => {
 };
 
 // Export to flashcards.js
-export { displayTags };
+export { displayTags }; // displayTags(tagsList)
