@@ -65,7 +65,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
           }
           const mappedPhotoData = {
             googleId: photoData.id,
-            baseUrl: photoData.baseUrl,
+            baseUrl: `${photoData.baseUrl}=w2048-h1024`,
             tagsFromGoogle: photoData.description.split(' ').filter(Boolean),
           };  
           try {
