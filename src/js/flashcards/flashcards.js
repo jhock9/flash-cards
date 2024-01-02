@@ -39,18 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(logout, 12 * 60 * 60 * 1000);
 });
 
-const toggleNav = () => {
-  console.log('Toggling nav...');
-  tabletOpenBtn.classList.toggle('open');
-  flashPanel.classList.toggle('open');
-  
-  if (flashPanel.classList.contains('open')) {
-    loadRenderLockedTags();
-  } else {
-    clearSelectedTags();  
-  }
-};
-
 //**   USER INPUTS TO SELECT PHOTOS TO DISPLAY   **//
 // Slider for total number of photos to display
 totalSlider.addEventListener('input', () => {
@@ -128,6 +116,19 @@ tagsList.addEventListener('click', (e) => {
   
   resetTagSelect(filterInput);
 });
+
+const toggleNav = () => {
+  console.log('Toggling nav...');
+  tabletOpenBtn.classList.toggle('open');
+  flashPanel.classList.toggle('open');
+  
+  if (flashPanel.classList.contains('open')) {
+    loadRenderLockedTags();
+  } else {
+    clearSelectedTags();  
+  }
+};
+
 
 //**   BUTTONS   **//
 
