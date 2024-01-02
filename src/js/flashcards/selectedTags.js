@@ -3,19 +3,19 @@ const removeBtns = document.querySelectorAll('.remove-btn');
 let selectedTags = [];
 
 import {
-  createSlider, 
-  createTagName, // createTagName(selectedTag)
+  appendToNewDiv, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // createRemoveBtn(selectedDiv)
-  appendToNewDiv, // appendToNewDiv(classList, elements)
+  createRemoveBtn,
+  createSlider,
+  createTagName, // createTagName(selectedTag)
 } from './createSelectedTags.js';
-import { lockedTags } from './saveData.js'; // lockedTags(save = true) 
+import { saveTags } from './saveData.js'; // saveTags(save = true) 
 
 // Load and render locked tags from local storage
 const loadRenderLockedTags = () => {
   console.log('loadRenderLockedTags called...');
   //! update to use appointmentModel, not localStorage
-  const loadedLockedTags = JSON.parse(localStorage.getItem('lockedTags') || '[]');
+  const loadedLockedTags = JSON.parse(localStorage.getItem('saveTags') || '[]');
   
   selectedTagsWrapper.innerHTML = '';
   selectedTags = [];
@@ -42,13 +42,13 @@ const loadRenderLockedTags = () => {
     lockIcon.classList.remove('fa-unlock');
   });
   
-  resetTagSelect();
+  resetTagSelect(filterInput);
 };
 
 const handleTagSelection = (selectedTag, sourceElement = null) => {
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
-    resetTagSelect();
+    resetTagSelect(filterInput);
     return false;
   }
   
@@ -100,7 +100,7 @@ const removeTag = (selectedTag) => {
   const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
   if (selectedDiv) {
     selectedDiv.remove();
-    lockedTags(false);
+    saveTags(false);
   }
   
   // Deselect the tag in the tags-list
@@ -130,17 +130,17 @@ const clearSelectedTags = (removeLockedTags = false) => {
   // Clear locked tags from local storage if removeLockedTags is true
   if (removeLockedTags) {
     console.log('Clearing locked tags from local storage...')
-    lockedTags(false);
+    saveTags(false);
   } else {
     console.log('Saving locked tags to local storage...')
-    lockedTags(true);
+    saveTags(true);
   };
   
   toggleBorders();
 };
 
 // Reset dropdown, filterInput and tags in tagsList
-const resetTagSelect = () => {
+const resetTagSelect = (filterInput) => {
   // dropdown.selectedIndex = 0;
   const tags = document.querySelectorAll(".tag");
   tags.forEach(tag => tag.classList.remove("hide")); 
@@ -169,5 +169,10 @@ removeBtns.forEach((btn) => {
 
 // Export to flashcards.js
 export {
-  clearSelectedTags, createSelectedDiv, handleTagSelection, loadRenderLockedTags, resetTagSelect
+  loadRenderLockedTags,
+  handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
+  createSelectedDiv, // createSelectedDiv(selectedTag)
+  clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
+  resetTagSelect, // resetTagSelect(filterInput)
 };
+
