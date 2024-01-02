@@ -22,7 +22,7 @@ let lastUseRemainder;
 import { logout } from '../components/logout.js';
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import { 
-  loadRenderLockedTags,
+  loadRenderLockedTags, // loadRenderLockedTags(filterInput)
   handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
@@ -123,7 +123,7 @@ const toggleNav = () => {
   flashPanel.classList.toggle('open');
   
   if (flashPanel.classList.contains('open')) {
-    loadRenderLockedTags();
+    loadRenderLockedTags(filterInput);
   } else {
     clearSelectedTags();  
   }

@@ -12,7 +12,7 @@ import {
 import { saveTags } from './saveData.js'; // saveTags(save = true) 
 
 // Load and render locked tags from local storage
-const loadRenderLockedTags = () => {
+const loadRenderLockedTags = (filterInput) => {
   console.log('loadRenderLockedTags called...');
   //! update to use appointmentModel, not localStorage
   const loadedLockedTags = JSON.parse(localStorage.getItem('saveTags') || '[]');
