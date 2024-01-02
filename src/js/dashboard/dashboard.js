@@ -13,12 +13,13 @@ let currentUser;
 
 // TODO: Prob need to have JS auto populate all the sections instead of hard coding...
 
+import { addModalEventListeners, hideModal, showFlashcardsModal } from '../components/modals.js';
+import { logout } from './components/logout.js';
 import { fetchAccountData, updatePassword } from './account.js';
 import { refreshUsersTable, createUser } from './users.js';
 import { refreshClientsTable, createClient } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js';
 import { togglePasswordVisibility } from '../components/password.js';
-import { addModalEventListeners, hideModal, showFlashcardsModal } from '../components/modals.js';
 
 // Show or hide elements based on the user's role
 const updateDashNav = async (currentUser) => {
@@ -40,20 +41,6 @@ const updateDashNav = async (currentUser) => {
     }
   } catch (error) {
     console.error('Error updating dashboard navigation:', error);
-  }
-};
-
-const logout = async () => {
-  try {
-    console.log('Sending logout request...');
-    const response = await fetch('/auth/logout', { method: 'GET', credentials: 'include' });
-    if (!response.ok) {
-      throw new Error('Logout failed');
-    }
-    console.log('Logout successful.');
-    window.location.href = '/';
-  } catch (error) {
-    console.error('Error during logout:', error);
   }
 };
 
