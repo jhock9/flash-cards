@@ -64,8 +64,8 @@
   transform: translateX(0);
 }
 
-/* Item-selection-form styles */
-#item-selection-form {
+/* tag-selection-form styles */
+#tag-selection-form {
   width: 100%;
   max-width: 42rem;
   height: 100%;
@@ -285,7 +285,7 @@ letter-spacing: 0.1rem;
   margin: 2rem;
 }
 
-#db-btn-container {
+#save-btns {
   position: sticky;
   bottom: 0;
   width: 100%;
@@ -345,7 +345,7 @@ main {
     width: 50rem;
   }
   
-  #item-selection-form {
+  #tag-selection-form {
     min-width: 25rem;
   }
   
