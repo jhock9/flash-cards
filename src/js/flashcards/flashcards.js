@@ -20,20 +20,20 @@ let lastTotalPhotos;
 let lastUseRemainder;
 
 import { logout } from '../components/logout.js';
+import {
+  displayPhotos,
+  fetchPhotosData, // fetchPhotosData(tags)
+  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
+} from './displayPhotos.js';
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
-import { 
-  loadRenderLockedTags, // loadRenderLockedTags(filterInput)
+import {
+  loadSavedTags, // loadSavedTags(filterInput)
   handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
   toggleBorders, // toggleBorders()
 } from './selectedTags.js';
-import { 
-  fetchPhotosData, // fetchPhotosData(tags)
-  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
-  displayPhotos, // displayPhotos(photos)
-} from './displayPhotos.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Logout after 12 hours
@@ -124,7 +124,7 @@ const toggleNav = () => {
   flashPanel.classList.toggle('open');
   
   if (flashPanel.classList.contains('open')) {
-    loadRenderLockedTags(filterInput);
+    loadSavedTags(filterInput);
   } else {
     clearSelectedTags();  
   }
@@ -164,6 +164,11 @@ refreshBtn.addEventListener('click', async () => {
     }
   }
 });
+
+// TODO: Update the refreshBtn to preserve the state of the saved photos. 
+  // Store the state of the saved photos
+  // Refresh the photos
+  // Restore the state of the saved photos
 
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
@@ -264,13 +269,25 @@ submitBtn.addEventListener('click', async (e) => {
   toggleNav();
 });
 
+// TODO: add save button to html (Save)
+// I will need these parameters, yeah? 
+// or I could move the btns to the saveData.js file? 
+// would I need to import back here?
 
+// const saveBtn = document.querySelector('#save-appt-btn');
+
+saveBtn.addEventListener('click', async (e) => {
+  console.log('Save button clicked...');
+  e.preventDefault();
+  saveAppointment(appointmentId, savedTags, savedPhotos);
+});
+
+// TODO: rename "Save and Return", update html (Save and Return)
+// const dashboardBtn = document.querySelector('#save-return-btn');
 
 dashboardBtn.addEventListener('click', async (e) => {
   console.log('Dashboard button clicked...');
   e.preventDefault();
-  
-  //!! save current selections and state to database?
-  
+  saveAppointment(appointmentId, savedTags, savedPhotos);
   window.location.href = '/dashboard';
 });

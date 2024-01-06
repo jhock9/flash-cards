@@ -1,4 +1,4 @@
-import { saveTags } from './saveData.js'; // saveTags(save = true) 
+import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
 
 const createSlider = () => {
   const slider = document.createElement('input');
@@ -46,7 +46,7 @@ const toggleLock = (selectedDiv, lockIcon) => {
   selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
   lockIcon.classList.toggle('fa-lock');
   lockIcon.classList.toggle('fa-unlock');
-  saveTags(!isLocked);
+  toggleLockedTags(!isLocked);
 };
 
 const createRemoveBtn = (selectedDiv) => {
@@ -78,5 +78,6 @@ export {
   createLockToggle, // createLockToggle(selectedDiv)
   createRemoveBtn,
   createSlider,
-  createTagName, // createTagName(selectedTag)
+  createTagName
 };
+
