@@ -97,6 +97,17 @@ const displayPhotos = (photos) => {
   }
 };
 
+// TODO: Add an event listener to each photo that calls savePhoto() when the photo is clicked
+// integrate this with the displayPhotos function?
+// import savePhoto from './saveData.js';
+photos.forEach(photo => {
+  photo.addEventListener('click', () => {
+    savePhoto(photo.id, appointmentId);
+    photo.classList.add('locked');
+  });
+});
+
+
 export { 
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
