@@ -4,7 +4,7 @@ const appointmentSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   client: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
   savedTags: [{
-    name: { type: mongoose.Schema.Types.ObjectId, ref: 'Photo'},
+    name: { type: String, required: true},
     qty: { type: Number, default: 0 }, 
     locked: { type: Boolean, default: false } 
   }],
