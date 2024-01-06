@@ -1,25 +1,57 @@
-// Get the appointment data from the URL
+// Get the appointment data from the URL and initialize the page
 const urlParams = new URLSearchParams(window.location.search);
 const appointmentData = JSON.parse(decodeURIComponent(urlParams.get('appointment')));
-// Use appointmentData to initialize the page
+const appointmentId = appointmentData._id;
 
-// Save or remove locked tags from local storage
-const saveTags = (save = true) => {
-  console.log('saveTags called...');
+// Save or remove locked tags from database
+const toggleLockedTags = async (save = true) => {
+  console.log('toggleLockedTags called...');
+  
+  // Get locked tags
+  const savedTag = Array.from(document.querySelectorAll('.selected-div'))
+    .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
+    .map(selectedDiv => {
+      return { name: selectedDiv.dataset.tag, qty: parseInt(selectedDiv.querySelector('.slider').value), locked: true };
+    });
+    
   if (save) {
-    // Save locked tags to local storage
-    const lockedTags = Array.from(document.querySelectorAll('.selected-div'))
-      .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
-      .map(selectedDiv => {
-        return { tag: selectedDiv.dataset.tag, quantity: selectedDiv.querySelector('.slider').value };
-      });
-    //! update to use appointmentModel, not localStorage
-    localStorage.setItem('lockedTags', JSON.stringify(lockedTags));
+    // Save tags to the database
+    const response = await fetch(`/appointment/${appointmentId}/save-tags`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(savedTag),
+    });
+    const result = await response.json();
+    console.log(result);
   } else {
-    // Remove locked tags from local storage
-    //! update to use appointmentModel, not localStorage
-    localStorage.removeItem('lockedTags');
+    // Remove saved tags from the database
+    const response = await fetch(`/appointment/${appointmentId}/remove-tags`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(savedTag),
+    });
+    const result = await response.json();
+    console.log(result);
   }
 };
 
-export { saveTags };
+const savePhoto = (photoId, appointmentId) => {
+  console.log('savePhoto called...');
+  // This function should send a request to the server to save a photo. 
+};
+
+// TODO: Update the frontend code to visually indicate when a photo is locked. 
+// This could be done by adding a CSS class to the photo element when it's clicked.
+
+
+const saveAppointment = (appointmentId, savedTags, savedPhotos) => {
+  console.log('saveAppointment called...');
+  // This function should send a request to the server to save the appointment. 
+};
+
+
+export { toggleLockedTags };

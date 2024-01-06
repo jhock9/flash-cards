@@ -1,3 +1,8 @@
+// Get the appointment data from the URL and initialize the page
+const urlParams = new URLSearchParams(window.location.search);
+const appointmentData = JSON.parse(decodeURIComponent(urlParams.get('appointment')));
+const appointmentId = appointmentData._id;
+
 const selectedTagsWrapper = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll('.remove-btn');
 let selectedTags = [];
@@ -9,18 +14,19 @@ import {
   createSlider,
   createTagName, // createTagName(selectedTag)
 } from './createSelectedTags.js';
-import { saveTags } from './saveData.js'; // saveTags(save = true) 
+import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
 
-// Load and render locked tags from local storage
-const loadRenderLockedTags = (filterInput) => {
-  console.log('loadRenderLockedTags called...');
-  //! update to use appointmentModel, not localStorage
-  const loadedLockedTags = JSON.parse(localStorage.getItem('saveTags') || '[]');
+// Load saved tags
+const loadSavedTags = async (filterInput) => {
+  console.log('loadSavedTags called...');
+  const response = await fetch(`/appointment/${appointmentId}/load-tags`);
+  const savedTags = await response.json();
+  console.log(savedTags);
   
   selectedTagsWrapper.innerHTML = '';
   selectedTags = [];
   
-  loadedLockedTags.forEach(tagInfo => {
+  savedTags.forEach(tagInfo => {
     const { tag, quantity } = tagInfo;
     
     const proceed = handleTagSelection(tag);
@@ -100,7 +106,7 @@ const removeTag = (selectedTag) => {
   const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
   if (selectedDiv) {
     selectedDiv.remove();
-    saveTags(false);
+    toggleLockedTags(false);
   }
   
   // Deselect the tag in the tags-list
@@ -127,13 +133,13 @@ const clearSelectedTags = (removeLockedTags = false) => {
   // Update selectedTags array to only contain locked tags if removeLockedTags is true
   selectedTags = removeLockedTags ? selectedTags.filter(tag => tag.locked) : selectedTags;
   
-  // Clear locked tags from local storage if removeLockedTags is true
+  // Clear locked tags from database if removeLockedTags is true
   if (removeLockedTags) {
-    console.log('Clearing locked tags from local storage...')
-    saveTags(false);
+    console.log('Clearing locked tags from database...')
+    toggleLockedTags(false);
   } else {
-    console.log('Saving locked tags to local storage...')
-    saveTags(true);
+    console.log('Saving locked tags to database...')
+    toggleLockedTags(true);
   };
   
   toggleBorders();
@@ -169,11 +175,10 @@ removeBtns.forEach((btn) => {
 
 // Export to flashcards.js
 export {
-  loadRenderLockedTags,
-  handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
-  createSelectedDiv, // createSelectedDiv(selectedTag)
-  clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
+  clearSelectedTags, // handleTagSelection(selectedTag, sourceElement = null)
+  createSelectedDiv, // loadSavedTags(filterInput)
+  handleTagSelection, loadSavedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
-  toggleBorders, // toggleBorders()
+  toggleBorders
 };
 
