@@ -20,26 +20,27 @@ import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = tru
 const loadSavedTags = async (filterInput) => {
   console.log('loadSavedTags called...');
   const response = await fetch(`/appointment/${appointmentId}/load-tags`);
-  const savedTags = await response.json();
+  const data = await response.json();
+  const savedTags = data.savedTags;
   console.log(savedTags);
   
   selectedTagsWrapper.innerHTML = '';
   selectedTags = [];
   
   savedTags.forEach(tagInfo => {
-    const { tag, quantity } = tagInfo;
+    const { name, qty } = tagInfo;
     
-    const proceed = handleTagSelection(tag);
+    const proceed = handleTagSelection(name);
     if (!proceed) {
       return;
     }
     
     // Modify the slider value to reflect stored quantity
-    const selectedDiv = createSelectedDiv(tag);
+    const selectedDiv = createSelectedDiv(name);
     const slider = selectedDiv.querySelector('.slider');
     const sliderValue = selectedDiv.querySelector('.slider-value');
-    slider.value = quantity;
-    sliderValue.textContent = quantity;
+    slider.value = qty;
+    sliderValue.textContent = qty;
     
     // Set tag to locked
     const lockIcon = selectedDiv.querySelector('.fa-solid');
