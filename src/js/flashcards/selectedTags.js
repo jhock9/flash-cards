@@ -119,7 +119,7 @@ const removeTag = (selectedTag) => {
 }
 
 // Clears selected tags based on removeLockedTags
-const clearSelectedTags = (removeLockedTags = false) => {
+const clearSelectedTags = (removeLockedTags = true) => {
   console.log('clearSelectedTags called...');
   let selectedDivs = document.querySelectorAll('.selected-div');
   
