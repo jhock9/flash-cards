@@ -5,6 +5,7 @@ const refreshBtn = document.querySelector('#refresh-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
+const saveBtn = document.querySelector('#save-appt-btn');
 const dashboardBtn = document.querySelector('#dashboard-btn');
 const totalSlider = document.querySelector('#total-slider');
 const totalSliderValue = document.querySelector('#total-slider-value');
