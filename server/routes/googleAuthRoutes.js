@@ -87,29 +87,36 @@ const checkTokenValidity = async (accessToken) => {
 // Check if admin has authenticated with database
 router.get('/google-check', async (req, res) => {
   logger.info('Received request for /google-check...');
+  logger.debug(`Error checking Google authentication: ${error}`);
   try {
     const tokenDoc = await Token.findOne({});
+    logger.debug(`Token document: ${JSON.stringify(tokenDoc)}`);
     if (tokenDoc) {
       // Check if the access token is valid
       const isValid = await checkTokenValidity(tokenDoc.accessToken);
+      logger.debug(`Access token: ${tokenDoc.accessToken}`);
       logger.info(`Token validity: ${isValid}`);
       if (isValid) {
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
       } else {
         // The access token is invalid, so get a new one using the refresh token
         const { tokens } = await oauth2Client.refreshToken(tokenDoc.refreshToken);
+        logger.debug(`Refreshed tokens: ${JSON.stringify(tokens)}`);
         // Save the new access token to the database
         await Token.findOneAndUpdate({}, { accessToken: tokens.access_token });
         
         // Fetch the updated document from the database
         const updatedTokenDoc = await Token.findOne({});
+        logger.debug(`Updated token document: ${JSON.stringify(updatedTokenDoc)}`);
         res.json({ isGoogleAuthenticated: updatedTokenDoc.isGoogleAuthenticated });
       }
     } else {
+      logger.debug('No token document found.');
       logger.info('No token document found.');
       res.json({ isGoogleAuthenticated: false });
     }
   } catch (error) {
+    logger.debug(`Error checking Google authentication: ${error}`);
     logger.error(`Error checking Google authentication: ${error}`);
     res.status(500).send(`Something went wrong! Error: ${error.message}`);
   }});
