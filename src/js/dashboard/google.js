@@ -69,7 +69,7 @@ const checkGoogleAuthentication = async () => {
     if (!response.ok) {
       console.error(`Server responded with status: ${response.status}`);
       if (response.status === 401) {
-        console.log('Admin needs to re-authenticate with Google.');
+        console.log('Google Account access revoked.');
       }
       throw new Error(`Server responded with status: ${response.status}`);
     }
@@ -85,7 +85,7 @@ const checkGoogleAuthentication = async () => {
     console.error('Error checking Google authentication:', error);
   }
   
-  console.log('Admin is not authenticated with Google. Sign in again.');
+  console.log('Admin needs to re-authenticate with Google.');
   googleTab.click();
   googleTab.classList.add('clicked');
   
