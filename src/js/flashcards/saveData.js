@@ -59,5 +59,9 @@ const saveAppointment = (appointmentId, savedTags, savedPhotos) => {
   // This function should send a request to the server to save the appointment. 
 };
 
-
-export { toggleLockedTags };
+// Export to selectedTags.js
+export { 
+  toggleLockedTags,  // Also to createSelectedTags.js // toggleLockedTags(save = true)
+  savePhoto, // savePhoto(photoId, appointmentId) 
+  saveAppointment, // saveAppointment(appointmentId, savedTags, savedPhotos)
+};

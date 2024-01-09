@@ -107,7 +107,7 @@ const displayPhotos = (photos) => {
 //   });
 // });
 
-
+// Export to flashcards.js
 export { 
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
