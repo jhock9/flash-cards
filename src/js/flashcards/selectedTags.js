@@ -8,11 +8,11 @@ const removeBtns = document.querySelectorAll('.remove-btn');
 let selectedTags = [];
 
 import {
-  appendToNewDiv, // createTagName(selectedTag)
-  createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn,
   createSlider,
   createTagName, // createTagName(selectedTag)
+  createLockToggle, // createLockToggle(selectedDiv)
+  createRemoveBtn, // createRemoveBtn(selectedDiv)
+  appendToNewDiv, // appendToNewDiv(classList, elements)
 } from './createSelectedTags.js';
 import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
 
@@ -180,10 +180,12 @@ removeBtns.forEach((btn) => {
 
 // Export to flashcards.js
 export {
-  clearSelectedTags, // handleTagSelection(selectedTag, sourceElement = null)
-  createSelectedDiv, // loadSavedTags(filterInput)
-  handleTagSelection, loadSavedTags, // clearSelectedTags(removeLockedTags = false)
+  loadSavedTags, // loadSavedTags(filterInput)
+  handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
+  createSelectedDiv, // createSelectedDiv(selectedTag)
+  clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
-  toggleBorders
+  toggleBorders, // toggleBorders()
 };
+
 

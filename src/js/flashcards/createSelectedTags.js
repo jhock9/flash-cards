@@ -75,10 +75,10 @@ const appendToNewDiv = (classList, elements) => {
 
 // Export to selectedTags.js
 export {
-  appendToNewDiv, // createTagName(selectedTag)
-  createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn,
   createSlider,
   createTagName, // createTagName(selectedTag)
+  createLockToggle, // createLockToggle(selectedDiv)
+  createRemoveBtn, // createRemoveBtn(selectedDiv)
+  appendToNewDiv, // appendToNewDiv(classList, elements)
 };
 

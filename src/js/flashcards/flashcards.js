@@ -20,11 +20,12 @@ let useRemainder = false;
 let lastTotalPhotos; 
 let lastUseRemainder;
 
+
 import { logout } from '../components/logout.js';
 import {
-  displayPhotos,
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
+  displayPhotos, // displayPhotos(photos)
 } from './displayPhotos.js';
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import {
@@ -84,7 +85,7 @@ filterInput.addEventListener("input", function (e) {
   const searchText = e.target.value.toLowerCase();
   const tags = document.querySelectorAll(".tag");
   
-  for (tag of tags) {
+  for (let tag of tags) {
     const tagLowerText = tag.innerText.toLowerCase();
     if (tagLowerText.includes(searchText)) {
       tag.classList.remove("hide");
