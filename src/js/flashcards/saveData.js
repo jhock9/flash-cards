@@ -11,7 +11,11 @@ const toggleLockedTags = async (save = true) => {
   const savedTag = Array.from(document.querySelectorAll('.selected-div'))
     .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
     .map(selectedDiv => {
-      return { name: selectedDiv.dataset.tag, qty: parseInt(selectedDiv.querySelector('.slider').value), locked: true };
+      return { 
+        name: selectedDiv.dataset.tag, 
+        qty: parseInt(selectedDiv.querySelector('.slider').value), 
+        locked: true 
+      };
     });
     
   if (save) {
