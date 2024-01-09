@@ -87,7 +87,7 @@ const checkTokenValidity = async (accessToken) => {
 // Check if admin has authenticated with database
 router.get('/google-check', async (req, res) => {
   logger.info('Received request for /google-check...');
-  logger.debug(`Error checking Google authentication: ${error}`);
+  logger.debug(`Received request for /google-check..`);
   try {
     const tokenDoc = await Token.findOne({});
     logger.debug(`Token document: ${JSON.stringify(tokenDoc)}`);
