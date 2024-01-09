@@ -97,8 +97,8 @@ const createSelectedDiv = (selectedTag) => {
   return selectedDiv;
 };
 
-
-const removeTag = (selectedTag) => {
+const removeTag = (selectedTag, removeFromDatabase = true) => {
+  // removeFromDatabase parameter only used in clearSelectedTags()
   console.log('removeTag called...');
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
@@ -106,8 +106,12 @@ const removeTag = (selectedTag) => {
   // Remove the tag from the selected-tags-wrapper
   const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
   if (selectedDiv) {
-    selectedDiv.remove();
-    toggleLockedTags(false);
+    selectedDiv.remove(); // Removes tag from DOM
+    console.log('Tag removed from DOM...')
+    if (removeFromDatabase && selectedDiv.dataset.locked === 'true') {
+      console.log('Removing tag from database...')
+      toggleLockedTags(false); // Removes tag from database
+    }
   }
   
   // Deselect the tag in the tags-list
@@ -118,27 +122,27 @@ const removeTag = (selectedTag) => {
   toggleBorders();
 }
 
-// Clears selected tags based on removeLockedTags
-const clearSelectedTags = (removeLockedTags = true) => {
+const clearSelectedTags = (removeLockedTags = false) => {
   console.log('clearSelectedTags called...');
-  let selectedDivs = document.querySelectorAll('.selected-div');
+  let selectedDivs = Array.from(document.querySelectorAll('.selected-div'));
   
-  // Remove selected tags from selected-tags-wrapper that are not locked, or when removeLockedTags is true
+  // Remove tags if 1) removeLockedTags is true or 2) if the tag is not locked 
   selectedDivs.forEach((div) => {
     if (removeLockedTags || div.dataset.locked !== 'true') {
-      removeTag(div.dataset.tag); 
+      removeTag(div.dataset.tag, false); // Removes tag from DOM 
     }
   });
   
-  //!! Is this still necessary?
-  // Update selectedTags array to only contain locked tags if removeLockedTags is true
-  selectedTags = removeLockedTags ? selectedTags.filter(tag => tag.locked) : selectedTags;
+  // Filter selectedTags array to only include locked tags
+  selectedTags = selectedTags.filter(tag => !removeLockedTags || tag.locked);
+  // Check if there are any locked tags
+  const lockedTags = selectedTags.filter(tag => tag.locked);
   
   // Clear locked tags from database if removeLockedTags is true
-  if (removeLockedTags) {
+  if (removeLockedTags && lockedTags.length > 0) {
     console.log('Clearing locked tags from database...')
-    toggleLockedTags(false);
-  } else {
+    toggleLockedTags(false); 
+  } else if (lockedTags.length > 0) {
     console.log('Saving locked tags to database...')
     toggleLockedTags(true);
   };
