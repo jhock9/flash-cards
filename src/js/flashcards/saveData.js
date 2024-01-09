@@ -28,7 +28,7 @@ const toggleLockedTags = async (save = true) => {
     console.log(result);
   } else {
     // Remove saved tags from the database
-    console.log('Removing tagsto the database...');
+    console.log('Removing tags from the database...');
     const response = await fetch(`/appointment/${appointmentId}/remove-tags`, {
       method: 'POST',
       headers: {
