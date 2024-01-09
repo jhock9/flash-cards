@@ -96,9 +96,13 @@ router.get('/google-check', async (req, res) => {
       const isValid = await checkTokenValidity(tokenDoc.accessToken);
       logger.debug(`Access token: ${tokenDoc.accessToken}`);
       logger.info(`Token validity: ${isValid}`);
+      logger.debug(`Token validity: ${isValid}`);
       if (isValid) {
+        logger.debug('Access token is valid.');
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
+        logger.debug(`Response sent: ${JSON.stringify({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated })}`);
       } else {
+        logger.debug('Access token is invalid.');
         // The access token is invalid, so get a new one using the refresh token
         const { tokens } = await oauth2Client.refreshToken(tokenDoc.refreshToken);
         logger.debug(`Refreshed tokens: ${JSON.stringify(tokens)}`);
@@ -116,10 +120,16 @@ router.get('/google-check', async (req, res) => {
       res.json({ isGoogleAuthenticated: false });
     }
   } catch (error) {
-    logger.debug(`Error checking Google authentication: ${error}`);
-    logger.error(`Error checking Google authentication: ${error}`);
-    res.status(500).send(`Something went wrong! Error: ${error.message}`);
-  }});
+    if (error.message === 'invalid_grant') {
+      logger.debug('Refresh token is invalid or expired. User needs to re-authenticate.');
+      logger.error('Refresh token is invalid or expired. User needs to re-authenticate.');
+      res.status(401).send('Please re-authenticate with Google.');
+    } else {
+      logger.debug(`Error checking Google authentication: ${error}`);
+      logger.error(`Error checking Google authentication: ${error}`);
+      res.status(500).send(`Something went wrong! Error: ${error.message}`);
+    }
+}});
 
 // Export to server.js
 module.exports = router;
