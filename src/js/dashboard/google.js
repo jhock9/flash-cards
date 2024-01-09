@@ -68,6 +68,9 @@ const checkGoogleAuthentication = async () => {
     const response = await fetch('/google-auth/google-check', { credentials: 'include' });
     if (!response.ok) {
       console.error(`Server responded with status: ${response.status}`);
+      if (response.status === 401) {
+        console.log('Admin needs to re-authenticate with Google.');
+      }
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const data = await response.json();
@@ -77,24 +80,24 @@ const checkGoogleAuthentication = async () => {
       signedIn.classList.remove('hide');
       googleSignIn.classList.add('hide');
       return true;
-    } else {
-      console.log('Admin is not authenticated with Google. Sign in again.');
-      googleTab.click();
-      googleTab.classList.add('clicked');
-      
-      document.querySelector('#account').classList.add('hide');
-      document.querySelector('#google').classList.remove('hide');
-      
-      signedIn.classList.add('hide');
-      googleSignIn.classList.remove('hide');
-      
-      showGoogleSignInModal();
-      setTimeout(hideModal, 4000);
-      return false;
-} 
+    }
   } catch (error) {
     console.error('Error checking Google authentication:', error);
   }
+  
+  console.log('Admin is not authenticated with Google. Sign in again.');
+  googleTab.click();
+  googleTab.classList.add('clicked');
+  
+  document.querySelector('#account').classList.add('hide');
+  document.querySelector('#google').classList.remove('hide');
+  
+  signedIn.classList.add('hide');
+  googleSignIn.classList.remove('hide');
+  
+  showGoogleSignInModal();
+  setTimeout(hideModal, 4000);
+  return false;
 };
 
 // Export to dashboard.js
