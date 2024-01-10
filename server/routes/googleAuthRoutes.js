@@ -42,9 +42,10 @@ router.get('/oauth2callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.info('Tokens received...');
     
-    // Save the refresh token to your database
+  // Save the refresh token and expiry time to your database
     if (tokens.refresh_token) {
-      await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, isGoogleAuthenticated: true }, { upsert: true, new: true });
+      const expiryDate = new Date().getTime() + (tokens.expires_in * 1000);
+      await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, expiryDate: expiryDate, isGoogleAuthenticated: true }, { upsert: true, new: true });
       logger.info('Token document updated...');
     }
     oauth2Client.setCredentials(tokens);
@@ -65,24 +66,24 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
-// Check if access token is valid
-const checkTokenValidity = async (accessToken) => {
-  try {
-    logger.info('Checking token validity...');
-    oauth2Client.setCredentials({ access_token: accessToken });
-    const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
-    const isValid = Date.now() < tokenInfo.expiry_date;
-    logger.info(`Token validity: ${isValid}`);
-    return isValid;
-  } catch (error) {
-    if (error.message === 'invalid_token') {
-      logger.info('Token is invalid.');
-      return false;
-    }
-    logger.error(`Error while checking token validity: ${error}`);
-    throw error;
-  }
-};
+// // Check if access token is valid
+// const checkTokenValidity = async (accessToken) => {
+//   try {
+//     logger.info('Checking token validity...');
+//     oauth2Client.setCredentials({ access_token: accessToken });
+//     const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
+//     const isValid = Date.now() < tokenInfo.expiry_date;
+//     logger.info(`Token validity: ${isValid}`);
+//     return isValid;
+//   } catch (error) {
+//     if (error.message === 'invalid_token') {
+//       logger.info('Token is invalid.');
+//       return false;
+//     }
+//     logger.error(`Error while checking token validity: ${error}`);
+//     throw error;
+//   }
+// };
 
 // Check if admin has authenticated with database
 router.get('/google-check', async (req, res) => {
@@ -90,19 +91,30 @@ router.get('/google-check', async (req, res) => {
   try {
     const tokenDoc = await Token.findOne({});
     if (tokenDoc) {
-      // Check if the access token is valid
-      const isValid = await checkTokenValidity(tokenDoc.accessToken);
-      logger.info(`Token validity: ${isValid}`);
-      if (isValid) {
+      // // Check if the access token is valid
+      // const isValid = await checkTokenValidity(tokenDoc.accessToken);
+      // logger.info(`Token validity: ${isValid}`);
+      // if (isValid) {
+
+      // Check if the access token is about to expire
+      const isAboutToExpire = Date.now() > tokenDoc.expiryDate - 60000; // 1 minute buffer
+      if (!isAboutToExpire) {      
         logger.info('Access token is valid.');
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
       } else {
-        logger.info('Access token is invalid.');
-        // The access token is invalid, so get a new one using the refresh token
+        // logger.info('Access token is invalid.');
+        // // The access token is invalid, so get a new one using the refresh token
+
+        logger.info('Access token is about to expire.');
+        // The access token is about to expire, so get a new one using the refresh token
         const { tokens } = await oauth2Client.refreshToken(tokenDoc.refreshToken);
-        // Save the new access token to the database
-        await Token.findOneAndUpdate({}, { accessToken: tokens.access_token });
-        
+        // // Save the new access token to the database
+        // await Token.findOneAndUpdate({}, { accessToken: tokens.access_token });
+
+        // Save the new access token and expiry time to the database
+        const expiryDate = new Date().getTime() + (tokens.expires_in * 1000);
+        await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, expiryDate });
+
         // Fetch the updated document from the database
         const updatedTokenDoc = await Token.findOne({});
         res.json({ isGoogleAuthenticated: updatedTokenDoc.isGoogleAuthenticated });
