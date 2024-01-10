@@ -42,9 +42,9 @@ router.get('/oauth2callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.info('Tokens received...');
     
-  // Save the refresh token and expiry time to your database
+    // Save the refresh token and expiry time to your database
     if (tokens.refresh_token) {
-      const expiryDate = new Date().getTime() + (tokens.expires_in * 1000);
+      const expiryDate = new Date().getTime() + (Number(tokens.expires_in) * 1000);
       await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, expiryDate: expiryDate, isGoogleAuthenticated: true }, { upsert: true, new: true });
       logger.info('Token document updated...');
     }
@@ -112,9 +112,8 @@ router.get('/google-check', async (req, res) => {
         // await Token.findOneAndUpdate({}, { accessToken: tokens.access_token });
 
         // Save the new access token and expiry time to the database
-        const expiryDate = new Date().getTime() + (tokens.expires_in * 1000);
+        const expiryDate = new Date().getTime() + (Number(tokens.expires_in) * 1000);
         await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, expiryDate });
-
         // Fetch the updated document from the database
         const updatedTokenDoc = await Token.findOne({});
         res.json({ isGoogleAuthenticated: updatedTokenDoc.isGoogleAuthenticated });
