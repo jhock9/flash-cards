@@ -29,9 +29,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelector('#users-tab').click();
   } else {
     console.log('User is not admin. Showing user views...');
-    for (let view of adminViews) {
-      view.classList.add('hide');
-    }
     document.querySelector('#clients-tab').click();   
   }
   
