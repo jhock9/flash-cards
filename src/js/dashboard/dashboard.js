@@ -19,7 +19,13 @@ import { togglePasswordVisibility } from '../components/password.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
-  const currentUser = await fetchAccountData();
+  // Fetch the config and account data in parallel
+  const configPromise = fetchConfig();
+  const accountDataPromise = fetchAccountData();
+
+  // Wait for both promises to resolve
+  await configPromise;
+  const currentUser = await accountDataPromise;
   
   if (currentUser.role === 'admin') {
     console.log ('User is admin. Showing admin views...');
@@ -44,7 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   setTimeout(logout, 12 * 60 * 60 * 1000);
   
   // Check if app is authenticated with Google
-  await fetchConfig();
   await checkGoogleAuthentication(currentUser);
 });
 
