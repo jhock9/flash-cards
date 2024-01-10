@@ -91,7 +91,7 @@ const showFlashcardsModal = () => {
 // Export to various files
 export { 
   addModalEventListeners, // login.js, dashboard.js
-  hideModal, // login.js, dashboard.js, account.js, google.js
+  hideModal, // login.js, account.js, google.js
   showIncorrectUsernameModal, // login.js
   showIncorrectPasswordModal, // login.js
   showSuccessModal, // login.js
@@ -104,5 +104,5 @@ export {
   showClientCreatedModal, // clients.js
   showNoUsernameModal, // clients.js
   showGoogleSignInModal, // google.js
-  showFlashcardsModal // dashboard.js
+  showFlashcardsModal // google.js
 };

@@ -3,7 +3,7 @@ const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientID; 
 
-import { hideModal, showGoogleSignInModal } from '../components/modals.js';
+import { hideModal, showFlashcardsModal, showGoogleSignInModal } from '../components/modals.js';
 
 // Fetch Google Client ID from server
 const fetchConfig = async () => {
@@ -62,7 +62,7 @@ const googleAuth = () => {
 };
 
 // Check if admin is authenticated with Google
-const checkGoogleAuthentication = async () => {
+const checkGoogleAuthentication = async (currentUser) => {
   try {
     console.log('Checking Google authentication...');
     const response = await fetch('/google-auth/google-check', { credentials: 'include' });
@@ -84,21 +84,30 @@ const checkGoogleAuthentication = async () => {
   } catch (error) {
     console.error('Error checking Google authentication:', error);
   }
-  
   console.log('Admin needs to re-authenticate with Google.');
-  googleTab.click();
-  googleTab.classList.add('clicked');
   
-  document.querySelector('#account').classList.add('hide');
-  document.querySelector('#google').classList.remove('hide');
-  
-  signedIn.classList.add('hide');
-  googleSignIn.classList.remove('hide');
-  
-  showGoogleSignInModal();
-  setTimeout(hideModal, 4000);
-  return false;
+  if (currentUser.role === 'admin') {
+    googleTab.click();
+    googleTab.classList.add('clicked');
+    
+    document.querySelector('#account').classList.add('hide');
+    document.querySelector('#google').classList.remove('hide');
+    
+    signedIn.classList.add('hide');
+    googleSignIn.classList.remove('hide');
+    
+    showGoogleSignInModal();
+    setTimeout(hideModal, 4000);
+    return false;
+  } else {
+    showFlashcardsModal();
+    setTimeout(hideModal, 4000);
+    return false;
+  }
 };
 
 // Export to dashboard.js
-export { fetchConfig, checkGoogleAuthentication };
+export { 
+  fetchConfig, 
+  checkGoogleAuthentication, //checkGoogleAuthentication(currentUser);
+}; 
