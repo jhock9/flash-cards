@@ -1,6 +1,7 @@
 const axios = require('axios');
 const logger = require('../config/winston');
 const photoController = require('../controllers/photoController'); // savePhoto(photoData)
+const Token = require('../models/tokenModel');
 
 // Fetch Google Photos and send to photoDBRoutes.js
 const fetchGooglePhotos = async (oauth2Client) => {

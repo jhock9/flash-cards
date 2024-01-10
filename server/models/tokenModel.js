@@ -8,5 +8,5 @@ const tokenSchema = new mongoose.Schema({
 
 const Token = mongoose.model('Token', tokenSchema);
 
-// Export to googleAuthRoutes.js
+// Export to googleAuthRoutes.js and googlePhotosAPI.js
 module.exports = Token;
