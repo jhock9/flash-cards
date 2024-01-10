@@ -1,49 +1,55 @@
 const dashPanel = document.querySelector('#dash-panel');
 const navOpenBtn = document.querySelector('#nav-open-btn');
-
 const adminViews = document.querySelectorAll('.admin-view');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
-
 const createUserForm = document.querySelector('#user-form');
 const createClientForm = document.querySelector('#client-form');
-const flashcardsModal = document.querySelector('#flashcards-modal');
-
-let currentUser;
 
 // TODO: Prob need to have JS auto populate all the sections instead of hard coding...
 
-import { addModalEventListeners, hideModal, showFlashcardsModal } from '../components/modals.js';
+import { addModalEventListeners } from '../components/modals.js';
 import { logout } from '../components/logout.js';
 import { fetchAccountData, updatePassword } from './account.js';
 import { refreshUsersTable, createUser } from './users.js';
 import { refreshClientsTable, createClient } from './clients.js';
-import { checkGoogleAuthentication, fetchConfig } from './google.js';
+import { checkGoogleAuthentication, fetchConfig } from './google.js'; //checkGoogleAuthentication(currentUser);
 import { togglePasswordVisibility } from '../components/password.js';
 
-// Show or hide elements based on the user's role
-const updateDashNav = async (currentUser) => {
-  try {
-    if (currentUser.role === 'admin') {
-      console.log ('User is admin. Showing admin views...');
-      const isAuthenticated = await checkGoogleAuthentication();
-      
-      if (isAuthenticated === true) {
-        document.querySelector('#users-tab').click();
-      }
-      
-      for (let view of adminViews) {
-        view.classList.remove('hide');
-      }
-      } else {
-      console.log('User is not admin. Showing user views...');
-      document.querySelector('#clients-tab').click();
-    }
-  } catch (error) {
-    console.error('Error updating dashboard navigation:', error);
-  }
-};
 
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('Dashboard window loaded...');
+  const currentUser = await fetchAccountData();
+  
+  if (currentUser.role === 'admin') {
+    console.log ('User is admin. Showing admin views...');
+    for (let view of adminViews) {
+      view.classList.remove('hide');
+    }
+    document.querySelector('#users-tab').click();
+  } else {
+    console.log('User is not admin. Showing user views...');
+    for (let view of adminViews) {
+      view.classList.add('hide');
+    }
+    document.querySelector('#clients-tab').click();   
+  }
+  
+  // Update the HTML to display the user's name and username
+  document.querySelector('#acct-name').textContent = currentUser.fullname;
+  document.querySelector('#acct-username').textContent = currentUser.username;
+  
+  togglePasswordVisibility();
+  addModalEventListeners();
+  updatePassword(document.querySelector('#update-password-form'));
+  
+  // Logout after 12 hours
+  setTimeout(logout, 12 * 60 * 60 * 1000);
+  
+  // Check if app is authenticated with Google
+  await fetchConfig();
+  await checkGoogleAuthentication(currentUser);
+});
 
 //**   NAV  **//
 
@@ -92,49 +98,11 @@ navLinks.forEach((link) => {
       
       // Show the flashcards modal if not authenticated with Google
       if (sectionId === 'flashcards') {
-        checkGoogleAuthentication().then(response => {
-          if (!response.isGoogleAuthenticated) {
-            showFlashcardsModal();
-            setTimeout(hideModal, 3000);
-          }
-        });
+        window.location.href = '/flashcards.html';
       }
     }
   });
 });
-
-//**   WINDOW LOAD EVENTS   **/
-
-document.addEventListener('DOMContentLoaded', async () => {
-  console.log('Dashboard window loaded...');
-  for (let view of adminViews) {
-    view.classList.add('hide');
-  }
-  
-  currentUser = await fetchAccountData();
-  await updateDashNav(currentUser);
-  
-  // Update the HTML to display the user's name and username
-  document.querySelector('#acct-name').textContent = currentUser.fullname;
-  document.querySelector('#acct-username').textContent = currentUser.username;
-  
-  await fetchConfig();
-  
-  togglePasswordVisibility();
-  addModalEventListeners();
-  updatePassword(document.querySelector('#update-password-form'));
-  
-  // Logout after 12 hours
-  setTimeout(logout, 12 * 60 * 60 * 1000);
-});
-
-// Closes the flashcards modal if the user clicks outside of it
-window.onclick = (event) => {
-  if (event.target === flashcardsModal) {
-    flashcardsModal.classList.add('hide');
-    window.location.href = '/flashcards.html';
-  }
-};
 
 
 //**   TOGGLES   **// 
