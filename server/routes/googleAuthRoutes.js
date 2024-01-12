@@ -41,6 +41,7 @@ router.get('/oauth2callback', async (req, res) => {
     
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.info('Tokens received...');
+    logger.debug(`Tokens: ${JSON.stringify(tokens)}`);  
     
     // Save the refresh token and expiry time to your database
     if (tokens.refresh_token) {
@@ -52,6 +53,7 @@ router.get('/oauth2callback', async (req, res) => {
       } else {
         logger.error(`Invalid expires_in value: ${tokens.expires_in}`);
         res.status(500).send('Invalid expires_in value');
+        return;
       }
     }
 
