@@ -41,11 +41,10 @@ router.get('/oauth2callback', async (req, res) => {
     
     const { tokens } = await oauth2Client.getToken(q.code);
     logger.info('Tokens received...');
-    logger.debug(`Tokens: ${JSON.stringify(tokens)}`);  
     
     // Save the refresh token and expiry time to your database
     if (tokens.refresh_token) {
-      logger.info(`expiry_date value: ${tokens.expiry_date}`);
+      logger.info('Refresh token received...');
       if (!isNaN(tokens.expiry_date)) {
         const expiryDate = new Date().getTime() + (Number(tokens.expiry_date) * 1000);
         await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, expiryDate: expiryDate, isGoogleAuthenticated: true }, { upsert: true, new: true });
