@@ -11,9 +11,11 @@ const toggleLockedTags = async (save = true) => {
   const savedTag = Array.from(document.querySelectorAll('.selected-div'))
     .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
     .map(selectedDiv => {
+      const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);
+      console.log(`Slider value for ${selectedDiv.dataset.tag}:`, sliderValue);
       return { 
         name: selectedDiv.dataset.tag, 
-        qty: parseInt(selectedDiv.querySelector('.slider').value), 
+        qty: sliderValue, 
         locked: true 
       };
     }) || []; 
@@ -36,6 +38,7 @@ const toggleLockedTags = async (save = true) => {
   } else {
     // Remove saved tags from the database
     console.log('Removing tags from the database...');
+    console.log('Removing tags:', savedTag);
     const response = await fetch(`/appointment/${appointmentId}/remove-tags`, {
       method: 'POST',
       headers: {
