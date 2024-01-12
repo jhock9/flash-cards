@@ -85,7 +85,7 @@ const displayPhotos = (photos) => {
   } else if (numPhotos > 1) {
     flexBasis = `calc((100% / 3) - 2rem)`;
   } else {
-    flexBasis = `calc(80% - 2rem)`;
+    flexBasis = `calc(60% - 2rem)`;
   }
   
   for (let i = 0; i < numPhotos; i++) {
