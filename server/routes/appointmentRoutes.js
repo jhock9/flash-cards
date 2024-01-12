@@ -48,6 +48,10 @@ router.post('/:appointmentId/save-tags', async (req, res) => {
   logger.info('Received request for /:appointmentId/save-tags...');
   try {
     const { savedTag } = req.body;
+
+    if (!Array.isArray(savedTag)) {
+      return res.status(400).json({ message: 'Invalid request: savedTag must be an array' });
+    }
     // get the appointment data by _id value
     await Appointment.findByIdAndUpdate(req.params.appointmentId, { $push: { savedTags: { $each: savedTag } } });
     res.json({ message: 'Tags saved successfully' });

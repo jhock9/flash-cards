@@ -16,7 +16,9 @@ const toggleLockedTags = async (save = true) => {
         qty: parseInt(selectedDiv.querySelector('.slider').value), 
         locked: true 
       };
-    });
+    }) || []; 
+    // '|| []' ensures 'savedTag' is an array. It defaults to an empty array if no 
+    // '.selected-div' elements with 'dataset.locked === 'true'' are found.
     
   if (save) {
     // Save tags to the database
