@@ -44,10 +44,17 @@ router.get('/oauth2callback', async (req, res) => {
     
     // Save the refresh token and expiry time to your database
     if (tokens.refresh_token) {
-      const expiryDate = new Date().getTime() + (Number(tokens.expires_in) * 1000);
-      await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, expiryDate: expiryDate, isGoogleAuthenticated: true }, { upsert: true, new: true });
-      logger.info('Token document updated...');
+      logger.info(`expires_in value: ${tokens.expires_in}`);
+      if (!isNaN(tokens.expires_in)) {
+        const expiryDate = new Date().getTime() + (Number(tokens.expires_in) * 1000);
+        await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, expiryDate: expiryDate, isGoogleAuthenticated: true }, { upsert: true, new: true });
+        logger.info('Token document updated...');
+      } else {
+        logger.error(`Invalid expires_in value: ${tokens.expires_in}`);
+        res.status(500).send('Invalid expires_in value');
+      }
     }
+
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
     
