@@ -30,7 +30,7 @@ const loadSavedTags = async (filterInput) => {
   savedTags.forEach(tagInfo => {
     const { name, qty } = tagInfo;
     
-    const proceed = handleTagSelection(name);
+    const proceed = handleTagSelection(name, filterInput, null);
     if (!proceed) {
       return;
     }
@@ -52,7 +52,7 @@ const loadSavedTags = async (filterInput) => {
   resetTagSelect(filterInput);
 };
 
-const handleTagSelection = (selectedTag, sourceElement = null) => {
+const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
     resetTagSelect(filterInput);
@@ -181,11 +181,9 @@ removeBtns.forEach((btn) => {
 // Export to flashcards.js
 export {
   loadSavedTags, // loadSavedTags(filterInput)
-  handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
+  handleTagSelection, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
   toggleBorders, // toggleBorders()
 };
-
-

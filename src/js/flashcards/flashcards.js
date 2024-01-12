@@ -30,7 +30,7 @@ import {
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import {
   loadSavedTags, // loadSavedTags(filterInput)
-  handleTagSelection, // handleTagSelection(selectedTag, sourceElement = null)
+  handleTagSelection, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
@@ -108,7 +108,7 @@ tagsList.addEventListener('click', (e) => {
   if (e.target.classList.contains('name')) {
     const selectedTag = e.target.textContent;
     
-    const proceed = handleTagSelection(selectedTag, e.target);
+    const proceed = handleTagSelection(selectedTag, filterInput, e.target);
     if (!proceed) {
       return;
     }  
@@ -225,7 +225,7 @@ randomBtn.addEventListener('click', () => {
     allTags.splice(randomTagIndex, 1); // Removes duplicates
     
     // Directly call the process that would happen on clicking the tag
-    const proceed = handleTagSelection(selectedTag);
+    const proceed = handleTagSelection(selectedTag, filterInput, null);
     if (!proceed) continue;  // If the tag shouldn't be added, skip to the next iteration
     
     const selectedDiv = createSelectedDiv(selectedTag);
