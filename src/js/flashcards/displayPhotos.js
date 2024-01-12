@@ -29,6 +29,18 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   
+  // If the intended total exceeds the maximum total of 10, adjust the quantities
+  if (intendedTotal > 10) {
+    selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
+      const proportion = quantity / intendedTotal;
+      const adjustedQuantity = Math.round(proportion * 10);
+      return { tag, quantity: adjustedQuantity };
+    });
+    
+    // Recalculate the intended total
+    intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
+  }
+  
   // Calculate how many more photos are needed to meet the total
   let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
   
