@@ -49,7 +49,7 @@ const toggleLock = (selectedDiv, lockIcon) => {
   toggleLockedTags(!isLocked);
 };
 
-const createRemoveBtn = (selectedDiv) => {
+const createRemoveBtn = (selectedDiv, removeTag) => {
   const removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.classList.add('remove-btn', 'center');
@@ -78,7 +78,7 @@ export {
   createSlider,
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // createRemoveBtn(selectedDiv)
+  createRemoveBtn, // createRemoveBtn(selectedDiv, removeTag)
   appendToNewDiv, // appendToNewDiv(classList, elements)
 };
 

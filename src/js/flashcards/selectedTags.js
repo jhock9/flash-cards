@@ -11,7 +11,7 @@ import {
   createSlider,
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // createRemoveBtn(selectedDiv)
+  createRemoveBtn, // createRemoveBtn(selectedDiv, removeTag)
   appendToNewDiv, // appendToNewDiv(classList, elements)
 } from './createSelectedTags.js';
 import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
@@ -83,7 +83,7 @@ const createSelectedDiv = (selectedTag) => {
   const [slider, sliderValue] = createSlider();
   const tagName = createTagName(selectedTag);
   const lockToggle = createLockToggle(selectedDiv);
-  const removeBtn = createRemoveBtn(selectedDiv);
+  const removeBtn = createRemoveBtn(selectedDiv, removeTag);
   
   // Append elements
   const sliderTagDiv = appendToNewDiv('slider-tag-div center', [slider, sliderValue, tagName]);
