@@ -73,11 +73,11 @@ router.post('/:appointmentId/remove-tags', async (req, res) => {
   // Find the appointment and removed savedTag from the savedTags array
   logger.info('Received request for /:appointmentId/remove-tags...');
   logger.debug(`Request body: ${req.body}`);
-  logger.debug(`Tags to remove: ${JSON.stringify(savedTag)}`);
+  logger.debug(`Request body: ${JSON.stringify(req.body)}`);
 
   const { savedTag } = req.body;
   try {
-    logger.debug(`savedTag: ${savedTag}`); 
+    logger.debug(`Tags to remove: ${JSON.stringify(savedTag)}`); 
     // get the appointment _id value
     const appointment = await Appointment.findById(req.params.appointmentId); 
     // remove savedTags from array
