@@ -28,9 +28,8 @@ const toggleLockedTags = async (save = true) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
       },
-      body: JSON.stringify(savedTag),
+      body: JSON.stringify({ savedTag: savedTag }),
     });
     const result = await response.json();
     console.log('Save tags response:', result);
@@ -42,7 +41,7 @@ const toggleLockedTags = async (save = true) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(savedTag),
+      body: JSON.stringify({ savedTag: savedTag }),
     });
     const result = await response.json();
     console.log('Remove tags response:', result);
