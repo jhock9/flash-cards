@@ -45,14 +45,14 @@ router.get('/oauth2callback', async (req, res) => {
     
     // Save the refresh token and expiry time to your database
     if (tokens.refresh_token) {
-      logger.info(`expires_in value: ${tokens.expires_in}`);
-      if (!isNaN(tokens.expires_in)) {
-        const expiryDate = new Date().getTime() + (Number(tokens.expires_in) * 1000);
+      logger.info(`expiry_date value: ${tokens.expiry_date}`);
+      if (!isNaN(tokens.expiry_date)) {
+        const expiryDate = new Date().getTime() + (Number(tokens.expiry_date) * 1000);
         await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, refreshToken: tokens.refresh_token, expiryDate: expiryDate, isGoogleAuthenticated: true }, { upsert: true, new: true });
         logger.info('Token document updated...');
       } else {
-        logger.error(`Invalid expires_in value: ${tokens.expires_in}`);
-        res.status(500).send('Invalid expires_in value');
+        logger.error(`Invalid expiry_date value: ${tokens.expiry_date}`);
+        res.status(500).send('Invalid expiry_date value');
         return;
       }
     }
@@ -121,7 +121,7 @@ router.get('/google-check', async (req, res) => {
         // await Token.findOneAndUpdate({}, { accessToken: tokens.access_token });
 
         // Save the new access token and expiry time to the database
-        const expiryDate = new Date().getTime() + (Number(tokens.expires_in) * 1000);
+        const expiryDate = new Date().getTime() + (Number(tokens.expiry_date) * 1000);
         await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, expiryDate });
         // Fetch the updated document from the database
         const updatedTokenDoc = await Token.findOne({});
