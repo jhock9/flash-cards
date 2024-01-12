@@ -46,14 +46,21 @@ router.get('/:appointmentId/load-tags', async (req, res) => {
 router.post('/:appointmentId/save-tags', async (req, res) => {
   // Find the appointment and update the savedTags array
   logger.info('Received request for /:appointmentId/save-tags...');
+  logger.debug('Request body:', req.body);
+  
   try {
     const { savedTag } = req.body;
+    logger.debug('savedTag:', savedTag);
 
     if (!Array.isArray(savedTag)) {
       return res.status(400).json({ message: 'Invalid request: savedTag must be an array' });
     }
     // get the appointment data by _id value
-    await Appointment.findByIdAndUpdate(req.params.appointmentId, { $push: { savedTags: { $each: savedTag } } });
+    // await Appointment.findByIdAndUpdate(req.params.appointmentId, { $push: { savedTags: { $each: savedTag } } });
+    
+    const updatedAppointment = await Appointment.findByIdAndUpdate(req.params.appointmentId, { $push: { savedTags: { $each: savedTag } } }, { new: true });
+    logger.debug('Updated appointment:', updatedAppointment); // Log the updated appointment
+
     res.json({ message: 'Tags saved successfully' });
   } catch (error) {
     logger.error(`Error: ${error.message}`);
@@ -65,13 +72,19 @@ router.post('/:appointmentId/save-tags', async (req, res) => {
 router.post('/:appointmentId/remove-tags', async (req, res) => {
   // Find the appointment and removed savedTag from the savedTags array
   logger.info('Received request for /:appointmentId/remove-tags...');
+  logger.debug('Request body:', req.body);
+  
   const { savedTag } = req.body;
   try {
+    logger.debug('savedTag:', savedTag); 
     // get the appointment _id value
     const appointment = await Appointment.findById(req.params.appointmentId); 
     // remove savedTags from array
     appointment.savedTags = appointment.savedTags.filter(tag => !savedTag.some(saved => saved.name === tag.name));
-    await appointment.save();
+    // await appointment.save();
+    const updatedAppointment = await appointment.save();
+    logger.debug('Updated appointment:', updatedAppointment); // Log the updated appointment
+
     res.json({ message: 'Tags removed successfully' });
   } catch (error) {
     logger.error(`Error: ${error.message}`);

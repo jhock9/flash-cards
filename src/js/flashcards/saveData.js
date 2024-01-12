@@ -19,6 +19,7 @@ const toggleLockedTags = async (save = true) => {
     }) || []; 
     // '|| []' ensures 'savedTag' is an array. It defaults to an empty array if no 
     // '.selected-div' elements with 'dataset.locked === 'true'' are found.
+  console.log('savedTag:', savedTag);
     
   if (save) {
     // Save tags to the database
@@ -27,11 +28,12 @@ const toggleLockedTags = async (save = true) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify(savedTag),
     });
     const result = await response.json();
-    console.log(result);
+    console.log('Save tags response:', result);
   } else {
     // Remove saved tags from the database
     console.log('Removing tags from the database...');
@@ -43,7 +45,7 @@ const toggleLockedTags = async (save = true) => {
       body: JSON.stringify(savedTag),
     });
     const result = await response.json();
-    console.log(result);
+    console.log('Remove tags response:', result);
   }
 };
 
