@@ -137,6 +137,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
   selectedTags = selectedTags.filter(tag => !removeLockedTags || tag.locked);
   // Check if there are any locked tags
   const lockedTags = selectedTags.filter(tag => tag.locked);
+  console.log('Locked tags:', lockedTags);
   
   // Clear locked tags from database if removeLockedTags is true
   if (removeLockedTags && lockedTags.length > 0) {
