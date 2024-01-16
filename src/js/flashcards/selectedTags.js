@@ -106,11 +106,10 @@ const removeTag = (selectedTag, removeFromDatabase = true) => {
   // Remove the tag from the selected-tags-wrapper
   const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
   if (selectedDiv) {
-    console.log('selectedDiv found...', selectedDiv);
     selectedDiv.remove(); // Removes tag from DOM
     console.log('Tag removed from DOM...')
     if (removeFromDatabase && selectedDiv.dataset.locked === 'true') {
-      console.log('Removing tag from database...')
+      console.log('Tag removed from database...')
       toggleLockedTags(false, selectedTag); // Removes tag from database
     }
   }
