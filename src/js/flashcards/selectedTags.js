@@ -107,14 +107,14 @@ const removeTag = (selectedTag, removeFromDatabase = true) => {
   const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
   if (selectedDiv) {
     console.log(`Found selectedDiv for ${selectedTag}...`);
-    selectedDiv.remove(); // Removes tag from DOM
-    console.log('Tag removed from DOM...')
     if (removeFromDatabase && selectedDiv.dataset.locked === 'true') {
       console.log(`Attempting to remove ${selectedTag} from database...`);
       toggleLockedTags(false, selectedTag); // Removes tag from database
     } else {
       console.log(`Not attempting to remove ${selectedTag} from database because removeFromDatabase=${removeFromDatabase} and selectedDiv.dataset.locked=${selectedDiv.dataset.locked}...`);
     }
+    selectedDiv.remove(); // Removes tag from DOM after it's removed from the database
+    console.log('Tag removed from DOM...')
   } else {
     console.log(`Did not find selectedDiv for ${selectedTag}...`);
   }
