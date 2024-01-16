@@ -22,7 +22,6 @@ const loadSavedTags = async (filterInput) => {
   const response = await fetch(`/appointment/${appointmentId}/load-tags`);
   const data = await response.json();
   const savedTags = data.savedTags;
-  console.log(savedTags);
   
   selectedTagsWrapper.innerHTML = '';
   selectedTags = [];
