@@ -111,7 +111,7 @@ const removeTag = (selectedTag, removeFromDatabase = true) => {
     console.log('Tag removed from DOM...')
     if (removeFromDatabase && selectedDiv.dataset.locked === 'true') {
       console.log('Removing tag from database...')
-      toggleLockedTags(false); // Removes tag from database
+      toggleLockedTags(false, selectedTag); // Removes tag from database
     }
   }
   
@@ -145,7 +145,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
     console.log('Clearing locked tags from database...')
     toggleLockedTags(false); 
   } else if (lockedTags.length > 0) {
-    console.log('Saving locked tags to database...')
+    console.log('Keeping locked tags on database...')
     toggleLockedTags(true);
   };
   

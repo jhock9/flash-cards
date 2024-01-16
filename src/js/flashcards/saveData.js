@@ -4,11 +4,11 @@ const appointmentData = JSON.parse(decodeURIComponent(urlParams.get('appointment
 const appointmentId = appointmentData._id;
 
 // Save or remove locked tags from database
-const toggleLockedTags = async (save = true) => {
+const toggleLockedTags = async (save = true, tag = null) => {
   console.log('toggleLockedTags called...');
   
   // Get locked tags
-  const savedTag = Array.from(document.querySelectorAll('.selected-div'))
+  let savedTag = Array.from(document.querySelectorAll('.selected-div'))
     .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
     .map(selectedDiv => {
       const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);
@@ -21,6 +21,13 @@ const toggleLockedTags = async (save = true) => {
     }) || []; 
     // '|| []' ensures 'savedTag' is an array. It defaults to an empty array if no 
     // '.selected-div' elements with 'dataset.locked === 'true'' are found.
+  
+  // If a specific tag is provided, only save or remove that tag
+  if (tag) {
+    savedTag = savedTag.filter(t => t.name === tag);
+  }
+    
+    
   console.log('savedTag:', savedTag);
     
   if (save) {

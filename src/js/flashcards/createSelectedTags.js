@@ -44,7 +44,8 @@ const createLockToggle = (selectedDiv) => {
 const toggleLock = (selectedDiv, lockIcon) => {
   const isLocked = selectedDiv.dataset.locked === 'true';
   selectedDiv.dataset.locked = isLocked ? 'false' : 'true';
-  toggleLockedTags(!isLocked);
+  const selectedTag = selectedDiv.dataset.tag;
+  toggleLockedTags(!isLocked, selectedTag);
   lockIcon.classList.toggle('fa-lock');
   lockIcon.classList.toggle('fa-unlock');
 };
