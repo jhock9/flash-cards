@@ -46,12 +46,12 @@ router.get('/:appointmentId/load-tags', async (req, res) => {
 router.post('/:appointmentId/save-tags', async (req, res) => {
   // Find the appointment and update the savedTags array
   logger.info('Received request for /:appointmentId/save-tags...');
-  logger.debug(`Request body: ${req.body}`);
+  logger.debug(`Request body: ${JSON.stringify(req.body)}`);
   
   try {
     const { savedTag } = req.body;
-    logger.debug(`savedTag: ${savedTag}`);
-
+    logger.debug(`savedTag: ${JSON.stringify(savedTag)}`);
+    
     if (!Array.isArray(savedTag)) {
       return res.status(400).json({ message: 'Invalid request: savedTag must be an array' });
     }
@@ -59,8 +59,8 @@ router.post('/:appointmentId/save-tags', async (req, res) => {
     // await Appointment.findByIdAndUpdate(req.params.appointmentId, { $push: { savedTags: { $each: savedTag } } });
     
     const updatedAppointment = await Appointment.findByIdAndUpdate(req.params.appointmentId, { $push: { savedTags: { $each: savedTag } } }, { new: true });
-    logger.debug(`Updated appointment: ${updatedAppointment}`); // Log the updated appointment
-
+    logger.debug(`Updated appointment: ${JSON.stringify(updatedAppointment)}`); 
+    
     res.json({ message: 'Tags saved successfully' });
   } catch (error) {
     logger.error(`Error: ${error.message}`);
@@ -72,7 +72,6 @@ router.post('/:appointmentId/save-tags', async (req, res) => {
 router.post('/:appointmentId/remove-tags', async (req, res) => {
   // Find the appointment and removed savedTag from the savedTags array
   logger.info('Received request for /:appointmentId/remove-tags...');
-  logger.debug(`Request body: ${req.body}`);
   logger.debug(`Request body: ${JSON.stringify(req.body)}`);
 
   const { savedTag } = req.body;
@@ -83,10 +82,10 @@ router.post('/:appointmentId/remove-tags', async (req, res) => {
     // remove savedTags from array
     logger.debug(`savedTags before update: ${JSON.stringify(appointment.savedTags)}`);
     appointment.savedTags = appointment.savedTags.filter(tag => !savedTag.some(saved => saved.name === tag.name));
-    logger.debug(`Updated savedTags: ${appointment.savedTags}`);
+    logger.debug(`Updated savedTags: ${JSON.stringify(appointment.savedTags)}`);
 // await appointment.save();
     const updatedAppointment = await appointment.save();
-    logger.debug(`Updated appointment: ${updatedAppointment}`); // Log the updated appointment
+    logger.debug(`Updated appointment: ${JSON.stringify(updatedAppointment)}`); // Log the updated appointment
 
     res.json({ message: 'Tags removed successfully' });
   } catch (error) {
