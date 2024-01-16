@@ -99,18 +99,24 @@ const createSelectedDiv = (selectedTag) => {
 const removeTag = (selectedTag, removeFromDatabase = true) => {
   // removeFromDatabase parameter only used in clearSelectedTags()
   console.log('removeTag called...');
+  console.log(`removeTag called with selectedTag=${selectedTag} and removeFromDatabase=${removeFromDatabase}...`);
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   
   // Remove the tag from the selected-tags-wrapper
   const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
   if (selectedDiv) {
+    console.log(`Found selectedDiv for ${selectedTag}...`);
     selectedDiv.remove(); // Removes tag from DOM
     console.log('Tag removed from DOM...')
     if (removeFromDatabase && selectedDiv.dataset.locked === 'true') {
-      console.log('Tag removed from database...')
+      console.log(`Attempting to remove ${selectedTag} from database...`);
       toggleLockedTags(false, selectedTag); // Removes tag from database
+    } else {
+      console.log(`Not attempting to remove ${selectedTag} from database because removeFromDatabase=${removeFromDatabase} and selectedDiv.dataset.locked=${selectedDiv.dataset.locked}...`);
     }
+  } else {
+    console.log(`Did not find selectedDiv for ${selectedTag}...`);
   }
   
   // Deselect the tag in the tags-list
