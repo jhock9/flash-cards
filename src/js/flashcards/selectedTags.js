@@ -96,23 +96,16 @@ const createSelectedDiv = (selectedTag) => {
   return selectedDiv;
 };
 
-const removeTag = (selectedTag, removeFromDatabase = true) => {
-  // removeFromDatabase parameter only used in clearSelectedTags()
-  console.log('removeTag called...');
-  console.log(`removeTag called with selectedTag=${selectedTag} and removeFromDatabase=${removeFromDatabase}...`);
+const removeTag = (selectedTag) => {
+  console.log(`removeTag called with selectedTag=${selectedTag}...`);
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   
   // Remove the tag from the selected-tags-wrapper
   const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
   if (selectedDiv) {
-    console.log(`Found selectedDiv for ${selectedTag}...`);
-    if (removeFromDatabase && selectedDiv.dataset.locked === 'true') {
-      console.log(`Attempting to remove ${selectedTag} from database...`);
-      toggleLockedTags(false, selectedTag); // Removes tag from database
-    } else {
-      console.log(`Not attempting to remove ${selectedTag} from database because removeFromDatabase=${removeFromDatabase} and selectedDiv.dataset.locked=${selectedDiv.dataset.locked}...`);
-    }
+    console.log(`Attempting to remove ${selectedTag} from database...`);
+    toggleLockedTags(false, selectedTag); // Removes tag from database
     selectedDiv.remove(); // Removes tag from DOM after it's removed from the database
     console.log('Tag removed from DOM...')
   } else {
@@ -131,15 +124,15 @@ const clearSelectedTags = (removeLockedTags = false) => {
   console.log('clearSelectedTags called...');
   let selectedDivs = Array.from(document.querySelectorAll('.selected-div'));
   
-  // Remove tags if 1) removeLockedTags is true or 2) if the tag is not locked 
   selectedDivs.forEach((div) => {
     if (removeLockedTags || div.dataset.locked !== 'true') {
-      removeTag(div.dataset.tag, false); // Removes tag from DOM 
+      removeTag(div.dataset.tag); // Removes tag from DOM and database
     }
   });
   
   // Filter selectedTags array to only include locked tags
   selectedTags = selectedTags.filter(tag => !removeLockedTags || tag.locked);
+
   // Check if there are any locked tags
   const lockedTags = selectedTags.filter(tag => tag.locked);
   console.log('Locked tags:', lockedTags);
