@@ -285,7 +285,7 @@ letter-spacing: 0.1rem;
   margin: 2rem;
 }
 
-#save-btns {
+#db-btn-container {
   position: sticky;
   bottom: 0;
   width: 100%;
@@ -294,16 +294,8 @@ letter-spacing: 0.1rem;
   align-items: flex-end;
 }
 
-#save-btn,
-#dashboard-btn {
-  max-width: 45%;
-  /* margin: 0 1rem; */
-}
-
-#save-btn i,
 #dashboard-btn i {
-  /* font-size: 1.5rem; */
-  font-size: 2rem;
+  font-size: 1.5rem;
   padding: 0 0 .1rem 0;
 }
 
