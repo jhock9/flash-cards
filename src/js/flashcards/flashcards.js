@@ -166,11 +166,6 @@ refreshBtn.addEventListener('click', async () => {
   }
 });
 
-// TODO: Update the refreshBtn to preserve the state of the saved photos. 
-  // Store the state of the saved photos
-  // Refresh the photos
-  // Restore the state of the saved photos
-
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
   clearSelectedTags(true);  
