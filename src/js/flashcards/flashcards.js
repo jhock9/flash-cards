@@ -5,7 +5,6 @@ const refreshBtn = document.querySelector('#refresh-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
 const submitBtn = document.querySelector('#submit-btn');
-const saveBtn = document.querySelector('#save-appt-btn');
 const dashboardBtn = document.querySelector('#dashboard-btn');
 const totalSlider = document.querySelector('#total-slider');
 const totalSliderValue = document.querySelector('#total-slider-value');
@@ -271,25 +270,8 @@ submitBtn.addEventListener('click', async (e) => {
   toggleNav();
 });
 
-// TODO: add save button to html (Save)
-// I will need these parameters, yeah? 
-// or I could move the btns to the saveData.js file? 
-// would I need to import back here?
-
-// const saveBtn = document.querySelector('#save-appt-btn');
-
-saveBtn.addEventListener('click', async (e) => {
-  console.log('Save button clicked...');
-  e.preventDefault();
-  saveAppointment(appointmentId, savedTags, savedPhotos);
-});
-
-// TODO: rename "Save and Return", update html (Save and Return)
-// const dashboardBtn = document.querySelector('#save-return-btn');
-
 dashboardBtn.addEventListener('click', async (e) => {
   console.log('Dashboard button clicked...');
   e.preventDefault();
-  saveAppointment(appointmentId, savedTags, savedPhotos);
   window.location.href = '/dashboard';
 });
