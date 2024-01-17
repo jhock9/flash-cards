@@ -1,5 +1,14 @@
 const displayedImages = document.querySelector('#images-container');
 
+import { lock } from '../../../server/routes/appointmentRoutes.js';
+import savePhoto from './saveData.js';
+
+// TODO: Add an event listener to each photo that calls savePhoto() when the photo is clicked
+// integrate this with the displayPhotos function?
+// Add a green border to the photo around the selected photo. need to add a new css class?? '.selected-photo'??
+// If a user selects a different photo, then the saved photo is immediately updated to the new selection.
+// If a user clicks on the same photo, then the saved photo is removed.
+
 // Fetch photos data from database
 const fetchPhotosData = async (tags) => {
   console.log('Fetching photos data...');
@@ -105,23 +114,17 @@ const displayPhotos = (photos) => {
     img.src = photos[i].baseUrl;
     img.classList.add('image');
     img.style.flexBasis = flexBasis;
+    lockPhoto(img);
     displayedImages.appendChild(img);
   }
 };
 
-// TODO: Add an event listener to each photo that calls savePhoto() when the photo is clicked
-// integrate this with the displayPhotos function?
-// Add a green border to the photo around the selected photo. css class: 'selected-photo'
-// If a user selects a different photo, then the saved photo is immediately updated to the new selection.
-
-// import savePhoto from './saveData.js';
-
-// photos.forEach(photo => {
-//   photo.addEventListener('click', () => {
-//     savePhoto(photo.id, appointmentId);
-//     photo.classList.add('locked');
-//   });
-// });
+const lockPhoto = (photo) => {
+  photo.addEventListener('click', async () => {
+    await savePhoto(photo._id); // Assuming photo.src is the unique identifier for the photo
+    photo.classList.add('locked-photo'); // Add a class to visually indicate the photo is locked
+  });
+};
 
 // Export to flashcards.js
 export { 

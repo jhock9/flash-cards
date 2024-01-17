@@ -72,10 +72,24 @@ const toggleLockedTags = async (save = true, tag = null) => {
   }
 };
 
-const savePhoto = async () => {
+const savePhoto = async (photoId) => {
   console.log('savePhoto called...');
-  // This function should send a request to the server to save a photo when clicked on.
   // Limit to only one photo saved per appointment or now, but could be increased in later versions.
+  try {
+    const response = await fetch(`/appointments/${appointmentId}/save-photo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photo: photoId }),
+    });
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    console.log('Photo saved successfully');
+  } catch (error) {
+    console.error('Error saving photo:', error);
+  }
+
+
 };
 
 
