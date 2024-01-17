@@ -83,18 +83,25 @@ router.post('/:appointmentId/remove-tags', async (req, res) => {
   }
 });
 
-
-// TODO: Update the server-side route handler for the request sent by savePhoto(). 
-// This handler should find the appointment with the specified ID and add the photo ID to the savedPhotos array.
-
 // Route handler to save a photo
-router.post('/:appointmentId/save-photo', (req, res) => {
+router.post('/:appointmentId/save-photo', async (req, res) => {
   // Find the appointment and add the photo to the savedPhotos array
-});
-
-// Route handler to save an appointment
-router.post('/:appointmentId/save-appt', (req, res) => {
-  // Find the appointment and update the savedTags and savedPhotos arrays
+  logger.info('Received request for /:appointmentId/save-photo...');
+  
+  const { photo } = req.body;
+  try {
+    // get the appointment _id value
+    const appointment = await Appointment.findById(req.params.appointmentId); 
+    // add photo to array
+    // !! is this the right code for adding to an array?
+    appointment.savedPhotos.push(photo);
+    await appointment.save();
+    
+    res.json({ message: 'Photo saved successfully' });
+  } catch (error) {
+    logger.error(`Error: ${error.message}`);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
 });
 
 module.exports = router;

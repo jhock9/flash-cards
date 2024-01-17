@@ -7,7 +7,7 @@ const appointmentId = appointmentData._id;
 const toggleLockedTags = async (save = true, tag = null) => {
   console.log('toggleLockedTags called...');
   console.log(`toggleLockedTags called with save=${save} and tag=${tag}...`);
-
+  
   let savedTag = [];
   
   // If a specific tag is provided, only save or remove that tag
@@ -72,23 +72,14 @@ const toggleLockedTags = async (save = true, tag = null) => {
   }
 };
 
-const savePhoto = (photoId, appointmentId) => {
+const savePhoto = async () => {
   console.log('savePhoto called...');
-  // This function should send a request to the server to save a photo. 
+  // This function should send a request to the server to save a photo when clicked on.
+  // Limit to only one photo saved per appointment or now, but could be increased in later versions.
 };
 
-// TODO: Update the frontend code to visually indicate when a photo is locked. 
-// This could be done by adding a CSS class to the photo element when it's clicked.
 
-
-const saveAppointment = (appointmentId, savedTags, savedPhotos) => {
-  console.log('saveAppointment called...');
-  // This function should send a request to the server to save the appointment. 
-};
-
-// Export to selectedTags.js
 export { 
-  toggleLockedTags,  // Also to createSelectedTags.js // toggleLockedTags(save = true)
-  savePhoto, // savePhoto(photoId, appointmentId) 
-  saveAppointment, // saveAppointment(appointmentId, savedTags, savedPhotos)
+  toggleLockedTags,  // Export to selectedTags.js, createSelectedTags.js // toggleLockedTags(save = true, tag = null)
+  savePhoto, // Export to displayPhotos.js
 };

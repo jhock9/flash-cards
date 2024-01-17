@@ -110,8 +110,12 @@ const displayPhotos = (photos) => {
 };
 
 // TODO: Add an event listener to each photo that calls savePhoto() when the photo is clicked
-// // integrate this with the displayPhotos function?
-// // import savePhoto from './saveData.js';
+// integrate this with the displayPhotos function?
+// Add a green border to the photo around the selected photo. css class: 'selected-photo'
+// If a user selects a different photo, then the saved photo is immediately updated to the new selection.
+
+// import savePhoto from './saveData.js';
+
 // photos.forEach(photo => {
 //   photo.addEventListener('click', () => {
 //     savePhoto(photo.id, appointmentId);
