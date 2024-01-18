@@ -1,4 +1,5 @@
 const displayedImages = document.querySelector('#images-container');
+let lockedPhoto = null;
 
 import { toggleLockedPhoto } from './saveData.js';
 
@@ -112,14 +113,21 @@ const displayPhotos = (photos) => {
   }
 };
 
-//!! the locked-photo class needs to be added or removed anytime a photo is clicked,
-//!! and if another photo is clicked on, then it should automatically remove 
-//!! the locked-photo class from the previous photo and remove it from the database
 const lockPhoto = (photo) => {
   photo.addEventListener('click', async () => {
+    // If another photo is already locked, unlock it
+    if (lockedPhoto && lockedPhoto !== photo) {
+      await toggleLockedPhoto(lockedPhoto._id, false);
+      lockedPhoto.classList.remove('locked-photo');
+    }
+    
+    // Toggle the lock status of the clicked photo
     const save = !photo.classList.contains('locked-photo');
     await toggleLockedPhoto(photo._id, save);
     photo.classList.toggle('locked-photo');
+    
+    // Update the currently locked photo
+    lockedPhoto = save ? photo : null;
   });
 };
 
