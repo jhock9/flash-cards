@@ -27,7 +27,7 @@
           <button id="reset-btn" class="square-btn btn center" type="button"><i class="fa-solid fa-rotate-left"></i></i></button>
           <button id="random-btn" class="square-btn btn center" type="button"><i class="fa-solid fa-shuffle"></i></button>
           <button id="submit-btn" class="square-btn btn center" type="submit"><i class="fas fa-arrow-right-to-bracket"></i></button>
-          <button id="mobile-open-btn" class="square-btn btn open-btn center"><i class="fa-solid fa-bars"></i></button>
+          <button id="mobile-open-btn" class="square-btn btn center"><i class="fa-solid fa-bars"></i></button>
         </div>
         
         <div id="total-quantity-wrapper" class="center">
@@ -93,10 +93,15 @@
       </div>
     </aside>
     <!-- <i class="fa-solid fa-angles-left"></i>&nbsp; -->
-
+    
     <div id="menu-btns"> 
-      <button id="tablet-open-btn" class="square-btn btn open-btn center"><i class="fa-solid fa-bars"></i></button>
-      <button id="refresh-btn" class="square-btn btn center"><i class="fa-solid fa-rotate"></i></button> 
+      <button id="menu-btn" class="square-btn btn center"><i class="fa-solid fa-bars"></i></button>
+      <button id="refresh-btn" class="square-btn btn center"><i class="fa-solid fa-rotate"></i></button>
+      <!-- //? this btn could also unlock the photo, if desired in the future -->
+      <div id="lock-photo-container" class="square-btn btn center hide">
+        <i id="photo-icon" class="fa-solid fa-image image-icon"></i>
+        <i id="photo-icon-lock" class="fa-solid fa-lock lock-icon"></i>
+      </div>
     </div>
     
     <main class="center">

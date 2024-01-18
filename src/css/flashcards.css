@@ -300,8 +300,9 @@ letter-spacing: 0.1rem;
 }
 
 /* Menu button styles */
-#tablet-open-btn,
-#refresh-btn {
+#menu-btn,
+#refresh-btn,
+#lock-photo-container {
   position: fixed;
   top: 2rem;
   left: 0;
@@ -310,6 +311,22 @@ letter-spacing: 0.1rem;
 
 #refresh-btn {
   top: 11rem;
+}
+
+#lock-photo-container {
+  top: 20rem;
+}
+
+#photo-icon {
+  color: var(--border-color);
+}
+
+#photo-icon-lock {
+  position: absolute;
+  bottom: -0.9rem;
+  right: -0.6rem;
+  font-size: 2.3rem;
+color: var(--primary-color);
 }
 
 /* Main-Images styles */
@@ -369,17 +386,13 @@ main {
     width: 100%;
   }
   
-  #mobile-open-btn {
-    display: none;
-  }
-  
-  #tablet-open-btn {
+  #menu-btn {
     transform: translateX(0); 
     transition: transform 0.8s; 
     z-index: 4;
   }
   
-  #tablet-open-btn.open {
+  #menu-btn.open {
     position: absolute;
     transition: transform 0.8s; 
     transform: translateX(50rem);
@@ -387,6 +400,16 @@ main {
   
   #refresh-btn {
     top: 14rem;
+  }
+  
+  #lock-photo-container {
+    top: 26rem;
+  }
+  
+  #photo-icon-lock {
+    bottom: -1rem;
+    right: -0.8rem;
+    font-size: 3rem;
   }
 }
 
