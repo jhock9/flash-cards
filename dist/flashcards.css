@@ -333,6 +333,10 @@ main {
   border-radius: .5rem;
 }
 
+.image.locked-photo {
+  border: 0.5rem solid var(--primary-color);
+}
+
 /*=====================================================================================
   Media Queries for Responsive Design     
 =====================================================================================*/
