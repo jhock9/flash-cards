@@ -65,14 +65,14 @@ router.post('/:appointmentId/save-tags', async (req, res) => {
 router.post('/:appointmentId/remove-tags', async (req, res) => {
   // Find the appointment and removed savedTag from the savedTags array
   logger.info('Received request for /:appointmentId/remove-tags...');
-
+  
   const { savedTag } = req.body;
   try {
     const appointment = await Appointment.findById(req.params.appointmentId); 
     // remove savedTags from array
     appointment.savedTags = appointment.savedTags.filter(tag => !savedTag.some(saved => saved.name === tag.name));
     await appointment.save();
-
+    
     res.json({ message: 'Tags removed successfully' });
   } catch (error) {
     logger.error(`Error: ${error.message}`);
@@ -88,13 +88,34 @@ router.post('/:appointmentId/save-photo', async (req, res) => {
   const { photoId } = req.body;
   try {
     const appointment = await Appointment.findById(req.params.appointmentId); 
+    
     if (!appointment.savedPhotos.includes(photoId)) { // Only add the photo if it's not already in the array
       appointment.savedPhotos.push(photoId);
       await appointment.save();
+      
       res.json({ message: 'Photo saved successfully' });
     } else {
       res.json({ message: 'Photo already saved' });
     }
+  } catch (error) {
+    logger.error(`Error: ${error.message}`);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// Route handler to remove a photo
+router.post('/:appointmentId/remove-photo', async (req, res) => {
+  // Find the appointment and remove the photo from the savedPhotos array
+  logger.info('Received request for /:appointmentId/remove-photo...');
+  
+  const { photoId } = req.body;
+  try {
+    const appointment = await Appointment.findById(req.params.appointmentId); 
+    
+    appointment.savedPhotos = appointment.savedPhotos.filter(id => id !== photoId);
+    await appointment.save();
+    
+    res.json({ message: 'Photo removed successfully' });
   } catch (error) {
     logger.error(`Error: ${error.message}`);
     res.status(500).json({ message: 'Server error', error: error.message });

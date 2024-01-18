@@ -1,12 +1,6 @@
 const displayedImages = document.querySelector('#images-container');
 
-import { savePhoto } from './saveData.js';
-
-// TODO: Add an event listener to each photo that calls savePhoto() when the photo is clicked
-// integrate this with the displayPhotos function?
-// Add a green border to the photo around the selected photo. need to add a new css class?? '.selected-photo'??
-// If a user selects a different photo, then the saved photo is immediately updated to the new selection.
-// If a user clicks on the same photo, then the saved photo is removed.
+import { toggleLockedPhoto } from './saveData.js';
 
 // Fetch photos data from database
 const fetchPhotosData = async (tags) => {
@@ -118,16 +112,19 @@ const displayPhotos = (photos) => {
   }
 };
 
+//!! the locked-photo class needs to be added or removed anytime a photo is clicked,
+//!! and if another photo is clicked on, then it should automatically remove 
+//!! the locked-photo class from the previous photo and remove it from the database
 const lockPhoto = (photo) => {
   photo.addEventListener('click', async () => {
-    await savePhoto(photo._id); // Assuming photo.src is the unique identifier for the photo
-    photo.classList.add('locked-photo'); // Add a class to visually indicate the photo is locked
+    const save = !photo.classList.contains('locked-photo');
+    await toggleLockedPhoto(photo._id, save);
+    photo.classList.toggle('locked-photo');
   });
 };
 
 // Export to flashcards.js
-export { 
-  fetchPhotosData, // fetchPhotosData(tags)
-  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
-  displayPhotos, // displayPhotos(photos)
+export {
+  displayPhotos, fetchPhotosData, // fetchPhotosData(tags)
+  filterPhotosByTags
 };

@@ -72,11 +72,12 @@ const toggleLockedTags = async (save = true, tag = null) => {
   }
 };
 
-const savePhoto = async (photoId) => {
-  console.log('savePhoto called...');
+//!! Update this to save AND remove photos, much like toggleLockedTags()
+const toggleLockedPhoto = async (photoId, save = true) => {
+  console.log('toggleLockedPhoto called...');
   // Limit to only one photo saved per appointment or now, but could be increased in later versions.
   try {
-    const response = await fetch(`/appointment/${appointmentId}/save-photo`, {
+    const response = await fetch(`/appointment/${appointmentId}/${save ? 'save-photo' : 'remove-photo'}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ photo: photoId }),
@@ -84,16 +85,14 @@ const savePhoto = async (photoId) => {
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
-    console.log('Photo saved successfully');
+    console.log(save ? 'Photo saved successfully' : 'Photo removed successfully');
   } catch (error) {
     console.error('Error saving photo:', error);
   }
-
-
 };
 
 
-export { 
-  toggleLockedTags,  // Export to selectedTags.js, createSelectedTags.js // toggleLockedTags(save = true, tag = null)
-  savePhoto, // Export to displayPhotos.js
+export {
+  toggleLockedPhoto, toggleLockedTags
 };
+
