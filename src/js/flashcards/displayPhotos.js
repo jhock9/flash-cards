@@ -1,7 +1,6 @@
 const displayedImages = document.querySelector('#images-container');
 
-import { lock } from '../../../server/routes/appointmentRoutes.js';
-import savePhoto from './saveData.js';
+import { savePhoto } from './saveData.js';
 
 // TODO: Add an event listener to each photo that calls savePhoto() when the photo is clicked
 // integrate this with the displayPhotos function?
