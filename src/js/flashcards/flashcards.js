@@ -1,6 +1,5 @@
 const flashPanel = document.querySelector('#flash-panel');
-const mobileOpenBtn = document.querySelector('#mobile-open-btn');
-const tabletOpenBtn = document.querySelector('#tablet-open-btn');
+const tabletOpenBtn = document.querySelector('#menu-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
@@ -133,17 +132,6 @@ const toggleNav = () => {
 
 
 //**   BUTTONS   **//
-
-mobileOpenBtn.addEventListener('click', async () => {
-  console.log('Open button clicked...');
-  try {
-    displayTags(tagsList);
-    toggleNav();
-  } catch (error) {
-    console.error('Error on open button click:', error);
-  }
-});
-
 tabletOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
   try {
