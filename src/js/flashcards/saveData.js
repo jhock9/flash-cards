@@ -76,7 +76,7 @@ const savePhoto = async (photoId) => {
   console.log('savePhoto called...');
   // Limit to only one photo saved per appointment or now, but could be increased in later versions.
   try {
-    const response = await fetch(`/appointments/${appointmentId}/save-photo`, {
+    const response = await fetch(`/appointment/${appointmentId}/save-photo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ photo: photoId }),
