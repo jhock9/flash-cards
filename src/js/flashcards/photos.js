@@ -67,6 +67,11 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
   }
   
+  // If there's a saved photo, include it in the filtered photos
+  if (lockedPhoto && !selectedPhotoIds.has(lockedPhoto.googleId)) {
+    filteredPhotos.unshift(lockedPhoto);
+  }
+
   // Finally, slice the array based on 'totalPhotos'
   if (totalPhotos > 0) {
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
@@ -110,6 +115,7 @@ const displayPhotos = (photos) => {
     img.style.flexBasis = flexBasis;
     lockPhoto(img);
     displayedImages.appendChild(img);
+    img.classList.remove('locked-photo');
   }
 };
 
