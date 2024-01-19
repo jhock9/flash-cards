@@ -82,4 +82,3 @@ export {
   createRemoveBtn, // createRemoveBtn(selectedDiv, removeTag)
   appendToNewDiv, // appendToNewDiv(classList, elements)
 };
-
