@@ -24,7 +24,7 @@ import {
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
   displayPhotos, // displayPhotos(photos)
-} from './displayPhotos.js';
+} from './photos.js';
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import {
   loadSavedTags, // loadSavedTags(filterInput)
