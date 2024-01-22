@@ -29,6 +29,12 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
+    // If there's a saved photo, include it in the filtered photos
+  if (lockedPhoto) {
+    filteredPhotos.push(lockedPhoto);
+    selectedPhotoIds.add(lockedPhoto.googleId);
+  }
+  
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   
@@ -64,14 +70,10 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   if (useRemainder && remainingPhotos > 0) {
     const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
     shuffleArray(additionalPhotos);
-    filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
+    const additionalPhotosToDisplay = additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - filteredPhotos.length));
+    filteredPhotos.push(...additionalPhotosToDisplay);
   }
   
-  // If there's a saved photo, include it in the filtered photos
-  if (lockedPhoto && !selectedPhotoIds.has(lockedPhoto.googleId)) {
-    filteredPhotos.unshift(lockedPhoto);
-  }
-
   // Finally, slice the array based on 'totalPhotos'
   if (totalPhotos > 0) {
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
@@ -112,6 +114,7 @@ const displayPhotos = (photos) => {
     img.src = photos[i].baseUrl;
     img.classList.add('image');
     img.style.flexBasis = flexBasis;
+    img.photoData = photos[i];
     lockPhoto(img);
     displayedImages.appendChild(img);
     img.classList.remove('locked-photo');
@@ -121,7 +124,7 @@ const displayPhotos = (photos) => {
 const lockPhoto = (photo) => {
   photo.addEventListener('click', async () => {
     // If another photo is already locked, unlock it
-    if (lockedPhoto && lockedPhoto !== photo) {
+    if (lockedPhoto && lockedPhoto !== photo.photoData) {
       await toggleLockedPhoto(lockedPhoto._id, false);
       lockedPhoto.classList.remove('locked-photo');
     }
@@ -132,12 +135,13 @@ const lockPhoto = (photo) => {
     photo.classList.toggle('locked-photo');
     
     // Update the currently locked photo
-    lockedPhoto = save ? photo : null;
+    lockedPhoto = save ? photo.photoData : null;
   });
 };
 
 // Export to flashcards.js
 export {
-  displayPhotos, fetchPhotosData, // fetchPhotosData(tags)
-  filterPhotosByTags
+  fetchPhotosData, // fetchPhotosData(tags)
+  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
+  displayPhotos, // displayPhotos(photos)
 };
