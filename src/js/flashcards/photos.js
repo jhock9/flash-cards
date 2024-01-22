@@ -29,9 +29,9 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
-    // If there's a saved photo, include it in the filtered photos
-  if (lockedPhoto) {
-    filteredPhotos.push(lockedPhoto);
+  // If there's a saved photo and it's not already in the filtered photos, include it
+  if (lockedPhoto && !selectedPhotoIds.has(lockedPhoto.googleId)) {
+    filteredPhotos.unshift(lockedPhoto);
     selectedPhotoIds.add(lockedPhoto.googleId);
   }
   
