@@ -31,15 +31,21 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // If there's a saved photo and it's not already in the filtered photos, include it
   if (lockedPhoto && !selectedPhotoIds.has(lockedPhoto.googleId)) {
+    console.log('Adding locked photo to filtered photos...');
     filteredPhotos.unshift(lockedPhoto);
     selectedPhotoIds.add(lockedPhoto.googleId);
   }
   
+  console.log('Initial filtered photos:', filteredPhotos);
+
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   
+  console.log('Intended total:', intendedTotal);
+
   // If the intended total exceeds the maximum total of 10, adjust the quantities
   if (intendedTotal > 10) {
+    console.log('Adjusting quantities...');
     selectedTagsAndQuantities = selectedTagsAndQuantities.map(({ tag, quantity }) => {
       const proportion = quantity / intendedTotal;
       const adjustedQuantity = Math.round(proportion * 10);
@@ -50,12 +56,17 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   }
   
+  console.log('Adjusted intended total:', intendedTotal);
+
   // Calculate how many more photos are needed to meet the total
   let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
   
+  console.log('Remaining photos:', remainingPhotos);
+
   // Loop through each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
-    
+    console.log(`Processing tag: ${tag}, quantity: ${quantity}`);
+
     const selectedPhotos = photos.filter(photo => 
       photo.tagsFromGoogle && photo.tagsFromGoogle.includes(tag) && !selectedPhotoIds.has(photo.googleId));
     
@@ -65,7 +76,8 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     photosToDisplay.forEach(photo => selectedPhotoIds.add(photo.googleId)); // Add selected photo IDs to the Set
     filteredPhotos.push(...photosToDisplay);
   }
-  
+  console.log('Filtered photos after processing tags:', filteredPhotos);
+
   // If 'useRemainder' is checked and there are remaining photos to be filled
   if (useRemainder && remainingPhotos > 0) {
     const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
@@ -73,12 +85,15 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     const additionalPhotosToDisplay = additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - filteredPhotos.length));
     filteredPhotos.push(...additionalPhotosToDisplay);
   }
-  
+  console.log('Filtered photos after adding remainder:', filteredPhotos);
+
   // Finally, slice the array based on 'totalPhotos'
   if (totalPhotos > 0) {
+    console.log('Slicing filtered photos to total photos...');
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
   }
-  
+  console.log('Final filtered photos:', filteredPhotos);
+
   shuffleArray(filteredPhotos);
   return filteredPhotos;
 };
