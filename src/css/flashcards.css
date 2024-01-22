@@ -302,7 +302,7 @@ letter-spacing: 0.1rem;
 /* Menu button styles */
 #tablet-open-btn,
 #refresh-btn,
-#lock-photo-container {
+#locked-photo-container {
   position: fixed;
   top: 2rem;
   left: 0;
@@ -313,8 +313,16 @@ letter-spacing: 0.1rem;
   top: 11rem;
 }
 
-#lock-photo-container {
+#locked-photo-container {
   top: 20rem;
+}
+
+#locked-photo-container:hover,
+#locked-photo-container:active {
+  color: var(--primary-color);
+  background-color: var(--white);
+  border-color: var(--border-color);
+  cursor: auto;
 }
 
 #photo-icon {
@@ -406,7 +414,7 @@ main {
     top: 14rem;
   }
   
-  #lock-photo-container {
+  #locked-photo-container {
     top: 26rem;
   }
   
