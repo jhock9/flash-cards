@@ -78,7 +78,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   }
   
   shuffleArray(filteredPhotos);
-  // console.log('Filtered photos:', filteredPhotos);
   return filteredPhotos;
 };
 

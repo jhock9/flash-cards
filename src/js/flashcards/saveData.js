@@ -8,32 +8,31 @@ const lockedPhotoContainer = document.querySelector('#locked-photo-container');
 // Save or remove locked tags from database
 const toggleLockedTags = async (save = true, tag = null) => {
   console.log('toggleLockedTags called...');
-  console.log(`toggleLockedTags called with save=${save} and tag=${tag}...`);
   
   let savedTag = [];
   
-  // If a specific tag is provided, only save or remove that tag
   if (tag) {
+    // If a specific tag is provided, only save or remove that tag
+    console.log('Specific tag provided...');
     const selectedDiv = document.querySelector(`.selected-div[data-tag="${tag}"]`);
     if (selectedDiv) {
-      console.log(`Found selectedDiv for ${tag}...`);
+      console.log('Found selectedDiv...');
       const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);
-      console.log(`Slider value for ${selectedDiv.dataset.tag}:`, sliderValue);
       savedTag.push({ 
         name: selectedDiv.dataset.tag, 
         qty: sliderValue, 
         locked: selectedDiv.dataset.locked === 'true' 
       });
     } else {
-      console.log(`Did not find selectedDiv for ${tag}...`);
+      console.log('No selectedDiv found...');
     }
   } else {
     // If no specific tag is provided, save or remove all locked tags
+    console.log('No specific tag provided...');
     savedTag = Array.from(document.querySelectorAll('.selected-div'))
     .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
     .map(selectedDiv => {
       const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);
-      console.log(`Slider value for ${selectedDiv.dataset.tag}:`, sliderValue);
       return { 
         name: selectedDiv.dataset.tag, 
         qty: sliderValue, 
@@ -44,33 +43,26 @@ const toggleLockedTags = async (save = true, tag = null) => {
     // '.selected-div' elements with 'dataset.locked === 'true'' are found.
   }
     
-  console.log('savedTag:', savedTag);
-    
   if (save) {
     // Save tags to the database
     console.log('Saving tags to the database...');
-    const response = await fetch(`/appointment/${appointmentId}/save-tags`, {
+    await fetch(`/appointment/${appointmentId}/save-tags`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ savedTag: savedTag }),
     });
-    const result = await response.json();
-    console.log('Save tags response:', result);
   } else {
     // Remove saved tags from the database
     console.log('Removing tags from the database...');
-    console.log('Removing tags:', savedTag);
-    const response = await fetch(`/appointment/${appointmentId}/remove-tags`, {
+    await fetch(`/appointment/${appointmentId}/remove-tags`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ savedTag: savedTag }),
     });
-    const result = await response.json();
-    console.log('Remove tags response:', result);
   }
 };
 
