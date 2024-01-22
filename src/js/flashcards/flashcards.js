@@ -1,5 +1,5 @@
 const flashPanel = document.querySelector('#flash-panel');
-const tabletOpenBtn = document.querySelector('#menu-btn');
+const tabletOpenBtn = document.querySelector('#tablet-open-btn');
 const refreshBtn = document.querySelector('#refresh-btn');
 const resetBtn = document.querySelector('#reset-btn');
 const randomBtn = document.querySelector('#random-btn');
