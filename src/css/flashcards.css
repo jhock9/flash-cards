@@ -300,7 +300,7 @@ letter-spacing: 0.1rem;
 }
 
 /* Menu button styles */
-#menu-btn,
+#tablet-open-btn,
 #refresh-btn,
 #lock-photo-container {
   position: fixed;
@@ -386,13 +386,17 @@ main {
     width: 100%;
   }
   
-  #menu-btn {
+  #mobile-open-btn {
+    display: none;
+  }
+  
+  #tablet-open-btn {
     transform: translateX(0); 
     transition: transform 0.8s; 
     z-index: 4;
   }
   
-  #menu-btn.open {
+  #tablet-open-btn.open {
     position: absolute;
     transition: transform 0.8s; 
     transform: translateX(50rem);
