@@ -92,8 +92,9 @@ const toggleLockedPhoto = async (photoId, save = true) => {
   }
 };
 
-
+// Export to saveData.js
 export {
-  toggleLockedPhoto, toggleLockedTags
+  toggleLockedPhoto, // toggleLockedPhoto(photoId, save = true)
+  toggleLockedTags, // also to createSelectedTags.js, selectedTags.js // toggleLockedTags(save = true, tag = null)
 };
 
