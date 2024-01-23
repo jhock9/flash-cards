@@ -17,20 +17,21 @@ const adjustQuantities = (selectedTagsAndQuantities, intendedTotal) => {
 };
 
 const processTag = (tag, quantity, photos, selectedPhotoIds, lockedPhoto) => {
-  let adjustedQuantity = quantity;
+  console.log(`Processing tag: ${tag}, quantity: ${quantity}`);
   
-  // If there's a saved photo and it's not already in the filtered photos, include it
-  if (lockedPhoto && lockedPhoto.tagsFromGoogle.includes(tag) && !selectedPhotoIds.has(lockedPhoto.googleId)) {
-    console.log('Adding locked photo to filtered photos...');
-    adjustedQuantity = Math.max(0, quantity - 1);
+  // Filter photos by tag and exclude already selected photos
+  let photosByTag = photos.filter(photo => photo.tagsFromGoogle.includes(tag) && !selectedPhotoIds.has(photo.googleId));
+  
+  // If a photo is locked and it has the same tag, add it to the photos
+  if (lockedPhoto && lockedPhoto.tagsFromGoogle.includes(tag)) {
+    photosByTag.push(lockedPhoto);
   }
   
-  const selectedPhotos = photos.filter(photo => 
-    photo.tagsFromGoogle && photo.tagsFromGoogle.includes(tag) && !selectedPhotoIds.has(photo.googleId));
+  shuffleArray(photosByTag);
+  const newPhotos = photosByTag.slice(0, quantity);
   
-  shuffleArray(selectedPhotos);
-  
-  return selectedPhotos.slice(0, adjustedQuantity);
+  console.log(`New photos for tag: ${tag}`, newPhotos);
+  return newPhotos;
 };
 
 const addRemainingPhotos = (useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds) => {
