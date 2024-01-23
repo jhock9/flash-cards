@@ -20,7 +20,6 @@ const processTag = (tag, quantity, photos, selectedPhotoIds, lockedPhoto) => {
   shuffleArray(photosByTag);
   const newPhotos = photosByTag.slice(0, quantity);
   
-  console.log(`New photos for tag: ${tag}`, newPhotos);
   return newPhotos;
 };
 

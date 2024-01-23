@@ -105,30 +105,17 @@ const displayPhotos = (photos) => {
 };
 
 const lockPhoto = (photo) => {
-  if (!photo) {
-    console.error('Photo is undefined');
-    return;
-  }
-  
   photo.addEventListener('click', async () => {
     // If another photo is already locked, unlock it
     if (lockedPhoto && lockedPhoto !== photo.photoData) {
-      await toggleLockedPhoto(lockedPhoto._id, false);
-      if (photo.classList) {
-        photo.classList.toggle('locked-photo');
-      } else {
-        console.error('Photo does not have classList property');
-      }
+      await toggleLockedPhoto(photo.photoData._id, false);
+      photo.classList.toggle('locked-photo');
     }
     
     // Toggle the lock status of the clicked photo
     const save = !photo.classList.contains('locked-photo');
-    await toggleLockedPhoto(photo._id, save);
-    if (photo.classList) {
-      photo.classList.toggle('locked-photo');
-    } else {
-      console.error('Photo does not have classList property');
-    }
+    await toggleLockedPhoto(photo.photoData._id, save);
+    photo.classList.toggle('locked-photo');
     
     // Update the currently locked photo
     lockedPhoto = save ? photo.photoData : null;

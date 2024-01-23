@@ -69,7 +69,7 @@ const toggleLockedTags = async (save = true, tag = null) => {
 const toggleLockedPhoto = async (photoId, save = true) => {
   // console.log('toggleLockedPhoto called...');
   console.log('toggleLockedPhoto called with photoId:', photoId, 'and save:', save);
-
+  
   // Limit to only one photo saved per appointment or now, but could be increased in later versions.
   try {
     const response = await fetch(`/appointment/${appointmentId}/${save ? 'save-photo' : 'remove-photo'}`, {
@@ -89,7 +89,7 @@ const toggleLockedPhoto = async (photoId, save = true) => {
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     };
-
+    
     console.log(save ? 'Photo saved successfully' : 'Photo removed successfully');
   } catch (error) {
     console.error('Error saving photo:', error);
