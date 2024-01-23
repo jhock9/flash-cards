@@ -111,7 +111,7 @@ const lockPhoto = (photo) => {
     // If another photo is already locked, unlock it
     if (lockedPhoto && lockedPhoto !== photo.photoData) {
       await toggleLockedPhoto(lockedPhoto._id, false);
-      lockedPhoto.classList.remove('locked-photo');
+      photo.classList.toggle('locked-photo');
     }
     
     // Toggle the lock status of the clicked photo
