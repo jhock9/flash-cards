@@ -3,10 +3,10 @@ let lockedPhoto = null;
 
 import { toggleLockedPhoto } from './saveData.js';
 import {
-  shuffleArray, // shuffleArray(array)
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
   processTag, // processTag(tag, quantity, photos, selectedPhotoIds, lockedPhoto)
   addRemainingPhotos, // addRemainingPhotos(useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds)
+  shuffleArray, // shuffleArray(array)
 } from './photoHelpers.js';
 
 // Fetch photos data from database
@@ -42,7 +42,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // If the intended total exceeds the maximum total of 10, adjust the quantities
   if (intendedTotal > 10) {
-    console.log('Adjusting quantities...');
     selectedTagsAndQuantities = adjustQuantities(selectedTagsAndQuantities, intendedTotal);
     intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   }
@@ -50,7 +49,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // Process each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
-    console.log(`Processing tag: ${tag}, quantity: ${quantity}`);
     const newPhotos = processTag(tag, quantity, photos, selectedPhotoIds, lockedPhoto);
     newPhotos.forEach(photo => selectedPhotoIds.add(photo.googleId));
     filteredPhotos.push(...newPhotos);
