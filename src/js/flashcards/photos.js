@@ -4,8 +4,9 @@ let lockedPhoto = null;
 import { toggleLockedPhoto } from './saveData.js';
 import {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
-  processTag, // processTag(tag, quantity, photos, selectedPhotoIds, lockedPhoto)
+  processTag, // processTag(tag, quantity, photos)
   addRemainingPhotos, // addRemainingPhotos(useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds)
+  addPhotos, // addPhotos(newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto)
   shuffleArray, // shuffleArray(array)
 } from './photoHelpers.js';
 
@@ -34,9 +35,16 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
+  
+  // If there's a locked photo, add it to the filteredPhotos array and selectedPhotoIds set
+  if (lockedPhoto) {
+    filteredPhotos.push(lockedPhoto);
+    selectedPhotoIds.add(lockedPhoto.googleId);
+  }
+  
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
-    
+  
   console.log('Initial filtered photos:', filteredPhotos);
   console.log('Intended total:', intendedTotal);
   
@@ -50,8 +58,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   // Process each tag and quantity
   for (const { tag, quantity } of selectedTagsAndQuantities) {
     const newPhotos = processTag(tag, quantity, photos, selectedPhotoIds, lockedPhoto);
-    newPhotos.forEach(photo => selectedPhotoIds.add(photo.googleId));
-    filteredPhotos.push(...newPhotos);
+    addPhotos(newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto);
   }
   console.log('Filtered photos after processing tags:', filteredPhotos);
   
@@ -59,8 +66,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   if (useRemainder && remainingPhotos > 0) {
     console.log('Adding remainder...');
     const newPhotos = addRemainingPhotos(useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds);
-    newPhotos.forEach(photo => selectedPhotoIds.add(photo.googleId));
-    filteredPhotos.push(...newPhotos);
+    addPhotos(newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto);
   }
   console.log('Filtered photos after adding remainder:', filteredPhotos);
   
@@ -111,7 +117,7 @@ const lockPhoto = (photo) => {
       await toggleLockedPhoto(photo.photoData._id, false);
       photo.classList.toggle('locked-photo');
     }
-    
+
     // Toggle the lock status of the clicked photo
     const save = !photo.classList.contains('locked-photo');
     await toggleLockedPhoto(photo.photoData._id, save);

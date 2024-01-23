@@ -7,15 +7,10 @@ const adjustQuantities = (selectedTagsAndQuantities, intendedTotal) => {
   });
 };
 
-const processTag = (tag, quantity, photos, selectedPhotoIds, lockedPhoto) => {
+const processTag = (tag, quantity, photos) => {
   console.log('Processing tag and qty...');
-  // Filter photos by tag and exclude already selected photos
-  let photosByTag = photos.filter(photo => photo.tagsFromGoogle.includes(tag) && !selectedPhotoIds.has(photo.googleId));
-  
-  // If a photo is locked and it has the same tag, add it to the photos
-  if (lockedPhoto && lockedPhoto.tagsFromGoogle.includes(tag)) {
-    photosByTag.push(lockedPhoto);
-  }
+  // Filter photos by tag
+  let photosByTag = photos.filter(photo => photo.tagsFromGoogle.includes(tag));
   
   shuffleArray(photosByTag);
   const newPhotos = photosByTag.slice(0, quantity);
@@ -27,11 +22,25 @@ const addRemainingPhotos = (useRemainder, remainingPhotos, totalPhotos, photos, 
   if (!useRemainder) {
     return [];
   }
-
+  
   const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
   shuffleArray(additionalPhotos);
   
   return additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - selectedPhotoIds.size));
+};
+
+const addPhotos = (newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto) => {
+  newPhotos.forEach(photo => {
+    // Add the photo to filteredPhotos and update selectedPhotoIds
+    selectedPhotoIds.add(photo.googleId);
+    filteredPhotos.push(photo);
+  });
+  
+  // If the locked photo is not in the new photos, add it
+  if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {
+    selectedPhotoIds.add(lockedPhoto.googleId);
+    filteredPhotos.unshift(lockedPhoto);
+  }
 };
 
 const shuffleArray = (array) => {
@@ -47,7 +56,8 @@ const shuffleArray = (array) => {
 // Exported to photos.js
 export {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
-  processTag, // processTag(tag, quantity, photos, selectedPhotoIds, lockedPhoto)
+  processTag, // processTag(tag, quantity, photos)
   addRemainingPhotos, // addRemainingPhotos(useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds)
+  addPhotos, // addPhotos(newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto)
   shuffleArray, // shuffleArray(array)
 };
