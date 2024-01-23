@@ -38,17 +38,23 @@ const addPhotos = (newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto, int
   
   // If the locked photo is not in the new photos, add it
   if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {
-    selectedPhotoIds.add(lockedPhoto.googleId);
-    filteredPhotos.unshift(lockedPhoto);
-  }
-  
-  // If the total number of photos exceeds the intended total, remove a photo with the same tag as the locked photo
-  if (filteredPhotos.length > intendedTotal) {
     const sameTagIndex = filteredPhotos.findIndex(photo => photo.tagsFromGoogle.includes(lockedPhoto.tagsFromGoogle[0]));
     if (sameTagIndex !== -1) {
-      const removedPhoto = filteredPhotos.splice(sameTagIndex, 1)[0];
+      // Replace the photo with the same tag with the locked photo
+      const removedPhoto = filteredPhotos.splice(sameTagIndex, 1, lockedPhoto)[0];
       selectedPhotoIds.delete(removedPhoto.googleId);
+      selectedPhotoIds.add(lockedPhoto.googleId);
+    } else {
+      // Add the locked photo to the filteredPhotos array
+      selectedPhotoIds.add(lockedPhoto.googleId);
+      filteredPhotos.unshift(lockedPhoto);
     }
+  }
+  
+  // If the total number of photos exceeds the intended total, remove a photo
+  if (filteredPhotos.length > intendedTotal) {
+    const removedPhoto = filteredPhotos.pop();
+    selectedPhotoIds.delete(removedPhoto.googleId);
   }
 };
 
