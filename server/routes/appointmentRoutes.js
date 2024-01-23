@@ -84,7 +84,6 @@ router.post('/:appointmentId/remove-tags', async (req, res) => {
 router.post('/:appointmentId/save-photo', async (req, res) => {
   // Find the appointment and add the photo to the savedPhotos array
   logger.info('Received request for /:appointmentId/save-photo...');
-  logger.debug(`req.body: ${JSON.stringify(req.body)}`);
 
   const { photoId } = req.body;
   try {
@@ -94,10 +93,8 @@ router.post('/:appointmentId/save-photo', async (req, res) => {
       appointment.savedPhotos.push(photoId);
       await appointment.save();
       
-      logger.debug('Photo saved successfully');
       res.json({ message: 'Photo saved successfully' });
     } else {
-      logger.debug('Photo already saved');
       res.json({ message: 'Photo already saved' });
     }
   } catch (error) {
@@ -110,7 +107,6 @@ router.post('/:appointmentId/save-photo', async (req, res) => {
 router.post('/:appointmentId/remove-photo', async (req, res) => {
   // Find the appointment and remove the photo from the savedPhotos array
   logger.info('Received request for /:appointmentId/remove-photo...');
-  logger.debug(`req.body: ${JSON.stringify(req.body)}`);
   
   const { photoId } = req.body;
   try {
@@ -119,7 +115,6 @@ router.post('/:appointmentId/remove-photo', async (req, res) => {
     appointment.savedPhotos = appointment.savedPhotos.filter(id => id !== photoId);
     await appointment.save();
     
-    logger.debug('Photo removed successfully');
     res.json({ message: 'Photo removed successfully' });
   } catch (error) {
     logger.error(`Error: ${error.message}`);
