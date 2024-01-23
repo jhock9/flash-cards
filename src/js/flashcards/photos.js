@@ -28,19 +28,19 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
+  // Sum of all photos that are intended to be selected (based on slider values)
+  let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   
   // If there's a saved photo and it's not already in the filtered photos, include it
   if (lockedPhoto && !selectedPhotoIds.has(lockedPhoto.googleId)) {
     console.log('Adding locked photo to filtered photos...');
     filteredPhotos.unshift(lockedPhoto);
     selectedPhotoIds.add(lockedPhoto.googleId);
+    intendedTotal = Math.max(0, intendedTotal - 1);
   }
   
   console.log('Initial filtered photos:', filteredPhotos);
 
-  // Sum of all photos that are intended to be selected (based on slider values)
-  let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
-  
   console.log('Intended total:', intendedTotal);
 
   // If the intended total exceeds the maximum total of 10, adjust the quantities
