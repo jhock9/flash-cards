@@ -59,8 +59,8 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   console.log('Adjusted intended total:', intendedTotal);
 
   // Calculate how many more photos are needed to meet the total
-  let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
-  
+  let remainingPhotos = Math.max(0, (totalPhotos || photos.length) - intendedTotal);
+
   console.log('Remaining photos:', remainingPhotos);
 
   // Loop through each tag and quantity
