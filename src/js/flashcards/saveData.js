@@ -73,7 +73,7 @@ const toggleLockedPhoto = async (photoId, save = true) => {
     const response = await fetch(`/appointment/${appointmentId}/${save ? 'save-photo' : 'remove-photo'}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ photo: photoId }),
+      body: JSON.stringify({ photoId: photoId }),
     });
     
     if (save) {
