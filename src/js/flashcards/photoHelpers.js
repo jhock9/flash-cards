@@ -23,11 +23,12 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
 };
 
 // Add remaining photos if 'useRemainder' is checked
-const addRemainingPhotos = (photos, remainingPhotos, totalPhotos, selectedPhotoIds) => {
+const addRemainingPhotos = (photos, filteredPhotos, remainingPhotos, selectedPhotoIds) => {
   console.log('Adding remaining photos...');
   const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
   shuffleArray(additionalPhotos);
-  return additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - selectedPhotoIds.size));
+  return filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
+  // return additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - selectedPhotoIds.size));
 };
 
 // Add photos to the filteredPhotos array and update selectedPhotoIds
@@ -74,7 +75,7 @@ const shuffleArray = (array) => {
 export {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
   processTags, // processTag(tag, quantity, photos)
-  addRemainingPhotos, // addRemainingPhotos(useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds)
+  addRemainingPhotos, // addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds)
   addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
 };

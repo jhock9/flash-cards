@@ -6,7 +6,7 @@ import { toggleLockedPhoto } from './saveData.js';
 import {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
   processTags, // processTags(tag, quantity, photos)
-  addRemainingPhotos, // addRemainingPhotos(useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds)
+  addRemainingPhotos, // addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds)
   addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
 } from './photoHelpers.js';
@@ -39,31 +39,27 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
-  console.log('Initial filtered photos:', filteredPhotos);
   console.log('Intended total:', intendedTotal);
+  console.log('Total photos:', totalPhotos);
   
   // If the intended total exceeds the maximum total of 10, adjust the quantities
   if (intendedTotal > 10) {
     selectedTagsAndQuantities = adjustQuantities(selectedTagsAndQuantities, intendedTotal);
     intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
-    console.log('Adjusted intended total:', intendedTotal);
   }
   
   // If the intended total is less than the maximum total, add photos based on the tags and quantities
   const photosToAdd = processTags(photos, selectedTagsAndQuantities, selectedPhotoIds);
   addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal);
-  console.log('Filtered photos after processing tags:', filteredPhotos);
   
   // If there are still photos remaining, add them to the filtered photos
   let remainingPhotos = Math.max(0, totalPhotos - filteredPhotos.length);
-  console.log('Remaining photos:', remainingPhotos);
+  console.log('Remaining photos:', remainingPhotos.length);
   
   // If 'userRemainder' is true, add any remaining photos to the filtered photos
   if (useRemainder && remainingPhotos > 0) {
-    console.log('Adding remainder...');
-    const photosToAdd = addRemainingPhotos(photos, remainingPhotos, totalPhotos, selectedPhotoIds);
+    const photosToAdd = addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds);
     addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal);
-    console.log('Filtered photos after adding remainder:', filteredPhotos);
   }
   
   // Slice the array based on 'totalPhotos'
@@ -71,7 +67,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     console.log('Slicing filtered photos to total photos...');
     filteredPhotos = filteredPhotos.slice(0, totalPhotos);
   }
-  console.log('Final filtered photos:', filteredPhotos);
   
   shuffleArray(filteredPhotos);
   return filteredPhotos;
