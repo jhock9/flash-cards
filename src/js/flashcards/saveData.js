@@ -101,4 +101,3 @@ export {
   toggleLockedPhoto, // toggleLockedPhoto(photoId, save = true)
   toggleLockedTags, // also to createSelectedTags.js, selectedTags.js // toggleLockedTags(save = true, tag = null)
 };
-
