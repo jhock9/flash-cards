@@ -27,7 +27,9 @@ const addRemainingPhotos = (photos, filteredPhotos, remainingPhotos, selectedPho
   console.log('Adding remaining photos...');
   const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
   shuffleArray(additionalPhotos);
-  return filteredPhotos.push(...additionalPhotos.slice(0, remainingPhotos));
+  const newPhotos = additionalPhotos.slice(0, remainingPhotos);
+  filteredPhotos.push(...newPhotos);
+  return newPhotos;
   // return additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - selectedPhotoIds.size));
 };
 
