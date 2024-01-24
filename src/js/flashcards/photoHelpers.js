@@ -15,7 +15,10 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
       photo.tagsFromGoogle?.includes(tag) && !selectedPhotoIds.has(photo.googleId)
     );
     shuffleArray(taggedPhotos);
-    return taggedPhotos.slice(0, quantity);
+    const photosToAdd = taggedPhotos.slice(0, quantity);
+    
+    photosToAdd.forEach(photo => selectedPhotoIds.add(photo.googleId));
+    return photosToAdd;
   });
 };
 
