@@ -112,7 +112,7 @@ router.post('/:appointmentId/remove-photo', async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.appointmentId); 
     
-    appointment.savedPhotos = appointment.savedPhotos.filter(id => id !== photoId);
+    appointment.savedPhotos = appointment.savedPhotos.filter(id => id.toString() !== photoId);
     await appointment.save();
     
     res.json({ message: 'Photo removed successfully' });
