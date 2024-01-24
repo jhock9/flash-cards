@@ -36,7 +36,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
-
+  
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   console.log('Initial filtered photos:', filteredPhotos);
@@ -126,7 +126,13 @@ lockedPhotoContainer.addEventListener('click', async () => {
   if (lockedPhoto) {
     const savedPhotoId = lockedPhoto._id;
     await toggleLockedPhoto(savedPhotoId, false);
-    photo.classList.toggle('locked-photo');
+    
+    // Find the photo element in the DOM that corresponds to the lockedPhoto
+    const photoElement = Array.from(document.getElementsByClassName('image')).find(img => img.photoData._id === savedPhotoId);
+    if (photoElement) {
+      photoElement.classList.remove('locked-photo');
+    }
+    
     lockedPhoto = null;
   }
 });
