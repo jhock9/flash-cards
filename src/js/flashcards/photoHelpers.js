@@ -1,36 +1,35 @@
+// Adjust quantities based on the intended total and a maximum allowed value
 const adjustQuantities = (selectedTagsAndQuantities, intendedTotal) => {
   console.log('Adjusting quantities...');
   return selectedTagsAndQuantities.map(({ tag, quantity }) => {
     const proportion = quantity / intendedTotal;
-    const adjustedQuantity = Math.round(proportion * 10);
-    return { tag, quantity: adjustedQuantity };
+    return { tag, quantity: Math.round(proportion * 10) };
   });
 };
 
-const processTag = (tag, quantity, photos) => {
-  console.log('Processing tag and qty...');
-  // Filter photos by tag
-  let photosByTag = photos.filter(photo => photo.tagsFromGoogle.includes(tag));
-  
-  shuffleArray(photosByTag);
-  const newPhotos = photosByTag.slice(0, quantity);
-  
-  return newPhotos;
+// Process the tags and quantities, and add photos to the filteredPhotos array
+const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
+  console.log('Processing tags...');
+  return selectedTagsAndQuantities.flatMap(({ tag, quantity }) => {
+    const taggedPhotos = photos.filter(photo =>
+      photo.tagsFromGoogle?.includes(tag) && !selectedPhotoIds.has(photo.googleId)
+    );
+    shuffleArray(taggedPhotos);
+    return taggedPhotos.slice(0, quantity);
+  });
 };
 
-const addRemainingPhotos = (useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds) => {
-  if (!useRemainder) {
-    return [];
-  }
-  
+// Add remaining photos if 'useRemainder' is checked
+const addRemainingPhotos = (photos, remainingPhotos, totalPhotos, selectedPhotoIds) => {
+  console.log('Adding remaining photos...');
   const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
   shuffleArray(additionalPhotos);
-  
   return additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - selectedPhotoIds.size));
 };
 
-const addPhotos = (newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal) => {
-  newPhotos.forEach(photo => {
+// Add photos to the filteredPhotos array and update selectedPhotoIds
+const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal) => {
+  photosToAdd.forEach(photo => {
     // Add the photo to filteredPhotos and update selectedPhotoIds
     selectedPhotoIds.add(photo.googleId);
     filteredPhotos.push(photo);
@@ -71,8 +70,8 @@ const shuffleArray = (array) => {
 // Exported to photos.js
 export {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
-  processTag, // processTag(tag, quantity, photos)
+  processTags, // processTag(tag, quantity, photos)
   addRemainingPhotos, // addRemainingPhotos(useRemainder, remainingPhotos, totalPhotos, photos, selectedPhotoIds)
-  addPhotos, // addPhotos(newPhotos, selectedPhotoIds, filteredPhotos, lockedPhoto)
+  addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
 };
