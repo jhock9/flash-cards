@@ -126,6 +126,7 @@ lockedPhotoContainer.addEventListener('click', async () => {
   if (lockedPhoto) {
     const savedPhotoId = lockedPhoto._id;
     await toggleLockedPhoto(savedPhotoId, false);
+    photo.classList.toggle('locked-photo');
     lockedPhoto = null;
   }
 });
