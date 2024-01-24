@@ -1,4 +1,5 @@
 const displayedImages = document.querySelector('#images-container');
+const lockedPhotoContainer = document.querySelector('#locked-photo-container');
 let lockedPhoto = null;
 
 import { toggleLockedPhoto } from './saveData.js';
@@ -76,7 +77,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   return filteredPhotos;
 };
 
-
 const displayPhotos = (photos) => {
   console.log('displayPhotos called...');
   displayedImages.innerHTML = '';
@@ -112,7 +112,6 @@ const lockPhoto = (photo) => {
       await toggleLockedPhoto(photo.photoData._id, false);
       photo.classList.toggle('locked-photo');
     }
-
     // Toggle the lock status of the clicked photo
     const save = !photo.classList.contains('locked-photo');
     await toggleLockedPhoto(photo.photoData._id, save);
@@ -122,6 +121,14 @@ const lockPhoto = (photo) => {
     lockedPhoto = save ? photo.photoData : null;
   });
 };
+
+lockedPhotoContainer.addEventListener('click', async () => {
+  if (lockedPhoto) {
+    const savedPhotoId = lockedPhoto._id;
+    await toggleLockedPhoto(savedPhotoId, false);
+    lockedPhoto = null;
+  }
+});
 
 // Export to flashcards.js
 export {
