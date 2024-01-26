@@ -3,8 +3,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const appointmentData = JSON.parse(decodeURIComponent(urlParams.get('appointment')));
 const appointmentId = appointmentData._id;
 
-const lockedPhotoContainer = document.querySelector('#locked-photo-container'); 
-
 // Save or remove locked tags from database
 const toggleLockedTags = async (save = true, tag = null) => {
   console.log('toggleLockedTags called...');
@@ -77,12 +75,6 @@ const toggleLockedPhoto = async (photoId, save = true) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ photoId: photoId, selectedTag: selectedTag }),
     });
-    
-    if (save) {
-      lockedPhotoContainer.classList.remove('hide');
-    } else {
-      lockedPhotoContainer.classList.add('hide');
-    };
     const data = await response.json();
     console.log('Response from server:', data);
     
