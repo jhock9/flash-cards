@@ -136,7 +136,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
   
   // Filter selectedTags array to only include locked tags
   selectedTags = selectedTags.filter(tag => !removeLockedTags || tag.locked);
-
+  
   // Check if there are any locked tags
   const lockedTags = selectedTags.filter(tag => tag.locked);
   

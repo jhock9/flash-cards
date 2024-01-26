@@ -64,7 +64,7 @@ const toggleLockedTags = async (save = true, tag = null) => {
   }
 };
 
-const toggleLockedPhoto = async (photoId, save = true) => {
+const toggleLockedPhoto = async (photoId, selectedTag, save = true) => {
   // console.log('toggleLockedPhoto called...');
   console.log('toggleLockedPhoto called with photoId:', photoId, 'and save:', save);
   

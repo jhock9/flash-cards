@@ -110,15 +110,17 @@ const displayPhotos = (filteredPhotos) => {
 };
 
 const lockPhoto = (img) => {
+  // Lock or unlock the photo when clicked
   img.addEventListener('click', async () => {
     // If another photo is already locked, unlock it
     if (lockedPhoto && lockedPhoto !== img.photoData) {
-      await toggleLockedPhoto(img.photoData._id, false);
+      // Remove the photo from the database
+      await toggleLockedPhoto(img.photoData._id, img.tag, false);
       img.classList.toggle('locked-photo');
     }
     // Toggle the lock status of the clicked photo
     const save = !img.classList.contains('locked-photo');
-    await toggleLockedPhoto(img.photoData._id, save);
+    await toggleLockedPhoto(img.photoData._id, img.tag, save);
     img.classList.toggle('locked-photo');
     
     // Update the currently locked photo 
@@ -143,7 +145,7 @@ const removeLockedPhoto = async (selectedTag) => {
   
   if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
     // Remove the photo from the database
-    await toggleLockedPhoto(selectedTag, false);
+    await toggleLockedPhoto(lockedPhoto.photoData._id, selectedTag, false);
     
     // Remove the photo from the DOM
     const photoElement = Array.from(document.getElementsByClassName('image')).find(img => img.photoData._id === selectedTag);
@@ -171,7 +173,7 @@ const createSavedPhotoDiv = (lockedPhoto) => {
   tagName.classList.add('name', 'center');
   tagName.textContent = lockedPhoto.tag; 
   
-  const tagText = createTagName('Image saved:');
+  const tagText = document.createElement('span');
   tagText.classList.add('tag-text', 'center');
   tagText.innerHTML = "Image saved:";
   
