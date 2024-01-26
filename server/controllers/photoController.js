@@ -56,35 +56,19 @@ const getPhotoTags = async () => {
   }
 };
 
-// Get selected photos from database
+// Get selected photos and their selected tag from database
 const getSelectedPhotos = async (tags) => {
   try {
-    const selectedPhotos = await Photo.find({ tagsFromGoogle: { $in: tags } });
+    const selectedPhotos = [];
+    for (const tag of tags) {
+      const photos = await Photo.find({ tagsFromGoogle: tag });
+      for (const photo of photos) {
+        selectedPhotos.push({ photoData: photo, tag });
+      }
+    }
     return selectedPhotos;
   } catch (error) {
     logger.error(`ERROR getting selected photos: ${error}`);
-    return [];
-  }
-};
-
-// Get photo by id from database
-const getPhotoById = async (id) => {
-  try {
-    const photo = await Photo.findById(id);
-    return photo;
-  } catch (error) {
-    logger.error(`ERROR getting photo by id ${id}:`, error);
-    return null;
-  }
-}
-
-// Get all photos from database
-const getAllPhotos = async () => {
-  try {
-    const photos = await Photo.find({});
-    return photos;
-  } catch (error) {
-    logger.error(`ERROR getting all photos: ${error}`);
     return [];
   }
 };
@@ -94,6 +78,4 @@ module.exports = {
   savePhoto, // Export savePhoto(mappedPhotoData) to googlePhotosAPI.js and photoUpdateController.js
   getPhotoTags,
   getSelectedPhotos, // getSelectedPhotos(tags)
-  getPhotoById, // getPhotoById(id)
-  getAllPhotos,
 };
