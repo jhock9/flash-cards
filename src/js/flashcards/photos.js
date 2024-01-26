@@ -114,7 +114,7 @@ const lockPhoto = (img) => {
   img.addEventListener('click', async () => {
     console.log('Image clicked...');
     // If another photo is already locked, unlock it
-    if (lockedPhoto && lockedPhoto !== img.photoData) {
+    if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
       console.log('Another photo is already locked, unlocking it...');
       // Remove the photo from the database
       await toggleLockedPhoto(img.photoData._id, img.tag, false);
