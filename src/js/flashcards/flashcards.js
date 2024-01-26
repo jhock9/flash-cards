@@ -23,7 +23,7 @@ import { logout } from '../components/logout.js';
 import {
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
-  displayPhotos, // displayPhotos(photos)
+  displayPhotos, // displayPhotos(filteredPhotos)
 } from './photos.js';
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import {
