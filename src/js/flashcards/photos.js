@@ -114,12 +114,14 @@ const lockPhoto = (img) => {
   img.addEventListener('click', async () => {
     // If another photo is already locked, unlock it
     if (lockedPhoto && lockedPhoto !== img.photoData) {
+      console.log('Another photo is already locked, unlocking it...');
       // Remove the photo from the database
       await toggleLockedPhoto(img.photoData._id, img.tag, false);
       img.classList.toggle('locked-photo');
     }
     // Toggle the lock status of the clicked photo
     const save = !img.classList.contains('locked-photo');
+    console.log('Toggling lock status of clicked photo...');
     await toggleLockedPhoto(img.photoData._id, img.tag, save);
     img.classList.toggle('locked-photo');
     
@@ -127,8 +129,10 @@ const lockPhoto = (img) => {
     lockedPhoto = save ? {photoData: img.photoData, tag: img.tag} : null;
     
     if (save) {
+      console.log('Creating saved photo div...');
       createSavedPhotoDiv(lockedPhoto);
     } else {
+      console.log('Removing locked photo...');
       removeLockedPhoto(img.photoData._id);
     }
   });
@@ -150,16 +154,19 @@ const removeLockedPhoto = async (selectedTag) => {
     // Remove the photo from the DOM
     const photoElement = Array.from(document.getElementsByClassName('image')).find(img => img.photoData._id === selectedTag);
     if (photoElement) {
+      console.log('Removing photo from DOM...');
       photoElement.classList.remove('locked-photo');
     }
     
     // Remove the saved photo div from the selectedTagsWrapper
     const savedPhotoDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
     if (savedPhotoDiv) {
+      console.log('Removing saved photo div...');
       savedPhotoDiv.remove();
     }
     lockedPhoto = null;
   }
+  console.log('Hiding locked photo container and toggling borders...');
   lockedPhotoContainer.classList.add('hide');
   toggleBorders();
 };
@@ -189,7 +196,8 @@ const createSavedPhotoDiv = (lockedPhoto) => {
   selectedDiv.appendChild(tagNameDiv);
   selectedDiv.appendChild(thumbnailDiv);  
   selectedTagsWrapper.prepend(selectedDiv);
-  
+  console.log('Saved photo div created and added to selected tags wrapper...');
+  console.log('Locked photo container shown and borders toggled...');
   lockedPhotoContainer.classList.remove('hide');
   toggleBorders();
 };
