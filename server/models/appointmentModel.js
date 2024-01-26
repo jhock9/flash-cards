@@ -8,7 +8,10 @@ const appointmentSchema = new mongoose.Schema({
     qty: { type: Number, default: 0 }, 
     locked: { type: Boolean, default: false } 
   }],
-  savedPhotos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Photo' }],
+  savedPhotos: [{
+    photo: { type: mongoose.Schema.Types.ObjectId, ref: 'Photo' },
+    selectedTag: { type: String }
+  }],
 }, { timestamps: true });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
