@@ -319,7 +319,7 @@
 /* Menu button styles */
 #tablet-open-btn,
 #refresh-btn,
-#locked-photo-container {
+#locked-photo-btn {
   position: fixed;
   top: 2rem;
   left: 0;
