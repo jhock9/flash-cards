@@ -1,5 +1,5 @@
 const displayedImages = document.querySelector('#images-container');
-const lockedPhotoContainer = document.querySelector('#locked-photo-container');
+const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let lockedPhoto = null;
 
 import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(photoId, save = true)
@@ -112,6 +112,7 @@ const displayPhotos = (filteredPhotos) => {
 const lockPhoto = (img) => {
   // Lock or unlock the photo when clicked
   img.addEventListener('click', async () => {
+    console.log('Image clicked...');
     // If another photo is already locked, unlock it
     if (lockedPhoto && lockedPhoto !== img.photoData) {
       console.log('Another photo is already locked, unlocking it...');
@@ -130,17 +131,17 @@ const lockPhoto = (img) => {
     
     if (save) {
       console.log('Creating saved photo div...');
-      lockedPhotoContainer.classList.add('hide');
+      lockedPhotoBtn.classList.add('hide');
       createSavedPhotoDiv(lockedPhoto);
     } else {
       console.log('Removing locked photo...');
-      lockedPhotoContainer.classList.remove('hide');
+      lockedPhotoBtn.classList.remove('hide');
       removeLockedPhoto(img.photoData._id);
     }
   });
 };
 
-lockedPhotoContainer.addEventListener('click', () => {
+lockedPhotoBtn.addEventListener('click', () => {
   if (lockedPhoto) {
     removeLockedPhoto(lockedPhoto.photoData._id);
   }
@@ -169,7 +170,7 @@ const removeLockedPhoto = async (selectedTag) => {
     lockedPhoto = null;
   }
   console.log('Hiding locked photo container and toggling borders...');
-  lockedPhotoContainer.classList.add('hide');
+  lockedPhotoBtn.classList.add('hide');
   toggleBorders();
 };
 
@@ -200,7 +201,7 @@ const createSavedPhotoDiv = (lockedPhoto) => {
   selectedTagsWrapper.prepend(selectedDiv);
   console.log('Saved photo div created and added to selected tags wrapper...');
   console.log('Locked photo container shown and borders toggled...');
-  lockedPhotoContainer.classList.remove('hide');
+  lockedPhotoBtn.classList.remove('hide');
   toggleBorders();
 };
 

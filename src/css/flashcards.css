@@ -319,7 +319,7 @@
 /* Menu button styles */
 #tablet-open-btn,
 #refresh-btn,
-#locked-photo-container {
+#locked-photo-btn {
   position: fixed;
   top: 2rem;
   left: 0;
@@ -330,12 +330,12 @@
   top: 11rem;
 }
 
-#locked-photo-container {
+#locked-photo-btn {
   top: 20rem;
 }
 
-#locked-photo-container:hover,
-#locked-photo-container:active {
+#locked-photo-btn:hover,
+#locked-photo-btn:active {
   color: var(--primary-color);
   background-color: var(--white);
   border-color: var(--border-color);
@@ -351,7 +351,7 @@
   bottom: -0.9rem;
   right: -0.6rem;
   font-size: 2.3rem;
-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 /* Main-Images styles */
@@ -431,7 +431,7 @@ main {
     top: 14rem;
   }
   
-  #locked-photo-container {
+  #locked-photo-btn {
     top: 26rem;
   }
   
