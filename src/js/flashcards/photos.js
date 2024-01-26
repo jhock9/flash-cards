@@ -115,6 +115,7 @@ const lockPhoto = (img) => {
     console.log('Image clicked...');
     // If another photo is already locked, unlock it
     if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
+    if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
       console.log('Another photo is already locked, unlocking it...');
       // Remove the photo from the database
       await toggleLockedPhoto(img.photoData._id, img.tag, false);
@@ -129,6 +130,19 @@ const lockPhoto = (img) => {
     // Update the currently locked photo 
     lockedPhoto = save ? {photoData: img.photoData, tag: img.tag} : null;
     
+    // If another photo is already locked, unlock it
+    if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
+      console.log('Another photo is already locked, unlocking it...');
+      // Remove the photo from the database
+      await toggleLockedPhoto(lockedPhoto.photoData._id, lockedPhoto.tag, false);
+      img.classList.toggle('locked-photo');
+    }
+    
+    // Toggle the lock status of the clicked photo
+    console.log('Toggling lock status of clicked photo...');
+    await toggleLockedPhoto(lockedPhoto.photoData._id, lockedPhoto.tag, save);
+    img.classList.toggle('locked-photo');
+    
     if (save) {
       console.log('Creating saved photo div...');
       lockedPhotoBtn.classList.add('hide');
@@ -136,7 +150,7 @@ const lockPhoto = (img) => {
     } else {
       console.log('Removing locked photo...');
       lockedPhotoBtn.classList.remove('hide');
-      removeLockedPhoto(img.photoData._id);
+      removeLockedPhoto(lockedPhoto.photoData._id);
     }
   });
 };
