@@ -42,7 +42,7 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
   
   // If the locked photo is not in the new photos, add it
   if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {
-    const sameTagIndex = filteredPhotos.findIndex(photo => photo.photoData.tagsFromGoogle.includes(lockedPhoto.tagsFromGoogle[0]));
+    const sameTagIndex = filteredPhotos.findIndex(photo => photo.photoData.tagsFromGoogle.includes(lockedPhoto.photoData.tagsFromGoogle[0]));
     if (sameTagIndex !== -1) {
       // Replace the photo with the same tag with the locked photo
       const removedPhoto = filteredPhotos.splice(sameTagIndex, 1, lockedPhoto)[0];
