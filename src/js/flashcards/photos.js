@@ -2,10 +2,18 @@ const displayedImages = document.querySelector('#images-container');
 const lockedPhotoContainer = document.querySelector('#locked-photo-container');
 let lockedPhoto = null;
 
-import { toggleLockedPhoto } from './saveData.js';
+import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(photoId, save = true)
+import { 
+  createRemoveBtn, // createRemoveBtn(selectedDiv, removeTag)
+  appendToNewDiv, // appendToNewDiv(classList, elements)
+} from './createSelectedTags.js';
+import { 
+  toggleBorders, // toggleBorders()
+  selectedTagsWrapper, // global variable
+} from './selectedTags.js';
 import {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
-  processTags, // processTags(tag, quantity, photos)
+  processTags, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
   addRemainingPhotos, // addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds)
   addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
@@ -54,7 +62,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // If there are still photos remaining, add them to the filtered photos
   let remainingPhotos = Math.max(0, totalPhotos - filteredPhotos.length);
-  console.log('Remaining photos:', remainingPhotos.length);
+  console.log('Remaining photos:', remainingPhotos);
   
   // If 'userRemainder' is true, add any remaining photos to the filtered photos
   if (useRemainder && remainingPhotos > 0) {
@@ -72,10 +80,10 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   return filteredPhotos;
 };
 
-const displayPhotos = (photos) => {
+const displayPhotos = (filteredPhotos) => {
   console.log('displayPhotos called...');
   displayedImages.innerHTML = '';
-  const numPhotos = photos.length;
+  const numPhotos = filteredPhotos.length;
   let flexBasis;
   
   if (numPhotos > 6) {
@@ -90,51 +98,104 @@ const displayPhotos = (photos) => {
   
   for (let i = 0; i < numPhotos; i++) {
     const img = document.createElement('img');
-    img.src = photos[i].baseUrl;
+    img.src = filteredPhotos[i].photoData.baseUrl;
     img.classList.add('image');
     img.style.flexBasis = flexBasis;
-    img.photoData = photos[i];
+    img.photoData = filteredPhotos[i].photoData;
+    img.tag = filteredPhotos[i].tag;
     lockPhoto(img);
     displayedImages.appendChild(img);
     img.classList.remove('locked-photo');
   }
 };
 
-const lockPhoto = (photo) => {
-  photo.addEventListener('click', async () => {
+const lockPhoto = (img) => {
+  img.addEventListener('click', async () => {
     // If another photo is already locked, unlock it
-    if (lockedPhoto && lockedPhoto !== photo.photoData) {
-      await toggleLockedPhoto(photo.photoData._id, false);
-      photo.classList.toggle('locked-photo');
+    if (lockedPhoto && lockedPhoto !== img.photoData) {
+      await toggleLockedPhoto(img.photoData._id, false);
+      img.classList.toggle('locked-photo');
     }
     // Toggle the lock status of the clicked photo
-    const save = !photo.classList.contains('locked-photo');
-    await toggleLockedPhoto(photo.photoData._id, save);
-    photo.classList.toggle('locked-photo');
+    const save = !img.classList.contains('locked-photo');
+    await toggleLockedPhoto(img.photoData._id, save);
+    img.classList.toggle('locked-photo');
     
-    // Update the currently locked photo
-    lockedPhoto = save ? photo.photoData : null;
+    // Update the currently locked photo 
+    lockedPhoto = save ? {photoData: img.photoData, tag: img.tag} : null;
+    
+    if (save) {
+      createSavedPhotoDiv(lockedPhoto);
+    } else {
+      removeLockedPhoto(img.photoData._id);
+    }
   });
 };
 
-lockedPhotoContainer.addEventListener('click', async () => {
+lockedPhotoContainer.addEventListener('click', () => {
   if (lockedPhoto) {
-    const savedPhotoId = lockedPhoto._id;
-    await toggleLockedPhoto(savedPhotoId, false);
+    removeLockedPhoto(lockedPhoto.photoData._id);
+  }
+});
+
+const removeLockedPhoto = async (selectedTag) => {
+  console.log('removeLockedPhoto called...');
+  
+  if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
+    // Remove the photo from the database
+    await toggleLockedPhoto(selectedTag, false);
     
-    // Find the photo element in the DOM that corresponds to the lockedPhoto
-    const photoElement = Array.from(document.getElementsByClassName('image')).find(img => img.photoData._id === savedPhotoId);
+    // Remove the photo from the DOM
+    const photoElement = Array.from(document.getElementsByClassName('image')).find(img => img.photoData._id === selectedTag);
     if (photoElement) {
       photoElement.classList.remove('locked-photo');
     }
     
+    // Remove the saved photo div from the selectedTagsWrapper
+    const savedPhotoDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
+    if (savedPhotoDiv) {
+      savedPhotoDiv.remove();
+    }
     lockedPhoto = null;
   }
-});
+  lockedPhotoContainer.classList.add('hide');
+  toggleBorders();
+};
+
+const createSavedPhotoDiv = (lockedPhoto) => {
+  const selectedDiv = document.createElement('div');
+  selectedDiv.classList.add('selected-div', 'saved-photo-div', 'center');
+  selectedDiv.dataset.tag = lockedPhoto.photoData._id; 
+  
+  const tagName = document.createElement('span');
+  tagName.classList.add('name', 'center');
+  tagName.textContent = lockedPhoto.tag; 
+  
+  const tagText = createTagName('Image saved:');
+  tagText.classList.add('tag-text', 'center');
+  tagText.innerHTML = "Image saved:";
+  
+  const thumbnail = document.createElement('img');
+  thumbnail.src = lockedPhoto.photoData.baseUrl;
+  thumbnail.classList.add('thumbnail', 'center');
+  
+  const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto);
+  
+  const tagNameDiv = appendToNewDiv('saved-photo-name center', [tagName, tagText]);
+  const thumbnailDiv = appendToNewDiv('thumbnail-div center', [thumbnail, removeBtn]);
+  
+  selectedDiv.appendChild(tagNameDiv);
+  selectedDiv.appendChild(thumbnailDiv);  
+  selectedTagsWrapper.prepend(selectedDiv);
+  
+  lockedPhotoContainer.classList.remove('hide');
+  toggleBorders();
+};
 
 // Export to flashcards.js
 export {
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
-  displayPhotos, // displayPhotos(photos)
+  displayPhotos, // displayPhotos(filteredPhotos)
+  removeLockedPhoto, // Export to selectedTags.js // removeLockedPhoto(selectedTag)
 };
