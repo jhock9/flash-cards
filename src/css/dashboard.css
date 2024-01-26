@@ -161,7 +161,7 @@ figure img {
 #clients-labels {
   color: var(--white);
   background-color: var(--third-color);
-  border: .3rem solid var(--third-color);
+  border: 0.3rem solid var(--third-color);
 }
 
 #users-labels th:nth-child(4),
@@ -171,7 +171,7 @@ figure img {
 
 #users-create td,
 #clients-create td {
-  border: .3rem solid var(--border-color);
+  border: 0.3rem solid var(--border-color);
 }
 
 #users-table-wrapper,
@@ -330,7 +330,7 @@ figure img {
 
 .form-wrapper {
   padding: 2rem 4rem;
-  border: .5rem solid var(--border-color);
+  border: 0.5rem solid var(--border-color);
 }
 
 #account h4 {
