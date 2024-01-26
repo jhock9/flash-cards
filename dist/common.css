@@ -59,7 +59,7 @@ body {
   text-transform: uppercase;  
   color: var(--primary-color);
   background-color: var(--white);
-  border: .3rem solid var(--border-color);
+  border: 0.3rem solid var(--border-color);
   border-radius: .4rem;
   cursor: pointer;
   transition: 0.3s;
@@ -148,7 +148,7 @@ input[type=password] {
   width: 80%;
   padding: 3rem;
   text-align: center;
-  border: .5rem solid var(--third-color);
+  border: 0.5rem solid var(--third-color);
   background-color: var(--white);
   color: var(--third-color);
   flex-direction: column;
