@@ -173,7 +173,7 @@ const removeLockedPhoto = async (selectedTag) => {
 
 const createSavedPhotoDiv = (lockedPhoto) => {
   const selectedDiv = document.createElement('div');
-  selectedDiv.classList.add('selected-div', 'saved-photo-div', 'center');
+  selectedDiv.classList.add('selected-div', 'center');
   selectedDiv.dataset.tag = lockedPhoto.photoData._id; 
   
   const tagName = document.createElement('span');
