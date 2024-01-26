@@ -85,12 +85,13 @@ router.post('/:appointmentId/save-photo', async (req, res) => {
   // Find the appointment and add the photo to the savedPhotos array
   logger.info('Received request for /:appointmentId/save-photo...');
 
-  const { photoId } = req.body;
+  const { photoId, selectedTag } = req.body;
   try {
     const appointment = await Appointment.findById(req.params.appointmentId); 
     
-    if (!appointment.savedPhotos.includes(photoId)) { // Only add the photo if it's not already in the array
-      appointment.savedPhotos.push(photoId);
+    if (!appointment.savedPhotos.some(photo => photo.photo.toString() === photoId)) { 
+    // Check the photo field of each item, and only add the photo if it's not already in the array
+      appointment.savedPhotos.push({ photo: photoId, selectedTag: selectedTag });
       await appointment.save();
       
       res.json({ message: 'Photo saved successfully' });
@@ -112,7 +113,7 @@ router.post('/:appointmentId/remove-photo', async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.appointmentId); 
     
-    appointment.savedPhotos = appointment.savedPhotos.filter(id => id.toString() !== photoId);
+    appointment.savedPhotos = appointment.savedPhotos.filter(photo => photo.photo.toString() !== photoId);
     await appointment.save();
     
     res.json({ message: 'Photo removed successfully' });
