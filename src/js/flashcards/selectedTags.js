@@ -11,10 +11,11 @@ import {
   createSlider,
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // createRemoveBtn(selectedDiv, removeTag)
+  createRemoveBtn, // createRemoveBtn(selectedDiv, callback)
   appendToNewDiv, // appendToNewDiv(classList, elements)
 } from './createSelectedTags.js';
 import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
+import { removeLockedPhoto } from './photos.js';  // removeLockedPhoto(selectedTag)
 
 // Load saved tags
 const loadSavedTags = async (filterInput) => {
@@ -82,7 +83,7 @@ const createSelectedDiv = (selectedTag) => {
   const [slider, sliderValue] = createSlider();
   const tagName = createTagName(selectedTag);
   const lockToggle = createLockToggle(selectedDiv);
-  const removeBtn = createRemoveBtn(selectedDiv, removeTag);
+  const removeBtn = createRemoveBtn(selectedDiv, removeTag); // using removeTag() in place of callback here
   
   // Append elements
   const sliderTagDiv = appendToNewDiv('slider-tag-div center', [slider, sliderValue, tagName]);
@@ -97,6 +98,10 @@ const createSelectedDiv = (selectedTag) => {
 
 const removeTag = (selectedTag) => {
   console.log('removeTag called...');
+
+  // Removes all references of a locked photo from the DOM and database
+  removeLockedPhoto(selectedTag);
+  
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
   
@@ -182,6 +187,6 @@ export {
   createSelectedDiv, // createSelectedDiv(selectedTag)
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
-  toggleBorders, // toggleBorders()
-  removeTag, // Export to photos.js // removeTag(selectedTag)
+  toggleBorders, // also to photos.js // toggleBorders()
+  selectedTagsWrapper, // Export to photos.js // global variable
 };
