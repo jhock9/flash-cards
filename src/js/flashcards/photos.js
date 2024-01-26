@@ -136,7 +136,7 @@ const lockPhoto = (img) => {
     } else {
       console.log('Removing locked photo...');
       // lockedPhotoBtn.classList.remove('hide');
-      removeLockedPhoto(lockedPhoto.photoData._id);
+      removeLockedPhoto(img.photoData._id);
     }
   });
 };
