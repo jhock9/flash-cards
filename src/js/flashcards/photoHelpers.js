@@ -75,7 +75,7 @@ const shuffleArray = (array) => {
 // Exported to photos.js
 export {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
-  processTags, // processTag(tag, quantity, photos)
+  processTags, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
   addRemainingPhotos, // addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds)
   addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
