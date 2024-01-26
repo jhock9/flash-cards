@@ -130,7 +130,6 @@ const toggleNav = () => {
   }
 };
 
-
 //**   BUTTONS   **//
 tabletOpenBtn.addEventListener('click', async () => {
   console.log('Open button clicked...');
