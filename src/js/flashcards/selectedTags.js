@@ -90,7 +90,6 @@ const createSelectedDiv = (selectedTag) => {
   
   selectedDiv.appendChild(sliderTagDiv);
   selectedDiv.appendChild(iconDiv);
-  
   selectedTagsWrapper.appendChild(selectedDiv);
   
   return selectedDiv;
@@ -184,4 +183,5 @@ export {
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
   toggleBorders, // toggleBorders()
+  removeTag, // Export to photos.js // removeTag(selectedTag)
 };
