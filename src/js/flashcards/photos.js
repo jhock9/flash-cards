@@ -130,9 +130,11 @@ const lockPhoto = (img) => {
     
     if (save) {
       console.log('Creating saved photo div...');
+      lockedPhotoContainer.classList.add('hide');
       createSavedPhotoDiv(lockedPhoto);
     } else {
       console.log('Removing locked photo...');
+      lockedPhotoContainer.classList.remove('hide');
       removeLockedPhoto(img.photoData._id);
     }
   });
