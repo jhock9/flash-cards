@@ -80,9 +80,8 @@ const toggleLockedPhoto = async (photoId, selectedTag, save = true) => {
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
     };
+    await response.json();
     
-    const data = await response.json();
-    console.log(`Server response: ${JSON.stringify(data, null, 2)}`);
     console.log(`Photo ${action} successfully`);
   } catch (error) {
     console.error(`Error in ${action} photo:`, error);
