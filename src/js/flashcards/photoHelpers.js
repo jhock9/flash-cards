@@ -12,12 +12,12 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
   console.log('Processing tags...');
   return selectedTagsAndQuantities.flatMap(({ tag, quantity }) => {
     const taggedPhotos = photos.filter(photo =>
-      photo.tagsFromGoogle?.includes(tag) && !selectedPhotoIds.has(photo.googleId)
+      photo.tag?.includes(tag) && !selectedPhotoIds.has(photo.photoData.googleId)
     );
     shuffleArray(taggedPhotos);
     const photosToAdd = taggedPhotos.slice(0, quantity);
     
-    photosToAdd.forEach(photo => selectedPhotoIds.add(photo.googleId));
+    photosToAdd.forEach(photo => selectedPhotoIds.add(photo.photoData.googleId));
     return photosToAdd;
   });
 };
@@ -25,25 +25,24 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
 // Add remaining photos if 'useRemainder' is checked
 const addRemainingPhotos = (photos, filteredPhotos, remainingPhotos, selectedPhotoIds) => {
   console.log('Adding remaining photos...');
-  const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.googleId));
+  const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.photoData.googleId));
   shuffleArray(additionalPhotos);
-  const newPhotos = additionalPhotos.slice(0, remainingPhotos);
-  filteredPhotos.push(...newPhotos);
-  return newPhotos;
-  // return additionalPhotos.slice(0, Math.min(remainingPhotos, totalPhotos - selectedPhotoIds.size));
+  const photosToAdd = additionalPhotos.slice(0, remainingPhotos);
+  photosToAdd.forEach(photo => filteredPhotos.push(photo));
+  return photosToAdd;
 };
 
 // Add photos to the filteredPhotos array and update selectedPhotoIds
 const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal) => {
   photosToAdd.forEach(photo => {
     // Add the photo to filteredPhotos and update selectedPhotoIds
-    selectedPhotoIds.add(photo.googleId);
+    selectedPhotoIds.add(photo.photoData.googleId);
     filteredPhotos.push(photo);
   });
   
   // If the locked photo is not in the new photos, add it
   if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {
-    const sameTagIndex = filteredPhotos.findIndex(photo => photo.tagsFromGoogle.includes(lockedPhoto.tagsFromGoogle[0]));
+    const sameTagIndex = filteredPhotos.findIndex(photo => photo.photoData.tagsFromGoogle.includes(lockedPhoto.tagsFromGoogle[0]));
     if (sameTagIndex !== -1) {
       // Replace the photo with the same tag with the locked photo
       const removedPhoto = filteredPhotos.splice(sameTagIndex, 1, lockedPhoto)[0];
