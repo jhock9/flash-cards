@@ -123,7 +123,7 @@ const lockPhoto = (img) => {
     // Toggle the lock status of the clicked photo
     const save = !img.classList.contains('locked-photo');
     console.log('Toggling lock status of clicked photo...');
-    await toggleLockedPhoto(lockedPhoto.photoData._id, lockedPhoto.tag, save);
+    await toggleLockedPhoto(img.photoData._id, lockedPhoto.tag, save);
     img.classList.toggle('locked-photo');
     
     // Update the currently locked photo 
