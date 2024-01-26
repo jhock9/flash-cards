@@ -50,7 +50,7 @@ const toggleLock = (selectedDiv, lockIcon) => {
   lockIcon.classList.toggle('fa-unlock');
 };
 
-const createRemoveBtn = (selectedDiv, removeTag) => {
+const createRemoveBtn = (selectedDiv, callback) => {
   const removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.classList.add('remove-btn', 'center');
@@ -60,8 +60,8 @@ const createRemoveBtn = (selectedDiv, removeTag) => {
   removeBtn.appendChild(removeIcon);
   
   removeBtn.addEventListener('click', () => {
-    const tag = selectedDiv.dataset.tag;
-    removeTag(tag);
+    const selectedTag = selectedDiv.dataset.tag;
+    callback(selectedTag);
   });
   
   return removeBtn;
@@ -79,6 +79,6 @@ export {
   createSlider,
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // also to photos.js // createRemoveBtn(selectedDiv, removeTag)
+  createRemoveBtn, // also to photos.js // createRemoveBtn(selectedDiv, callback)
   appendToNewDiv, // also to photos.js // appendToNewDiv(classList, elements)
 };
