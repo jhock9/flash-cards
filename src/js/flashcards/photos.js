@@ -2,14 +2,9 @@ const displayedImages = document.querySelector('#images-container');
 const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let lockedPhoto = null;
 
-import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(photoId, save = true)
-import { 
-  createRemoveBtn, // createRemoveBtn(selectedDiv, removeTag)
-  appendToNewDiv, // appendToNewDiv(classList, elements)
-} from './createSelectedTags.js';
-import { 
-  toggleBorders, // toggleBorders()
-  selectedTagsWrapper, // global variable
+import {
+  removeLockedPhoto, // removeLockedPhoto(selectedTag)
+  createLockedPhotoDiv, // createLockedPhotoDiv(lockedPhoto)
 } from './selectedTags.js';
 import {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
@@ -17,6 +12,7 @@ import {
   addRemainingPhotos, // addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds)
   addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
+  lockPhoto, // lockPhoto(img, lockedPhoto)
 } from './photoHelpers.js';
 
 // Fetch photos data from database
@@ -118,7 +114,7 @@ const lockPhoto = (img) => {
       console.log('Another photo is already locked, unlocking it...');
       lockedPhoto.classList.toggle('locked-photo');
       // Remove the saved photo div from the selectedTagsWrapper
-      removeLockedPhoto(lockedPhoto.photoData._id);
+      removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
     }
     // Toggle the lock status of the clicked photo
     const save = !img.classList.contains('locked-photo');
@@ -127,81 +123,22 @@ const lockPhoto = (img) => {
       await toggleLockedPhoto(img.photoData._id, img.tag, save);
       img.classList.toggle('locked-photo');
       lockedPhoto = {photoData: img.photoData, tag: img.tag};
-      createSavedPhotoDiv(lockedPhoto);
+      createLockedPhotoDiv(lockedPhoto);
     } else {
-      removeLockedPhoto(img.photoData._id);
+      removeLockedPhoto(img.photoData._id, lockedPhoto);
     }
   });
 };
 
 lockedPhotoBtn.addEventListener('click', () => {
   if (lockedPhoto) {
-    removeLockedPhoto(lockedPhoto.photoData._id);
+    removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
   }
 });
-
-const removeLockedPhoto = async (selectedTag) => {
-  console.log('removeLockedPhoto called...');
-  
-  if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
-    // Remove the photo from the database
-    await toggleLockedPhoto(lockedPhoto.photoData._id, selectedTag, false);
-    
-    // Remove the photo from the DOM
-    const photoElement = Array.from(document.getElementsByClassName('image')).find(img => img.photoData._id === selectedTag);
-    if (photoElement) {
-      console.log('Removing photo from DOM...');
-      photoElement.classList.remove('locked-photo');
-    }
-    
-    // Remove the saved photo div from the selectedTagsWrapper
-    const savedPhotoDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
-    if (savedPhotoDiv) {
-      console.log('Removing saved photo div...');
-      savedPhotoDiv.remove();
-    }
-    lockedPhoto = null;
-  }
-  console.log('Hiding locked photo container and toggling borders...');
-  lockedPhotoBtn.classList.add('hide');
-  toggleBorders();
-};
-
-const createSavedPhotoDiv = (lockedPhoto) => {
-  console.log('createSavedPhotoDiv called...');
-  const selectedDiv = document.createElement('div');
-  selectedDiv.classList.add('selected-div', 'center');
-  selectedDiv.dataset.tag = lockedPhoto.photoData._id; 
-  
-  const tagName = document.createElement('span');
-  tagName.classList.add('name', 'center');
-  tagName.textContent = lockedPhoto.tag; 
-  
-  const tagText = document.createElement('span');
-  tagText.classList.add('tag-text', 'center');
-  tagText.innerHTML = "Image saved:";
-  
-  const thumbnail = document.createElement('img');
-  thumbnail.src = lockedPhoto.photoData.baseUrl;
-  thumbnail.classList.add('thumbnail', 'center');
-  
-  const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto);
-  
-  const tagNameDiv = appendToNewDiv('saved-photo-name center', [tagName, tagText]);
-  const thumbnailDiv = appendToNewDiv('thumbnail-div center', [thumbnail, removeBtn]);
-  
-  selectedDiv.appendChild(tagNameDiv);
-  selectedDiv.appendChild(thumbnailDiv);  
-  selectedTagsWrapper.prepend(selectedDiv);
-  console.log('Saved photo div added to selected tags wrapper, Locked photo btn shown, borders toggled...');
-  lockedPhotoBtn.classList.remove('hide');
-  toggleBorders();
-};
 
 // Export to flashcards.js
 export {
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
   displayPhotos, // displayPhotos(filteredPhotos)
-  removeLockedPhoto, // Export to selectedTags.js // removeLockedPhoto(selectedTag)
 };

@@ -79,6 +79,6 @@ export {
   createSlider,
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // also to photos.js // createRemoveBtn(selectedDiv, callback)
-  appendToNewDiv, // also to photos.js // appendToNewDiv(classList, elements)
+  createRemoveBtn, // createRemoveBtn(selectedDiv, callback)
+  appendToNewDiv, // appendToNewDiv(classList, elements)
 };
