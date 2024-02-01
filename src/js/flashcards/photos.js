@@ -9,7 +9,6 @@ import {
   addRemainingPhotos, // addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds)
   addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
-  lockPhoto, // lockPhoto(img, lockedPhoto)
 } from './photoHelpers.js';
 
 // Fetch photos data from database
