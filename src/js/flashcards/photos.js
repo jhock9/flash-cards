@@ -1,5 +1,4 @@
 const displayedImages = document.querySelector('#images-container');
-const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let lockedPhoto = null;
 
 import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(selectedTag)
@@ -124,12 +123,6 @@ const lockPhoto = (img) => {
     }
   });
 };
-
-lockedPhotoBtn.addEventListener('click', () => {
-  if (lockedPhoto) {
-    removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
-  }
-});
 
 // Export to flashcards.js
 export {

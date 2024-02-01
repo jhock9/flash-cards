@@ -5,6 +5,7 @@ const appointmentId = appointmentData._id;
 
 const selectedTagsWrapper = document.querySelector('#selected-tags-wrapper');
 const removeBtns = document.querySelectorAll('.remove-btn');
+const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let selectedTags = [];
 
 import {
@@ -245,6 +246,12 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   lockedPhotoBtn.classList.remove('hide');
   toggleBorders();
 };
+
+lockedPhotoBtn.addEventListener('click', () => {
+  if (lockedPhoto) {
+    removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
+  }
+});
 
 // Export to flashcards.js
 export {
