@@ -17,7 +17,8 @@ import {
 import { 
   toggleLockedTags, // toggleLockedTags(save = true, tag = null)
   toggleLockedPhoto, // toggleLockedPhoto(photoId, save = true)
-} from './saveData.js'; // toggleLockedTags(save = true) 
+} from './saveData.js';
+import { lockedPhoto } from './photos.js'; // global variable
 
 // Load saved tags
 const loadSavedTags = async (filterInput) => {
@@ -51,6 +52,10 @@ const loadSavedTags = async (filterInput) => {
     lockIcon.classList.remove('fa-unlock');
   });
   
+  // If there is a locked photo, create a div for it
+  if (lockedPhoto) {
+    createLockedPhotoDiv(lockedPhoto);
+  }
   resetTagSelect(filterInput);
 };
 
@@ -250,5 +255,4 @@ export {
   resetTagSelect, // resetTagSelect(filterInput)
   toggleBorders, // toggleBorders()
   removeLockedPhoto, // Export to photos.js // removeLockedPhoto(selectedTag)
-  createLockedPhotoDiv, // Export to photos.js // createLockedPhotoDiv(lockedPhoto)
 };

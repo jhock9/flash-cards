@@ -2,10 +2,7 @@ const displayedImages = document.querySelector('#images-container');
 const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let lockedPhoto = null;
 
-import {
-  removeLockedPhoto, // removeLockedPhoto(selectedTag)
-  createLockedPhotoDiv, // createLockedPhotoDiv(lockedPhoto)
-} from './selectedTags.js';
+import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(selectedTag)
 import {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
   processTags, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
@@ -123,7 +120,6 @@ const lockPhoto = (img) => {
       await toggleLockedPhoto(img.photoData._id, img.tag, save);
       img.classList.toggle('locked-photo');
       lockedPhoto = {photoData: img.photoData, tag: img.tag};
-      createLockedPhotoDiv(lockedPhoto);
     } else {
       removeLockedPhoto(img.photoData._id, lockedPhoto);
     }
@@ -141,4 +137,5 @@ export {
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
   displayPhotos, // displayPhotos(filteredPhotos)
+  lockedPhoto, // Export to selectedTags.js // global variable
 };
