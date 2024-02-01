@@ -2,6 +2,7 @@ const displayedImages = document.querySelector('#images-container');
 let lockedPhoto = null;
 
 import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(selectedTag)
+import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(selectedTag, tag, save = true)
 import {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
   processTags, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
