@@ -34,6 +34,16 @@ const addRemainingPhotos = (photos, filteredPhotos, remainingPhotos, selectedPho
 
 // Add photos to the filteredPhotos array and update selectedPhotoIds
 const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal) => {
+  console.log('addPhotos called...');
+  
+  // If the photo is not already in the filteredPhotos array, add it
+  for (let photo of photosToAdd) {
+    if (!selectedPhotoIds.has(photo.googleId)) {
+      selectedPhotoIds.add(photo.googleId);
+      filteredPhotos.push(photo);
+    }
+  } 
+  
   photosToAdd.forEach(photo => {
     // Add the photo to filteredPhotos and update selectedPhotoIds
     selectedPhotoIds.add(photo.photoData.googleId);
