@@ -107,13 +107,14 @@ const lockPhoto = (img) => {
   img.addEventListener('click', async () => {
     console.log('Image clicked...');
     // If another photo is already locked and it's not the one being clicked, unlock it
-    if (lockedPhoto !== null && lockedPhoto !== undefined && lockedPhoto.photoData._id !== img.photoData._id) {
+    if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
       console.log('Another photo is already locked, unlocking it...');
       console.log('Locked photo:', lockedPhoto); 
-      lockedPhoto.classList.toggle('locked-photo');
+      if (lockedPhoto.classList) {
+        lockedPhoto.classList.toggle('locked-photo');
+      }
       // Remove the locked photo div from the selectedTagsWrapper, set lockedPhoto to null
       lockedPhoto = await removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
-
     }
     // Toggle the lock status of the clicked photo
     const save = !img.classList.contains('locked-photo');
