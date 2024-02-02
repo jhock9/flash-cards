@@ -238,14 +238,6 @@ submitBtn.addEventListener('click', async (e) => {
     return { tag, quantity };
   });
   
-  // Check if there are any locked tags and update them in the database
-  selectedTagsAndQuantities.forEach(({ tag }) => {
-    const selectedDiv = document.querySelector(`.selected-div[data-tag="${tag}"]`);
-    if (selectedDiv.dataset.locked === 'true') {
-      toggleLockedTags(true, tag);
-    }
-  });
-
   lastSelectedTagsAndQuantities = selectedTagsAndQuantities;
   
   // Fetch photos based on the selected tags

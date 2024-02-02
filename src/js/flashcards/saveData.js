@@ -41,7 +41,7 @@ const toggleLockedTags = async (save = true, tag = null) => {
       };
     }) || []; 
     console.log(`savedTag: ${JSON.stringify(savedTag)}`); // Log savedTag
-
+    
     // '|| []' ensures 'savedTag' is an array. It defaults to an empty array if no 
     // '.selected-div' elements with 'dataset.locked === 'true'' are found.
   }

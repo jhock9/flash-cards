@@ -13,6 +13,10 @@ const createSlider = () => {
   sliderValue.innerHTML = slider.value;
   slider.oninput = () => {
     sliderValue.innerHTML = slider.value;
+    const selectedDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
+    if (selectedDiv && selectedDiv.dataset.locked === 'true') {
+      toggleLockedTags(true, selectedTag);
+    } 
   };
   
   return [slider, sliderValue];
