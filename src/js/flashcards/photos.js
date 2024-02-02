@@ -1,4 +1,5 @@
 const displayedImages = document.querySelector('#images-container');
+const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let lockedPhoto = null;
 
 import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(selectedTag)
@@ -108,8 +109,9 @@ const lockPhoto = (img) => {
     // If another photo is already locked and it's not the one being clicked, unlock it
     if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
       console.log('Another photo is already locked, unlocking it...');
+      console.log('Locked photo:', lockedPhoto); 
       lockedPhoto.classList.toggle('locked-photo');
-      // Remove the saved photo div from the selectedTagsWrapper
+      // Remove the locked photo div from the selectedTagsWrapper
       removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
     }
     // Toggle the lock status of the clicked photo
@@ -119,6 +121,7 @@ const lockPhoto = (img) => {
       await toggleLockedPhoto(img.photoData._id, img.tag, save);
       img.classList.toggle('locked-photo');
       lockedPhoto = {photoData: img.photoData, tag: img.tag};
+      lockedPhotoBtn.classList.remove('hide');
     } else {
       removeLockedPhoto(img.photoData._id, lockedPhoto);
     }
