@@ -202,15 +202,15 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
       photoElement.classList.remove('locked-photo');
     }
     
-    // Remove the saved photo div from the selectedTagsWrapper
-    const savedPhotoDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
-    if (savedPhotoDiv) {
-      console.log('Removing saved photo div...');
-      savedPhotoDiv.remove();
+    // Remove the locked photo div from the selectedTagsWrapper
+    const lockedPhotoDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
+    if (lockedPhotoDiv) {
+      console.log('Removing locked photo div...');
+      lockedPhotoDiv.remove();
     }
-    lockedPhoto = null;
   }
   console.log('Hiding locked photo container and toggling borders...');
+  lockedPhoto = null;
   lockedPhotoBtn.classList.add('hide');
   toggleBorders();
 };
@@ -222,28 +222,22 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   selectedDiv.classList.add('selected-div', 'center');
   selectedDiv.dataset.tag = lockedPhoto.photoData._id; 
   
+  const tagText = document.createElement('span');
+  tagText.classList.add('tag-text', 'center');
+  tagText.innerHTML = "Image tag locked:";
+  
   const tagName = document.createElement('span');
   tagName.classList.add('name', 'center');
   tagName.textContent = lockedPhoto.tag; 
   
-  const tagText = document.createElement('span');
-  tagText.classList.add('tag-text', 'center');
-  tagText.innerHTML = "Image saved:";
-  
-  const thumbnail = document.createElement('img');
-  thumbnail.src = lockedPhoto.photoData.baseUrl;
-  thumbnail.classList.add('thumbnail', 'center');
-  
   const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto);
   
-  const tagNameDiv = appendToNewDiv('saved-photo-name center', [tagName, tagText]);
-  const thumbnailDiv = appendToNewDiv('thumbnail-div center', [thumbnail, removeBtn]);
+  const tagNameDiv = appendToNewDiv('locked-photo-name center', [tagText, tagName]);
   
   selectedDiv.appendChild(tagNameDiv);
-  selectedDiv.appendChild(thumbnailDiv);  
+  selectedDiv.appendChild(removeBtn);  
   selectedTagsWrapper.prepend(selectedDiv);
-  console.log('Saved photo div added to selected tags wrapper, Locked photo btn shown, borders toggled...');
-  lockedPhotoBtn.classList.remove('hide');
+  console.log('Locked photo div added to selected tags wrapper, Locked photo btn shown, borders toggled...');
   toggleBorders();
 };
 

@@ -202,8 +202,7 @@
   border-color: var(--white);
 }
 
-.icon-div,
-.thumbnail-div {
+.icon-div {
   width: 20%;
   justify-content: flex-end;
 }
@@ -230,15 +229,7 @@
 /* Photo Lock styles */
 .tag-text {
   /* letter-spacing: 0.1rem; */
-}
-
-.thumbnail {
-  width: 3rem;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border: 0.3rem solid var(--border-color);
-  padding: 0.1rem;
-  margin: 0 1rem;
+  margin-right: 1rem;
 }
 
 /* Tag search styles */
