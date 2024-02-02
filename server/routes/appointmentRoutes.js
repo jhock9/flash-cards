@@ -52,7 +52,22 @@ router.post('/:appointmentId/save-tags', async (req, res) => {
     if (!Array.isArray(savedTag)) {
       return res.status(400).json({ message: 'Invalid request: savedTag must be an array' });
     }
-    await Appointment.findByIdAndUpdate(req.params.appointmentId, { $push: { savedTags: { $each: savedTag } } });
+    
+    const appointment = await Appointment.findById(req.params.appointmentId);
+    
+    savedTag.forEach(newTag => {
+      const existingTagIndex = appointment.savedTags.findIndex(tag => tag.name === newTag.name);
+      
+      if (existingTagIndex !== -1) {
+        // If the tag exists, update it
+        appointment.savedTags[existingTagIndex] = newTag;
+      } else {
+        // If the tag doesn't exist, add it
+        appointment.savedTags.push(newTag);
+      }
+    });
+    
+    await appointment.save();
     
     res.json({ message: 'Tags saved successfully' });
   } catch (error) {
