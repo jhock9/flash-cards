@@ -9,7 +9,7 @@ const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let selectedTags = [];
 
 import {
-  createSlider,
+  createSlider, // createSlider(selectedTag)
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
   createRemoveBtn, // createRemoveBtn(selectedDiv, callback)
@@ -88,7 +88,7 @@ const createSelectedDiv = (selectedTag) => {
   selectedDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
   
   // Create elements
-  const [slider, sliderValue] = createSlider();
+  const [slider, sliderValue] = createSlider(selectedTag);
   const tagName = createTagName(selectedTag);
   const lockToggle = createLockToggle(selectedDiv);
   const removeBtn = createRemoveBtn(selectedDiv, removeTag); // using removeTag() in place of callback here

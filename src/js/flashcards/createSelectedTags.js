@@ -1,6 +1,6 @@
 import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
 
-const createSlider = () => {
+const createSlider = (selectedTag) => {
   const slider = document.createElement('input');
   slider.type = 'range';
   slider.min = 1;
@@ -80,7 +80,7 @@ const appendToNewDiv = (classList, elements) => {
 
 // Export to selectedTags.js
 export {
-  createSlider,
+  createSlider, // createSlider(selectedTag) 
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
   createRemoveBtn, // createRemoveBtn(selectedDiv, callback)
