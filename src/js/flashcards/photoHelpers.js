@@ -15,10 +15,6 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
       photo.tag?.includes(tag) && !selectedPhotoIds.has(photo.photoData.googleId)
     );
     shuffleArray(taggedPhotos);
-    // const photosToAdd = taggedPhotos.slice(0, quantity);
-    
-    // photosToAdd.forEach(photo => selectedPhotoIds.add(photo.photoData.googleId));
-    // return photosToAdd;
     return taggedPhotos.slice(0, quantity);
   });
 };
@@ -79,7 +75,6 @@ const shuffleArray = (array) => {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
-  
   return array;
 };
 
