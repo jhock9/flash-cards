@@ -15,10 +15,11 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
       photo.tag?.includes(tag) && !selectedPhotoIds.has(photo.photoData.googleId)
     );
     shuffleArray(taggedPhotos);
-    const photosToAdd = taggedPhotos.slice(0, quantity);
+    // const photosToAdd = taggedPhotos.slice(0, quantity);
     
-    photosToAdd.forEach(photo => selectedPhotoIds.add(photo.photoData.googleId));
-    return photosToAdd;
+    // photosToAdd.forEach(photo => selectedPhotoIds.add(photo.photoData.googleId));
+    // return photosToAdd;
+    return taggedPhotos.slice(0, quantity);
   });
 };
 
@@ -47,7 +48,8 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
     if (!selectedPhotoIds.has(photo.photoData.googleId)) {
       selectedPhotoIds.add(photo.photoData.googleId);
       filteredPhotos.push(photo);
-    }  });
+    }
+  });
   
   // If the locked photo is not in the new photos, add it
   if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {
