@@ -244,7 +244,7 @@ submitBtn.addEventListener('click', async (e) => {
   photos = await fetchPhotosData(selectedTagsAndQuantities.map(({ tag }) => tag));
   
   if (photos) {
-    const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, totalPhotos, useRemainder);
+    const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder);
     displayPhotos(filteredPhotos);
   } else {
     console.error('Photos data is not available. Fetch it first.');
