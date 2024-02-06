@@ -28,7 +28,12 @@ const addRemainingPhotos = (photos, filteredPhotos, remainingPhotos, selectedPho
   const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.photoData.googleId));
   shuffleArray(additionalPhotos);
   const photosToAdd = additionalPhotos.slice(0, remainingPhotos);
-  photosToAdd.forEach(photo => filteredPhotos.push(photo));
+  photosToAdd.forEach(photo => {
+    if (!selectedPhotoIds.has(photo.photoData.googleId)) {
+      filteredPhotos.push(photo);
+      selectedPhotoIds.add(photo.photoData.googleId);
+    }
+  });
   return photosToAdd;
 };
 
@@ -37,18 +42,12 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
   console.log('addPhotos called...');
   
   // If the photo is not already in the filteredPhotos array, add it
-  for (let photo of photosToAdd) {
-    if (!selectedPhotoIds.has(photo.googleId)) {
-      selectedPhotoIds.add(photo.googleId);
-      filteredPhotos.push(photo);
-    }
-  } 
-  
   photosToAdd.forEach(photo => {
     // Add the photo to filteredPhotos and update selectedPhotoIds
-    selectedPhotoIds.add(photo.photoData.googleId);
-    filteredPhotos.push(photo);
-  });
+    if (!selectedPhotoIds.has(photo.photoData.googleId)) {
+      selectedPhotoIds.add(photo.photoData.googleId);
+      filteredPhotos.push(photo);
+    }  });
   
   // If the locked photo is not in the new photos, add it
   if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {

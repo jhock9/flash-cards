@@ -38,6 +38,11 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
+  // If there is a locked photo, add it to the selectedPhotoIds
+  if (lockedPhoto) {
+    selectedPhotoIds.add(lockedPhoto.photoData.googleId);
+  }
+  
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
   console.log('Intended total:', intendedTotal);
