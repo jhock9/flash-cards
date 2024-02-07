@@ -190,8 +190,12 @@ removeBtns.forEach((btn) => {
 
 const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
   console.log('removeLockedPhoto called...');
-  console.log('Selected tag:', selectedTag);
-  console.log('Locked photo:', lockedPhoto);
+  if (!selectedTag || !lockedPhoto) {
+    console.log('Selected tag or locked photo is undefined or null');
+    return;
+  }
+  console.log('Selected tag:', selectedTag); // not logging out
+  console.log('Locked photo:', lockedPhoto); // not logging out
   
   if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
     // Remove the photo from the database
@@ -221,6 +225,7 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
 const createLockedPhotoDiv = (lockedPhoto) => {
   console.log('createLockedPhotoDiv called...');
   console.log('SelectedTagsWrapper:', selectedTagsWrapper);
+  
   const selectedDiv = document.createElement('div');
   selectedDiv.classList.add('selected-div', 'center');
   selectedDiv.dataset.tag = lockedPhoto.photoData._id; 

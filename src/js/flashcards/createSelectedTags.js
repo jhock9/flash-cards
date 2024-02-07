@@ -65,6 +65,7 @@ const createRemoveBtn = (selectedDiv, callback) => {
   
   removeBtn.addEventListener('click', () => {
     const selectedTag = selectedDiv.dataset.tag;
+    console.log('Remove button clicked, selectedTag:', selectedTag);
     callback(selectedTag);
   });
   
