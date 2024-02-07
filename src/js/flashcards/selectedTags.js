@@ -55,12 +55,18 @@ const loadSavedTags = async (filterInput) => {
   
   // If there is a locked photo, create a div for it
   if (lockedPhoto) {
+    console.log('Locked photo:', lockedPhoto);
     createLockedPhotoDiv(lockedPhoto);
-  }
+  } else {
+    console.log('No locked photo');
+  };
+  
   resetTagSelect(filterInput);
 };
 
 const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
+  console.log('handleTagSelection called, selectedTag:', selectedTag);
+  
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
     resetTagSelect(filterInput);
@@ -245,7 +251,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   selectedDiv.appendChild(tagNameDiv);
   selectedDiv.appendChild(removeBtn);  
   selectedTagsWrapper.prepend(selectedDiv);
-  console.log('Locked photo div added to selected tags wrapper, Locked photo btn shown, borders toggled...');
+  console.log('Locked photo div added to selected tags wrapper...');
   toggleBorders();
 };
 
