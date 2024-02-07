@@ -136,10 +136,13 @@ const lockPhoto = (img) => {
 };
 
 // Set the locked photo
-const setLockedPhoto = (photo) => {
-  lockedPhoto = photo;
+const setLockedPhoto = (savedPhotos) => {
+  if (savedPhotos.length > 0) {
+    lockedPhoto = savedPhotos[0];
+  } else {
+    lockedPhoto = null;
+  }
 };
-
 // Export to flashcards.js and selectedTags.js
 export {
   fetchPhotosData, // fetchPhotosData(tags)

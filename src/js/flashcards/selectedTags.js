@@ -59,7 +59,7 @@ const loadSavedTags = async (filterInput) => {
   });
   
   // If there is a locked photo, create a div for it
-  if (lockedPhoto) {
+  if (lockedPhoto !== null) {
     console.log('Locked photo:', lockedPhoto);
     createLockedPhotoDiv(lockedPhoto);
   } else {
