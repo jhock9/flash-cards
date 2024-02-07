@@ -12,7 +12,7 @@ import {
   createSlider, // createSlider(selectedTag)
   createTagName, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // createRemoveBtn(selectedDiv, callback)
+  createRemoveBtn, // createRemoveBtn(selectedDiv, callback, lockedPhoto)
   appendToNewDiv, // appendToNewDiv(classList, elements)
 } from './createSelectedTags.js';
 import { 
@@ -112,12 +112,12 @@ const createSelectedDiv = (selectedTag) => {
   selectedDiv.appendChild(iconDiv);
   selectedTagsWrapper.appendChild(selectedDiv);
   
+  console.log('selectedDiv:', selectedDiv);
   return selectedDiv;
 };
 
 const removeTag = (selectedTag) => {
   console.log('removeTag called...');
-
   // Removes all references of a locked photo from the DOM and database
   removeLockedPhoto(selectedTag);
   
@@ -210,8 +210,8 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
     console.log('Selected tag or locked photo is undefined or null');
     return;
   }
-  console.log('Selected tag:', selectedTag); // not logging out
-  console.log('Locked photo:', lockedPhoto); // not logging out
+  console.log('Selected tag:', selectedTag);
+  console.log('Locked photo:', lockedPhoto);
   
   if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
     // Remove the photo from the database
@@ -222,6 +222,8 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
     if (photoElement) {
       console.log('Removing photo from DOM...');
       photoElement.classList.remove('locked-photo');
+    } else {
+    console.log('Photo element not found in DOM');
     }
     
     // Remove the locked photo div from the selectedTagsWrapper
@@ -229,6 +231,8 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
     if (lockedPhotoDiv) {
       console.log('Removing locked photo div...');
       lockedPhotoDiv.remove();
+    } else {
+      console.log('Locked photo div not found in DOM');
     }
   }
   console.log('Hiding locked photo container and toggling borders...');
