@@ -45,8 +45,8 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
     selectedPhotoIds.add(lockedPhoto.photoData.googleId);
     console.log('Locked photo added to selected photo IDs:', selectedPhotoIds);
   } else if (unlockedPhotoId) {
-    photos = photos.filter(photo => photo.photoData._id !== unlockedPhoto);
-    unlockedPhoto = null; // Reset unlockedPhotoId
+    photos = photos.filter(photo => photo.photoData._id !== unlockedPhotoId);
+    unlockedPhotoId = null; // Reset unlockedPhotoId
   }
   
   // Sum of all photos that are intended to be selected (based on slider values)
