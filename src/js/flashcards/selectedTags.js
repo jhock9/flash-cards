@@ -190,6 +190,8 @@ removeBtns.forEach((btn) => {
 
 const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
   console.log('removeLockedPhoto called...');
+  console.log('Selected tag:', selectedTag);
+  console.log('Locked photo:', lockedPhoto);
   
   if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
     // Remove the photo from the database
