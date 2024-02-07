@@ -39,9 +39,12 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   console.log('Selected photo IDs:', selectedPhotoIds);
   
-  // If there is a locked photo, add it to the selectedPhotoIds
+  // If there is a locked photo, add it to the selectedPhotoIds, otherwise remove it from the photos array
   if (lockedPhoto) {
     selectedPhotoIds.add(lockedPhoto.photoData.googleId);
+    console.log('Locked photo added to selected photo IDs:', selectedPhotoIds);
+  } else if (lockedPhoto === null) {
+    photos = photos.filter(photo => photo.photoData._id !== lockedPhoto.photoData._id);
   }
   
   // Sum of all photos that are intended to be selected (based on slider values)
