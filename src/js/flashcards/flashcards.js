@@ -20,7 +20,6 @@ let lastUseRemainder;
 
 
 import { logout } from '../components/logout.js';
-import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
 import {
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
