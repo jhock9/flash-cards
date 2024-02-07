@@ -1,6 +1,7 @@
 const displayedImages = document.querySelector('#images-container');
 const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
-let lockedPhoto = null;
+let lockedPhoto;
+let unlockedPhotoId;
 
 import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(selectedTag)
 import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(selectedTag, tag, save = true)
@@ -43,8 +44,9 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   if (lockedPhoto) {
     selectedPhotoIds.add(lockedPhoto.photoData.googleId);
     console.log('Locked photo added to selected photo IDs:', selectedPhotoIds);
-  } else if (lockedPhoto === null) {
-    photos = photos.filter(photo => photo.photoData._id !== lockedPhoto.photoData._id);
+  } else if (unlockedPhotoId) {
+    photos = photos.filter(photo => photo.photoData._id !== unlockedPhoto);
+    unlockedPhoto = null; // Reset unlockedPhotoId
   }
   
   // Sum of all photos that are intended to be selected (based on slider values)
@@ -135,6 +137,7 @@ const lockPhoto = (img) => {
       lockedPhotoBtn.classList.remove('hide');
     } else {
       removeLockedPhoto(img.photoData._id, lockedPhoto);
+      unlockedPhotoId = img.photoData._id;
     }
   });
 };
