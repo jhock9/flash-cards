@@ -143,8 +143,12 @@ const clearSelectedTags = (removeLockedTags = false) => {
   let selectedDivs = Array.from(document.querySelectorAll('.selected-div'));
   
   selectedDivs.forEach((div) => {
-    if (removeLockedTags || div.dataset.locked !== 'true') {
-      removeTag(div.dataset.tag); // Removes tag from DOM and database
+    // Check if the div is a locked tag or a locked photo
+    const isLockedTag = div.dataset.locked === 'true';
+    const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
+    
+    if (removeLockedTags || (!isLockedTag && !isLockedPhoto)) {
+      removeTag(div.dataset.tag); // Removes from DOM and database
     }
   });
   
@@ -155,9 +159,10 @@ const clearSelectedTags = (removeLockedTags = false) => {
   const lockedTags = selectedTags.filter(tag => tag.locked);
   
   // Clear locked tags from database if removeLockedTags is true
-  if (removeLockedTags && lockedTags.length > 0) {
-    console.log('Clearing locked tags from database...')
+  if (removeLockedTags && (lockedTags.length > 0 || lockedPhoto)) {
+    console.log('Clearing locked tags and photo from database...')
     toggleLockedTags(false); 
+    toggleLockedPhoto(null, false);
   } else if (lockedTags.length > 0) {
     console.log('Keeping locked tags on database...')
     toggleLockedTags(true);
