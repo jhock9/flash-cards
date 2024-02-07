@@ -6,13 +6,12 @@ const appointmentId = appointmentData._id;
 // Save or remove locked tags from database
 const toggleLockedTags = async (save = true, tag = null) => {
   console.log('toggleLockedTags called...');
-  
   let savedTag = [];
   
   if (tag) {
     // If a specific tag is provided, only save or remove that tag
     console.log('Specific tag provided...');
-    const selectedDiv = document.querySelector(`.selected-div[data-tag="${tag}"]`);
+    const selectedDiv = document.querySelector(`.selected-tag-div[data-tag="${tag}"]`);
     if (selectedDiv) {
       console.log('Found selectedDiv...');
       const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);
@@ -29,7 +28,7 @@ const toggleLockedTags = async (save = true, tag = null) => {
   } else {
     // If no specific tag is provided, save or remove all locked tags
     console.log('No specific tag provided...');
-    savedTag = Array.from(document.querySelectorAll('.selected-div'))
+    savedTag = Array.from(document.querySelectorAll('.selected-tag-div'))
     .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
     .map(selectedDiv => {
       const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);

@@ -95,7 +95,7 @@ const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
 const createSelectedDiv = (selectedTag) => {
   // Create a new div for the selected tag
   const selectedDiv = document.createElement('div');
-  selectedDiv.classList.add('selected-div', 'center');
+  selectedDiv.classList.add('selected-div', 'selected-tag-div', 'center');
   selectedDiv.dataset.tag = selectedTag; // Add a data attribute to identify the tag
   
   // Create elements
@@ -225,7 +225,7 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
     }
     
     // Remove the locked photo div from the selectedTagsWrapper
-    const lockedPhotoDiv = document.querySelector(`.selected-div[data-tag="${selectedTag}"]`);
+    const lockedPhotoDiv = document.querySelector(`.selected-photo-div[data-tag="${selectedTag}"]`);
     if (lockedPhotoDiv) {
       console.log('Removing locked photo div...');
       lockedPhotoDiv.remove();
@@ -243,7 +243,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   console.log('SelectedTagsWrapper:', selectedTagsWrapper);
   
   const selectedDiv = document.createElement('div');
-  selectedDiv.classList.add('selected-div', 'center');
+  selectedDiv.classList.add('selected-div', 'selected-photo-div', 'center');
   selectedDiv.dataset.tag = lockedPhoto.photoData._id; 
   
   const tagText = document.createElement('span');
