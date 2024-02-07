@@ -67,6 +67,9 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
     const removedPhoto = filteredPhotos.pop();
     selectedPhotoIds.delete(removedPhoto.googleId);
   }
+
+  console.log('Selected photo IDs:', selectedPhotoIds);
+  console.log(`Filtered photos googleId's:`, filteredPhotos.map(photo => photo.photoData.googleId));
 };
 
 const shuffleArray = (array) => {

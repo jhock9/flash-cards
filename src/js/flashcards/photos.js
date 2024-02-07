@@ -37,6 +37,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
+  console.log('Selected photo IDs:', selectedPhotoIds);
   
   // If there is a locked photo, add it to the selectedPhotoIds
   if (lockedPhoto) {
@@ -143,6 +144,7 @@ const setLockedPhoto = (savedPhotos) => {
     lockedPhoto = null;
   }
 };
+
 // Export to flashcards.js and selectedTags.js
 export {
   fetchPhotosData, // fetchPhotosData(tags)
