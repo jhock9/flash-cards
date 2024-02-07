@@ -95,11 +95,24 @@ router.post('/:appointmentId/remove-tags', async (req, res) => {
   }
 });
 
+// Route handler to get saved photo
+router.get('/:appointmentId/load-photo', async (req, res) => {
+  // Find the appointment and return the savedPhotos array
+  logger.info('Received request for /:appointmentId/load-photos...');
+  try {
+    const appointment = await Appointment.findById(req.params.appointmentId); 
+    res.json({ savedPhotos: appointment.savedPhotos });
+  } catch (error) {
+    logger.error(`Error: ${error.message}`);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // Route handler to save a photo
 router.post('/:appointmentId/save-photo', async (req, res) => {
   // Find the appointment and add the photo to the savedPhotos array
   logger.info('Received request for /:appointmentId/save-photo...');
-
+  
   const { photoId, selectedTag } = req.body;
   try {
     const appointment = await Appointment.findById(req.params.appointmentId); 
