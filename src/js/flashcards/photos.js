@@ -135,10 +135,16 @@ const lockPhoto = (img) => {
   });
 };
 
-// Export to flashcards.js
+// Set the locked photo
+const setLockedPhoto = (photo) => {
+  lockedPhoto = photo;
+};
+
+// Export to flashcards.js and selectedTags.js
 export {
   fetchPhotosData, // fetchPhotosData(tags)
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
   displayPhotos, // displayPhotos(filteredPhotos)
   lockedPhoto, // Export to selectedTags.js // global variable
+  setLockedPhoto, // Export to selectedTags.js // setLockedPhoto(photo)
 };
