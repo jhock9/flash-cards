@@ -19,14 +19,19 @@ import {
   toggleLockedTags, // toggleLockedTags(save = true, tag = null)
   toggleLockedPhoto, // toggleLockedPhoto(photoId, save = true)
 } from './saveData.js';
-import { lockedPhoto } from './photos.js'; // global variable
+import { lockedPhoto, setLockedPhoto } from './photos.js'; // global variable, setLockedPhoto(photo)
 
 // Load saved tags
 const loadSavedTags = async (filterInput) => {
   console.log('loadSavedTags called...');
-  const response = await fetch(`/appointment/${appointmentId}/load-tags`);
-  const data = await response.json();
-  const savedTags = data.savedTags;
+  const tagsResponse = await fetch(`/appointment/${appointmentId}/load-tags`);
+  const tagData = await tagsResponse.json();
+  const savedTags = tagData.savedTags;
+  
+  const photoResponse = await fetch(`/appointment/${appointmentId}/load-photo`);
+  const photoData = await photoResponse.json();
+  console.log('Photo data:', photoData);
+  setLockedPhoto(photoData.savedPhotos);
   
   selectedTagsWrapper.innerHTML = '';
   selectedTags = [];
