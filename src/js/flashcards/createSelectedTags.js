@@ -54,7 +54,7 @@ const toggleLock = (selectedDiv, lockIcon) => {
   lockIcon.classList.toggle('fa-unlock');
 };
 
-const createRemoveBtn = (selectedDiv, callback) => {
+const createRemoveBtn = (selectedDiv, callback, lockedPhoto) => {
   const removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.classList.add('remove-btn', 'center');

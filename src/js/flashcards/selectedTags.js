@@ -66,7 +66,7 @@ const loadSavedTags = async (filterInput) => {
 
 const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
   console.log('handleTagSelection called, selectedTag:', selectedTag);
-  
+
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
     resetTagSelect(filterInput);
@@ -244,7 +244,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   tagName.classList.add('name', 'center');
   tagName.textContent = lockedPhoto.tag; 
   
-  const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto);
+  const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto, lockedPhoto);
   
   const tagNameDiv = appendToNewDiv('locked-photo-name center', [tagText, tagName]);
   
