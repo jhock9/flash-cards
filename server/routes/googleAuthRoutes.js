@@ -55,7 +55,7 @@ router.get('/oauth2callback', async (req, res) => {
         return;
       }
     }
-
+    
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
     
@@ -74,51 +74,21 @@ router.get('/oauth2callback', async (req, res) => {
   }
 });
 
-// // Check if access token is valid
-// const checkTokenValidity = async (accessToken) => {
-//   try {
-//     logger.info('Checking token validity...');
-//     oauth2Client.setCredentials({ access_token: accessToken });
-//     const tokenInfo = await oauth2Client.getTokenInfo(accessToken);
-//     const isValid = Date.now() < tokenInfo.expiry_date;
-//     logger.info(`Token validity: ${isValid}`);
-//     return isValid;
-//   } catch (error) {
-//     if (error.message === 'invalid_token') {
-//       logger.info('Token is invalid.');
-//       return false;
-//     }
-//     logger.error(`Error while checking token validity: ${error}`);
-//     throw error;
-//   }
-// };
-
 // Check if admin has authenticated with database
 router.get('/google-check', async (req, res) => {
   logger.info('Received request for /google-check...');
   try {
     const tokenDoc = await Token.findOne({});
     if (tokenDoc) {
-      // // Check if the access token is valid
-      // const isValid = await checkTokenValidity(tokenDoc.accessToken);
-      // logger.info(`Token validity: ${isValid}`);
-      // if (isValid) {
-
       // Check if the access token is about to expire
       const isAboutToExpire = Date.now() > tokenDoc.expiryDate - 60000; // 1 minute buffer
       if (!isAboutToExpire) {      
         logger.info('Access token is valid.');
         res.json({ isGoogleAuthenticated: tokenDoc.isGoogleAuthenticated });
       } else {
-        // logger.info('Access token is invalid.');
-        // // The access token is invalid, so get a new one using the refresh token
-
         logger.info('Access token is about to expire.');
         // The access token is about to expire, so get a new one using the refresh token
         const { tokens } = await oauth2Client.refreshToken(tokenDoc.refreshToken);
-        // // Save the new access token to the database
-        // await Token.findOneAndUpdate({}, { accessToken: tokens.access_token });
-
         // Save the new access token and expiry time to the database
         const expiryDate = new Date().getTime() + (Number(tokens.expiry_date) * 1000);
         await Token.findOneAndUpdate({}, { accessToken: tokens.access_token, expiryDate });
