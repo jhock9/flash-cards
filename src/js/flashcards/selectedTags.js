@@ -32,6 +32,7 @@ const loadSavedTags = async (filterInput) => {
   const photoData = await photoResponse.json();
   console.log('Photo data:', photoData);
   setLockedPhoto(photoData.savedPhotos);
+  console.log('Locked photo:', lockedPhoto);
   
   selectedTagsWrapper.innerHTML = '';
   selectedTags = [];
