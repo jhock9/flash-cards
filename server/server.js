@@ -146,10 +146,15 @@ app.use('/users', userRoutes);
 app.use('/clients', clientRoutes);
 app.use('/appointment', appointmentRoutes);
 
-// Update photo data in database at 2:00 AM every day
+// Update photo data in database every hour from 8:00AM to 5:00PM, Monday to Friday
 initializeOauthClient().then((oauth2Client) => {
-  logger.info ('Cron job initialized.')
-  cron.schedule('0 2 * * *', () => updatePhotoData(oauth2Client));
+  logger.info('Cron job for fetching photos initialized.');
+  cron.schedule('0 8-17 * * 1-5', () => {
+    logger.info('Starting scheduled fetch and update of photo data...');
+    updatePhotoData(oauth2Client)
+      .then(() => logger.info('Photo data updated successfully.'))
+      .catch(error => logger.error('Failed to update photo data:', error));
+  });
 });
 
 // Error handler
