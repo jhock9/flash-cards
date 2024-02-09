@@ -161,6 +161,12 @@ initializeOauthClient().then((oauth2Client) => {
   });
 });
 
+initializeOauthClient().then((oauth2Client) => {
+  updatePhotoData(oauth2Client)
+    .then(() => console.log('Photo data updated successfully.'))
+    .catch(error => console.error('Failed to update photo data:', error));
+});
+
 // Error handler
 app.use((err, req, res, next) => {
   logger.error(err);
