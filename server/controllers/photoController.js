@@ -6,6 +6,7 @@ const savePhoto = async (mappedPhotoData) => {
   if (mappedPhotoData.tagsFromGoogle) {
     const existingPhoto = await Photo.findOne({ googleId: mappedPhotoData.googleId });
     if (existingPhoto) {
+      logger.debug(`Updating photo: ${mappedPhotoData.googleId}. Previous baseURL: ${existingPhoto.baseUrl}, Updated baseURL: ${mappedPhotoData.baseUrl}`);
       // Photo already exists in the database, update it
       if (existingPhoto.baseUrl !== mappedPhotoData.baseUrl || !arraysAreEqual(existingPhoto.tagsFromGoogle, mappedPhotoData.tagsFromGoogle)) {
         existingPhoto.baseUrl = mappedPhotoData.baseUrl;

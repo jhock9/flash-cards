@@ -32,6 +32,9 @@ const appointmentRoutes = require('./routes/appointmentRoutes'); // Routes for a
 // Controllers
 const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
 
+// Sets the timezone to CST
+process.env.TZ = 'America/Chicago';
+
 // Enforce HTTPS redirection in production
 if (NODE_ENV === 'production') {
   app.use((req, res, next) => {
@@ -148,7 +151,8 @@ app.use('/appointment', appointmentRoutes);
 
 // Update photo data in database every hour from 8:00AM to 5:00PM, Monday to Friday
 initializeOauthClient().then((oauth2Client) => {
-  logger.info('Cron job for fetching photos initialized.');
+  logger.info(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
+  logger.debug(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
   cron.schedule('0 8-17 * * 1-5', () => {
     logger.info('Starting scheduled fetch and update of photo data...');
     updatePhotoData(oauth2Client)

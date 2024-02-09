@@ -103,6 +103,10 @@ const displayPhotos = (filteredPhotos) => {
   for (let i = 0; i < numPhotos; i++) {
     const img = document.createElement('img');
     img.src = filteredPhotos[i].photoData.baseUrl;
+    img.onerror = () => {
+      console.log(`Failed to load image with ID: ${filteredPhotos[i].photoData.googleId} and URL: ${filteredPhotos[i].photoData.baseUrl}`);
+      // Optionally, replace with a placeholder image or display an error message
+    };
     img.classList.add('image');
     img.style.flexBasis = flexBasis;
     img.photoData = filteredPhotos[i].photoData;
