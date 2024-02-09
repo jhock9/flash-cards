@@ -6,15 +6,17 @@ const savePhoto = async (mappedPhotoData) => {
   if (mappedPhotoData.tagsFromGoogle) {
     const existingPhoto = await Photo.findOne({ googleId: mappedPhotoData.googleId });
     if (existingPhoto) {
-      logger.debug(`Updating photo: ${mappedPhotoData.googleId}. Previous baseURL: ${existingPhoto.baseUrl}, Updated baseURL: ${mappedPhotoData.baseUrl}`);
-      // Photo already exists in the database, update it
-      if (existingPhoto.baseUrl !== mappedPhotoData.baseUrl || !arraysAreEqual(existingPhoto.tagsFromGoogle, mappedPhotoData.tagsFromGoogle)) {
-        existingPhoto.baseUrl = mappedPhotoData.baseUrl;
+      // baseURL expires every 60 minutes, update it every time
+      existingPhoto.baseUrl = mappedPhotoData.baseUrl;
+      
+      // Check if any tags have been added or removed
+      if (!arraysAreEqual(existingPhoto.tagsFromGoogle, mappedPhotoData.tagsFromGoogle)) {
         existingPhoto.tagsFromGoogle = mappedPhotoData.tagsFromGoogle;
-        await existingPhoto.save();
       }
+      
+      await existingPhoto.save();
     } else {
-      // Photo has a unique googleId, insert it into the database
+      // If the photo does not exist, insert it as new
       const photo = new Photo(mappedPhotoData);
       await photo.save();
     }

@@ -152,7 +152,6 @@ app.use('/appointment', appointmentRoutes);
 // Update photo data in database every hour from 8:00AM to 5:00PM, Monday to Friday
 initializeOauthClient().then((oauth2Client) => {
   logger.info(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
-  logger.debug(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
   cron.schedule('0 8-17 * * 1-5', () => {
     logger.info('Starting scheduled fetch and update of photo data...');
     updatePhotoData(oauth2Client)
