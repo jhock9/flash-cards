@@ -256,7 +256,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   
   const tagName = document.createElement('span');
   tagName.classList.add('name', 'center');
-  tagName.textContent = lockedPhoto.tag; 
+  tagName.textContent = lockedPhoto.selectedTag; 
   
   const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto, lockedPhoto);
   
