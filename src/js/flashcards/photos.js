@@ -140,7 +140,7 @@ const lockPhoto = (img) => {
       lockedPhoto = {photoData: img.photoData, tag: img.tag};
       lockedPhotoBtn.classList.remove('hide');
     } else {
-      removeLockedPhoto(img.photoData._id, lockedPhoto);
+      lockedPhoto = await removeLockedPhoto(img.photoData._id, lockedPhoto);
       unlockedPhotoId = img.photoData._id;
     }
   });
