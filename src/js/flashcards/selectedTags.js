@@ -71,8 +71,8 @@ const loadSavedTags = async (filterInput) => {
 };
 
 const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
-  console.log('handleTagSelection called, selectedTag:', selectedTag);
-
+  console.log('handleTagSelection called...');
+  
   if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
     resetTagSelect(filterInput);
@@ -113,7 +113,6 @@ const createSelectedDiv = (selectedTag) => {
   selectedDiv.appendChild(iconDiv);
   selectedTagsWrapper.appendChild(selectedDiv);
   
-  console.log('selectedDiv:', selectedDiv);
   return selectedDiv;
 };
 
@@ -249,7 +248,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   
   const selectedDiv = document.createElement('div');
   selectedDiv.classList.add('selected-div', 'selected-photo-div', 'center');
-  selectedDiv.dataset.tag = lockedPhoto.photoData._id; 
+  selectedDiv.dataset.tag = lockedPhoto._id; 
   
   const tagText = document.createElement('span');
   tagText.classList.add('tag-text', 'center');
@@ -257,7 +256,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   
   const tagName = document.createElement('span');
   tagName.classList.add('name', 'center');
-  tagName.textContent = lockedPhoto.tag; 
+  tagName.textContent = lockedPhoto.selectedTag; 
   
   const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto, lockedPhoto);
   
