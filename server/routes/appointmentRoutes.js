@@ -100,7 +100,8 @@ router.get('/:appointmentId/load-photo', async (req, res) => {
   // Find the appointment and return the savedPhotos array
   logger.info('Received request for /:appointmentId/load-photos...');
   try {
-    const appointment = await Appointment.findById(req.params.appointmentId); 
+    const appointment = await Appointment.findById(req.params.appointmentId) 
+      .populate('savedPhotos.photo');
     res.json({ savedPhotos: appointment.savedPhotos });
   } catch (error) {
     logger.error(`Error: ${error.message}`);
