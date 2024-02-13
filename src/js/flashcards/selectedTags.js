@@ -19,7 +19,7 @@ import {
   toggleLockedTags, // toggleLockedTags(save = true, tag = null)
   toggleLockedPhoto, // toggleLockedPhoto(photoId, save = true)
 } from './saveData.js';
-import { lockedPhoto, setLockedPhoto } from './photos.js'; // global variable, setLockedPhoto(photo)
+import { lockedPhoto, setLockedPhoto } from './photos.js'; // global variable, setLockedPhoto(savedPhoto)
 
 // Load saved tags
 const loadSavedTags = async (filterInput) => {
@@ -32,7 +32,6 @@ const loadSavedTags = async (filterInput) => {
   const photoData = await photoResponse.json();
   console.log('Photo data:', photoData);
   setLockedPhoto(photoData.savedPhotos);
-  console.log('Locked photo:', lockedPhoto);
   
   selectedTagsWrapper.innerHTML = '';
   selectedTags = [];
@@ -116,10 +115,10 @@ const createSelectedDiv = (selectedTag) => {
   return selectedDiv;
 };
 
-const removeTag = (selectedTag) => {
+const removeTag = async (selectedTag) => {
   console.log('removeTag called...');
   // Removes all references of a locked photo from the DOM and database
-  removeLockedPhoto(selectedTag);
+  await removeLockedPhoto(selectedTag);
   
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
@@ -243,7 +242,7 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
   lockedPhotoBtn.classList.add('hide');
   toggleBorders();
   
-  return null; // Return null to reset lockedPhoto
+  setLockedPhoto(null); // Resets lockedPhoto to null
 };
 
 const createLockedPhotoDiv = (lockedPhoto) => {
@@ -272,11 +271,11 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   toggleBorders();
 };
 
-lockedPhotoBtn.addEventListener('click', () => {
+lockedPhotoBtn.addEventListener('click', async () => {
   console.log('Locked photo button clicked to unlock...');
   if (lockedPhoto) {
     console.log('lockedPhoto:', lockedPhoto);
-    removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
+    await removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto); // Resets lockedPhoto to null
   }
 });
 

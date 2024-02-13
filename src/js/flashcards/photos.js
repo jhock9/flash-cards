@@ -129,7 +129,7 @@ const lockPhoto = (img) => {
         lockedPhoto.classList.toggle('locked-photo');
       }
       // Remove the locked photo div from the selectedTagsWrapper, set lockedPhoto to null
-      lockedPhoto = await removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
+      await removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
     }
     // Toggle the lock status of the clicked photo
     const save = !img.classList.contains('locked-photo');
@@ -140,18 +140,18 @@ const lockPhoto = (img) => {
       lockedPhoto = {photoData: img.photoData, tag: img.tag};
       lockedPhotoBtn.classList.remove('hide');
     } else {
-      lockedPhoto = await removeLockedPhoto(img.photoData._id, lockedPhoto);
+      await removeLockedPhoto(img.photoData._id, lockedPhoto);
       unlockedPhotoId = img.photoData._id;
     }
   });
 };
 
-// Set the locked photo
-const setLockedPhoto = (savedPhotos) => {
-  if (savedPhotos.length > 0) {
+// Set the locked photo (savedPhoto parameter used for loadSavedTags() in selectedTags.js)
+const setLockedPhoto = (savedPhoto) => {
+  if (savedPhoto.length > 0) {
     lockedPhoto = {
-      photoData: savedPhotos[0].photo, // photo schema data
-      selectedTag: savedPhotos[0].selectedTag // tag name
+      photoData: savedPhoto[0].photo, // photo schema data
+      selectedTag: savedPhoto[0].selectedTag // tag name
     };
   } else {
     lockedPhoto = null;
@@ -164,5 +164,5 @@ export {
   filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
   displayPhotos, // displayPhotos(filteredPhotos)
   lockedPhoto, // Export to selectedTags.js // global variable
-  setLockedPhoto, // Export to selectedTags.js // setLockedPhoto(photo)
+  setLockedPhoto, // Export to selectedTags.js // setLockedPhoto(savedPhoto)
 };
