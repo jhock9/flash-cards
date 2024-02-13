@@ -159,8 +159,9 @@ const clearSelectedTags = (removeLockedTags = false) => {
     
     // if removeLockedTags is true, or if the tag is not locked and the photo is not locked, remove the tag
     if (removeLockedTags || (!isLockedTag && !isLockedPhoto)) {
-      removeTag(div.dataset.tag); // Removes from DOM and database
-    }
+      const tagToRemove = isLockedPhoto ? lockedPhoto.selectedTag : div.dataset.tag;
+      removeTag(tagToRemove); // Removes from DOM and database
+      }
   });
   
   // Filter selectedTags array to only include locked tags
@@ -168,7 +169,8 @@ const clearSelectedTags = (removeLockedTags = false) => {
   
   // Check if there are any locked tags
   const lockedTags = selectedTags.filter(tag => tag.locked);
-  
+  console.log('Locked tags:', lockedTags);
+
   // Clear locked tags from database if removeLockedTags is true
   if (removeLockedTags && (lockedTags.length > 0 || lockedPhoto)) {
     console.log('Clearing locked tags and photo from database...')
