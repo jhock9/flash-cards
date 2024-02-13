@@ -218,7 +218,11 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
     await toggleLockedPhoto(lockedPhoto.photoData._id, selectedTag, false);
     
     // Remove the photo from the DOM
-    const photoElement = Array.from(document.getElementsByClassName('image')).find(img => img.photoData._id === selectedTag);
+    const images = Array.from(document.getElementsByClassName('image'));
+    console.log('Images:', images);
+    const photoElement = images.find(img => img.photoData._id === selectedTag);
+    console.log('Photo element:', photoElement);
+    
     if (photoElement) {
       console.log('Removing photo from DOM...');
       photoElement.classList.remove('locked-photo');

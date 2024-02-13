@@ -125,6 +125,7 @@ const lockPhoto = (img) => {
     if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
       console.log('Another photo is already locked, unlocking it...');
       console.log('Locked photo:', lockedPhoto); 
+      console.log('Locked photo img parameter:', img);
       if (lockedPhoto.classList) {
         lockedPhoto.classList.toggle('locked-photo');
       }
