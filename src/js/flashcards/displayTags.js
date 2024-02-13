@@ -13,7 +13,6 @@ const fetchTagsData = async () => {
     }
     const responseText = await response.text();
     googleTags = JSON.parse(responseText);
-    console.log('google tags fetched...');
     return googleTags;
   } catch (error) {
     console.error('Error fetching google tags:', error);
@@ -36,7 +35,6 @@ const displayTags = async (tagsList) => {
       tagDiv.appendChild(tagName);  
       tagsList.appendChild(tagDiv);
     }
-    console.log('Tags displayed...');
   } catch (error) {
     console.error('Error:', error);
   }

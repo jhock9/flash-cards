@@ -26,7 +26,6 @@ const fetchPhotosData = async (tags) => {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const photos = await response.json();
-    console.log('Photos data fetched...');
     return photos;
   } catch (error) {
     console.error('Error fetching photos:', error);
@@ -51,8 +50,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
-  console.log('Intended total:', intendedTotal);
-  console.log('Total photos:', totalPhotos);
   
   // If the intended total exceeds the maximum total of 10, adjust the quantities
   if (intendedTotal > 10) {
@@ -121,11 +118,13 @@ const lockPhoto = (img) => {
   // Lock or unlock the photo when clicked
   img.addEventListener('click', async () => {
     console.log('Image clicked...');
+    console.log('Locked photo img photoData:', img.photoData);
+    console.log('Locked photo img tag:', img.tag);
+    
     // If another photo is already locked and it's not the one being clicked, unlock it
     if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
       console.log('Another photo is already locked, unlocking it...');
       console.log('Locked photo:', lockedPhoto); 
-      console.log('Locked photo img parameter:', img);
       if (lockedPhoto.classList) {
         lockedPhoto.classList.toggle('locked-photo');
       }

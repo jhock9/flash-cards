@@ -119,7 +119,6 @@ tagsList.addEventListener('click', (e) => {
 });
 
 const toggleNav = () => {
-  console.log('Toggling nav...');
   tabletOpenBtn.classList.toggle('open');
   flashPanel.classList.toggle('open');
   
