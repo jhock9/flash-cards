@@ -149,15 +149,15 @@ const clearSelectedTags = (removeLockedTags = false) => {
   selectedDivs.forEach((div) => {
     // Check if the div is a locked tag or a locked photo
     const isLockedTag = div.dataset.locked === 'true';
-    const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
+    const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.selectedTag;
     
-    console.log('div:', div.dataset);
-    console.log('div.dataset.tag:', div.dataset.tag);
     console.log('isLockedTag:', isLockedTag);
     console.log('isLockedPhoto:', isLockedPhoto);
     console.log('removeLockedTags set to:', removeLockedTags);
     console.log('lockedPhoto:', lockedPhoto);
+    console.log('div.dataset.tag:', div.dataset.tag);
     
+    // if removeLockedTags is true, or if the tag is not locked and the photo is not locked, remove the tag
     if (removeLockedTags || (!isLockedTag && !isLockedPhoto)) {
       removeTag(div.dataset.tag); // Removes from DOM and database
     }
