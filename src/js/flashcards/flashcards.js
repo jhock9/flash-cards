@@ -231,7 +231,7 @@ submitBtn.addEventListener('click', async (e) => {
   console.log('Submit button clicked...');
   
   // Get selected tags and quantities from selected-tags-wrapper
-  const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-div')).map(selectedDiv => {
+  const selectedTagsAndQuantities = Array.from(document.querySelectorAll('.selected-tag-div')).map(selectedDiv => {
     const tag = selectedDiv.dataset.tag;
     const quantity = selectedDiv.querySelector('.slider').value;
     return { tag, quantity };
