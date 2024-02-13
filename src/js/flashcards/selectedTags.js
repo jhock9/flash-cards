@@ -151,6 +151,13 @@ const clearSelectedTags = (removeLockedTags = false) => {
     const isLockedTag = div.dataset.locked === 'true';
     const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
     
+    console.log('div:', div.dataset);
+    console.log('div.dataset.tag:', div.dataset.tag);
+    console.log('isLockedTag:', isLockedTag);
+    console.log('isLockedPhoto:', isLockedPhoto);
+    console.log('removeLockedTags set to:', removeLockedTags);
+    console.log('lockedPhoto:', lockedPhoto);
+    
     if (removeLockedTags || (!isLockedTag && !isLockedPhoto)) {
       removeTag(div.dataset.tag); // Removes from DOM and database
     }
