@@ -148,7 +148,7 @@ const lockPhoto = (img) => {
 
 // Set the locked photo (savedPhoto parameter used for loadSavedTags() in selectedTags.js)
 const setLockedPhoto = (savedPhoto) => {
-  if (savedPhoto.length > 0) {
+  if (savedPhoto && savedPhoto.length > 0) {
     lockedPhoto = {
       photoData: savedPhoto[0].photo, // photo schema data
       selectedTag: savedPhoto[0].selectedTag // tag name
