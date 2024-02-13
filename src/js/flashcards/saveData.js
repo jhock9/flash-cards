@@ -15,13 +15,11 @@ const toggleLockedTags = async (save = true, tag = null) => {
     if (selectedDiv) {
       console.log('Found selectedDiv...');
       const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);
-      console.log(`sliderValue: ${sliderValue}`); // Log sliderValue
       savedTag.push({ 
         name: selectedDiv.dataset.tag, 
         qty: sliderValue, 
         locked: selectedDiv.dataset.locked === 'true' 
       });
-      console.log(`savedTag: ${JSON.stringify(savedTag)}`); // Log savedTag
     } else {
       console.log('No selectedDiv found...');
     }
@@ -32,14 +30,12 @@ const toggleLockedTags = async (save = true, tag = null) => {
     .filter(selectedDiv => selectedDiv.dataset.locked === 'true')
     .map(selectedDiv => {
       const sliderValue = parseInt(selectedDiv.querySelector('.slider').value);
-      console.log(`sliderValue: ${sliderValue}`); // Log sliderValue
       return { 
         name: selectedDiv.dataset.tag, 
         qty: sliderValue, 
         locked: true 
       };
     }) || []; 
-    console.log(`savedTag: ${JSON.stringify(savedTag)}`); // Log savedTag
     
     // '|| []' ensures 'savedTag' is an array. It defaults to an empty array if no 
     // '.selected-div' elements with 'dataset.locked === 'true'' are found.

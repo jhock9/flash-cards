@@ -244,7 +244,6 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
 
 const createLockedPhotoDiv = (lockedPhoto) => {
   console.log('createLockedPhotoDiv called...');
-  console.log('SelectedTagsWrapper:', selectedTagsWrapper);
   
   const selectedDiv = document.createElement('div');
   selectedDiv.classList.add('selected-div', 'selected-photo-div', 'center');
