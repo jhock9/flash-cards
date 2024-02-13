@@ -12,7 +12,7 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
   console.log('Processing tags...');
   return selectedTagsAndQuantities.flatMap(({ tag, quantity }) => {
     const taggedPhotos = photos.filter(photo =>
-      photo.tag?.includes(tag) && !selectedPhotoIds.has(photo.photoData.googleId)
+      photo.tag?.includes(tag) && !selectedPhotoIds.has(photo.photoData._id)
     );
     shuffleArray(taggedPhotos);
     return taggedPhotos.slice(0, quantity);
@@ -22,13 +22,13 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
 // Add remaining photos if 'useRemainder' is checked
 const addRemainingPhotos = (photos, filteredPhotos, remainingPhotos, selectedPhotoIds) => {
   console.log('Adding remaining photos...');
-  const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.photoData.googleId));
+  const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.photoData._id));
   shuffleArray(additionalPhotos);
   const photosToAdd = additionalPhotos.slice(0, remainingPhotos);
   photosToAdd.forEach(photo => {
-    if (!selectedPhotoIds.has(photo.photoData.googleId)) {
+    if (!selectedPhotoIds.has(photo.photoData._id)) {
       filteredPhotos.push(photo);
-      selectedPhotoIds.add(photo.photoData.googleId);
+      selectedPhotoIds.add(photo.photoData._id);
     }
   });
   return photosToAdd;
@@ -41,8 +41,8 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
   // If the photo is not already in the filteredPhotos array, add it
   photosToAdd.forEach(photo => {
     // Add the photo to filteredPhotos and update selectedPhotoIds
-    if (!selectedPhotoIds.has(photo.photoData.googleId)) {
-      selectedPhotoIds.add(photo.photoData.googleId);
+    if (!selectedPhotoIds.has(photo.photoData._id)) {
+      selectedPhotoIds.add(photo.photoData._id);
       filteredPhotos.push(photo);
     }
   });
@@ -53,11 +53,11 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
     if (sameTagIndex !== -1) {
       // Replace the photo with the same tag with the locked photo
       const removedPhoto = filteredPhotos.splice(sameTagIndex, 1, lockedPhoto)[0];
-      selectedPhotoIds.delete(removedPhoto.googleId);
-      selectedPhotoIds.add(lockedPhoto.googleId);
+      selectedPhotoIds.delete(removedPhoto._id);
+      selectedPhotoIds.add(lockedPhoto._id);
     } else {
       // Add the locked photo to the filteredPhotos array
-      selectedPhotoIds.add(lockedPhoto.googleId);
+      selectedPhotoIds.add(lockedPhoto._id);
       filteredPhotos.unshift(lockedPhoto);
     }
   }
@@ -65,11 +65,11 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
   // If the total number of photos exceeds the intended total, remove a photo
   if (filteredPhotos.length > intendedTotal) {
     const removedPhoto = filteredPhotos.pop();
-    selectedPhotoIds.delete(removedPhoto.googleId);
+    selectedPhotoIds.delete(removedPhoto._id);
   }
 
   console.log('Selected photo IDs:', selectedPhotoIds);
-  console.log(`Filtered photos googleId's:`, filteredPhotos.map(photo => photo.photoData.googleId));
+  console.log(`Filtered photos by ._id's:`, filteredPhotos.map(photo => photo.photoData._id));
 };
 
 const shuffleArray = (array) => {

@@ -42,7 +42,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // If there is a locked photo, add it to the selectedPhotoIds, otherwise remove it from the photos array
   if (lockedPhoto) {
-    selectedPhotoIds.add(lockedPhoto.photoData.googleId);
+    selectedPhotoIds.add(lockedPhoto.photoData._id);
     console.log('Locked photo added to selected photo IDs:', selectedPhotoIds);
   } else if (unlockedPhotoId) {
     photos = photos.filter(photo => photo.photoData._id !== unlockedPhotoId);
@@ -104,7 +104,7 @@ const displayPhotos = (filteredPhotos) => {
     const img = document.createElement('img');
     img.src = filteredPhotos[i].photoData.baseUrl;
     img.onerror = () => {
-      console.log(`Failed to load image with ID: ${filteredPhotos[i].photoData.googleId} and URL: ${filteredPhotos[i].photoData.baseUrl}`);
+      console.log(`Failed to load image with ID: ${filteredPhotos[i].photoData._id} and URL: ${filteredPhotos[i].photoData.baseUrl}`);
       // Optionally, replace with a placeholder image or display an error message
     };
     img.classList.add('image');
