@@ -270,6 +270,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
 
 lockedPhotoBtn.addEventListener('click', () => {
   if (lockedPhoto) {
+    console.log('lockedPhoto:', lockedPhoto);
     removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
   }
 });
