@@ -142,10 +142,7 @@ const removeTag = async (selectedTag) => {
     tagSpan.classList.remove('selected');
   }
   toggleBorders();
-}
-
-//!! seems like there might be some doubling up on code between removeTag and clearSelectedTags
-//!! specifically with how they handle database removal
+};
 
 const clearSelectedTags = (removeLockedTags = false) => {
   console.log('clearSelectedTags called...');
@@ -156,19 +153,26 @@ const clearSelectedTags = (removeLockedTags = false) => {
     // Check if the div is a locked tag or a locked photo
     const isLockedTag = div.dataset.locked === 'true';
     const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.selectedTag;
-    //!! this is evaluating incorrectly
+    //!! is this evaluating incorrectly?
 
-    if (isLockedPhoto) {
-      console.log('isLockedPhoto:', isLockedPhoto);
-      console.log('Locked photo div:', div);
+    if (isLockedTag) {
+      console.log('Locked TAG div:', div);
       console.log('lockedPhoto:', lockedPhoto);
-      console.log('div.dataset.tag:', div.dataset.tag);
-      console.log('div.dataset.locked:', div.dataset.locked);
+      console.log(`
+        isLockedTag: ${isLockedTag}, 
+        isLockedPhoto: ${isLockedPhoto},
+        div.dataset.locked: ${div.dataset.locked}, 
+        div.dataset.tag: ${div.dataset.tag},
+      `);
     } else {
-      console.log('isLockedTag:', isLockedTag);
-      console.log('Not a locked photo div:', div);
-      console.log('div.dataset.tag:', div.dataset.tag);
-      console.log('div.dataset.locked:', div.dataset.locked);
+      console.log('Locked PHOTO div:', div);
+      console.log('lockedPhoto:', lockedPhoto);
+      console.log(`
+        isLockedTag: ${isLockedTag}, 
+        isLockedPhoto: ${isLockedPhoto},
+        div.dataset.locked: ${div.dataset.locked}, 
+        div.dataset.tag: ${div.dataset.tag},
+      `);
     }
     
     // if removeLockedTags is true, or if the isLockedTag and isLockedPhoto are both false, remove the tag
@@ -242,9 +246,7 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
     
     // Remove the photo from the DOM
     const images = Array.from(document.getElementsByClassName('image'));
-    console.log('Images:', images);
     const photoElement = images.find(img => img.photoData._id === selectedTag);
-    console.log('Photo element:', photoElement);
     
     if (photoElement) {
       console.log('Removing photo from DOM...');
