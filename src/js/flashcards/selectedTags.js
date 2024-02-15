@@ -119,7 +119,6 @@ const removeTag = async (selectedTag) => {
   console.log('removeTag called...');
   // Removes all references of a locked photo from the DOM and database
   console.log('Selected tag:', selectedTag);
-  console.log('Locked photo:', lockedPhoto);
   await removeLockedPhoto(selectedTag, lockedPhoto);
   
   // Remove the tag from the selectedTags array
@@ -152,10 +151,10 @@ const clearSelectedTags = (removeLockedTags = false) => {
   selectedDivs.forEach((div) => {
     // Check if the div is a locked tag or a locked photo
     const isLockedTag = div.dataset.locked === 'true';
-    const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.selectedTag;
-    //!! is this evaluating incorrectly?
-
+    const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
+    
     if (isLockedTag) {
+      // log when there is a locked tag
       console.log('Locked TAG div:', div);
       console.log('lockedPhoto:', lockedPhoto);
       console.log(`
@@ -165,6 +164,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
         div.dataset.tag: ${div.dataset.tag},
       `);
     } else {
+      // log when there is a locked photo
       console.log('Locked PHOTO div:', div);
       console.log('lockedPhoto:', lockedPhoto);
       console.log(`
@@ -194,7 +194,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
   if (removeLockedTags && (lockedTags.length > 0 || lockedPhoto)) {
     console.log('Clearing locked tags and photo from database...')
     toggleLockedTags(false); 
-    toggleLockedPhoto(null, null, false);
+    toggleLockedPhoto(lockedPhoto.photoData._id, selectedTag, false);
   } else if (lockedTags.length > 0) {
     console.log('Keeping locked tags on database...')
     toggleLockedTags(true);
