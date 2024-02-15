@@ -42,6 +42,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   // If there is a locked photo, add it to the selectedPhotoIds, otherwise remove it from the photos array
   if (lockedPhoto) {
     selectedPhotoIds.add(lockedPhoto.photoData._id);
+    filteredPhotos.push(lockedPhoto);
     console.log('Locked photo added to selected photo IDs:', selectedPhotoIds);
   } else if (unlockedPhotoId) {
     photos = photos.filter(photo => photo.photoData._id !== unlockedPhotoId);
@@ -78,6 +79,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   }
   
   shuffleArray(filteredPhotos);
+  console.log('Filtered photos:', filteredPhotos);
   return filteredPhotos;
 };
 
