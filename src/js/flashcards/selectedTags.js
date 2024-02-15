@@ -61,6 +61,7 @@ const loadSavedTags = async (filterInput) => {
   if (lockedPhoto !== null) {
     console.log('Locked photo:', lockedPhoto);
     createLockedPhotoDiv(lockedPhoto);
+    toggleBorders();
   } else {
     console.log('No locked photo');
   };
@@ -70,8 +71,8 @@ const loadSavedTags = async (filterInput) => {
 
 const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
   console.log('handleTagSelection called...');
-  
-  if (selectedTags.includes(selectedTag)) {
+  // Check if the tag is already selected
+    if (selectedTags.includes(selectedTag)) {
     removeTag(selectedTag);
     resetTagSelect(filterInput);
     return false;
@@ -155,7 +156,8 @@ const clearSelectedTags = (removeLockedTags = false) => {
     // Check if the div is a locked tag or a locked photo
     const isLockedTag = div.dataset.locked === 'true';
     const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.selectedTag;
-    
+    //!! this is evaluating incorrectly
+
     if (isLockedPhoto) {
       console.log('isLockedPhoto:', isLockedPhoto);
       console.log('Locked photo div:', div);
