@@ -119,7 +119,12 @@ const removeTag = async (selectedTag) => {
   console.log('removeTag called...');
   // Removes all references of a locked photo from the DOM and database
   console.log('Selected tag:', selectedTag);
-  await removeLockedPhoto(selectedTag, lockedPhoto);
+  
+  // Check if this is a locked photo
+  if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
+    console.log('Locked photo found...');
+    await removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto, selectedTag);
+  }
   
   // Remove the tag from the selectedTags array
   selectedTags = selectedTags.filter(tag => tag !== selectedTag);
@@ -152,7 +157,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
     // Check if the div is a locked tag or a locked photo
     const isLockedTag = div.dataset.locked === 'true';
     const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
-    
+    // const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.selectedTag;
     if (isLockedTag) {
       // log when there is a locked tag
       console.log('Locked TAG div:', div);
@@ -194,7 +199,8 @@ const clearSelectedTags = (removeLockedTags = false) => {
   if (removeLockedTags && (lockedTags.length > 0 || lockedPhoto)) {
     console.log('Clearing locked tags and photo from database...')
     toggleLockedTags(false); 
-    toggleLockedPhoto(lockedPhoto.photoData._id, selectedTag, false);
+    //!! toggleLockedPhoto should not be called here
+    // toggleLockedPhoto(lockedPhoto.photoData._id, selectedTag, false);
   } else if (lockedTags.length > 0) {
     console.log('Keeping locked tags on database...')
     toggleLockedTags(true);
@@ -227,26 +233,32 @@ removeBtns.forEach((btn) => {
   btn.addEventListener('click', () => {
     console.log('Remove button clicked..');
     const selectedTag = btn.parentElement.dataset.tag;
+    console.log('Selected tag:', selectedTag);
+    
     removeTag(selectedTag);
+    //!! what if I added removeLockedPhoto here?
+    // removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto, selectedTag);
   });
 });
 
-const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
+const removeLockedPhoto = async (photoId, lockedPhoto, selectedTag) => {
   console.log('removeLockedPhoto called...');
-  if (!selectedTag || !lockedPhoto) {
+  if (!photoId || !lockedPhoto || !selectedTag) {
+    console.log(`photoId: ${photoId}, lockedPhoto: ${lockedPhoto}, selectedTag: ${selectedTag} identified as null or undefined`);
     console.log(`Selected tag: ${selectedTag}, lockedPhoto: ${lockedPhoto} identified as null or undefined`);
     return;
-  }
-  console.log('Selected tag:', selectedTag);
-  console.log('Locked photo:', lockedPhoto);
+  } else {
+    console.log(`photoId: ${photoId}, lockedPhoto: ${JSON.stringify(lockedPhoto, null, 2)}, selectedTag: ${selectedTag}`);
+  };
   
-  if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
+  //!! why is this check here? these will never equal each other
+  if (lockedPhoto && selectedTag === photoId) {
     // Remove the photo from the database
-    await toggleLockedPhoto(lockedPhoto.photoData._id, selectedTag, false);
+    await toggleLockedPhoto(photoId, selectedTag, false);
     
     // Remove the photo from the DOM
     const images = Array.from(document.getElementsByClassName('image'));
-    const photoElement = images.find(img => img.photoData._id === selectedTag);
+    const photoElement = images.find(img => img.photoData._id === photoId);
     
     if (photoElement) {
       console.log('Removing photo from DOM...');
@@ -256,7 +268,7 @@ const removeLockedPhoto = async (selectedTag, lockedPhoto) => {
     }
     
     // Remove the locked photo div from the selectedTagsWrapper
-    const lockedPhotoDiv = document.querySelector(`.selected-photo-div[data-tag="${selectedTag}"]`);
+    const lockedPhotoDiv = document.querySelector(`.selected-photo-div[data-tag="${photoId}"]`);
     if (lockedPhotoDiv) {
       console.log('Removing locked photo div...');
       lockedPhotoDiv.remove();
@@ -313,5 +325,5 @@ export {
   clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
   toggleBorders, // toggleBorders()
-  removeLockedPhoto, // Export to photos.js // removeLockedPhoto(selectedTag)
+  removeLockedPhoto, // Export to photos.js // removeLockedPhoto(photoId, lockedPhoto, selectedTag)
 };

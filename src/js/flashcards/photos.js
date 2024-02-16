@@ -3,7 +3,7 @@ const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let lockedPhoto;
 let unlockedPhotoId;
 
-import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(selectedTag)
+import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(photoId, lockedPhoto, tag)
 import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(selectedTag, tag, save = true)
 import {
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
@@ -131,7 +131,7 @@ const lockPhoto = (img) => {
         lockedPhoto.classList.toggle('locked-photo');
       }
       // Remove the locked photo div from the selectedTagsWrapper, set lockedPhoto to null
-      await removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto);
+      await removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto, lockedPhoto.tag);
     }
     // Toggle the lock status of the clicked photo
     const save = !img.classList.contains('locked-photo');
@@ -142,7 +142,7 @@ const lockPhoto = (img) => {
       lockedPhoto = {photoData: img.photoData, tag: img.tag};
       lockedPhotoBtn.classList.remove('hide');
     } else {
-      await removeLockedPhoto(img.photoData._id, lockedPhoto);
+      await removeLockedPhoto(img.photoData._id, lockedPhoto, img.tag);
       unlockedPhotoId = img.photoData._id;
     }
   });
