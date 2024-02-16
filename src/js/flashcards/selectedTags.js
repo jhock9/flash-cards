@@ -116,9 +116,10 @@ const createSelectedDiv = (selectedTag) => {
 };
 
 const removeTag = async (selectedTag) => {
+  // The selectedTag is either a tag name (for selected/locked TAGS) or a photo ID (for locked PHOTOS)
   console.log('removeTag called...');
   // Removes all references of a locked photo from the DOM and database
-  console.log('Selected tag:', selectedTag);
+  console.log('Selected Div to remove:', selectedTag);
   
   // Check if this is a locked photo
   if (lockedPhoto && selectedTag === lockedPhoto.photoData._id) {
@@ -158,9 +159,9 @@ const clearSelectedTags = (removeLockedTags = false) => {
     const isLockedTag = div.dataset.locked === 'true';
     const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
     // const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.selectedTag;
-    if (isLockedTag) {
-      // log when there is a locked tag
-      console.log('Locked TAG div:', div);
+    if (!isLockedTag) {
+      // log when there is a locked photo
+      console.log('Locked PHOTO div:', div);
       console.log('lockedPhoto:', lockedPhoto);
       console.log(`
         isLockedTag: ${isLockedTag}, 
@@ -169,8 +170,8 @@ const clearSelectedTags = (removeLockedTags = false) => {
         div.dataset.tag: ${div.dataset.tag},
       `);
     } else {
-      // log when there is a locked photo
-      console.log('Locked PHOTO div:', div);
+      // log when there is a locked tag
+      console.log('Locked TAG div:', div);
       console.log('lockedPhoto:', lockedPhoto);
       console.log(`
         isLockedTag: ${isLockedTag}, 
@@ -182,9 +183,9 @@ const clearSelectedTags = (removeLockedTags = false) => {
     
     // if removeLockedTags is true, or if the isLockedTag and isLockedPhoto are both false, remove the tag
     if (removeLockedTags || (!isLockedTag && !isLockedPhoto)) {
-      const tagToRemove = isLockedPhoto ? lockedPhoto.selectedTag : div.dataset.tag;
-      console.log(`isLockedPhoto: ${isLockedPhoto}, tagToRemove: ${tagToRemove}`)
-      removeTag(tagToRemove); // Removes from DOM and database
+      const divToRemove = isLockedPhoto ? lockedPhoto.photoData._id : div.dataset.tag;
+      console.log(`Locked PHOTO div to remove: ${isLockedPhoto}, Locked TAG div to remove: ${divToRemove}`)
+      removeTag(divToRemove); // Removes from DOM and database
       }
   });
   
@@ -232,12 +233,10 @@ const toggleBorders = () => {
 removeBtns.forEach((btn) => {
   btn.addEventListener('click', () => {
     console.log('Remove button clicked..');
-    const selectedTag = btn.parentElement.dataset.tag;
-    console.log('Selected tag:', selectedTag);
-    
-    removeTag(selectedTag);
-    //!! what if I added removeLockedPhoto here?
-    // removeLockedPhoto(lockedPhoto.photoData._id, lockedPhoto, selectedTag);
+    // Select the div to remove based on the button's parent element dataset tag value
+    const selectedDiv = btn.parentElement.dataset.tag;
+    console.log('Selected Div:', selectedDiv);
+    removeTag(selectedDiv);
   });
 });
 
