@@ -67,7 +67,6 @@ const toggleLockedTags = async (save = true, tag = null) => {
 const toggleLockedPhoto = async (photoId, selectedTag, save = true) => {
   // console.log('toggleLockedPhoto called...');
   const action = save ? 'save-photo' : 'remove-photo';
-  console.log('toggleLockedPhoto called with photoId:', photoId, 'selectedTag:', selectedTag, 'save:', save, 'action:', action);
   
   // Limit to only one photo saved per appointment or now, but could be increased in later versions.
   try {

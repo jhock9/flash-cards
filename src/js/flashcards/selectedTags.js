@@ -61,7 +61,6 @@ const loadSavedTags = async (filterInput) => {
   
   // If there is a locked photo, create a div for it
   if (lockedPhoto !== null) {
-    console.log('Locked photo:', lockedPhoto);
     createLockedPhotoDiv(lockedPhoto);
     toggleBorders();
   } else {
@@ -120,8 +119,6 @@ const createSelectedDiv = (selectedTag) => {
 const removeTag = async (divToRemove) => {
   // The divToRemove is either a tag name (for selected/locked TAG divs) or a photo ID (for locked PHOTO divs)
   console.log('removeTag called...');
-  // Removes all references of a locked photo from the DOM and database
-  console.log('Selected Div to remove:', divToRemove);
   
   // Check if this is a locked photo
   if (lockedPhoto && divToRemove === lockedPhoto.photoData._id) {
@@ -153,40 +150,16 @@ const removeTag = async (divToRemove) => {
 
 const clearSelectedTags = (removeLockedTags = false) => {
   console.log('clearSelectedTags called...');
-  console.log('removeLockedTags set to:', removeLockedTags);
   let selectedDivs = Array.from(document.querySelectorAll('.selected-div'));
   
   selectedDivs.forEach((div) => {
     // Check if the div is a locked tag or a locked photo
     const isLockedTag = div.dataset.locked === 'true';
     const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
-    // const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.tag;
-    if (!isLockedTag) {
-      // log when there is a locked photo
-      console.log('Locked PHOTO div:', div);
-      console.log('lockedPhoto:', lockedPhoto);
-      console.log(`
-        isLockedTag: ${isLockedTag}, 
-        isLockedPhoto: ${isLockedPhoto},
-        div.dataset.locked: ${div.dataset.locked}, 
-        div.dataset.tag: ${div.dataset.tag},
-      `);
-    } else {
-      // log when there is a locked tag
-      console.log('Locked TAG div:', div);
-      console.log('lockedPhoto:', lockedPhoto);
-      console.log(`
-        isLockedTag: ${isLockedTag}, 
-        isLockedPhoto: ${isLockedPhoto},
-        div.dataset.locked: ${div.dataset.locked}, 
-        div.dataset.tag: ${div.dataset.tag},
-      `);
-    }
     
     // if removeLockedTags is true, or if the isLockedTag and isLockedPhoto are both false, remove the tag
     if (removeLockedTags || (!isLockedTag && !isLockedPhoto)) {
       const divToRemove = isLockedPhoto ? lockedPhoto.photoData._id : div.dataset.tag;
-      console.log(`isLockedPhoto: ${isLockedPhoto}, divToRemove: ${divToRemove}`)
       removeTag(divToRemove); // Removes from DOM and database
       }
   });
@@ -196,7 +169,6 @@ const clearSelectedTags = (removeLockedTags = false) => {
   
   // Check if there are any locked tags
   const lockedTags = selectedTags.filter(tag => tag.locked);
-  console.log('Locked tags:', lockedTags);
   
   // Clear locked tags from database if removeLockedTags is true
   if (removeLockedTags && (lockedTags.length > 0 || lockedPhoto)) {
@@ -220,16 +192,11 @@ const resetTagSelect = (filterInput) => {
 
 // Toggle borders on selected tags wrapper
 const toggleBorders = () => {
-  console.log('toggleBorders called...');
   const visibleTags = selectedTags.filter (tag => !tag.locked);
   if (visibleTags.length >= 1 || lockedPhoto) {
-    console.log('visibleTags:', visibleTags.length);
-    console.log('Locked photo:', lockedPhoto);
     selectedTagsWrapper.classList.add('show-borders');
     selectedTagsWrapper.classList.remove('hide');
   } else {
-    console.log('visibleTags:', visibleTags.length);
-    console.log('Locked photo:', lockedPhoto);
     selectedTagsWrapper.classList.remove('show-borders');
     selectedTagsWrapper.classList.add('hide');
   }
@@ -240,7 +207,6 @@ removeBtns.forEach((btn) => {
     console.log('Remove button clicked..');
     // Select the div to remove based on the button's parent element dataset tag value
     const selectedDiv = btn.parentElement.dataset.tag;
-    console.log('Selected Div:', selectedDiv);
     removeTag(selectedDiv);
   });
 });
@@ -250,8 +216,6 @@ const removeLockedPhoto = async (photoId, lockedPhoto, selectedTag) => {
   if (!photoId || !lockedPhoto) {
     console.log(`photoId: ${photoId}, lockedPhoto: ${JSON.stringify(lockedPhoto, null, 2)}, selectedTag: ${selectedTag} identified as null or undefined`);
     return;
-  } else {
-    console.log(`photoId: ${photoId}, lockedPhoto: ${JSON.stringify(lockedPhoto, null, 2)}, selectedTag: ${selectedTag}`);
   };
   
   // Check if the photo is locked

@@ -37,13 +37,11 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
-  console.log('Selected photo IDs:', selectedPhotoIds);
   
   // If there is a locked photo, add it to the selectedPhotoIds, otherwise remove it from the photos array
   if (lockedPhoto) {
     selectedPhotoIds.add(lockedPhoto.photoData._id);
     filteredPhotos.push(lockedPhoto);
-    console.log('Locked photo added to selected photo IDs:', selectedPhotoIds);
   } else if (unlockedPhotoId) {
     photos = photos.filter(photo => photo.photoData._id !== unlockedPhotoId);
     unlockedPhotoId = null; // Reset unlockedPhotoId
@@ -64,7 +62,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // If there are still photos remaining, add them to the filtered photos
   let remainingPhotos = Math.max(0, totalPhotos - filteredPhotos.length);
-  console.log('Remaining photos:', remainingPhotos);
   
   // If 'userRemainder' is true, add any remaining photos to the filtered photos
   if (useRemainder && remainingPhotos > 0) {
@@ -79,7 +76,6 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   }
   
   shuffleArray(filteredPhotos);
-  console.log('Filtered photos:', filteredPhotos);
   return filteredPhotos;
 };
 
@@ -120,13 +116,10 @@ const lockPhoto = (img) => {
   // Lock or unlock the photo when clicked
   img.addEventListener('click', async () => {
     console.log('Image clicked...');
-    console.log('Locked photo img photoData:', img.photoData);
-    console.log('Locked photo img tag:', img.tag);
     
     // If another photo is already locked and it's not the one being clicked, unlock it
     if (lockedPhoto && lockedPhoto.photoData._id !== img.photoData._id) {
       console.log('Another photo is already locked, unlocking it...');
-      console.log('Locked photo:', lockedPhoto); 
       if (lockedPhoto.classList) {
         lockedPhoto.classList.toggle('locked-photo');
       }
