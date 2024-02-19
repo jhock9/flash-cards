@@ -24,6 +24,8 @@ import { lockedPhoto, setLockedPhoto } from './photos.js'; // global variable, s
 // Load saved tags
 const loadSavedTags = async (filterInput) => {
   console.log('loadSavedTags called...');
+  toggleBorders();
+
   const tagsResponse = await fetch(`/appointment/${appointmentId}/load-tags`);
   const tagData = await tagsResponse.json();
   const savedTags = tagData.savedTags;
@@ -64,7 +66,6 @@ const loadSavedTags = async (filterInput) => {
     toggleBorders();
   } else {
     console.log('No locked photo');
-    toggleBorders();
   };
   
   resetTagSelect(filterInput);
@@ -242,7 +243,7 @@ removeBtns.forEach((btn) => {
 
 const removeLockedPhoto = async (photoId, lockedPhoto, selectedTag) => {
   console.log('removeLockedPhoto called...');
-  if (!photoId || !lockedPhoto || !selectedTag) {
+  if (!photoId || !lockedPhoto) {
     console.log(`photoId: ${photoId}, lockedPhoto: ${JSON.stringify(lockedPhoto, null, 2)}, selectedTag: ${selectedTag} identified as null or undefined`);
     return;
   } else {
