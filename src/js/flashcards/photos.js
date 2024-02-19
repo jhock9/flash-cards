@@ -35,6 +35,11 @@ const fetchPhotosData = async (tags) => {
 const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
   
+  console.log('photos length:', photos.length);
+  console.log('selectedTagsAndQuantities:', selectedTagsAndQuantities);
+  console.log('totalPhotos:', totalPhotos);
+  console.log('useRemainder:', useRemainder);
+
   let filteredPhotos = [];
   let selectedPhotoIds = new Set(); // Keep track of the selected photo IDs
   
@@ -49,23 +54,31 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // Sum of all photos that are intended to be selected (based on slider values)
   let intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
-  
+  console.log('Intended total:', intendedTotal);
+
   // If the intended total exceeds the maximum total of 10, adjust the quantities
   if (intendedTotal > 10) {
     selectedTagsAndQuantities = adjustQuantities(selectedTagsAndQuantities, intendedTotal);
     intendedTotal = selectedTagsAndQuantities.reduce((acc, { quantity }) => acc + parseInt(quantity, 10), 0);
+    console.log('Adjusted quantities:', selectedTagsAndQuantities);
+    console.log('Adjusted intended total:', intendedTotal);
   }
   
   // If the intended total is less than the maximum total, add photos based on the tags and quantities
   const photosToAdd = processTags(photos, selectedTagsAndQuantities, selectedPhotoIds);
+  console.log('number of Photos to add:', photosToAdd.length);
   addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal);
   
   // If there are still photos remaining, add them to the filtered photos
   let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
-  
+  console.log('remainingPhotos:', remainingPhotos);
+
   // If 'userRemainder' is true, add any remaining photos to the filtered photos
   if (useRemainder && remainingPhotos > 0) {
     const photosToAdd = addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds);
+    console.log('number of additional Photos to add:', photosToAdd.length);
+    console.log('photosToAdd:', photosToAdd);
+    console.log('number of filteredPhotos to add:', filteredPhotos.length);
     addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal);
   }
   
@@ -76,6 +89,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   }
   
   shuffleArray(filteredPhotos);
+  console.log('Final filtered photos count:', filteredPhotos.length);
   return filteredPhotos;
 };
 

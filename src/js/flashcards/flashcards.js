@@ -62,7 +62,7 @@ totalSlider.addEventListener('input', () => {
     remainder.classList.remove('gray-out');
   }
 });
-  
+
 // Checkbox for app to automatically fill in remaining photos
 remainder.addEventListener('change', () => {
   useRemainder = remainder.checked;
