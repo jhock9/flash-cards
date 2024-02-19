@@ -56,21 +56,21 @@ totalSlider.addEventListener('input', () => {
     useRemainder = false;
     totalSliderValue.classList.add('gray-out');
     remainder.classList.add('gray-out');
-      } else {
+    } else {
     remainder.disabled = false;
     totalSliderValue.classList.remove('gray-out');
     remainder.classList.remove('gray-out');
   }
 });
-
-  // Reset totalSlider value and remainder checkbox
-  totalSlider.value = 0;
-  totalSliderValue.textContent = totalSlider.value === 0 ? 'N/A' : totalSlider.value;
-  remainder.disabled = true;
-  remainder.checked = false;
-  useRemainder = false;
-  totalSliderValue.classList.add('gray-out');
-  remainder.classList.add('gray-out');
+  
+  //!! // Reset totalSlider value and remainder checkbox
+  // totalSlider.value = 0;
+  // totalSliderValue.textContent = totalSlider.value === 0 ? 'N/A' : totalSlider.value;
+  // remainder.disabled = true;
+  // remainder.checked = false;
+  // useRemainder = false;
+  // totalSliderValue.classList.add('gray-out');
+  // remainder.classList.add('gray-out');
   
 // Checkbox for app to automatically fill in remaining photos
 remainder.addEventListener('change', () => {
