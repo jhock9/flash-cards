@@ -61,7 +61,7 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal);
   
   // If there are still photos remaining, add them to the filtered photos
-  let remainingPhotos = Math.max(0, totalPhotos - filteredPhotos.length);
+  let remainingPhotos = Math.max(0, totalPhotos - intendedTotal);
   
   // If 'userRemainder' is true, add any remaining photos to the filtered photos
   if (useRemainder && remainingPhotos > 0) {
