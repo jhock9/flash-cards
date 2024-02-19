@@ -23,11 +23,7 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
 // Add photos to the filteredPhotos array and update selectedPhotoIds
 const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal) => {
   console.log('addPhotos called...');
-  console.log('Number of photos to add 1:', photosToAdd.length);
-  console.log('Number of selected photo IDs 1:', selectedPhotoIds.size);
-  console.log('Number of filtered photos before adding 1:', filteredPhotos.length);
-  console.log('Intended total:', intendedTotal);
-
+  
   // If the photo is not already in the filteredPhotos array, add it
   photosToAdd.forEach(photo => {
     // Add the photo to filteredPhotos and update selectedPhotoIds
@@ -36,9 +32,6 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
       filteredPhotos.push(photo);
     }
   });
-  console.log('Number of photos to add 2:', photosToAdd.length);
-  console.log('Number of selected photos IDs 2:', selectedPhotoIds.size);
-  console.log('Number of filtered photos after adding 2:', filteredPhotos.length);
   
   // If the locked photo is not in the new photos, add it
   if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {
