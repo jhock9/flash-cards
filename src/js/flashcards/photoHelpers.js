@@ -54,15 +54,6 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
       filteredPhotos.unshift(lockedPhoto);
     }
   }
-  
-  // // If the total number of photos exceeds the total number of photos to be displayed
-  // while (filteredPhotos.length > totalPhotos) {
-  //   const removedPhoto = filteredPhotos.pop();
-  //   selectedPhotoIds.delete(removedPhoto._id);
-  // }
-  // console.log('Number of photos to add 3:', photosToAdd.length);
-  // console.log('Number of selected photos IDs 3:', selectedPhotoIds.size);
-  // console.log('Number of filtered photos after adding 3:', filteredPhotos.length);
 };
 
 // Add remaining photos if 'useRemainder' is checked

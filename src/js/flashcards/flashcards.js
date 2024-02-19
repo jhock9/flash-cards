@@ -121,33 +121,12 @@ const toggleNav = () => {
 };
 
 //**   BUTTONS   **//
-tabletOpenBtn.addEventListener('click', async () => {
-  console.log('Open button clicked...');
-  try {
-    displayTags(tagsList);
-    toggleNav();
-  } catch (error) {
-    console.error('Error on open button click:', error);
-  }
-});
-
-refreshBtn.addEventListener('click', async () => {
-  console.log('Refresh button clicked...');
-  if (lastSelectedTagsAndQuantities !== null && lastTotalPhotos !== null && lastUseRemainder !== null) {
-    if (photos) {
-      const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, lastTotalPhotos, lastUseRemainder);
-      displayPhotos(filteredPhotos);
-    } else {
-      console.error('Photos data is not available. Fetch it first.');
-    }
-  }
-});
-
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
   clearSelectedTags(true);  
   
   // Reset totalSlider value and remainder checkbox
+  totalPhotos = 0;
   totalSlider.value = 0;
   totalSliderValue.textContent = totalSlider.value === 0 ? 'N/A' : totalSlider.value;
   remainder.disabled = true;
@@ -240,6 +219,28 @@ submitBtn.addEventListener('click', async (e) => {
   }
   
   toggleNav();
+});
+
+tabletOpenBtn.addEventListener('click', async () => {
+  console.log('Open button clicked...');
+  try {
+    displayTags(tagsList);
+    toggleNav();
+  } catch (error) {
+    console.error('Error on open button click:', error);
+  }
+});
+
+refreshBtn.addEventListener('click', async () => {
+  console.log('Refresh button clicked...');
+  if (lastSelectedTagsAndQuantities !== null && lastTotalPhotos !== null && lastUseRemainder !== null) {
+    if (photos) {
+      const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, lastTotalPhotos, lastUseRemainder);
+      displayPhotos(filteredPhotos);
+    } else {
+      console.error('Photos data is not available. Fetch it first.');
+    }
+  }
 });
 
 dashboardBtn.addEventListener('click', async (e) => {
