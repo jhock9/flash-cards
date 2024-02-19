@@ -281,9 +281,9 @@ const removeLockedPhoto = async (photoId, lockedPhoto, selectedTag) => {
   }
   console.log('Hiding locked photo container and toggling borders...');
   lockedPhotoBtn.classList.add('hide');
-  toggleBorders();
   
   setLockedPhoto(null); // Resets lockedPhoto to null
+  toggleBorders();
 };
 
 const createLockedPhotoDiv = (lockedPhoto) => {
