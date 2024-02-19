@@ -153,7 +153,7 @@ const setLockedPhoto = (savedPhoto) => {
   if (savedPhoto && savedPhoto.length > 0) {
     lockedPhoto = {
       photoData: savedPhoto[0].photo, // photo schema data
-      selectedTag: savedPhoto[0].selectedTag // tag name
+      tag: savedPhoto[0].selectedTag // tag name
     };
   } else {
     lockedPhoto = null;
