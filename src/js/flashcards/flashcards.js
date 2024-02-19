@@ -119,8 +119,10 @@ const toggleNav = () => {
   
   if (flashPanel.classList.contains('open')) {
     loadSavedTags(filterInput);
+    updateSliderDisplay();
   } else {
-    clearSelectedTags();  
+    clearSelectedTags(); 
+    updateSliderDisplay();
   }
 };
 
@@ -128,7 +130,8 @@ const toggleNav = () => {
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
   clearSelectedTags(true);  
-  
+  updateSliderDisplay();
+
   // Reset totalSlider value and remainder checkbox
   totalPhotos = 0;
   totalSlider.value = 0;
