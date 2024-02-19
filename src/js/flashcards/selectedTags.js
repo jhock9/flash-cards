@@ -64,6 +64,7 @@ const loadSavedTags = async (filterInput) => {
     toggleBorders();
   } else {
     console.log('No locked photo');
+    toggleBorders();
   };
   
   resetTagSelect(filterInput);
@@ -158,7 +159,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
     // Check if the div is a locked tag or a locked photo
     const isLockedTag = div.dataset.locked === 'true';
     const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.photoData._id;
-    // const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.selectedTag;
+    // const isLockedPhoto = lockedPhoto && div.dataset.tag === lockedPhoto.tag;
     if (!isLockedTag) {
       // log when there is a locked photo
       console.log('Locked PHOTO div:', div);
@@ -218,6 +219,7 @@ const resetTagSelect = (filterInput) => {
 
 // Toggle borders on selected tags wrapper
 const toggleBorders = () => {
+  console.log('toggleBorders called...');
   const visibleTags = selectedTags.filter (tag => !tag.locked);
   if (visibleTags.length >= 1 || lockedPhoto) {
     selectedTagsWrapper.classList.add('show-borders');
@@ -247,7 +249,7 @@ const removeLockedPhoto = async (photoId, lockedPhoto, selectedTag) => {
     console.log(`photoId: ${photoId}, lockedPhoto: ${JSON.stringify(lockedPhoto, null, 2)}, selectedTag: ${selectedTag}`);
   };
   
-  // 
+  // Check if the photo is locked
   if (lockedPhoto && photoId === lockedPhoto.photoData._id) {
     // Remove the photo from the database
     await toggleLockedPhoto(photoId, selectedTag, false);
@@ -292,7 +294,7 @@ const createLockedPhotoDiv = (lockedPhoto) => {
   
   const tagName = document.createElement('span');
   tagName.classList.add('name', 'center');
-  tagName.textContent = lockedPhoto.selectedTag; 
+  tagName.textContent = lockedPhoto.tag; 
   
   const removeBtn = createRemoveBtn(selectedDiv, removeLockedPhoto, lockedPhoto);
   
