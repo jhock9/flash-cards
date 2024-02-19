@@ -23,11 +23,11 @@ const processTags = (photos, selectedTagsAndQuantities, selectedPhotoIds) => {
 // Add photos to the filteredPhotos array and update selectedPhotoIds
 const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal) => {
   console.log('addPhotos called...');
-  console.log('Number of photos to add:', photosToAdd.length);
-  console.log('Number of selected photos:', selectedPhotoIds.size);
-  console.log('Number of photos before adding:', filteredPhotos.length);
+  console.log('Number of photos to add 1:', photosToAdd.length);
+  console.log('Number of selected photo IDs 1:', selectedPhotoIds.size);
+  console.log('Number of filtered photos before adding 1:', filteredPhotos.length);
   console.log('Intended total:', intendedTotal);
-  
+
   // If the photo is not already in the filteredPhotos array, add it
   photosToAdd.forEach(photo => {
     // Add the photo to filteredPhotos and update selectedPhotoIds
@@ -37,8 +37,8 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
     }
   });
   console.log('Number of photos to add 2:', photosToAdd.length);
-  console.log('Number of selected photos 2:', selectedPhotoIds.size);
-  console.log('Number of photos after adding 2:', filteredPhotos.length);
+  console.log('Number of selected photos IDs 2:', selectedPhotoIds.size);
+  console.log('Number of filtered photos after adding 2:', filteredPhotos.length);
   
   // If the locked photo is not in the new photos, add it
   if (lockedPhoto && !filteredPhotos.includes(lockedPhoto)) {
@@ -61,12 +61,12 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
     selectedPhotoIds.delete(removedPhoto._id);
   }
   console.log('Number of photos to add 3:', photosToAdd.length);
-  console.log('Number of selected photos 3:', selectedPhotoIds.size);
-  console.log('Number of photos after adding 3:', filteredPhotos.length);
+  console.log('Number of selected photos IDs 3:', selectedPhotoIds.size);
+  console.log('Number of filtered photos after adding 3:', filteredPhotos.length);
 };
 
 // Add remaining photos if 'useRemainder' is checked
-const addRemainingPhotos = (photos, filteredPhotos, remainingPhotos, selectedPhotoIds) => {
+const addRemainingPhotos = (photos, selectedPhotoIds, filteredPhotos, remainingPhotos) => {
   console.log('Adding remaining photos...');
   const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.photoData._id));
   shuffleArray(additionalPhotos);
