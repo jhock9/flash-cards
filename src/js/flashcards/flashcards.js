@@ -36,6 +36,7 @@ import {
 } from './selectedTags.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+  updateSliderDisplay();
   // Logout after 12 hours
   setTimeout(logout, 12 * 60 * 60 * 1000);
 });
@@ -45,10 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
 totalSlider.addEventListener('input', () => {
   totalPhotos = parseInt(totalSlider.value, 10);
   lastTotalPhotos = totalPhotos;
-  
+  updateSliderDisplay();
+});
+
+const updateSliderDisplay = () => {
   // Display 'N/A' when slider value is 0
   totalSliderValue.textContent = totalPhotos === 0 ? 'N/A' : totalPhotos;
-  
+
   // Disable and uncheck remainder tags checkbox if total slider value is 'N/A'
   if (totalPhotos === 0) {
     remainder.disabled = true;
@@ -56,12 +60,12 @@ totalSlider.addEventListener('input', () => {
     useRemainder = false;
     totalSliderValue.classList.add('gray-out');
     remainder.classList.add('gray-out');
-    } else {
+  } else {
     remainder.disabled = false;
     totalSliderValue.classList.remove('gray-out');
     remainder.classList.remove('gray-out');
   }
-});
+}
 
 // Checkbox for app to automatically fill in remaining photos
 remainder.addEventListener('change', () => {
