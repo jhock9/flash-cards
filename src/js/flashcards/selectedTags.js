@@ -241,8 +241,7 @@ removeBtns.forEach((btn) => {
 const removeLockedPhoto = async (photoId, lockedPhoto, selectedTag) => {
   console.log('removeLockedPhoto called...');
   if (!photoId || !lockedPhoto || !selectedTag) {
-    console.log(`photoId: ${photoId}, lockedPhoto: ${lockedPhoto}, selectedTag: ${selectedTag} identified as null or undefined`);
-    console.log(`Selected tag: ${selectedTag}, lockedPhoto: ${lockedPhoto} identified as null or undefined`);
+    console.log(`photoId: ${photoId}, lockedPhoto: ${JSON.stringify(lockedPhoto, null, 2)}, selectedTag: ${selectedTag} identified as null or undefined`);
     return;
   } else {
     console.log(`photoId: ${photoId}, lockedPhoto: ${JSON.stringify(lockedPhoto, null, 2)}, selectedTag: ${selectedTag}`);
