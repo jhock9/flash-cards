@@ -223,9 +223,13 @@ const toggleBorders = () => {
   console.log('toggleBorders called...');
   const visibleTags = selectedTags.filter (tag => !tag.locked);
   if (visibleTags.length >= 1 || lockedPhoto) {
+    console.log('visibleTags:', visibleTags.length);
+    console.log('Locked photo:', lockedPhoto);
     selectedTagsWrapper.classList.add('show-borders');
     selectedTagsWrapper.classList.remove('hide');
   } else {
+    console.log('visibleTags:', visibleTags.length);
+    console.log('Locked photo:', lockedPhoto);
     selectedTagsWrapper.classList.remove('show-borders');
     selectedTagsWrapper.classList.add('hide');
   }
