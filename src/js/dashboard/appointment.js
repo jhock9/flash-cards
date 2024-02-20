@@ -7,6 +7,7 @@ console.log('fetchAppointment called...');
     if (response.status === 404) {
       console.log('No appointment found, creating new appointment...');
       const newAppointmentData = await createAppointment(id);
+      console.log('New appointment data:', newAppointmentData);
       window.location.href = `/flashcards?appointment=${encodeURIComponent(JSON.stringify(newAppointmentData.appointment))}`;
     } else {
       console.log('Appointment found...');

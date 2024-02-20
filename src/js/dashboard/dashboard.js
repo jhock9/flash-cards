@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 navLinks.forEach((link) => {
   link.addEventListener('click', async (event) => {
     console.log('nav link clicked...'); 
+    event.preventDefault()
     
     const href = link.getAttribute('href');
     
