@@ -129,19 +129,13 @@ const toggleNav = () => {
 //**   BUTTONS   **//
 resetBtn.addEventListener('click', () => {
   console.log('Reset button clicked...');
-  clearSelectedTags(true);  
-  updateSliderDisplay();
-
+  
   // Reset totalSlider value and remainder checkbox
   totalPhotos = 0;
   totalSlider.value = 0;
-  totalSliderValue.textContent = totalSlider.value === 0 ? 'N/A' : totalSlider.value;
-  remainder.disabled = true;
-  remainder.checked = false;
-  useRemainder = false;
-  totalSliderValue.classList.add('gray-out');
-  remainder.classList.add('gray-out');
+  updateSliderDisplay();
   
+  clearSelectedTags(true);  
   resetTagSelect(filterInput);
   toggleBorders();
 });
