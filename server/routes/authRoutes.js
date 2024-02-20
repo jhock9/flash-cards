@@ -2,6 +2,7 @@ const router = require('express').Router();
 const passport = require('passport');
 const logger = require('../config/winston');
 const User = require('../models/userModel');
+const Appointment = require('../models/appointmentModel');
 
 // Register route
 router.post('/register', async (req, res) => {
@@ -35,9 +36,16 @@ router.post('/register', async (req, res) => {
   try {
     const user = new User({ fullname, username, password });
     await user.save();
+    
+    // Create a new appointment for the new user
+    const newAppointment = new Appointment({ client: user._id });
+    await newAppointment.save();
+    user.defaultAppointment = newAppointment._id;
+    await user.save();
+    
     res.status(201).json({ success: true });
   } catch (error) {
-    logger.error(`ERROR saving user to database: ${error}`);
+    logger.error(`ERROR: ${error}`);
     if (error.code === 11000) {
       res.status(400).json({ error: 'Username already exists.' });
     } else { 

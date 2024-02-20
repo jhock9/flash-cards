@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const logger = require('../config/winston');
 const User = require('../models/userModel');
+const Appointment = require('../models/appointmentModel');
 
 router.post('/create-user', async (req, res) => {
   logger.info('Received request for /create-user...');
@@ -26,10 +27,16 @@ router.post('/create-user', async (req, res) => {
   try {
     const user = new User({ fullname, username, password, role });
     await user.save();
-    res.status(201).json({ success: true });
     
+    // Create a new appointment for the new user
+    const newAppointment = new Appointment({ client: user._id });
+    await newAppointment.save();
+    user.defaultAppointment = newAppointment._id;
+    await user.save();
+    
+    res.status(201).json({ success: true });
   } catch (error) {
-    logger.error(`ERROR saving user to database: ${error}`);
+    logger.error(`ERROR: ${error}`);
     res.status(400).json({ error: error.message });
   } 
 });

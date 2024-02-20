@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const appointmentSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  client: { type: mongoose.Schema.Types.ObjectId, ref: 'Client' },
+  client: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: false},
   savedTags: [{
     name: { type: String, required: true},
     qty: { type: Number, default: 0 }, 

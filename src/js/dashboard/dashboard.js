@@ -14,13 +14,12 @@ import { refreshClientsTable, createClient } from './clients.js';
 import { checkGoogleAuthentication, fetchConfig } from './google.js'; //checkGoogleAuthentication(currentUser);
 import { togglePasswordVisibility } from '../components/password.js';
 
-
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
   // Fetch the config and account data in parallel
   const configPromise = fetchConfig();
   const accountDataPromise = fetchAccountData();
-
+  
   // Wait for both promises to resolve
   await configPromise;
   const currentUser = await accountDataPromise;

@@ -161,8 +161,6 @@ backBtn.addEventListener('click', () => {
   shiftFormsToLogin();
 });
 
-
-
 //**   HELPER FUNCTIONS   **//
 
 const shiftFormsToRegister = () => {
