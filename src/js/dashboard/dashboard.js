@@ -8,10 +8,11 @@ const createClientForm = document.querySelector('#client-form');
 
 import { addModalEventListeners } from '../components/modals.js';
 import { logout } from '../components/logout.js';
-import { fetchAccountData, updatePassword } from './account.js';
+import { fetchAccountData, updatePassword } from './account.js'; // updatePassword(updatePasswordForm)
+import { fetchAppointment } from './appointment.js'; // fetchAppointment(id)
 import { refreshUsersTable, createUser } from './users.js';
-import { refreshClientsTable, createClient } from './clients.js';
-import { checkGoogleAuthentication, fetchConfig } from './google.js'; //checkGoogleAuthentication(currentUser);
+import { refreshClientsTable, createClient } from './clients.js'; // refreshClientsTable(userId), createClient(event)
+import { checkGoogleAuthentication, fetchConfig } from './google.js'; // checkGoogleAuthentication(currentUser);
 import { togglePasswordVisibility } from '../components/password.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Add event listeners to the navigation links
 navLinks.forEach((link) => {
-  link.addEventListener('click', (event) => {
+  link.addEventListener('click', async (event) => {
     console.log('nav link clicked...'); 
     
     const href = link.getAttribute('href');
@@ -97,11 +98,14 @@ navLinks.forEach((link) => {
       
       // Show the flashcards modal if not authenticated with Google
       if (sectionId === 'flashcards') {
-        window.location.href = '/flashcards.html';
+        // Fetch the user's default appointment
+        const userData = await fetchAccountData();
+        await fetchAppointment(userData.defaultAppointment);
       }
     }
   });
 });
+
 
 
 //**   TOGGLES   **// 

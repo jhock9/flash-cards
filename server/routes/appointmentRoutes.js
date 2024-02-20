@@ -2,10 +2,10 @@ const router = require('express').Router();
 const logger = require('../config/winston');
 const Appointment = require('../models/appointmentModel');
 
-router.get('/:clientId', async (req, res) => {
-  logger.info('Received request for /:clientId...');
+router.get('/:id', async (req, res) => {
+  logger.info('Received request for /:id...');
   try {
-    const appointment = await Appointment.findOne({ client: req.params.clientId });
+    const appointment = await Appointment.findOne({ client: req.params.id });
     if (!appointment) {
       return res.status(404).json({ message: 'Appointment not found' });
     }

@@ -18,6 +18,7 @@ router.get('/account-data', async (req, res) => {
       fullname: user.fullname,
       username: user.username,
       role: user.role,
+      defaultAppointment: user.defaultAppointment,
     };
     
     res.json({ user: userResponse });

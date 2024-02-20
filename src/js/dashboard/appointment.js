@@ -1,12 +1,12 @@
-const fetchAppointment = async (clientId) => {
+const fetchAppointment = async (id) => {
 console.log('fetchAppointment called...');
   try {
-    const response = await fetch(`/appointment/${clientId}`);
+    const response = await fetch(`/appointment/${id}`);
     const data = await response.json();
     
     if (response.status === 404) {
       console.log('No appointment found, creating new appointment...');
-      const newAppointmentData = await createAppointment(clientId);
+      const newAppointmentData = await createAppointment(id);
       window.location.href = `/flashcards?appointment=${encodeURIComponent(JSON.stringify(newAppointmentData.appointment))}`;
     } else {
       console.log('Appointment found...');
@@ -17,7 +17,9 @@ console.log('fetchAppointment called...');
   }
 };
 
+// This is for Clients only
 const createAppointment = async (clientId) => {
+  console.log('createAppointment called for clients...');
   const response = await fetch(`/appointment/create-appt`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -29,5 +31,5 @@ const createAppointment = async (clientId) => {
   return data;
 };
 
-// Export to client.js
-export { fetchAppointment };
+// Export to dashboard.js, client.js
+export { fetchAppointment }; // fetchAppointment(id)
