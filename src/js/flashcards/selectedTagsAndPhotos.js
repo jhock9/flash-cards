@@ -9,23 +9,23 @@ const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let selectedTags = [];
 
 import {
+  appendToNewDiv, // createTagName(selectedTag)
+  createLockToggle, // createLockToggle(selectedDiv)
+  createRemoveBtn,
   createSlider, // createSlider(selectedTag)
   createTagName, // createTagName(selectedTag)
-  createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // createRemoveBtn(selectedDiv, callback, lockedPhoto)
-  appendToNewDiv, // appendToNewDiv(classList, elements)
-} from './createSelectedTags.js';
-import { 
-  toggleLockedTags, // toggleLockedTags(save = true, tag = null)
-  toggleLockedPhoto, // toggleLockedPhoto(photoId, save = true)
-} from './saveData.js';
+} from './createSelectedTagDivs.js';
 import { lockedPhoto, setLockedPhoto } from './photos.js'; // global variable, setLockedPhoto(savedPhoto)
+import {
+  toggleLockedPhoto,
+  toggleLockedTags, // toggleLockedTags(save = true, tag = null)
+} from './saveData.js';
 
 // Load saved tags
-const loadSavedTags = async (filterInput) => {
-  console.log('loadSavedTags called...');
+const loadSelectedDivs = async (filterInput) => {
+  console.log('loadSelectedDivs called...');
   toggleBorders();
-
+  
   const tagsResponse = await fetch(`/appointment/${appointmentId}/load-tags`);
   const tagData = await tagsResponse.json();
   const savedTags = tagData.savedTags;
@@ -46,7 +46,7 @@ const loadSavedTags = async (filterInput) => {
     }
     
     // Modify the slider value to reflect stored quantity
-    const selectedDiv = createSelectedDiv(name);
+    const selectedDiv = createSelectedTagDiv(name);
     const slider = selectedDiv.querySelector('.slider');
     const sliderValue = selectedDiv.querySelector('.slider-value');
     slider.value = qty;
@@ -74,7 +74,7 @@ const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
   console.log('handleTagSelection called...');
   // Check if the tag is already selected
     if (selectedTags.includes(selectedTag)) {
-    removeTag(selectedTag);
+    removeSelectedDiv(selectedTag);
     resetTagSelect(filterInput);
     return false;
   }
@@ -93,7 +93,7 @@ const handleTagSelection = (selectedTag, filterInput, sourceElement = null) => {
 };
 
 // Creating selected tag divs
-const createSelectedDiv = (selectedTag) => {
+const createSelectedTagDiv = (selectedTag) => {
   // Create a new div for the selected tag
   const selectedDiv = document.createElement('div');
   selectedDiv.classList.add('selected-div', 'selected-tag-div', 'center');
@@ -103,7 +103,7 @@ const createSelectedDiv = (selectedTag) => {
   const [slider, sliderValue] = createSlider(selectedTag);
   const tagName = createTagName(selectedTag);
   const lockToggle = createLockToggle(selectedDiv);
-  const removeBtn = createRemoveBtn(selectedDiv, removeTag); // using removeTag() in place of callback here
+  const removeBtn = createRemoveBtn(selectedDiv, removeSelectedDiv); // using removeSelectedDiv() in place of callback here
   
   // Append elements
   const sliderTagDiv = appendToNewDiv('slider-tag-div center', [slider, sliderValue, tagName]);
@@ -116,9 +116,9 @@ const createSelectedDiv = (selectedTag) => {
   return selectedDiv;
 };
 
-const removeTag = async (divToRemove) => {
+const removeSelectedDiv = async (divToRemove) => {
   // The divToRemove is either a tag name (for selected/locked TAG divs) or a photo ID (for locked PHOTO divs)
-  console.log('removeTag called...');
+  console.log('removeSelectedDiv called...');
   
   // Check if this is a locked photo
   if (lockedPhoto && divToRemove === lockedPhoto.photoData._id) {
@@ -148,8 +148,8 @@ const removeTag = async (divToRemove) => {
   toggleBorders();
 };
 
-const clearSelectedTags = (removeLockedTags = false) => {
-  console.log('clearSelectedTags called...');
+const clearSelectedDivs = (removeLockedTags = false) => {
+  console.log('clearSelectedDivs called...');
   let selectedDivs = Array.from(document.querySelectorAll('.selected-div'));
   
   selectedDivs.forEach((div) => {
@@ -160,7 +160,7 @@ const clearSelectedTags = (removeLockedTags = false) => {
     // if removeLockedTags is true, or if the isLockedTag and isLockedPhoto are both false, remove the tag
     if (removeLockedTags || (!isLockedTag && !isLockedPhoto)) {
       const divToRemove = isLockedPhoto ? lockedPhoto.photoData._id : div.dataset.tag;
-      removeTag(divToRemove); // Removes from DOM and database
+      removeSelectedDiv(divToRemove); // Removes from DOM and database
       }
   });
   
@@ -207,7 +207,7 @@ removeBtns.forEach((btn) => {
     console.log('Remove button clicked..');
     // Select the div to remove based on the button's parent element dataset tag value
     const selectedDiv = btn.parentElement.dataset.tag;
-    removeTag(selectedDiv);
+    removeSelectedDiv(selectedDiv);
   });
 });
 
@@ -286,11 +286,11 @@ lockedPhotoBtn.addEventListener('click', async () => {
 
 // Export to flashcards.js
 export {
-  loadSavedTags, // loadSavedTags(filterInput)
-  handleTagSelection, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
-  createSelectedDiv, // createSelectedDiv(selectedTag)
-  clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
+  clearSelectedDivs, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
+  createSelectedTagDiv, // loadSelectedDivs(filterInput)
+  handleTagSelection, loadSelectedDivs, // toggleBorders()
+  removeLockedPhoto, // clearSelectedDivs(removeLockedTags = false)
   resetTagSelect, // resetTagSelect(filterInput)
-  toggleBorders, // toggleBorders()
-  removeLockedPhoto, // Export to photos.js // removeLockedPhoto(photoId, lockedPhoto, selectedTag)
+  toggleBorders
 };
+

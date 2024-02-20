@@ -3,15 +3,15 @@ const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let lockedPhoto;
 let unlockedPhotoId;
 
-import { removeLockedPhoto } from './selectedTags.js'; // removeLockedPhoto(photoId, lockedPhoto, tag)
-import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(selectedTag, tag, save = true)
 import {
+  addPhotos, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
+  addRemainingPhotos,
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
-  processTags, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
-  addRemainingPhotos, // addRemainingPhotos(photos, filteredPhotos, remainingPhotos, selectedPhotoIds)
-  addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
+  processTags, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
   shuffleArray, // shuffleArray(array)
 } from './photoHelpers.js';
+import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(selectedTag, tag, save = true)
+import { removeLockedPhoto } from './selectedTagsAndPhotos.js'; // removeLockedPhoto(photoId, lockedPhoto, tag)
 
 // Fetch photos data from database
 const fetchPhotosData = async (tags) => {
@@ -154,7 +154,7 @@ const lockPhoto = (img) => {
   });
 };
 
-// Set the locked photo (savedPhoto parameter used for loadSavedTags() in selectedTags.js)
+// Set the locked photo (savedPhoto parameter used for loadSelectedDivs() in selectedTagsAndPhotos.js)
 const setLockedPhoto = (savedPhoto) => {
   if (savedPhoto && savedPhoto.length > 0) {
     lockedPhoto = {
@@ -166,11 +166,11 @@ const setLockedPhoto = (savedPhoto) => {
   }
 };
 
-// Export to flashcards.js and selectedTags.js
+// Export to flashcards.js and selectedTagsAndPhotos.js
 export {
-  fetchPhotosData, // fetchPhotosData(tags)
-  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
-  displayPhotos, // displayPhotos(filteredPhotos)
-  lockedPhoto, // Export to selectedTags.js // global variable
-  setLockedPhoto, // Export to selectedTags.js // setLockedPhoto(savedPhoto)
+  displayPhotos, fetchPhotosData, // fetchPhotosData(tags)
+  filterPhotosByTags, // displayPhotos(filteredPhotos)
+  lockedPhoto, // Export to selectedTagsAndPhotos.js // global variable
+  setLockedPhoto
 };
+

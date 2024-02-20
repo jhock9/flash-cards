@@ -20,20 +20,20 @@ let lastUseRemainder;
 
 
 import { logout } from '../components/logout.js';
-import {
-  fetchPhotosData, // fetchPhotosData(tags)
-  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
-  displayPhotos, // displayPhotos(filteredPhotos)
-} from './photos.js';
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import {
-  loadSavedTags, // loadSavedTags(filterInput)
-  handleTagSelection, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
-  createSelectedDiv, // createSelectedDiv(selectedTag)
-  clearSelectedTags, // clearSelectedTags(removeLockedTags = false)
-  resetTagSelect, // resetTagSelect(filterInput)
-  toggleBorders, // toggleBorders()
-} from './selectedTags.js';
+    displayPhotos,
+    fetchPhotosData, // fetchPhotosData(tags)
+    filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
+} from './photos.js';
+import {
+    clearSelectedDivs, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
+    createSelectedTagDiv, // loadSelectedDivs(filterInput)
+    handleTagSelection,
+    loadSelectedDivs, // clearSelectedDivs(removeLockedTags = false)
+    resetTagSelect, // resetTagSelect(filterInput)
+    toggleBorders, // toggleBorders()
+} from './selectedTagsAndPhotos.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   updateSliderDisplay();
@@ -107,7 +107,7 @@ tagsList.addEventListener('click', (e) => {
     }  
     
     e.target.classList.add('selected');
-    createSelectedDiv(selectedTag);
+    createSelectedTagDiv(selectedTag);
   }
   
   resetTagSelect(filterInput);
@@ -118,10 +118,10 @@ const toggleNav = () => {
   flashPanel.classList.toggle('open');
   
   if (flashPanel.classList.contains('open')) {
-    loadSavedTags(filterInput);
+    loadSelectedDivs(filterInput);
     updateSliderDisplay();
   } else {
-    clearSelectedTags(); 
+    clearSelectedDivs(); 
     updateSliderDisplay();
   }
 };
@@ -135,14 +135,14 @@ resetBtn.addEventListener('click', () => {
   totalSlider.value = 0;
   updateSliderDisplay();
   
-  clearSelectedTags(true);  
+  clearSelectedDivs(true);  
   resetTagSelect(filterInput);
   toggleBorders();
 });
 
 randomBtn.addEventListener('click', () => {
   console.log('Random button clicked...');
-  clearSelectedTags(true);
+  clearSelectedDivs(true);
   
   // Get all available tags
   const allTags = Array.from(document.querySelectorAll('.tag .name')).map(span => span.textContent);
@@ -179,7 +179,7 @@ randomBtn.addEventListener('click', () => {
     const proceed = handleTagSelection(selectedTag, filterInput, null);
     if (!proceed) continue;  // If the tag shouldn't be added, skip to the next iteration
     
-    const selectedDiv = createSelectedDiv(selectedTag);
+    const selectedDiv = createSelectedTagDiv(selectedTag);
     const slider = selectedDiv.querySelector('.slider');
     
     // Set value for slider, considering totalImages

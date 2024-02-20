@@ -78,11 +78,11 @@ const appendToNewDiv = (classList, elements) => {
   return newDiv;
 };
 
-// Export to selectedTags.js
+// Export to selectedTagsAndPhotos.js
 export {
-  createSlider, // createSlider(selectedTag) 
-  createTagName, // createTagName(selectedTag)
+  appendToNewDiv, // createTagName(selectedTag)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, // createRemoveBtn(selectedDiv, callback)
-  appendToNewDiv, // appendToNewDiv(classList, elements)
+  createRemoveBtn, createSlider, // createSlider(selectedTag) 
+  createTagName
 };
+
