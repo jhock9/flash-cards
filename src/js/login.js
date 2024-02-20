@@ -91,13 +91,13 @@ registerForm.addEventListener('submit', (event) => {
   const password = document.querySelector('#register-password').value;
   const confirmPassword = document.querySelector('#confirm-password').value;
   
-  if (!/^\d{4}$/.test(newPassword)) {
+  if (!/^\d{4}$/.test(password)) {
     showPasswordReqModal();
     setTimeout(hideModal, 2000);
     return;
   }
   
-  if (newPassword !== confirmNewPassword) {
+  if (password !== confirmPassword) {
     showPasswordMismatchModal();
     setTimeout(hideModal, 2000);
     return;
@@ -147,7 +147,6 @@ registerForm.addEventListener('submit', (event) => {
     console.error('There has been a problem with your fetch operation:', error);
   });
 });
-
 
 //**   BUTTONS   **//
 
