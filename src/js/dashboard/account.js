@@ -75,5 +75,5 @@ const updatePassword = (updatePasswordForm) => {
 // Export to dashboard.js
 export { 
   fetchAccountData, // and export to client.js
-  updatePassword,
+  updatePassword, // updatePassword(updatePasswordForm)
 };

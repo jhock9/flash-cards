@@ -1,5 +1,5 @@
 import { fetchAccountData } from './account.js';
-import { fetchAppointment } from './appointment.js';
+import { fetchAppointment } from './appointment.js'; // fetchAppointment(id)
 import { 
   hideModal,
   showClientCreatedModal,
@@ -192,6 +192,6 @@ const createClient = async (event) => {
 
 // Export to dashboard.js
 export {
-  refreshClientsTable,
-  createClient,
+  refreshClientsTable, // refreshClientsTable(userId)
+  createClient, // createClient(event)
 };

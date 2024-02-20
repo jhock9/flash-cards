@@ -4,10 +4,10 @@ let lockedPhoto;
 let unlockedPhotoId;
 
 import {
-  addPhotos, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
-  addRemainingPhotos,
+  addPhotos, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
+  addRemainingPhotos, // addRemainingPhotos(photos, selectedPhotoIds, filteredPhotos, remainingPhotos)
   adjustQuantities, // adjustQuantities(selectedTagsAndQuantities, intendedTotal)
-  processTags, // addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal)
+  processTags, // processTags(photos, selectedTagsAndQuantities, selectedPhotoIds)
   shuffleArray, // shuffleArray(array)
 } from './photoHelpers.js';
 import { toggleLockedPhoto } from './saveData.js'; // toggleLockedPhoto(selectedTag, tag, save = true)
@@ -168,9 +168,10 @@ const setLockedPhoto = (savedPhoto) => {
 
 // Export to flashcards.js and selectedTagsAndPhotos.js
 export {
-  displayPhotos, fetchPhotosData, // fetchPhotosData(tags)
-  filterPhotosByTags, // displayPhotos(filteredPhotos)
+  displayPhotos, // displayPhotos(filteredPhotos)
+  fetchPhotosData, // fetchPhotosData(tags)
+  filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
   lockedPhoto, // Export to selectedTagsAndPhotos.js // global variable
-  setLockedPhoto
+  setLockedPhoto, // setLockedPhoto(savedPhoto)
 };
 

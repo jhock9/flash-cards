@@ -22,15 +22,15 @@ let lastUseRemainder;
 import { logout } from '../components/logout.js';
 import { displayTags } from './displayTags.js'; // displayTags(tagsList)
 import {
-    displayPhotos,
+    displayPhotos, // displayPhotos(filteredPhotos)
     fetchPhotosData, // fetchPhotosData(tags)
     filterPhotosByTags, // filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder)
 } from './photos.js';
 import {
-    clearSelectedDivs, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
-    createSelectedTagDiv, // loadSelectedDivs(filterInput)
-    handleTagSelection,
-    loadSelectedDivs, // clearSelectedDivs(removeLockedTags = false)
+    clearSelectedDivs, // clearSelectedDivs(removeLockedTags = false)
+    createSelectedTagDiv, // createSelectedTagDiv(selectedTag)
+    handleTagSelection, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
+    loadSelectedDivs, // loadSelectedDivs(filterInput)
     resetTagSelect, // resetTagSelect(filterInput)
     toggleBorders, // toggleBorders()
 } from './selectedTagsAndPhotos.js';

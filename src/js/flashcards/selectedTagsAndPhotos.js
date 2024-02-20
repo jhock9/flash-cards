@@ -9,16 +9,18 @@ const lockedPhotoBtn = document.querySelector('#locked-photo-btn');
 let selectedTags = [];
 
 import {
-  appendToNewDiv, // createTagName(selectedTag)
+
+  appendToNewDiv, // appendToNewDiv(classList, elements)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn,
+  createRemoveBtn, // createRemoveBtn(selectedDiv, callback, lockedPhoto)
   createSlider, // createSlider(selectedTag)
   createTagName, // createTagName(selectedTag)
 } from './createSelectedTagDivs.js';
 import { lockedPhoto, setLockedPhoto } from './photos.js'; // global variable, setLockedPhoto(savedPhoto)
 import {
-  toggleLockedPhoto,
+  toggleLockedPhoto, // toggleLockedPhoto(photoId, selectedTag, save = true) 
   toggleLockedTags, // toggleLockedTags(save = true, tag = null)
+
 } from './saveData.js';
 
 // Load saved tags
@@ -286,11 +288,12 @@ lockedPhotoBtn.addEventListener('click', async () => {
 
 // Export to flashcards.js
 export {
-  clearSelectedDivs, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
-  createSelectedTagDiv, // loadSelectedDivs(filterInput)
-  handleTagSelection, loadSelectedDivs, // toggleBorders()
-  removeLockedPhoto, // clearSelectedDivs(removeLockedTags = false)
+  clearSelectedDivs, // clearSelectedDivs(removeLockedTags = false)
+  createSelectedTagDiv, // createSelectedTagDiv(selectedTag)
+  handleTagSelection, // handleTagSelection(selectedTag, filterInput, sourceElement = null)
+  loadSelectedDivs, // loadSelectedDivs(filterInput)
   resetTagSelect, // resetTagSelect(filterInput)
-  toggleBorders
+  toggleBorders, // toggleBorders()
+  removeLockedPhoto, // export to photos.js, removeLockedPhoto(photoId, lockedPhoto, selectedTag) 
 };
 

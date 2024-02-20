@@ -1,4 +1,4 @@
-import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true) 
+import { toggleLockedTags } from './saveData.js'; // toggleLockedTags(save = true, tag = null)
 
 const createSlider = (selectedTag) => {
   const slider = document.createElement('input');
@@ -80,9 +80,10 @@ const appendToNewDiv = (classList, elements) => {
 
 // Export to selectedTagsAndPhotos.js
 export {
-  appendToNewDiv, // createTagName(selectedTag)
+  appendToNewDiv, // appendToNewDiv(classList, elements)
   createLockToggle, // createLockToggle(selectedDiv)
-  createRemoveBtn, createSlider, // createSlider(selectedTag) 
-  createTagName
+  createRemoveBtn, // createRemoveBtn(selectedDiv, callback, lockedPhoto)
+  createSlider, // createSlider(selectedTag) 
+  createTagName, // createTagName(selectedTag)
 };
 
