@@ -6,8 +6,6 @@ const logoutBtn = document.querySelector('#logout-btn');
 const createUserForm = document.querySelector('#user-form');
 const createClientForm = document.querySelector('#client-form');
 
-// TODO: Prob need to have JS auto populate all the sections instead of hard coding...
-
 import { addModalEventListeners } from '../components/modals.js';
 import { logout } from '../components/logout.js';
 import { fetchAccountData, updatePassword } from './account.js';
