@@ -20,10 +20,10 @@ router.post('/create-client', async (req, res) => {
   
   logger.info('New client validated...');
   try {
-    // Generate a unique clientID
-    const clientID = await generateUniqueClientID();
+    // Generate a unique clientId
+    const clientId = await generateUniqueClientId();
     
-    const client = new Client({ fullname, user: existingUser._id, clientID });
+    const client = new Client({ fullname, user: existingUser._id, clientId });
     await client.save();
     res.status(201).json({ success: true });
     
@@ -33,18 +33,18 @@ router.post('/create-client', async (req, res) => {
   } 
 });
 
-const generateUniqueClientID = async () => {
+const generateUniqueClientId = async () => {
   const lastClient = await Client.findOne().sort({ createdAt: -1 });
-  let lastID = lastClient ? parseInt(lastClient.clientID) : 0;
-  let newID = (lastID + 1).toString().padStart(5, '0');
+  let lastId = lastClient ? parseInt(lastClient.clientId) : 0;
+  let newId = (lastId + 1).toString().padStart(5, '0');
   
-  // Check if newID already exists
-  const existingClient = await Client.findOne({ clientID: newID });
+  // Check if newId already exists
+  const existingClient = await Client.findOne({ clientId: newId });
   if (existingClient) {
-    // If newID already exists, increment lastID and try again
-    newID = (lastID + 2).toString().padStart(5, '0');
+    // If newId already exists, increment lastId and try again
+    newId = (lastId + 2).toString().padStart(5, '0');
   }
-  return newID;
+  return newId;
 };
 
 router.get('/refresh-clients', async (req, res) => {

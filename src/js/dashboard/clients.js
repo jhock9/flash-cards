@@ -40,9 +40,9 @@ const refreshClientsTable = async (userId) => {
       row.appendChild(techNameCell);
       
       // Not to be confused with the client's database _id, which is different
-      const clientIDCell = document.createElement('td');
-      clientIDCell.textContent = client.clientID;
-      row.appendChild(clientIDCell);
+      const clientIdCell = document.createElement('td');
+      clientIdCell.textContent = client.clientId;
+      row.appendChild(clientIdCell);
       
       // Action icons
       const actionCell = document.createElement('td');

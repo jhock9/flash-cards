@@ -1,7 +1,7 @@
 const googleTab = document.querySelector('#google-tab');
 const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
-let googleClientID; 
+let googleClientId; 
 
 import { hideModal, showFlashcardsModal, showGoogleSignInModal } from '../components/modals.js';
 
@@ -11,8 +11,8 @@ const fetchConfig = async () => {
     const response = await fetch('/config');
     const config = await response.json();
     
-    googleClientID = config.GOOGLE_CLIENT_ID;
-    console.log('googleClientID LOADED...'); 
+    googleClientId = config.GOOGLE_CLIENT_ID;
+    console.log('googleClientId LOADED...'); 
     
     initGoogleSignIn();
   } catch (error) {
@@ -24,7 +24,7 @@ const fetchConfig = async () => {
 const initGoogleSignIn = () => {
   console.log('initGoogleSignIn CALLED...');
   google.accounts.id.initialize({
-    client_id: googleClientID,
+    client_id: googleClientId,
     callback: handleCredentialResponse, // Success callback function
     on_failure: onSignInFailure // Failure callback function
   });
@@ -107,7 +107,7 @@ const checkGoogleAuthentication = async (currentUser) => {
 };
 
 // Export to dashboard.js
-export { 
-  fetchConfig, 
-  checkGoogleAuthentication, //checkGoogleAuthentication(currentUser);
-}; 
+export {
+  checkGoogleAuthentication, fetchConfig
+};
+
