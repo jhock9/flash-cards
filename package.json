@@ -9,9 +9,7 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:webpack\"",
     "dev:server": "NODE_ENV=development nodemon server/server.js",
     "dev:webpack": "webpack --mode=development --hot",
-    "prebuild": "echo Checking webpack-cli installation && npm list webpack-cli",
     "build": "NODE_ENV=production webpack --mode=production",
-    "postbuild": "echo Build complete",
     "start": "node server/server.js"
   },
   "jest": {
