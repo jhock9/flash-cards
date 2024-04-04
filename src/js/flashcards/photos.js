@@ -20,7 +20,7 @@ const fetchPhotosData = async (tags) => {
     const response = await fetch('/photos/get-photos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tags }),
+      body: JSON.stringify({ tags || [] }),
     });
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
@@ -32,7 +32,7 @@ const fetchPhotosData = async (tags) => {
   }
 };
 
-const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
+const filterPhotosByTags = async (photos, selectedTagsAndQuantities, totalPhotos, useRemainder) => {
   console.log('filterPhotosByTags called...');
   
   console.log('photos length:', photos.length);
@@ -75,7 +75,8 @@ const filterPhotosByTags = (photos, selectedTagsAndQuantities, totalPhotos, useR
   
   // If 'userRemainder' is true, add any remaining photos to the filtered photos
   if (useRemainder && remainingPhotos > 0) {
-    const photosToAdd = addRemainingPhotos(photos, selectedPhotoIds, filteredPhotos, remainingPhotos);
+    const allPhotos = await fetchPhotosData();
+    const photosToAdd = addRemainingPhotos(allPhotos, selectedPhotoIds, filteredPhotos, remainingPhotos);
     console.log('number of additional Photos to add:', photosToAdd.length);
     console.log('number of filteredPhotos to add:', filteredPhotos.length);
     addPhotos(photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, intendedTotal);
