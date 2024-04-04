@@ -50,9 +50,9 @@ const addPhotos = (photosToAdd, selectedPhotoIds, filteredPhotos, lockedPhoto, i
 };
 
 // Add remaining photos if 'useRemainder' is checked
-const addRemainingPhotos = (photos, selectedPhotoIds, filteredPhotos, remainingPhotos) => {
+const addRemainingPhotos = (allPhotos, selectedPhotoIds, filteredPhotos, remainingPhotos) => {
   console.log('Adding remaining photos...');
-  const additionalPhotos = photos.filter(photo => !selectedPhotoIds.has(photo.photoData._id));
+  const additionalPhotos = allPhotos.filter(photo => !selectedPhotoIds.has(photo.photoData._id));
   shuffleArray(additionalPhotos);
   const photosToAdd = additionalPhotos.slice(0, remainingPhotos);
   photosToAdd.forEach(photo => {
