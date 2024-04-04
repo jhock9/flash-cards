@@ -1,13 +1,33 @@
 # Interactive Flash Cards App
 
-Interactive Flash Cards is a web application designed to assist ABA Co-op therapists in their work with clients. The application provides a digital version of "VB-MAPP flash cards", allowing therapists to generate random photos of selected items in a flashcard format.
+The Interactive Flashcards App is an innovative tool designed to assist individuals, particularly those with autism and developmental disabilities, in enhancing their language and communication skills through engaging and interactive means. This digital adaptation of VB-MAPP flashcards transitions the utility and familiarity of traditional flashcards into a modern, digital format, providing a dynamic learning environment.
 
 ## Table of Contents
 
+- [App Background](#app-background)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Future Enhancements](#future-enhancements)
 - [Contact](#contact)
+
+## App Background
+
+### How It Works:
+- **Visual Learning:** The app uses colorful and engaging images to represent objects, actions, emotions, and concepts. Each image is associated with a word or phrase.
+- **Language Development:** Users interact with the flashcards to learn and practice words and phrases. This helps them understand and express themselves better.
+- **Communication Practice:** The app encourages communication by allowing users to name what they see on the flashcards or express their needs and preferences.
+
+### Why It's Helpful:
+- **Boosts Communication:** Engaging with the flashcards simplifies discussing topics, posing questions, and expressing personal thoughts, enhancing conversational abilities.
+- **Fun Learning:** The app integrates learning with play, transforming language development into an enjoyable and captivating experience.
+- **Personalized Experience:** Therapists have the capability to tailor the flashcard content, ensuring it aligns with the individual needs and interests of each user, fostering a more personalized learning journey.
+
+### Who Uses It:
+- **Individuals:** Designed for anyone seeking to improve their language and communication skills, the app is especially beneficial for those with autism or developmental disabilities.
+- **Therapists and Educators:** ABA professionals find this tool invaluable for incorporating into therapy sessions and educational activities, enriching the learning experience.
+
+### Why It Matters:
+The Interactive Flashcards App strives to make language learning and communication more accessible and enjoyable for those facing challenges in these areas. By digitizing these essential tools, we aim to support individuals in their language development endeavors, enhancing their ability to connect with the world around them and improving their overall quality of life.
 
 ## Features
 
