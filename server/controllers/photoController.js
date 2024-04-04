@@ -76,9 +76,21 @@ const getSelectedPhotos = async (tags) => {
   }
 };
 
+// Get all photos from database
+const getAllPhotos = async () => {
+  try {
+    const photos = await Photo.find({});
+    return photos;
+  } catch (error) {
+    logger.error(`Error getting all photos: ${error}`);
+    return [];
+  }
+};
+
 // Export to photoDBRoutes.js for CRUD routes, except savePhoto
 module.exports = {
   savePhoto, // Export savePhoto(mappedPhotoData) to googlePhotosAPI.js and photoUpdateController.js
   getPhotoTags,
   getSelectedPhotos, // getSelectedPhotos(tags)
+  getAllPhotos,
 };
