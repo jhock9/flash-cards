@@ -20,7 +20,7 @@ const fetchPhotosData = async (tags) => {
     const response = await fetch('/photos/get-photos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tags || [] }),
+      body: JSON.stringify({ tags: tags || [] }),
     });
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`);
