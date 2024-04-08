@@ -7,8 +7,19 @@
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({});
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/app.js":
+/*!********************!*\
+  !*** ./src/app.js ***!
+  \********************/
+/***/ (() => {
+
+eval("\n\n//# sourceURL=webpack://flash-cards/./src/app.js?");
+
+/***/ })
+
+/******/ 	});
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
@@ -69,7 +80,7 @@
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("315dd6b3aebf73a881e0")
+/******/ 		__webpack_require__.h = () => ("95dd214d882cba8198f4")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
@@ -1070,6 +1081,9 @@
 /************************************************************************/
 /******/ 	
 /******/ 	// module cache are used so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/app.js");
 /******/ 	
 /******/ })()
 ;
