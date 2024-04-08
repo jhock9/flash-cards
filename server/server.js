@@ -171,6 +171,11 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something went wrong!');
 });
 
+// Catch-all handler for any request that doesn't match the ones above
+app.use((req, res, next) => {
+  res.status(404).sendFile(path.join(__dirname, '../src/', '404.html'));
+});
+
 // Start server
 app.listen(port, () => {
   logger.info(`Server running at http://localhost:${port}`);
