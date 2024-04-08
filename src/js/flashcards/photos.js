@@ -26,6 +26,7 @@ const fetchPhotosData = async (tags) => {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     const photos = await response.json();
+    console.log('First photo:', photos[0]);
     return photos;
   } catch (error) {
     console.error('Error fetching photos:', error);
