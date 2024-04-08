@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { // For CRUD operations
   getPhotoTags, 
+  getAllPhotos,
   getSelectedPhotos, // getSelectedPhotos(tags)
 } = require('../controllers/photoController');
 

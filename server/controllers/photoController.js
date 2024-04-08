@@ -59,6 +59,17 @@ const getPhotoTags = async () => {
   }
 };
 
+// Get all photos from database
+const getAllPhotos = async () => {
+  try {
+    const photos = await Photo.find({});
+    return photos;
+  } catch (error) {
+    logger.error(`Error getting all photos: ${error}`);
+    return [];
+  }
+};
+
 // Get selected photos and their selected tag from database
 const getSelectedPhotos = async (tags) => {
   try {
@@ -72,17 +83,6 @@ const getSelectedPhotos = async (tags) => {
     return selectedPhotos;
   } catch (error) {
     logger.error(`ERROR getting selected photos: ${error}`);
-    return [];
-  }
-};
-
-// Get all photos from database
-const getAllPhotos = async () => {
-  try {
-    const photos = await Photo.find({});
-    return photos;
-  } catch (error) {
-    logger.error(`Error getting all photos: ${error}`);
     return [];
   }
 };
