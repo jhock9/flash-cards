@@ -63,7 +63,7 @@ const getPhotoTags = async () => {
 const getAllPhotos = async () => {
   try {
     const photos = await Photo.find({});
-    return photos;
+    return photos.map(photo => ({ photoData: photo }));
   } catch (error) {
     logger.error(`Error getting all photos: ${error}`);
     return [];
