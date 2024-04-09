@@ -213,7 +213,7 @@ submitBtn.addEventListener('click', async (e) => {
   photos = await fetchPhotosData(selectedTagsAndQuantities.map(({ tag }) => tag));
   
   if (photos) {
-    const filteredPhotos = filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder);
+    const filteredPhotos = await filterPhotosByTags(photos, selectedTagsAndQuantities, totalPhotos, useRemainder);
     displayPhotos(filteredPhotos);
   } else {
     console.error('Photos data is not available. Fetch it first.');
@@ -236,7 +236,7 @@ refreshBtn.addEventListener('click', async () => {
   console.log('Refresh button clicked...');
   if (lastSelectedTagsAndQuantities !== null && lastTotalPhotos !== null && lastUseRemainder !== null) {
     if (photos) {
-      const filteredPhotos = filterPhotosByTags(photos, lastSelectedTagsAndQuantities, lastTotalPhotos, lastUseRemainder);
+      const filteredPhotos = await filterPhotosByTags(photos, lastSelectedTagsAndQuantities, lastTotalPhotos, lastUseRemainder);
       displayPhotos(filteredPhotos);
     } else {
       console.error('Photos data is not available. Fetch it first.');
