@@ -3,11 +3,11 @@
 The Interactive Flashcards App is an innovative tool designed to assist individuals, particularly those with autism and developmental disabilities, in enhancing their language and communication skills through engaging and interactive means. This digital adaptation of VB-MAPP flashcards transitions the utility and familiarity of traditional flashcards into a modern, digital format, providing a dynamic learning environment.
 
 ## Table of Contents
-
 - [App Background](#app-background)
 - [Features](#features)
 - [Technology Stack](#technology-stack)
 - [Future Enhancements](#future-enhancements)
+- [License](#license)
 - [Contact](#contact)
 
 ## App Background
@@ -30,7 +30,6 @@ The Interactive Flashcards App is an innovative tool designed to assist individu
 The Interactive Flashcards App strives to make language learning and communication more accessible and enjoyable for those facing challenges in these areas. By digitizing these essential tools, we aim to support individuals in their language development endeavors, enhancing their ability to connect with the world around them and improving their overall quality of life.
 
 ## Features
-
 - **Enhanced User Authentication:** Therapists can sign in or register through a secure internal system, allowing for the creation of detailed user profiles.
 - **Client and Session Management:** Within the therapist dashboard, users can manage client profiles, organize sessions, and tailor therapy sessions to individual client needs.
 - **Admin Exclusive Features:** Admins have the ability to manage user profiles and integrate with Google Photos for a centralized photo repository, ensuring a rich selection of images for therapy sessions.
@@ -38,7 +37,6 @@ The Interactive Flashcards App strives to make language learning and communicati
 - **Personalization of Therapy Sessions:** The ability to save specific photos and maintain tag preferences across sessions allows therapists to customize therapy experiences to match client progress and interests.
 
 ## Technology Stack
-
 This app is built with a robust set of technologies to provide a seamless and responsive user experience:
 
 - **Frontend:** HTML, CSS, JavaScript
@@ -51,11 +49,12 @@ This app is built with a robust set of technologies to provide a seamless and re
 This stack supports the app’s complex functionalities, from user authentication to dynamic photo management and session customization.
 
 ## Future Enhancements
-
 - **Client and User Account Management:** While the icons are present, the forms for client and user profile editing are not built yet.
 
-## Contact
+## License
+This project is proprietary and not open for public use or modification. All rights reserved.
 
+## Contact
 If you have any questions or want to discuss this project further, you can reach me at:
 
 - Email: jon.hocker@gmail.com
