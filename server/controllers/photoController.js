@@ -1,5 +1,5 @@
-const logger = require('../config/winston.js');
-const Photo = require('../models/photoModel.js');
+const logger = require('../config/winston');
+const Photo = require('../models/photoModel');
 
 // Save photo to database
 const savePhoto = async (mappedPhotoData) => {
