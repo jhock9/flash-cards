@@ -3,6 +3,33 @@ const logger = require('../config/winston');
 const photoController = require('../controllers/photoController'); // savePhoto(photoData)
 const Token = require('../models/tokenModel');
 
+// Get Albums from Google Photos
+const getAlbums = async (oauth2Client) => {
+  try {
+    const response = await axios.get('https://photoslibrary.googleapis.com/v1/albums', {
+      headers: {
+        'Authorization': `Bearer ${oauth2Client.credentials.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    const albums = response.data.albums;
+    logger.info('Fetched albums:', albums);
+    const targetAlbum = albums.find(album => album.title === "onTheApp");
+    
+    // Get album ID for "onTheApp"
+    if (targetAlbum) {
+      logger.info(`Found album "onTheApp" with ID: ${targetAlbum.id}`);
+      return targetAlbum.id;
+    } else {
+      throw new Error('Album "onTheApp" not found.');
+    }
+  } catch (error) {
+    logger.error('Error fetching albums:', error.message);
+    throw error;
+  }
+};
+
 // Fetch Google Photos and send to photoDBRoutes.js
 const fetchGooglePhotos = async (oauth2Client) => {
   logger.info('fetching photos and photo data...');
@@ -10,12 +37,15 @@ const fetchGooglePhotos = async (oauth2Client) => {
   try {
     logger.info('Initializing Google Photos client...');
     
+    const albumId = await getAlbums(oauth2Client);
+    
     let nextPageToken;
     let response;
     do {
       const params = {
         pageSize: 50,
         pageToken: nextPageToken,
+        albumId: albumId,
       };
       try {
         // Get photos from Google Photos API
