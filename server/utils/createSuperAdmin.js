@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '../.env' });
 const mongoose = require('mongoose');
-const User = require('../server/models/userModel');
-const Appointment = require('../server/models/appointmentModel');
+const User = require('../models/userModel');
+const Appointment = require('../models/appointmentModel');
 
 const MONGO_URI = process.env.MONGO_URI;
 const SUPER_ADMIN_PASS = process.env.SUPER_ADMIN_PASS;
