@@ -107,7 +107,4 @@ const checkGoogleAuthentication = async (currentUser) => {
 };
 
 // Export to dashboard.js
-export {
-  checkGoogleAuthentication, fetchConfig
-};
-
+export { checkGoogleAuthentication, fetchConfig };
