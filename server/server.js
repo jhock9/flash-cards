@@ -15,7 +15,7 @@ const SESSION_SECRET = process.env.SESSION_SECRET;
 const MONGO_URI = process.env.MONGO_URI;
 
 // Config
-const { GOOGLE_CLIENT_ID, initializeOauthClient } = require('./config/googleClient'); // Google client ID for /config route, initializeOauthClient() for cron job
+const { GOOGLE_CLIENT_ID, REDIRECT_URL, initializeOauthClient } = require('./config/googleClient'); // Google client ID and redirect URL for /config route, initializeOauthClient() for cron job
 const morganMiddleware = require('./config/morgan');
 const logger = require('./config/winston');
 const localPassport = require('./config/passport');
@@ -130,6 +130,7 @@ app.get('/dashboard', (req, res) => {
 app.get('/config', (req, res) => {
   res.json({
     GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
+    REDIRECT_URL: REDIRECT_URL,
   });
 });
 

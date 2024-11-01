@@ -54,9 +54,9 @@ const initializeOauthClient = async () => {
   return oauth2Client;
 };
 
-// Export to server.js and googleAuthRoutes.js, respectively
 module.exports = {
-  GOOGLE_CLIENT_ID,
-  initializeOauthClient,
+  GOOGLE_CLIENT_ID, // Export to server.js
+  REDIRECT_URL, // Export to server.js
+  initializeOauthClient, // Export to server.js
   oauth2Client // Export to googleAuthRoutes.js
 };

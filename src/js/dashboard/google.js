@@ -2,18 +2,32 @@ const googleTab = document.querySelector('#google-tab');
 const signedIn = document.querySelector('#signed-in-wrapper');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientId; 
+let redirectUrl;
 
 import { hideModal, showFlashcardsModal, showGoogleSignInModal } from '../components/modals.js';
 
 // Fetch Google Client ID from server
 const fetchConfig = async () => {
   try {
+    console.log('fetching config...');
     const response = await fetch('/config');
     const config = await response.json();
-    
+    console.log('Config fetched:', config);
+
     googleClientId = config.GOOGLE_CLIENT_ID;
-    console.log('googleClientId LOADED...'); 
+    redirectUrl = config.REDIRECT_URL;
     
+    if (googleClientId) {
+      // Set the Google client ID dynamically in the HTML
+      document.querySelector('#g_id_onload').setAttribute('data-client_id', config.GOOGLE_CLIENT_ID);
+    }
+    
+    if (redirectUrl) {
+      // Set the redirect URL for Google sign-in
+      document.querySelector('#g_id_onload').setAttribute('data-login_uri', config.REDIRECT_URL);
+    }
+    
+    console.log('googleClientId LOADED...'); 
     initGoogleSignIn();
   } catch (error) {
     console.error('Error fetching configuration:', error);
@@ -23,6 +37,15 @@ const fetchConfig = async () => {
 // Initialize Google Sign-In called in fetchConfig()
 const initGoogleSignIn = () => {
   console.log('initGoogleSignIn CALLED...');
+  if (!googleClientId) {
+    console.error('Google Client ID is missing, cannot initialize sign-in');
+    return;
+  }
+  if (!redirectUrl) {
+    console.error('Redirect URL is missing, cannot initialize sign-in');
+    return;
+  }
+  
   google.accounts.id.initialize({
     client_id: googleClientId,
     callback: handleCredentialResponse, // Success callback function
