@@ -58,7 +58,8 @@ router.get('/oauth2callback', async (req, res) => {
     
     oauth2Client.setCredentials(tokens);
     logger.info('Tokens set in OAuth2 client.');
-    
+    console.log(`Access token fetched at: ${new Date().toISOString()}`);
+    console.log(`Access token expiry date: ${tokens.expiry_date ? new Date(tokens.expiry_date).toISOString() : 'Unknown'}`);    
     // Update photo data after tokens have been set
     try {
       await updatePhotoData(oauth2Client);

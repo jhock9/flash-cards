@@ -155,8 +155,8 @@ initializeOauthClient().then((oauth2Client) => {
   logger.info(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
   cron.schedule('0 7-19 * * *', () => {
     updatePhotoData(oauth2Client)
-      .then(() => logger.info('Photo data updated successfully.'))
-      .catch(error => logger.error('Failed to update photo data:', error));
+      .then(() => logger.info(`Photo data updated successfully at ${new Date().toISOString()}`))
+      .catch(error => logger.error(`Failed to update photo data at ${new Date().toISOString()}:`, error));
   });
 });
 
