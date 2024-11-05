@@ -36,6 +36,7 @@ const getAlbums = async (oauth2Client) => {
 
 // Fetch Google Photos and send to photoDBRoutes.js
 const fetchGooglePhotos = async (oauth2Client) => {
+  await refreshAccessToken(oauth2Client);
   logger.info('fetching photos and photo data...');
   
   try {
@@ -53,31 +54,9 @@ const fetchGooglePhotos = async (oauth2Client) => {
         pageToken: nextPageToken,
         albumId: cachedAlbumId,
       };
-      try {
-        // Get photos from Google Photos API
-        response = await callGooglePhotosAPI(params, oauth2Client);
-        logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
-      } catch (error) {
-        logger.error(`Error getting photos: ${error.message}`);
-        if (error.response && error.response.status === 401) { // If the token is expired
-          logger.error(`Error response from Google Photos API: ${error.response.data}`);
-          try {
-            // Refresh the token
-            await refreshAccessToken(oauth2Client);
-            // Retry the request with the new token
-            response = await callGooglePhotosAPI(params, oauth2Client);
-            logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API after refreshing token`);
-          } catch (refreshError) {
-            logger.error(`Failed to refresh access token: ${refreshError}`);
-            
-            await Token.findOneAndUpdate({}, { isGoogleAuthenticated: false });
-            throw refreshError;
-          }
-        } else {
-          logger.error(`Error getting photos: ${error.message}, Error stack: ${error.stack}`);
-          throw error;
-        }
-      }    
+      // Get photos from Google Photos API
+      response = await callGooglePhotosAPI(params, oauth2Client);
+      logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
       logger.info('Received media items...');
       
       // Save photo data to database
@@ -103,12 +82,23 @@ const callGooglePhotosAPI = async (params, oauth2Client) => {
   });
 };
 
+// Check and refresh the access token if it is about to expire
 const refreshAccessToken = async (oauth2Client) => {
-  const newTokens = await oauth2Client.refreshAccessToken();
-  oauth2Client.setCredentials(newTokens.credentials);
-  logger.info('Tokens refreshed and set in OAuth2 client.');
-  logger.info(`Access token retrieved at: ${new Date().toISOString()}`);
-  logger.info(`Access token expires in: ${newTokens.credentials.expiry_date ? new Date(newTokens.credentials.expiry_date).toISOString() : 'Unknown'}`);
+  if (!oauth2Client.credentials || !oauth2Client.credentials.expiry_date || new Date() >= new Date(oauth2Client.credentials.expiry_date)) {
+    try {
+      const newTokens = await oauth2Client.refreshAccessToken();
+      oauth2Client.setCredentials(newTokens.credentials);
+      logger.info('Tokens refreshed and set in OAuth2 client.');
+      logger.info(`Access token retrieved at: ${new Date().toISOString()}`);
+      logger.info(`Access token expires in: ${newTokens.credentials.expiry_date ? new Date(newTokens.credentials.expiry_date).toISOString() : 'Unknown'}`);
+    } catch (error) {
+      logger.error('Failed to refresh access token:', error);
+      await Token.findOneAndUpdate({}, { isGoogleAuthenticated: false });
+      throw error;
+    }
+  } else {
+    logger.info('Access token is still valid. No refresh needed.');
+  }
 };
 
 const processPhotoData = async (photoData) => {
