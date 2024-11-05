@@ -1,7 +1,11 @@
+require('dotenv').config();
 const axios = require('axios');
 const logger = require('../config/winston');
 const photoController = require('../controllers/photoController'); // savePhoto(photoData)
 const Token = require('../models/tokenModel');
+
+const albumTitle = process.env.GOOGLE_PHOTOS_ALBUM_ID; // Name of the album to fetch photos from
+let cachedAlbumId;
 
 // Get Albums from Google Photos
 const getAlbums = async (oauth2Client) => {
@@ -15,14 +19,14 @@ const getAlbums = async (oauth2Client) => {
     
     const albums = response.data.albums;
     logger.info('Fetched albums:', albums);
-    const targetAlbum = albums.find(album => album.title === "onTheApp");
+    const targetAlbum = albums.find(album => album.title === albumTitle);
     
-    // Get album ID for "onTheApp"
+    // Get album ID for albumTitle
     if (targetAlbum) {
-      logger.info(`Found album "onTheApp" with ID: ${targetAlbum.id}`);
+      logger.info(`Found album ${targetAlbum.title} with ID: ${targetAlbum.id}`);
       return targetAlbum.id;
     } else {
-      throw new Error('Album "onTheApp" not found.');
+      throw new Error(`Album ${albumTitle} not found.`);
     }
   } catch (error) {
     logger.error('Error fetching albums:', error.message);
@@ -37,7 +41,9 @@ const fetchGooglePhotos = async (oauth2Client) => {
   try {
     logger.info('Initializing Google Photos client...');
     
-    const albumId = await getAlbums(oauth2Client);
+    if (!cachedAlbumId) {
+      cachedAlbumId = await getAlbums(oauth2Client);
+    }
     
     let nextPageToken;
     let response;
@@ -45,7 +51,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
       const params = {
         pageSize: 50,
         pageToken: nextPageToken,
-        albumId: albumId,
+        albumId: cachedAlbumId,
       };
       try {
         // Get photos from Google Photos API
@@ -101,6 +107,8 @@ const refreshAccessToken = async (oauth2Client) => {
   const newTokens = await oauth2Client.refreshAccessToken();
   oauth2Client.setCredentials(newTokens.credentials);
   logger.info('Tokens refreshed and set in OAuth2 client.');
+  logger.info(`Access token retrieved at: ${new Date().toISOString()}`);
+  logger.info(`Access token expires in: ${newTokens.credentials.expiry_date ? new Date(newTokens.credentials.expiry_date).toISOString() : 'Unknown'}`);
 };
 
 const processPhotoData = async (photoData) => {
