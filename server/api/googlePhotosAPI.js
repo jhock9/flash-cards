@@ -4,7 +4,7 @@ const logger = require('../config/winston');
 const photoController = require('../controllers/photoController'); // savePhoto(photoData)
 const Token = require('../models/tokenModel');
 
-const albumTitle = process.env.GOOGLE_PHOTOS_ALBUM_ID; // Name of the album to fetch photos from
+const albumTitle = process.env.GOOGLE_PHOTOS_ALBUM_TITLE; // Name of the album to fetch photos from
 let cachedAlbumId;
 
 // Get Albums from Google Photos
