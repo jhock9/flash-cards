@@ -12,6 +12,13 @@ const updatePhotoData = async (oauth2Client) => {
     
     // Fetch existing photos from the database
     const existingPhotos = await Photo.find({});
+    logger.info(`Found ${existingPhotos.length} photos in the database`);
+    
+    // Log Google IDs of both fetched and existing photos for debugging purposes
+    const fetchedPhotoIds = fetchedPhotos.map(photo => photo.googleId);
+    const existingPhotoIds = existingPhotos.map(photo => photo.googleId);
+    logger.info(`Fetched Photo IDs: ${JSON.stringify(fetchedPhotoIds)}`);
+    logger.info(`Existing Photo IDs: ${JSON.stringify(existingPhotoIds)}`);
     
     // Convert existing photos to a Map for easy lookup
     const existingPhotosMap = new Map(existingPhotos.map(photo => [photo.googleId, photo]));
@@ -20,6 +27,7 @@ const updatePhotoData = async (oauth2Client) => {
     const updatedPhotos = [];
     const photosToAdd = [];
     
+    // Compare fetched photos with existing photos and update
     for (const fetchedPhoto of fetchedPhotos) {
       const existingPhoto = existingPhotosMap.get(fetchedPhoto.googleId);
       if (existingPhoto) {
@@ -48,12 +56,11 @@ const updatePhotoData = async (oauth2Client) => {
     logger.info(`Added ${photosToAdd.length} photos to the database`);
     
     // Remove photos that no longer exist in Google Photos
-    const fetchedPhotoIds = new Set(fetchedPhotos.map(photo => photo.googleId));
-    const photosToRemove = existingPhotos.filter(photo => !fetchedPhotoIds.has(photo.googleId));
+    const fetchedPhotoIdsSet = new Set(fetchedPhotos.map(photo => photo.googleId));
+    const photosToRemove = existingPhotos.filter(photo => !fetchedPhotoIdsSet.has(photo.googleId));
     for (const photo of photosToRemove) {
       try {
         await Photo.findByIdAndDelete(photo._id);
-        logger.info(`Deleted photo with ID: ${photo._id}`);
       } catch (error) {
         logger.error(`Failed to delete photo with ID: ${photo._id}. Error: ${error}`);
       }
