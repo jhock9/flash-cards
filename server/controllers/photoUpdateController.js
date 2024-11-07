@@ -17,18 +17,43 @@ const updatePhotoData = async (oauth2Client) => {
     const existingPhotosMap = new Map(existingPhotos.map(photo => [photo.googleId, photo]));
     
     // Prepare photo data to add
+    const updatedPhotos = [];
     const photosToAdd = [];
+    
     for (const fetchedPhoto of fetchedPhotos) {
-      if (!existingPhotosMap.has(fetchedPhoto.googleId)) {
+      const existingPhoto = existingPhotosMap.get(fetchedPhoto.googleId);
+      if (existingPhoto) {
+        // Update photo if any details (tags, baseUrl) have changed
+        if (!arraysAreEqual(existingPhoto.tagsFromGoogle, fetchedPhoto.tagsFromGoogle) || existingPhoto.baseUrl !== fetchedPhoto.baseUrl) {
+          existingPhoto.tagsFromGoogle = fetchedPhoto.tagsFromGoogle;
+          existingPhoto.baseUrl = fetchedPhoto.baseUrl;
+          updatedPhotos.push(existingPhoto);
+        }
+      } else {
         // If the photo data does not exist in the database, add it
         photosToAdd.push(fetchedPhoto);
       }
     }
+    
+    // Update photos that have changed
+    for (const photo of updatedPhotos) {
+      await photo.save();
+    }
+    logger.info(`Updated ${updatedPhotos.length} photos in the database`);
+    
     // Add photo data
     for (const photo of photosToAdd) {
       await photoController.savePhoto(photo);
     }
     logger.info(`Added ${photosToAdd.length} photos to the database`);
+
+    // Remove photos that no longer exist in Google Photos
+    const fetchedPhotoIds = new Set(fetchedPhotos.map(photo => photo.googleId));
+    const photosToRemove = existingPhotos.filter(photo => !fetchedPhotoIds.has(photo.googleId));
+    for (const photo of photosToRemove) {
+      await photo.remove();
+    }
+    logger.info(`Removed ${photosToRemove.length} photos from the database`);
   } catch (error) {
     logger.error(`Failed to fetch photos from Google Photos API: ${error}`);
   }
