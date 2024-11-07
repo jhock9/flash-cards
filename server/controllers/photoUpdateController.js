@@ -46,12 +46,17 @@ const updatePhotoData = async (oauth2Client) => {
       await photoController.savePhoto(photo);
     }
     logger.info(`Added ${photosToAdd.length} photos to the database`);
-
+    
     // Remove photos that no longer exist in Google Photos
     const fetchedPhotoIds = new Set(fetchedPhotos.map(photo => photo.googleId));
     const photosToRemove = existingPhotos.filter(photo => !fetchedPhotoIds.has(photo.googleId));
     for (const photo of photosToRemove) {
-      await photo.remove();
+      try {
+        await Photo.findByIdAndDelete(photo._id);
+        logger.info(`Deleted photo with ID: ${photo._id}`);
+      } catch (error) {
+        logger.error(`Failed to delete photo with ID: ${photo._id}. Error: ${error}`);
+      }
     }
     logger.info(`Removed ${photosToRemove.length} photos from the database`);
   } catch (error) {
