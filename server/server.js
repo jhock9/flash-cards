@@ -85,7 +85,9 @@ mongoose.connect(MONGO_URI)
   logger.info('Connected to MongoDB Atlas');
 })
 .catch(err => logger.error(`Could not connect to MongoDB Atlas: ${err}`));
-mongoose.set('debug', NODE_ENV === 'development');
+// mongoose.set('debug', NODE_ENV === 'development'); // Only enable debug mode in development
+mongoose.set('debug', false); // Turn off debug mode
+
 
 // Create a new MongoDB store
 const store = new MongoDBStore({
