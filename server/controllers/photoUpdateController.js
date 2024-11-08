@@ -9,18 +9,11 @@ const updatePhotoData = async (oauth2Client) => {
   try {
     const fetchedPhotos = await fetchGooglePhotos(oauth2Client);
     logger.info(`Fetched ${fetchedPhotos.length} photos from Google Photos API`);
-    logger.info(`Media item example: ${JSON.stringify(fetchedPhotos[0])}`); // log the first media item
     
     // Fetch existing photos from the database
     const existingPhotos = await Photo.find({});
     logger.info(`Found ${existingPhotos.length} photos in the database`);
-    
-    // Log Google IDs of both fetched and existing photos for debugging purposes
-    const fetchedPhotoIds = fetchedPhotos.map(photo => photo.id);
-    const existingPhotoIds = existingPhotos.map(photo => photo.googleId);
-    logger.info(`Fetched Photo IDs: ${JSON.stringify(fetchedPhotoIds)}`);
-    logger.info(`Existing Photo IDs: ${JSON.stringify(existingPhotoIds)}`);
-    
+        
     // Convert existing photos to a Map for easy lookup
     const existingPhotosMap = new Map(existingPhotos.map(photo => [photo.googleId, photo]));
     
@@ -57,15 +50,11 @@ const updatePhotoData = async (oauth2Client) => {
     logger.info(`Added ${photosToAdd.length} photos to the database`);
     
     // Remove photos that no longer exist in Google Photos
-    const fetchedPhotoIdsSet = new Set(fetchedPhotos.map(photo => photo.id.trim()));
-    const photosToRemove = existingPhotos.filter(photo => !fetchedPhotoIdsSet.has(photo.googleId.trim()));
+    const fetchedPhotoIds = new Set(fetchedPhotos.map(photo => photo.id.trim()));
+    const photosToRemove = existingPhotos.filter(photo => !fetchedPhotoIds.has(photo.googleId.trim()));
 
-    // const fetchedPhotoIdsSet = new Set(fetchedPhotos.map(photo => photo.googleId));
-    // const photosToRemove = existingPhotos.filter(photo => !fetchedPhotoIdsSet.has(photo.googleId));
     for (const photo of photosToRemove) {
       try {
-        logger.info(`Photos to remove: ${photosToRemove.map(photo => photo.googleId).join(', ')}`);
-        logger.info(`Fetched Photo ID Set: ${Array.from(fetchedPhotoIdsSet).join(', ')}`);
         await Photo.findByIdAndDelete(photo._id);
       } catch (error) {
         logger.error(`Failed to delete photo with ID: ${photo._id}. Error: ${error}`);
