@@ -57,13 +57,12 @@ const fetchGooglePhotos = async (oauth2Client) => {
       };
       // Get photos from Google Photos API
       response = await callGooglePhotosAPI(params, oauth2Client);
-      logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
-      logger.info(`Media item example: ${JSON.stringify(response.data.mediaItems[0])}`); // log the first media item
+      logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API request`);
       
       // Only add photos with an ID and a description      
       const photosToProcess = response.data.mediaItems.filter(photoData => photoData.id && photoData.description);
       allMediaItems.push(...photosToProcess);
-      logger.info(`Added ${photosToProcess.length} photos in this batch, total is now ${allMediaItems.length} photos...`);
+      logger.info(`Added ${photosToProcess.length} approved photos in this batch, total is now ${allMediaItems.length} approved photos...`);
       
       // Save photos to database
       await Promise.all(photosToProcess.map(processPhotoData));
