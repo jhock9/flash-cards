@@ -9,6 +9,7 @@ const updatePhotoData = async (oauth2Client) => {
   try {
     const fetchedPhotos = await fetchGooglePhotos(oauth2Client);
     logger.info(`Fetched ${fetchedPhotos.length} photos from Google Photos API`);
+    logger.info(`Media item example: ${JSON.stringify(fetchedPhotos[0])}`); // log the first media item
     
     // Fetch existing photos from the database
     const existingPhotos = await Photo.find({});

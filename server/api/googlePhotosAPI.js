@@ -48,6 +48,7 @@ const fetchGooglePhotos = async (oauth2Client) => {
     
     let nextPageToken;
     let response;
+    const allMediaItems = [];
     do {
       const params = {
         pageSize: 50,
@@ -57,15 +58,21 @@ const fetchGooglePhotos = async (oauth2Client) => {
       // Get photos from Google Photos API
       response = await callGooglePhotosAPI(params, oauth2Client);
       logger.info(`Received ${response.data.mediaItems.length} photos from Google Photos API in initial request`);
-      logger.info('Received media items...');
+      logger.info(`Media item example: ${JSON.stringify(response.data.mediaItems[0])}`); // log the first media item
       
-      // Save photo data to database
-      const photosToProcess = response.data.mediaItems.filter(photoData => photoData.description);
+      // Only add photos with an ID and a description      
+      const photosToProcess = response.data.mediaItems.filter(photoData => photoData.id && photoData.description);
+      allMediaItems.push(...photosToProcess);
+      logger.info(`Added ${photosToProcess.length} photos in this batch, total is now ${allMediaItems.length} photos...`);
+      
+      // Save photos to database
       await Promise.all(photosToProcess.map(processPhotoData));
+      logger.info(`Saved ${photosToProcess.length} photos to database...`);
+      
       nextPageToken = response.data.nextPageToken;
     } while (nextPageToken);
     
-    return response ? response.data.mediaItems : [];
+    return allMediaItems;
   } catch (error) {
     logger.error(`ERROR getting photos: ${error.message}`);
     logger.error(`Stack trace: ${error.stack}`);
@@ -101,6 +108,7 @@ const refreshAccessToken = async (oauth2Client) => {
   }
 };
 
+// Save photo data to database
 const processPhotoData = async (photoData) => {
   if (!photoData.id) {
     logger.error(`Photo missing id: ${JSON.stringify(photoData)}`);
