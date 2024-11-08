@@ -16,7 +16,7 @@ const updatePhotoData = async (oauth2Client) => {
     logger.info(`Found ${existingPhotos.length} photos in the database`);
     
     // Log Google IDs of both fetched and existing photos for debugging purposes
-    const fetchedPhotoIds = fetchedPhotos.map(photo => photo.googleId);
+    const fetchedPhotoIds = fetchedPhotos.map(photo => photo.id);
     const existingPhotoIds = existingPhotos.map(photo => photo.googleId);
     logger.info(`Fetched Photo IDs: ${JSON.stringify(fetchedPhotoIds)}`);
     logger.info(`Existing Photo IDs: ${JSON.stringify(existingPhotoIds)}`);
