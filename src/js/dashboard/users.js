@@ -41,7 +41,7 @@ const refreshUsersTable = async () => {
       
       // Action icons
       const actionCell = document.createElement('td');
-      const editUserBtn = createEditUserBtn();
+      // const editUserBtn = createEditUserBtn(); //!! removing until edit user functionality is added
       const viewClientsBtn = createViewClientsBtn(user._id);
       
       const iconDiv = appendToNewDiv('icon-div center', [editUserBtn, viewClientsBtn]);
