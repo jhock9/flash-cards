@@ -82,4 +82,4 @@ const getAdminData = async () => {
 };
 
 // Export to dataFetchRoutes.js
-export { dataFetch };
+module.exports = dataFetch;
