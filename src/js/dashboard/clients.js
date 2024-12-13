@@ -49,7 +49,9 @@ const refreshClientsTable = async (userId) => {
       // const editClientBtn = createEditClientBtn(); //!! removing until client user functionality is added
       const viewAppointmentsBtn = createViewAppointmentsBtn(client._id);
       
-      const iconDiv = appendToNewDiv('icon-div center', [editClientBtn, viewAppointmentsBtn]);
+      //!! Removing editClientBtn until functionality is added
+      // const iconDiv = appendToNewDiv('icon-div center', [editClientBtn, viewAppointmentsBtn]);
+      const iconDiv = appendToNewDiv('icon-div center', [viewAppointmentsBtn]);
       
       actionCell.appendChild(iconDiv);
       row.appendChild(actionCell);

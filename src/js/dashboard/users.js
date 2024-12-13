@@ -41,10 +41,12 @@ const refreshUsersTable = async () => {
       
       // Action icons
       const actionCell = document.createElement('td');
-      // const editUserBtn = createEditUserBtn(); //!! removing until edit user functionality is added
+      const editUserBtn = createEditUserBtn();
       const viewClientsBtn = createViewClientsBtn(user._id);
       
-      const iconDiv = appendToNewDiv('icon-div center', [editUserBtn, viewClientsBtn]);
+      //!! Removing editUserBtn until functionality is added
+      // const iconDiv = appendToNewDiv('icon-div center', [editUserBtn, viewClientsBtn]); 
+      const iconDiv = appendToNewDiv('icon-div center', [viewClientsBtn]);
       
       actionCell.appendChild(iconDiv);
       row.appendChild(actionCell);
