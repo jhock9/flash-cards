@@ -158,7 +158,7 @@ createClientForm.addEventListener('submit', (e) => {
 });
 
 // Fetch admin dashboard data
-refreshBtn.addEventListener("click", async (e)) => {
+refreshBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   fetchAdminData();
-}
+});
