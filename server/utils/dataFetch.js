@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Photo = require('../models/photoModel');
 const User = require('../models/userModel');
 const Client = require('../models/clientModel');
+const Appointment = require('../models/appointmentModel');
 
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -20,16 +21,15 @@ const dataFetch = async () => {
     await connectDB();
     
     const tagCounts = await getTagCounts();
-    const totalPhotos = await getTotalPhotos();
-    const profileCounts = await getProfileCounts();
+    const adminData = await getAdminData();
     
-    console.log({ tagCounts, totalPhotos, profileCounts });
-    return { tagCounts, totalPhotos, profileCounts };
+    console.log({ tagCounts, adminData });
+    return { tagCounts, adminData };
     
   } catch (error) {
     console.error('Error running the scripts:', error);
   } finally {
-    mongoose.connection.close();
+    await mongoose.disconnect()
     console.log('MongoDB connection closed');
   }
 };
@@ -65,29 +65,21 @@ const getTagCounts = async () => {
   }
 };
 
-// Get total quantity of photos
-const getTotalPhotos = async () => {
+// Get admin data
+const getAdminData = async () => {
   try {
     const totalPhotos = await Photo.countDocuments({});
-    return totalPhotos;
-  } catch (error) {
-    console.error('Error fetching total photos:', error);
-    return null;
-  }
-};
-
-// Get total number of admin, user, and client profiles
-const getProfileCounts = async () => {
-  try {
-    const totalUsers = await User.countDocuments({ role: 'user' });
     const totalAdmins = await User.countDocuments({ role: 'admin' });
+    const totalUsers = await User.countDocuments({ role: 'user' });
     const totalClients = await Client.countDocuments({});
+    const totalAppointments = await Appointment.countDocuments({});
     
-    return { totalUsers, totalAdmins, totalClients };
+    return { totalPhotos, totalUsers, totalAdmins, totalClients, totalAppointments };
   } catch (error) {
-    console.error('Error fetching profile counts:', error);
+    console.error('Error fetching admin data:', error);
     return null;
   }
 };
 
-dataFetch();
+// Export to dataFetchRoutes.js
+export { dataFetch };

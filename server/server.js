@@ -29,6 +29,7 @@ const accountRoutes = require('./routes/accountRoutes'); // Routes for account m
 const userRoutes = require('./routes/userRoutes'); // Routes for user management
 const clientRoutes = require('./routes/clientRoutes'); // Routes for client management
 const appointmentRoutes = require('./routes/appointmentRoutes'); // Routes for appointment management
+const dataFetchRoutes = require('./routes/dataFetchRoutes'); // Routes for admin dashboard
 // Controllers
 const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
 
@@ -151,6 +152,7 @@ app.use('/account', accountRoutes);
 app.use('/users', userRoutes);
 app.use('/clients', clientRoutes);
 app.use('/appointment', appointmentRoutes);
+app.use(dataFetchRoutes);
 
 // Update photo data in database every hour from 7:00AM to 7:00PM, everyday
 initializeOauthClient().then((oauth2Client) => {
