@@ -40,10 +40,6 @@ const fetchAdminData = async () => {
     appDataTable.clientCount.textContent = adminData.totalClients || "N/A";
     appDataTable.sessionCount.textContent = adminData.totalAppointments || "N/A";
     
-    // Show tables if they were hidden
-    document.querySelector("#tag-counts-table").classList.remove("hide");
-    document.querySelector("#app-data-table").classList.remove("hide");
-    
   } catch (error) {
     console.error("Error fetching admin data:", error);
     
