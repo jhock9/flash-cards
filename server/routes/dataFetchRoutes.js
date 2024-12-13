@@ -1,5 +1,5 @@
 const express = require("express");
-const { dataFetch } = require("../utils/dataFetch");
+const dataFetch = require("../utils/dataFetch");
 
 const router = express.Router();
 
