@@ -7,7 +7,6 @@ const appDataTable = {
   clientCount: document.querySelector("#clientCount"),
   sessionCount: document.querySelector("#sessionCount"),
 };
-const disconnectedText = document.querySelector(".disconnected");
 
 // Fetch and display admin data
 const fetchAdminData = async () => {
@@ -17,7 +16,6 @@ const fetchAdminData = async () => {
     if (!response.ok) throw new Error("Failed to fetch admin data");
     
     const { tagCounts, adminData } = await response.json();
-    disconnectedText.classList.remove("hide");
     
     // Populate Tag Counts Table
     tagCountsTableBody.innerHTML = ""; // Clear previous data

@@ -336,10 +336,6 @@ h3 {
   text-transform: uppercase;
 }
 
-.disconnected {
-  padding-bottom: 1rem;
-} 
-
 #tag-counts-table-wrapper,
 #tag-counts-table,
 #tag-counts-table-body,
@@ -486,9 +482,5 @@ h3 {
   
   #connected-wrapper {
     width: 35%;
-  }
-    
-  .disconnected {
-    /* font-size: 2.5rem; */
   }
 }
