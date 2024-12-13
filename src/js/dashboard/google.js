@@ -1,10 +1,12 @@
-const googleTab = document.querySelector('#google-tab');
-const signedIn = document.querySelector('#signed-in-wrapper');
+const adminTab = document.querySelector('#admin-tab');
+const connectedIcon = document.querySelector('#connected-icon');
+const disconnectedIcon = document.querySelector('#disconnected-icon');
 const googleSignIn = document.querySelector('#google-signin-wrapper');
 let googleClientId; 
 let redirectUrl;
 
 import { hideModal, showFlashcardsModal, showGoogleSignInModal } from '../components/modals.js';
+import { fetchAdminData } from './admin.js'; // fetchAdminData()
 
 // Fetch Google Client ID from server
 const fetchConfig = async () => {
@@ -100,7 +102,9 @@ const checkGoogleAuthentication = async (currentUser) => {
     
     if (data.isGoogleAuthenticated) {
       console.log('Admin is authenticated with Google.');
-      signedIn.classList.remove('hide');
+      
+      connectedIcon.classList.remove('hide');
+      disconnectedIcon.classList.add('hide');
       googleSignIn.classList.add('hide');
       return true;
     }
@@ -109,14 +113,17 @@ const checkGoogleAuthentication = async (currentUser) => {
   }
   console.log('Admin needs to re-authenticate with Google.');
   
+  // If admin is not authenticated with Google
   if (currentUser.role === 'admin') {
-    googleTab.click();
-    googleTab.classList.add('clicked');
+    adminTab.click();
+    adminTab.classList.add('clicked');
     
+    // Default open on Admin tab
     document.querySelector('#account').classList.add('hide');
-    document.querySelector('#google').classList.remove('hide');
+    document.querySelector('#admin').classList.remove('hide');
     
-    signedIn.classList.add('hide');
+    connectedIcon.classList.add('hide');
+    disconnectedIcon.classList.remove('hide');
     googleSignIn.classList.remove('hide');
     
     showGoogleSignInModal();

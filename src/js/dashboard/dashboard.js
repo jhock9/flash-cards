@@ -5,6 +5,7 @@ const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 const createUserForm = document.querySelector('#user-form');
 const createClientForm = document.querySelector('#client-form');
+const refreshBtn = document.querySelector("#refresh-btn");
 
 import { addModalEventListeners } from '../components/modals.js';
 import { logout } from '../components/logout.js';
@@ -12,6 +13,7 @@ import { fetchAccountData, updatePassword } from './account.js'; // updatePasswo
 import { fetchAppointment } from './appointment.js'; // fetchAppointment(id)
 import { refreshUsersTable, createUser } from './users.js';
 import { refreshClientsTable, createClient } from './clients.js'; // refreshClientsTable(userId), createClient(event)
+import { fetchAdminData } from './admin.js'; // fetchAdminData()
 import { checkGoogleAuthentication, fetchConfig } from './google.js'; // checkGoogleAuthentication(currentUser);
 import { togglePasswordVisibility } from '../components/password.js';
 
@@ -103,6 +105,11 @@ navLinks.forEach((link) => {
         const userData = await fetchAccountData();
         await fetchAppointment(userData.defaultAppointment);
       }
+      
+      // Fetch admin dashboard data
+      if (sectionId === 'admin') {
+        fetchAdminData();
+      }
     }
   });
 });
@@ -137,15 +144,21 @@ logoutBtn.addEventListener('click', async (e) => {
 });
 
 // Create and update users
-createUserForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  createUser(event);
+createUserForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  createUser(e);
   refreshUsersTable();
 });
 
 // Create and update clients
-createClientForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  createClient(event);
+createClientForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  createClient(e);
   refreshClientsTable();
 });
+
+// Fetch admin dashboard data
+refreshBtn.addEventListener("click", async (e)) => {
+  e.preventDefault();
+  fetchAdminData();
+}
