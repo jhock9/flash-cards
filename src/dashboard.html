@@ -42,7 +42,7 @@
           </li>
           
           <li class="admin-view nav-tab hide center">
-            <a id="google-tab" class="center" href="#google">Google Account</a>
+            <a id="admin-tab" class="center" href="#admin">Admin</a>
           </li>
           
           <li class="nav-tab center">
@@ -117,7 +117,7 @@
               <!-- Todo: Sortable table -->
               <tr>
                 <th>Client Name</th>
-                <th>Therapist/Tech</th>
+                <th>Therapist Username</th>
                 <th>Client ID</th>
                 <th>Actions</th>
               </tr>
@@ -151,31 +151,88 @@
       <section id="flashcards" class="hide center">
       </section>
       
-      <!-- GOOGLE SECTION -->
-      <section id="google" class="hide center">
-        <div id="signed-in-wrapper" class="hide center">
-          <i class="fa-regular fa-circle-check"></i>
-          <h2>Nothing to do here!</h2>
-          <p>You're all signed in and have authorized access to your Google Photos library.</p>
-        </div>
-        <div id="google-signin-wrapper" class="hide center">
-          <div id="g_id_onload"
-            data-client_id=""
-            data-login_uri="" 
-            data-context="use"
-            data-ux_mode="popup"
-            data-auto_prompt="false">
+      <!-- ADMIN SECTION -->
+      <section id="admin" class="center">
+        <div id="admin-data-wrapper" class="center">
+          
+          <div class="data-wrapper center">
+            <h2>Tag Counts</h2>
+            <div id="tag-counts-wrapper" class="center">
+              <!-- Tag Counts content dynamically generated from database -->
+              <div id="tag-counts-table-wrapper" class="center">
+                <table id="tag-counts-table" class="hide center">
+                  <tbody id="tag-counts-table-body">
+                  </tbody>
+                </table>
+              </div>
+              
+              <p class="disconnected center">disconnected...</p>
+            </div>
           </div>
           
-          <div id="google-signin" class="g_id_signin"
-            data-type="standard"
-            data-shape="rectangular"
-            data-theme="outline"
-            data-text="signin_with"
-            data-size="large"
-            data-logo_alignment="left">
+          <div class="data-wrapper center">
+            <h2>App Data</h2>
+            <div id="app-data-wrapper" class="center">
+              <!-- App Data content dynamically generated from database -->
+              <div id="app-data-table-wrapper" class="center">
+                <table id="app-data-table" class="hide center">
+                  <tbody id="app-data-table-body">
+                    <tr>
+                      <td><strong>Total Photos:</strong></td>
+                      <td id="totalPhotos"></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Admins:</strong></td>
+                      <td id="adminCount"></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Users:</strong></td>
+                      <td id="userCount"></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Clients:</strong></td>
+                      <td id="clientCount"></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Total Sessions:</strong></td>
+                      <td id="sessionCount"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <p class="disconnected center">disconnected...</p>
+            </div>
           </div>
+          <button id="refresh-btn" class="wide-btn btn center">Refresh</button>
         </div>
+        
+        <div id="google-connect-wrapper" class="center">
+          <div id="connected-wrapper" class="data-wrapper center"> 
+            <h3>Photos Connection:</h3>
+            <i id="connected-icon" class="hide fa-regular fa-circle-check"></i>
+            <i id="disconnected-icon" class="fa-regular fa-circle-xmark"></i>
+          </div>
+          
+          <div id="google-signin-wrapper" class="hide center">
+            <div id="g_id_onload"
+              data-client_id=""
+              data-login_uri="" 
+              data-context="use"
+              data-ux_mode="popup"
+              data-auto_prompt="false">
+            </div>
+            
+            <div id="google-signin" class="g_id_signin"
+              data-type="standard"
+              data-shape="rectangular"
+              data-theme="outline"
+              data-text="signin_with"
+              data-size="large"
+              data-logo_alignment="left">
+            </div>
+          </div>
+        </div>  
       </section>
       
       <!-- ACCOUNT SECTION -->

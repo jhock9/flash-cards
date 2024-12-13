@@ -289,32 +289,99 @@ figure img {
   /* background-color: var(--second-color); */
 }
 
-/* GOOGLE section */
-#google {
+/* ADMIN section */
+#admin {
   width: 100%;
 }
 
-#signed-in-wrapper {
-  width: 80%;
+.data-wrapper {
+  width: 100%;
   flex-direction: column;
-  text-align: center;    
+  background: var(--second-color);
+  padding: 2rem;
+  border: 0.2rem solid var(--border-color);
+  border-radius: 0.4rem;
 }
 
-#signed-in-wrapper i {
-  font-size: 10rem;
-  color: var(--primary-color);
-  margin: 0 1rem;
+#admin-data-wrapper,
+#google-connect-wrapper {
+  width: 100%;
+  padding: 2rem;
+  gap: 2rem;
+  background: var(--white);
+  border: 0.3rem solid var(--border-color);
+  text-align: center;
 }
 
-#signed-in-wrapper h2 {
-  font-size: 3rem;
-  font-style: italic;
-  margin: 4rem 0;
+#google-connect-wrapper {
+  margin-top: 4rem;
+  justify-content: center;
 }
 
-#signed-in-wrapper p {
+#connected-wrapper {
+  width: 90%;
+  flex-direction: row;
+  /* justify-content: space-around; */
+  margin: auto;
+}
+
+h2 {
   font-size: 2.5rem;
-  line-height: 1.5;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+.disconnected {
+  padding-bottom: 1rem;
+} 
+
+#tag-counts-table-wrapper,
+#tag-counts-table,
+#tag-counts-table-body,
+#tag-counts-table tr,
+#tag-counts-table th,
+#tag-counts-table td,
+#app-data-table-wrapper,
+#app-data-table,
+#app-data-table-body,
+#app-data-table tr,
+#app-data-table th,
+#app-data-table td {
+  width: 95%;
+  padding: 1rem 0;
+  font-size: 2rem;
+}
+
+/* Tag Counts & App Data column 1 */
+#tag-counts-table th:nth-child(1),
+#tag-counts-table td:nth-child(1),
+#app-data-table th:nth-child(1),
+#app-data-table td:nth-child(1) {
+  width: 100%;
+}
+
+/* Tag Counts & App Data column 2 */
+#tag-counts-table th:nth-child(2),
+#tag-counts-table td:nth-child(2),
+#app-data-table th:nth-child(2),
+#app-data-table td:nth-child(2) {
+  width: 100%;
+  text-align: right;
+}
+
+#refresh-btn {
+  margin: auto;
+}
+
+#connected-wrapper i {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-left: 2rem;
 }
 
 /* ACCOUNT section */
@@ -379,21 +446,49 @@ figure img {
     margin: 5rem 5rem 5rem 35rem;
   }
   
-  #signed-in-wrapper {
-    width: 70%;
+  .data-wrapper {
+    width: 48%;
   }
   
-  #signed-in-wrapper h2 {
-    font-size: 4rem;
+  #admin-data-wrapper,
+  #google-connect-wrapper {
+    justify-content: space-between;
+    align-items: flex-start;
   }
   
-  #signed-in-wrapper p {
-    font-size: 3rem;
+  #connected-wrapper {
+    width: 60%;
+  }
+  
+  #connected-wrapper h2 {
+    margin: 0;
+  }
+  
+  #tag-counts-table-wrapper,
+  #tag-counts-table,
+  #tag-counts-table-body,
+  #tag-counts-table tr,
+  #tag-counts-table th,
+  #tag-counts-table td,
+  #app-data-table-wrapper,
+  #app-data-table,
+  #app-data-table-body,
+  #app-data-table tr,
+  #app-data-table th,
+  #app-data-table td {
+    padding: 1rem 0;
+    font-size: 2.5rem;
   }
 }
 
 /**** DESKTOP STYLES ****/
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1000px) {
   
-  
+  #connected-wrapper {
+    width: 35%;
+  }
+    
+  .disconnected {
+    /* font-size: 2.5rem; */
+  }
 }
