@@ -115,7 +115,6 @@ navLinks.forEach((link) => {
 });
 
 
-
 //**   TOGGLES   **// 
 
 //!! Toggle the navigation menu when in mobile view only
@@ -145,6 +144,7 @@ logoutBtn.addEventListener('click', async (e) => {
 
 // Create and update users
 createUserForm.addEventListener('submit', (e) => {
+  console.log('Create user button clicked...');
   e.preventDefault();
   createUser(e);
   refreshUsersTable();
@@ -152,6 +152,7 @@ createUserForm.addEventListener('submit', (e) => {
 
 // Create and update clients
 createClientForm.addEventListener('submit', (e) => {
+  console.log('Create client button clicked...');
   e.preventDefault();
   createClient(e);
   refreshClientsTable();
@@ -159,6 +160,7 @@ createClientForm.addEventListener('submit', (e) => {
 
 // Fetch admin dashboard data
 refreshBtn.addEventListener('click', async (e) => {
+  console.log('Refresh button clicked...');
   e.preventDefault();
   fetchAdminData();
 });
