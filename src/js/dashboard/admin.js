@@ -1,5 +1,6 @@
 // Select table elements
-const tagCountsTableBody = document.querySelector("#tag-counts-table-body");
+const activeTagsTableBody = document.querySelector("#active-tags-table-body");
+const inactiveTagsTableBody = document.querySelector("#inactive-tags-table-body");
 const appDataTable = {
   totalPhotos: document.querySelector("#totalPhotos"),
   adminCount: document.querySelector("#adminCount"),
@@ -8,6 +9,11 @@ const appDataTable = {
   sessionCount: document.querySelector("#sessionCount"),
 };
 
+// TODO: add a searchable tag feature for quickly find a tag
+
+// testing mock data - remove after testing
+// import { mockData } from '../../../extra/mockData.js';
+
 // Fetch and display admin data
 const fetchAdminData = async () => {
   console.log("Fetching admin data...");
@@ -15,23 +21,22 @@ const fetchAdminData = async () => {
     const response = await fetch("/api/dataFetch");
     if (!response.ok) throw new Error("Failed to fetch admin data");
     
-    const { tagCounts, adminData } = await response.json();
+    const { activeTags, inactiveTags, adminData } = await response.json();
+    // testing mock data - remove after testing
+    // const { activeTags, inactiveTags, adminData } = mockData;
     
-    // Populate Tag Counts Table
-    tagCountsTableBody.innerHTML = ""; // Clear previous data
-    Object.entries(tagCounts).forEach(([tag, count]) => {
-      const row = document.createElement("tr");
-      
-      const tagCell = document.createElement("td");
-      tagCell.textContent = tag;
-      
-      const countCell = document.createElement("td");
-      countCell.textContent = count;
-      
-      row.appendChild(tagCell);
-      row.appendChild(countCell);
-      tagCountsTableBody.appendChild(row);
-    });
+    // Populate Tag Data Table
+    const populateTagTable = (tableBody, tags) => {
+      tableBody.innerHTML = ""; 
+      Object.entries(tags).forEach(([tag, count]) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${tag}</td><td>${count}</td>`;
+        tableBody.appendChild(row);
+      });
+    };
+    
+    populateTagTable(activeTagsTableBody, activeTags);
+    populateTagTable(inactiveTagsTableBody, inactiveTags);
     
     // Populate App Data Table
     appDataTable.totalPhotos.textContent = adminData.totalPhotos || "N/A";
@@ -44,7 +49,8 @@ const fetchAdminData = async () => {
     console.error("Error fetching admin data:", error);
     
     // Display error messages
-    tagCountsTableBody.innerHTML = `<tr><td colspan="2">Error fetching tag counts</td></tr>`;
+    activeTagsTableBody.innerHTML = `<tr><td colspan="2">Error fetching tag counts</td></tr>`;
+    inactiveTagsTableBody.innerHTML = "<tr><td colspan='2'>Error fetching tag counts</td></tr>";
     Object.values(appDataTable).forEach(cell => {
       cell.textContent = "Error";
     });
