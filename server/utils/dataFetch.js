@@ -20,11 +20,11 @@ const dataFetch = async () => {
   try {
     await connectDB();
     
-    const tagCounts = await getTagCounts();
+    const { activeTags, inactiveTags } = await getTagData();
     const adminData = await getAdminData();
     
-    console.log({ tagCounts, adminData });
-    return { tagCounts, adminData };
+    console.log({ activeTags, inactiveTags, adminData });
+    return { activeTags, inactiveTags, adminData };
     
   } catch (error) {
     console.error('Error running the scripts:', error);
@@ -34,33 +34,32 @@ const dataFetch = async () => {
   }
 };
 
-// Get tag counts across all photos
-const getTagCounts = async () => {
+// Get tag data across all photos
+const getTagData = async () => {
   try {
     const photos = await Photo.find({});
-    const tagCounts = {};
+    const tagData = {};
     
     photos.forEach(photo => {
       photo.tagsFromGoogle.forEach(tag => {
-        if (tag in tagCounts) {
-          tagCounts[tag]++;
-        } else {
-          tagCounts[tag] = 1;
-        }
+        tagData[tag] = (tagData[tag] || 0) + 1;
       });
     });
     
-    const filteredTagCounts = Object.entries(tagCounts)
-      .filter(([_, count]) => count > 1) // Only include tags with count greater than 1
-      .sort((a, b) => b[1] - a[1]) // Sort in descending order
-      .reduce((acc, [tag, count]) => {
-        acc[tag] = count;
-        return acc;
-      }, {}); // Convert back to an object
+    const sortedTags = Object.entries(tagData)
+    .sort(([tagA, countA], [tagB, countB]) => countB - countA || tagA.localeCompare(tagB));
     
-    return filteredTagCounts;
+    const activeTags = Object.fromEntries(
+      sortedTags.filter(([_, count]) => count >= 6)
+    );
+    
+    const inactiveTags = Object.fromEntries(
+      sortedTags.filter(([_, count]) => count >= 1 && count <= 5)
+    );
+    
+    return { activeTags, inactiveTags };
   } catch (error) {
-    console.error('Error fetching tag counts:', error);
+    console.error('Error fetching tag data:', error);
     return null;
   }
 };
