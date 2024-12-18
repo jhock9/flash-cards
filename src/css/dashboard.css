@@ -286,21 +286,11 @@ figure img {
 #create-client-btn:hover,
 #create-client-btn:active {
   color: var(--primary-color);
-  /* background-color: var(--second-color); */
 }
 
 /* ADMIN section */
 #admin {
   width: 100%;
-}
-
-.data-wrapper {
-  width: 100%;
-  flex-direction: column;
-  background: var(--second-color);
-  padding: 2rem;
-  border: 0.2rem solid var(--border-color);
-  border-radius: 0.4rem;
 }
 
 #admin-data-wrapper,
@@ -311,6 +301,108 @@ figure img {
   background: var(--white);
   border: 0.3rem solid var(--border-color);
   text-align: center;
+  justify-content: space-between;
+}
+
+#data-section-container {
+  width: 100%;
+  gap: 2rem; 
+  align-items: flex-start;
+}
+
+.data-wrapper {
+  width: 100%;
+  padding: 2rem 0;
+  background: var(--second-color);
+  border: 0.2rem solid var(--border-color);
+  border-radius: 0.4rem;
+}
+
+h2 {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+#tag-data-wrapper,
+#app-data-wrapper {
+  padding: 2rem;
+  background: var(--second-color);
+  border: 0.3rem solid var(--border-color);
+  border-radius: 0.4rem;
+}
+
+#tag-data-wrapper {
+  flex: 2;
+}
+
+#app-data-wrapper {
+  flex: 1;
+}
+
+#tag-data-table-container {
+  width: 100%;
+}
+
+#active-tags-table-wrapper,
+#inactive-tags-table-wrapper {
+  width: 50%;
+  }
+
+#active-tags-table,
+#inactive-tags-table {
+  width: 100%;
+}
+
+#active-tags-table-body,
+#inactive-tags-table-body {
+  max-height: 50rem;
+  overflow-y: auto;
+}
+
+table th {
+  padding: 0 0 1rem 0;
+  text-align: center;
+}
+
+table th h4 {
+  font-size: 2rem;
+  text-transform: uppercase;
+}
+
+table td {
+  padding: 0.25rem;
+  font-size: 2rem;
+}
+
+/* Tag Data column 1 */
+#active-tags-table td:nth-child(1),
+#inactive-tags-table td:nth-child(1) {
+  width: 20rem;
+}
+
+/* App Data column 1 */
+#app-data-table td:nth-child(1) {
+  width: 100%;
+}
+
+/* Tag Data & App Data column 2 */
+#active-tags-table td:nth-child(2),
+#inactive-tags-table td:nth-child(2),
+#app-data-table td:nth-child(2) {
+  width: 100%;
+  text-align: right;
+}
+
+#refresh-btn {
+  margin: auto;
 }
 
 #google-connect-wrapper {
@@ -321,56 +413,6 @@ figure img {
 #connected-wrapper {
   width: 90%;
   flex-direction: row;
-  /* justify-content: space-around; */
-  margin: auto;
-}
-
-h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-}
-
-h3 {
-  font-size: 2rem;
-  text-transform: uppercase;
-}
-
-#tag-counts-table-wrapper,
-#tag-counts-table,
-#tag-counts-table-body,
-#tag-counts-table tr,
-#tag-counts-table th,
-#tag-counts-table td,
-#app-data-table-wrapper,
-#app-data-table,
-#app-data-table-body,
-#app-data-table tr,
-#app-data-table th,
-#app-data-table td {
-  width: 95%;
-  padding: 1rem 0;
-  font-size: 2rem;
-}
-
-/* Tag Counts & App Data column 1 */
-#tag-counts-table th:nth-child(1),
-#tag-counts-table td:nth-child(1),
-#app-data-table th:nth-child(1),
-#app-data-table td:nth-child(1) {
-  width: 100%;
-}
-
-/* Tag Counts & App Data column 2 */
-#tag-counts-table th:nth-child(2),
-#tag-counts-table td:nth-child(2),
-#app-data-table th:nth-child(2),
-#app-data-table td:nth-child(2) {
-  width: 100%;
-  text-align: right;
-}
-
-#refresh-btn {
   margin: auto;
 }
 
@@ -420,19 +462,9 @@ h3 {
   
   /* Dash-panel NAV */
   #dash-panel {
-    /* position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0; */
     width: 30rem;
     transform: translateX(0); 
-    /* transition: transform 0.8s;  */
-    /* z-index: 3; */
   }
-  
-  /* #dash-panel.open {
-    transform: translateX(0);
-  } */
   
   #nav-open-btn {
     display: none;
@@ -452,6 +484,11 @@ h3 {
     align-items: flex-start;
   }
   
+  #app-data-table tr,
+  #app-data-table td {
+    padding: 0.75rem 0;
+  }
+  
   #connected-wrapper {
     width: 60%;
   }
@@ -459,28 +496,12 @@ h3 {
   #connected-wrapper h2 {
     margin: 0;
   }
-  
-  #tag-counts-table-wrapper,
-  #tag-counts-table,
-  #tag-counts-table-body,
-  #tag-counts-table tr,
-  #tag-counts-table th,
-  #tag-counts-table td,
-  #app-data-table-wrapper,
-  #app-data-table,
-  #app-data-table-body,
-  #app-data-table tr,
-  #app-data-table th,
-  #app-data-table td {
-    padding: 1rem 0;
-    font-size: 2.5rem;
-  }
 }
 
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1000px) {
   
   #connected-wrapper {
-    width: 35%;
+    width: 40%;
   }
 }

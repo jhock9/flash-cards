@@ -152,26 +152,54 @@
       </section>
       
       <!-- ADMIN SECTION -->
-      <section id="admin" class="center">
+      <!--!!HIDE-->
+      <section id="admin" class="center"> 
         <div id="admin-data-wrapper" class="center">
-          
-          <div class="data-wrapper center">
-            <h2>Tag Counts</h2>
-            <div id="tag-counts-wrapper" class="center">
-              <!-- Tag Counts content dynamically generated from database -->
-              <div id="tag-counts-table-wrapper" class="center">
-                <table id="tag-counts-table" class="center">
-                  <tbody id="tag-counts-table-body">
-                  </tbody>
-                </table>
+        <!-- Data content dynamically generated from database -->
+          <div id="data-section-container" class="center">
+            <div id="tag-data-wrapper" class=" data-wrapper center">
+              <h2>Tag Data</h2>
+              <div id="tag-data-table-container" class="center">
+                <div id="active-tags-table-wrapper" class="center">
+                  <table id="active-tags-table" class="center">
+                    <thead>
+                      <tr>
+                        <th><h4>Active Tags</h></th>
+                      </tr>
+                      <!-- Todo: Sortable table
+                      <tr>
+                        <th>Tag</th>
+                        <th>Count</th>
+                      </tr> -->
+                    </thead>
+                    
+                    <tbody id="active-tags-table-body">
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div id="inactive-tags-table-wrapper" class="center">
+                  <table id="inactive-tags-table" class="center">
+                    <thead>
+                      <tr>
+                        <th><h4>Inactive Tags</h4></th>
+                      </tr>
+                      <!-- Todo: Sortable table
+                      <tr>
+                        <th>Tag</th>
+                        <th>Count</th>
+                      </tr> -->
+                    </thead>
+                    
+                    <tbody id="inactive-tags-table-body">
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div class="data-wrapper center">
-            <h2>App Data</h2>
-            <div id="app-data-wrapper" class="center">
-              <!-- App Data content dynamically generated from database -->
+            
+            <div id="app-data-wrapper" class="data-wrapper center">
+              <h2>App Data</h2>
               <div id="app-data-table-wrapper" class="center">
                 <table id="app-data-table" class="center">
                   <tbody id="app-data-table-body">
