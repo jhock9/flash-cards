@@ -169,3 +169,22 @@ refreshBtn.addEventListener('click', async (e) => {
   e.preventDefault();
   fetchAdminData();
 });
+
+refreshBtn.addEventListener('click', async (e) => {
+  console.log('Refresh button clicked...');
+  e.preventDefault();
+  
+  try {
+    // Fetch and populate new data
+    await fetchAdminData();
+    
+    // Reset scroll positions
+    document.querySelector('#active-tags-table-body').scrollTop = 0;
+    document.querySelector('#inactive-tags-table-body').scrollTop = 0;
+    
+    console.log('Scroll reset and data refreshed.');
+  } catch (error) {
+    console.error('Error refreshing admin data:', error);
+  }
+});
+
