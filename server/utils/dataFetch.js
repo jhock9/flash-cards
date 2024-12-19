@@ -28,9 +28,6 @@ const dataFetch = async () => {
     
   } catch (error) {
     console.error('Error running the scripts:', error);
-  } finally {
-    await mongoose.disconnect()
-    console.log('MongoDB connection closed');
   }
 };
 

@@ -89,7 +89,6 @@ mongoose.connect(MONGO_URI)
 // mongoose.set('debug', NODE_ENV === 'development'); // Only enable debug mode in development
 mongoose.set('debug', false); // Turn off debug mode
 
-
 // Create a new MongoDB store
 const store = new MongoDBStore({
   uri: MONGO_URI,
