@@ -19,38 +19,41 @@ import { togglePasswordVisibility } from '../components/password.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
-  // Fetch the config and account data in parallel
-  const configPromise = fetchConfig();
-  const accountDataPromise = fetchAccountData();
-  
-  // Wait for both promises to resolve
-  await configPromise;
-  const currentUser = await accountDataPromise;
-  
-  if (currentUser.role === 'admin') {
-    console.log ('User is admin. Showing admin views...');
-    for (let view of adminViews) {
-      view.classList.remove('hide');
+  try {
+    // Fetch all data in parallel
+    const [, currentUser] = await Promise.all([
+      fetchConfig(),
+      fetchAccountData(),
+      fetchAdminData()
+    ]);
+    console.log('All data fetched.');
+    
+    // Update UI based on current user role
+    if (currentUser.role === 'admin') {
+      console.log ('User is admin. Showing admin views...');
+      adminViews.forEach(view => view.classList.remove('hide'));
+      document.querySelector('#users-tab').click();
+    } else {
+      console.log('User is not admin. Showing user views...');
+      document.querySelector('#clients-tab').click();   
     }
-    document.querySelector('#users-tab').click();
-  } else {
-    console.log('User is not admin. Showing user views...');
-    document.querySelector('#clients-tab').click();   
+    
+    // Update user display info
+    document.querySelector('#acct-name').textContent = currentUser.fullname;
+    document.querySelector('#acct-username').textContent = currentUser.username;
+    
+    // Additional setup
+    togglePasswordVisibility();
+    addModalEventListeners();
+    updatePassword(document.querySelector('#update-password-form'));
+    await checkGoogleAuthentication(currentUser);
+    
+    // Auto logout after 12 hours
+    setTimeout(logout, 12 * 60 * 60 * 1000);
+    
+  } catch (error) {
+    console.error('Error initializing dashboard:', error);
   }
-  
-  // Update the HTML to display the user's name and username
-  document.querySelector('#acct-name').textContent = currentUser.fullname;
-  document.querySelector('#acct-username').textContent = currentUser.username;
-  
-  togglePasswordVisibility();
-  addModalEventListeners();
-  updatePassword(document.querySelector('#update-password-form'));
-  
-  // Logout after 12 hours
-  setTimeout(logout, 12 * 60 * 60 * 1000);
-  
-  // Check if app is authenticated with Google
-  await checkGoogleAuthentication(currentUser);
 });
 
 //**   NAV  **//
@@ -101,6 +104,7 @@ navLinks.forEach((link) => {
       
       // Show the flashcards modal if not authenticated with Google
       if (sectionId === 'flashcards') {
+        console.log('flashcards-tab clicked...');
         // Fetch the user's default appointment
         const userData = await fetchAccountData();
         await fetchAppointment(userData.defaultAppointment);
@@ -108,6 +112,7 @@ navLinks.forEach((link) => {
       
       // Fetch admin dashboard data
       if (sectionId === 'admin') {
+        console.log('admin-tab clicked...');
         fetchAdminData();
       }
     }
