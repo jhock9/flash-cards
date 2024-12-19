@@ -3,7 +3,8 @@
   ========================================================================== */
 
 #login-content-wrapper {
-  min-height: calc(100vh - 2rem); /* Adjust based on mobile footer height */
+  /* min-height: calc(100vh - 2rem); Adjust based on mobile footer height */
+  min-height: 100vh; /* Adjust based on mobile footer height */
   width: 100%;
   flex-direction: column;
   justify-content: space-between;
@@ -154,7 +155,7 @@ footer p {
 @media screen and (min-width: 768px) {
   
   figure .logo img {
-    max-width: 40rem;
+    max-width: 30rem;
   }
   
   .welcome-text h1,
@@ -170,7 +171,7 @@ footer p {
     padding: 1.5rem 0;
   }
   
-  footer p{
+  footer p {
     font-size: 2rem;
   }
 }
@@ -178,4 +179,13 @@ footer p {
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1200px) {
   
+}
+
+/**** RESPONSIVE DESKTOP WINDOW STYLES ****/
+@media screen and (min-width: 768px) and (max-height: 680px) {
+  
+  /* Adjust for smaller win */
+  .welcome-text h1 {
+    margin: 2.5rem 0;
+  }
 }
