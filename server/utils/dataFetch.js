@@ -23,7 +23,8 @@ const dataFetch = async () => {
     const { activeTags, inactiveTags } = await getTagData();
     const adminData = await getAdminData();
     
-    console.log({ activeTags, inactiveTags, adminData });
+    // console.log({ activeTags, inactiveTags, adminData });
+    console.log('Data fetch complete.');
     return { activeTags, inactiveTags, adminData };
     
   } catch (error) {
