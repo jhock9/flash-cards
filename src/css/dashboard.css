@@ -487,8 +487,8 @@ table td {
   
   #admin-data-wrapper,
   #google-connect-wrapper {
-    justify-content: space-between;
-    align-items: flex-start;
+    /* justify-content: space-between;
+    align-items: flex-start; */
   }
   
   #active-tags-table-wrapper,
@@ -508,6 +508,7 @@ table td {
   
   #connected-wrapper {
     width: 60%;
+    margin: auto 2rem;
   }
   
   #connected-wrapper h2 {
