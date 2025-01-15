@@ -349,21 +349,23 @@ h3 {
 
 #tag-data-table-container {
   width: 100%;
+  flex-direction: column;
 }
 
 #active-tags-table-wrapper,
 #inactive-tags-table-wrapper {
-  width: 50%;
-  }
+  width: 100%;
+}
 
 #active-tags-table,
 #inactive-tags-table {
   width: 100%;
+  flex-direction: column;
 }
 
 #active-tags-table-body,
 #inactive-tags-table-body {
-  max-height: 50rem;
+  max-height: 30rem;
   overflow-y: auto;
   padding-right: 1rem;
 }
@@ -475,6 +477,10 @@ table td {
     margin: 5rem 5rem 5rem 35rem;
   }
   
+  #tag-data-table-container {
+    flex-direction: row;
+  }
+  
   .data-wrapper {
     width: 48%;
   }
@@ -483,6 +489,16 @@ table td {
   #google-connect-wrapper {
     justify-content: space-between;
     align-items: flex-start;
+  }
+  
+  #active-tags-table-wrapper,
+  #inactive-tags-table-wrapper {
+    width: 50%;
+  }
+  
+  #active-tags-table-body,
+  #inactive-tags-table-body {
+    max-height: 50rem;
   }
   
   #app-data-table tr,
