@@ -129,6 +129,11 @@ app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/', 'dashboard.html'));
 });
 
+// Serve privacy-policy.html
+app.get('/privacy-policy', (req, res) => {
+  res.sendFile(path.join(__dirname, '../src/', 'privacy-policy.html'));
+});
+
 app.get('/config', (req, res) => {
   res.json({
     GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,

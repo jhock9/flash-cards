@@ -40,23 +40,6 @@ figure .logo img {
   margin: 5rem 1rem 0 1rem;
 }
 
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 1rem 0;
-  background-color: var(--primary-color);
-}
-
-footer p {
-  font-size: 1.5rem;
-  color: var(--white);
-}
-
-.copyright a {
-  color: var(--white);
-}
-
 /*=====================================================================================
   Media Queries for Responsive Design     
 =====================================================================================*/
@@ -66,14 +49,6 @@ footer p {
   
   figure .logo img {
     max-width: 40rem;
-  }
-  
-  footer {
-    padding: 1.5rem 0;
-  }
-  
-  footer p{
-    font-size: 2rem;
   }
 }
 
