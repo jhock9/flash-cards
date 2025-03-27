@@ -5,33 +5,29 @@ const app = express();
 const port = process.env.PORT || 3003;
 const cors = require('cors');
 const session = require('express-session');
+const mongoose = require('mongoose');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const passport = require('passport');
-const mongoose = require('mongoose');
 const cron = require('node-cron');
-
-const NODE_ENV = process.env.NODE_ENV;
-const SESSION_SECRET = process.env.SESSION_SECRET;
-const MONGO_URI = process.env.MONGO_URI;
-
-// Config
-const { GOOGLE_CLIENT_ID, REDIRECT_URL, initializeOauthClient } = require('./config/googleClient'); // Google client ID and redirect URL for /config route, initializeOauthClient() for cron job
 const morganMiddleware = require('./config/morgan');
 const logger = require('./config/winston');
 const localPassport = require('./config/passport');
 require('./config/passport')(passport);
+const NODE_ENV = process.env.NODE_ENV;
+const SESSION_SECRET = process.env.SESSION_SECRET;
+const MONGO_URI = process.env.MONGO_URI;
 
 // Routes
 const authRoutes = require('./routes/authRoutes'); // Routes for local authentication
-const googleAuthRoutes = require('./routes/googleAuthRoutes'); // Routes for Google authentication
 const photoDBRoutes = require('./routes/photoDBRoutes'); // Routes for photo database and cron job
 const accountRoutes = require('./routes/accountRoutes'); // Routes for account management
 const userRoutes = require('./routes/userRoutes'); // Routes for user management
 const clientRoutes = require('./routes/clientRoutes'); // Routes for client management
 const appointmentRoutes = require('./routes/appointmentRoutes'); // Routes for appointment management
 const dataFetchRoutes = require('./routes/dataFetchRoutes'); // Routes for admin dashboard
+
 // Controllers
-const updatePhotoData = require('./controllers/photoUpdateController'); // updatePhotoData(oauth2Client) for cron job
+const updatePhotoData = require('./services/photoSyncService'); // For cron job
 
 // Sets the timezone to CST
 process.env.TZ = 'America/Chicago';
@@ -82,12 +78,8 @@ app.use((req, res, next) => {
 
 // MongoDB connection
 mongoose.connect(MONGO_URI)
-.then(() => {
-  logger.info('Connected to MongoDB Atlas');
-})
-.catch(err => logger.error(`Could not connect to MongoDB Atlas: ${err}`));
-// mongoose.set('debug', NODE_ENV === 'development'); // Only enable debug mode in development
-mongoose.set('debug', false); // Turn off debug mode
+.then(() => {logger.info('MongoDB connected successfully');})
+.catch(err => logger.error(`MongoDB connection error: ${err}`));
 
 // Create a new MongoDB store
 const store = new MongoDBStore({
@@ -134,13 +126,6 @@ app.get('/privacy-policy', (req, res) => {
   res.sendFile(path.join(__dirname, '../src/', 'privacy-policy.html'));
 });
 
-app.get('/config', (req, res) => {
-  res.json({
-    GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
-    REDIRECT_URL: REDIRECT_URL,
-  });
-});
-
 // Passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
@@ -150,7 +135,6 @@ localPassport(passport);
 
 // Routes
 app.use('/auth', authRoutes);
-app.use('/google-auth', googleAuthRoutes);
 app.use('/photos', photoDBRoutes);
 app.use('/account', accountRoutes);
 app.use('/users', userRoutes);
@@ -159,19 +143,11 @@ app.use('/appointment', appointmentRoutes);
 app.use(dataFetchRoutes);
 
 // Update photo data in database every hour from 7:00AM to 7:00PM, everyday
-initializeOauthClient().then((oauth2Client) => {
-  logger.info(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
-  cron.schedule('0 7-19 * * *', () => {
-    updatePhotoData(oauth2Client)
-      .then(() => logger.info(`Photo data updated successfully at ${new Date().toISOString()}`))
-      .catch(error => logger.error(`Failed to update photo data at ${new Date().toISOString()}:`, error));
-  });
-});
-
-initializeOauthClient().then((oauth2Client) => {
-  updatePhotoData(oauth2Client)
-    .then(() => console.log('Photo data updated successfully.'))
-    .catch(error => console.error('Failed to update photo data:', error));
+logger.info(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
+cron.schedule('0 7-19 * *a *', async () => {
+  await updatePhotoData()
+  .then(() => logger.info(`Photos updated successfully at ${new Date().toLocaleString()}`))
+  .catch(error => logger.error(`Failed to update photos at ${new Date().toLocaleString()}:`, error));
 });
 
 // Error handler

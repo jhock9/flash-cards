@@ -9,7 +9,7 @@ const appointmentSchema = new mongoose.Schema({
     locked: { type: Boolean, default: false } 
   }],
   savedPhotos: [{
-    photo: { type: mongoose.Schema.Types.ObjectId, ref: 'Photo' },
+    photo: { type: mongoose.Schema.Types.ObjectId, ref: 'PhotoAWS' },
     selectedTag: { type: String }
   }],
 }, { timestamps: true });

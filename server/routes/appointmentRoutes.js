@@ -2,6 +2,7 @@ const router = require('express').Router();
 const logger = require('../config/winston');
 const Appointment = require('../models/appointmentModel');
 
+// Route handler to get all appointments
 router.get('/:id', async (req, res) => {
   logger.info('Received request for /:id...');
   try {
@@ -16,6 +17,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Route handler to create a new appointment
 router.post('/create-appt', async (req, res) => {
   logger.info('Received request for /create-appt...');
   try {

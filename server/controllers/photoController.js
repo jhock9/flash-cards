@@ -1,31 +1,52 @@
 const logger = require('../config/winston');
 const Photo = require('../models/photoModel');
-
-// Save photo to database
+// Save photo to database, checking if it already exists
+// keep for future features (e.g. a photo upload UI, manual upload from a dashboard, or admin tagging).
 const savePhoto = async (mappedPhotoData) => {
-  if (mappedPhotoData.tagsFromGoogle) {
-    const existingPhoto = await Photo.findOne({ googleId: mappedPhotoData.googleId });
+  if (!mappedPhotoData.tagsFromAws || !mappedPhotoData.awsKey) {
+    logger.error(`Invalid photo data: ${JSON.stringify(mappedPhotoData)}`);
+    return;
+  }
+  
+  try {
+    const existingPhoto = await Photo.findOne({ awsKey: mappedPhotoData.awsKey });
+    
     if (existingPhoto) {
-      // baseURL expires every 60 minutes, update it every time
-      existingPhoto.baseUrl = mappedPhotoData.baseUrl;
+      let updated = false;
       
-      // Check if any tags have been added or removed
-      if (!arraysAreEqual(existingPhoto.tagsFromGoogle, mappedPhotoData.tagsFromGoogle)) {
-        existingPhoto.tagsFromGoogle = mappedPhotoData.tagsFromGoogle;
+      // Update baseUrl if changed
+      if (existingPhoto.baseUrl !== mappedPhotoData.baseUrl) {
+        existingPhoto.baseUrl = mappedPhotoData.baseUrl;
+        updated = true;
       }
       
-      await existingPhoto.save();
+      // Update tags if changed
+      if (!arraysAreEqual(existingPhoto.tagsFromAws, mappedPhotoData.tagsFromAws)) {
+        existingPhoto.tagsFromAws = mappedPhotoData.tagsFromAws;
+        updated = true;
+      }
+      
+      if (updated) {
+        await existingPhoto.save();
+        logger.info(`Updated existing photo: ${existingPhoto.awsKey}`);
+      } else {
+        logger.info(`Photo already up-to-date: ${existingPhoto.awsKey}`);
+      }
     } else {
-      // If the photo does not exist, insert it as new
-      const photo = new Photo(mappedPhotoData);
-      await photo.save();
+      // Insert new photo if it doesn't exist
+      const newPhoto = new Photo(mappedPhotoData);
+      await newPhoto.save();
+      logger.info(`Inserted new photo: ${mappedPhotoData.awsKey}`);
+      return 'inserted';
     }
+  } catch (error) {
+    logger.error(`Error saving photo to database: ${error.message}, Photo data: ${JSON.stringify(mappedPhotoData)}`);
   }
 };
 
 // Helper function to check if two arrays are equal
 const arraysAreEqual = (arr1, arr2) => {
-  return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+  return arr1.length === arr2.length && arr1.every((value) => arr2.includes(value));
 };
 
 // Get tags to be displayed from database
@@ -35,7 +56,7 @@ const getPhotoTags = async () => {
     const tagCounts = {};
     
     photos.forEach(photo => {
-      photo.tagsFromGoogle.forEach(tag => {
+      photo.tagsFromAws.forEach(tag => {
         if (tag in tagCounts) {
           tagCounts[tag]++;
         } else {
@@ -75,7 +96,7 @@ const getSelectedPhotos = async (tags) => {
   try {
     const selectedPhotos = [];
     for (const tag of tags) {
-      const photos = await Photo.find({ tagsFromGoogle: tag });
+      const photos = await Photo.find({ tagsFromAws: tag });
       for (const photo of photos) {
         selectedPhotos.push({ photoData: photo, tag });
       }
@@ -89,7 +110,7 @@ const getSelectedPhotos = async (tags) => {
 
 // Export to photoDBRoutes.js for CRUD routes, except savePhoto
 module.exports = {
-  savePhoto, // Export savePhoto(mappedPhotoData) to googlePhotosAPI.js and photoUpdateController.js
+  savePhoto, // not exported anywhere currently
   getPhotoTags,
   getSelectedPhotos, // getSelectedPhotos(tags)
   getAllPhotos,

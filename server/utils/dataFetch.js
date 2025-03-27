@@ -39,7 +39,7 @@ const getTagData = async () => {
     const tagData = {};
     
     photos.forEach(photo => {
-      photo.tagsFromGoogle.forEach(tag => {
+      photo.tagsFromAws.forEach(tag => {
         tagData[tag] = (tagData[tag] || 0) + 1;
       });
     });
