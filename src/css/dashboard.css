@@ -293,8 +293,7 @@ figure img {
   width: 100%;
 }
 
-#admin-data-wrapper,
-#google-connect-wrapper {
+#admin-data-wrapper{
   width: 100%;
   padding: 2rem;
   gap: 2rem;
@@ -408,23 +407,6 @@ table td {
   margin: auto;
 }
 
-#google-connect-wrapper {
-  margin-top: 4rem;
-  justify-content: center;
-}
-
-#connected-wrapper {
-  width: 90%;
-  flex-direction: row;
-  margin: auto;
-}
-
-#connected-wrapper i {
-  font-size: 3rem;
-  color: var(--primary-color);
-  margin-left: 2rem;
-}
-
 /* ACCOUNT section */
 #account {
   width: 100%;
@@ -485,12 +467,6 @@ table td {
     width: 48%;
   }
   
-  #admin-data-wrapper,
-  #google-connect-wrapper {
-    /* justify-content: space-between;
-    align-items: flex-start; */
-  }
-  
   #active-tags-table-wrapper,
   #inactive-tags-table-wrapper {
     width: 50%;
@@ -505,21 +481,9 @@ table td {
   #app-data-table td {
     padding: 0.75rem 0;
   }
-  
-  #connected-wrapper {
-    width: 60%;
-    margin: auto 2rem;
-  }
-  
-  #connected-wrapper h2 {
-    margin: 0;
-  }
 }
 
 /**** DESKTOP STYLES ****/
 @media screen and (min-width: 1000px) {
   
-  #connected-wrapper {
-    width: 40%;
-  }
 }

@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="03OSzltztIYEfli3IBMepEStSED0F-GGmw8CGxUPdWY"/>
   <title>Interactive Flash Cards | Dashboard</title>
   <meta name="description" content="An interactive flashcard app by ABA Co-op. User Dashboard.">
   
@@ -12,7 +11,6 @@
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/dashboard.css">
   
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://kit.fontawesome.com/18723e8048.js" crossorigin="anonymous"></script>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -228,34 +226,7 @@
             </div>
           </div>
           <button id="refresh-btn" class="wide-btn btn center">Refresh</button>
-        </div>
-        
-        <div id="google-connect-wrapper" class="center">
-          <div id="connected-wrapper" class="data-wrapper center"> 
-            <h3>Photos Connection:</h3>
-            <i id="connected-icon" class="hide fa-regular fa-circle-check"></i>
-            <i id="disconnected-icon" class="fa-regular fa-circle-xmark"></i>
-          </div>
-          
-          <div id="google-signin-wrapper" class="hide center">
-            <div id="g_id_onload"
-              data-client_id=""
-              data-login_uri="" 
-              data-context="use"
-              data-ux_mode="popup"
-              data-auto_prompt="false">
-            </div>
-            
-            <div id="google-signin" class="g_id_signin"
-              data-type="standard"
-              data-shape="rectangular"
-              data-theme="outline"
-              data-text="signin_with"
-              data-size="large"
-              data-logo_alignment="left">
-            </div>
-          </div>
-        </div>  
+        </div> 
       </section>
       
       <!-- ACCOUNT SECTION -->
@@ -361,25 +332,6 @@
       <h2 class="center">Sorry, that username doesn't exist or is incorrect.</h2>
       <i class="fa-regular fa-face-grimace"></i>
       <p class="center">Please try again!</p>
-    </div>
-  </div>
-  
-  <div id="google-signin-modal" class="modal hide center">
-    <div class="modal-content center">
-      <h2 class="center">Looks like we got disconnected from Google.</h2>
-      <i class="fa-regular fa-face-grin-beam-sweat"></i>
-      <p class="center">Please sign back into the ABA Co-op Google account so the photo library can stay updated!</p>
-      <h3 class="center">Thanks!</h3>
-    </div>
-  </div>
-  
-  <div id="flashcards-modal" class="modal hide center">
-    <div class="modal-content center">
-      <h2 class="center">Whoops...the photo library missed an update!</h2>
-      <i class="fa-regular fa-face-grin-beam-sweat"></i>
-      <p class="center">Its ok though, you can still access the flashcards page.
-      Make sure to let an Admin know to reconnect to the photo library soon.</p>
-      <h3 class="center">Thanks!</h3>
     </div>
   </div>
   

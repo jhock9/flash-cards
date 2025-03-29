@@ -14,7 +14,6 @@ import { fetchAppointment } from './appointment.js'; // fetchAppointment(id)
 import { refreshUsersTable, createUser } from './users.js';
 import { refreshClientsTable, createClient } from './clients.js'; // refreshClientsTable(userId), createClient(event)
 import { fetchAdminData } from './admin.js'; // fetchAdminData()
-import { checkGoogleAuthentication, fetchConfig } from './google.js'; // checkGoogleAuthentication(currentUser);
 import { togglePasswordVisibility } from '../components/password.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -22,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     // Fetch all data in parallel
     const [, currentUser] = await Promise.all([
-      fetchConfig(),
       fetchAccountData(),
       fetchAdminData()
     ]);
@@ -46,7 +44,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     togglePasswordVisibility();
     addModalEventListeners();
     updatePassword(document.querySelector('#update-password-form'));
-    await checkGoogleAuthentication(currentUser);
     
     // Auto logout after 12 hours
     setTimeout(logout, 12 * 60 * 60 * 1000);
@@ -102,7 +99,7 @@ navLinks.forEach((link) => {
         window.selectedUserId = null;
       }
       
-      // Show the flashcards modal if not authenticated with Google
+      // Fetch the user's default appointment
       if (sectionId === 'flashcards') {
         console.log('flashcards-tab clicked...');
         // Fetch the user's default appointment

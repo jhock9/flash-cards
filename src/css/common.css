@@ -143,11 +143,6 @@ input[type=password] {
   cursor: pointer;
 }
 
-#g_id_onload,
-#google-signin {
-  margin: 6rem 0;
-}
-
 /* Modals */
 .modal {
   position: fixed;

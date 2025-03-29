@@ -144,7 +144,7 @@ app.use(dataFetchRoutes);
 
 // Update photo data in database every hour from 7:00AM to 7:00PM, everyday
 logger.info(`Cron job for fetching photos started at ${new Date().toLocaleString()}`);
-cron.schedule('0 7-19 * *a *', async () => {
+cron.schedule('0 5,12 * * 1-5', async () => {
   await updatePhotoData()
   .then(() => logger.info(`Photos updated successfully at ${new Date().toLocaleString()}`))
   .catch(error => logger.error(`Failed to update photos at ${new Date().toLocaleString()}:`, error));

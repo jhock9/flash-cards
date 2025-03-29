@@ -4,6 +4,7 @@ const { // For CRUD operations
   getAllPhotos,
   getSelectedPhotos, // getSelectedPhotos(tags)
 } = require('../controllers/photoController');
+const updatePhotoData = require('../services/photoSyncService');
 
 //**   CRUD routes  **//
 
@@ -25,6 +26,16 @@ router.post('/get-photos', async (req, res) => {
     photos = await getSelectedPhotos(tags);
   }
   res.json(photos);
+});
+
+// Sync photos from AWS S3 to MongoDB
+router.post('/sync', async (req, res) => {
+  try {
+    await updatePhotoData();
+    res.status(200).json({ message: 'Photos synced successfully.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Photo sync failed.' });
+  }
 });
 
 // Export to server.js

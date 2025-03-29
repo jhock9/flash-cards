@@ -85,5 +85,5 @@ const updatePhotoData = async () => {
 
 updatePhotoData();
 
-// Export to server.js
+// Export to server.js and photoDBRoutes.js
 module.exports = updatePhotoData;

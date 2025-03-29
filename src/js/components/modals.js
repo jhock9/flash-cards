@@ -54,7 +54,6 @@ const showUnavailableModal = () => {
 const flashcardsModal = document.querySelector('#flashcards-modal');
 const currentPasswordIncorrectModal = document.querySelector('#current-password-incorrect-modal');
 const passwordUpdatedModal = document.querySelector('#password-updated-modal');
-const googleSignInModal = document.querySelector('#google-signin-modal');
 const userCreatedModal = document.querySelector('#user-created-modal');
 const clientCreatedModal = document.querySelector('#client-created-modal');
 const noUsernameModal = document.querySelector('#no-username-modal');
@@ -79,10 +78,6 @@ const showNoUsernameModal = () => {
   noUsernameModal.classList.remove('hide');
 };
 
-const showGoogleSignInModal = () => {
-  googleSignInModal.classList.remove('hide');
-};
-
 const showFlashcardsModal = () => {
   flashcardsModal.classList.remove('hide');
 };
@@ -91,7 +86,7 @@ const showFlashcardsModal = () => {
 // Export to various files
 export { 
   addModalEventListeners, // login.js, dashboard.js
-  hideModal, // login.js, account.js, google.js
+  hideModal, // login.js, account.js
   showIncorrectUsernameModal, // login.js
   showIncorrectPasswordModal, // login.js
   showSuccessModal, // login.js
@@ -103,6 +98,4 @@ export {
   showUserCreatedModal, // users.js
   showClientCreatedModal, // clients.js
   showNoUsernameModal, // clients.js
-  showGoogleSignInModal, // google.js
-  showFlashcardsModal // google.js
 };
