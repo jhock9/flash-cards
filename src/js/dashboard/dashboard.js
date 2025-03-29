@@ -1,6 +1,6 @@
 const dashPanel = document.querySelector('#dash-panel');
 const navOpenBtn = document.querySelector('#nav-open-btn');
-const adminViews = document.querySelectorAll('.admin-view');
+const adminTab = document.querySelector('#admin-tab');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 const createUserForm = document.querySelector('#user-form');
@@ -29,8 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update UI based on current user role
     if (currentUser.role === 'admin') {
       console.log ('User is admin. Showing admin views...');
-      adminViews.forEach(view => view.classList.remove('hide'));
-      document.querySelector('#users-tab').click();
+      document.querySelector('#admin').classList.remove('hide');
+      document.querySelector('#admin-tab').click();
+      // adminTab.click();
+      // adminTab.classList.add('clicked');
     } else {
       console.log('User is not admin. Showing user views...');
       document.querySelector('#clients-tab').click();   
