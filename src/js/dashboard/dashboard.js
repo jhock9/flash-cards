@@ -5,6 +5,12 @@ const logoutBtn = document.querySelector('#logout-btn');
 const createUserForm = document.querySelector('#user-form');
 const createClientForm = document.querySelector('#client-form');
 const refreshBtn = document.querySelector("#refresh-btn");
+const adminTab = document.querySelector('#admin-tab');
+const adminSection = document.querySelector('#admin');
+const acctName = document.querySelector('#acct-name');
+const acctUsername = document.querySelector('#acct-username');
+const adminViews = document.querySelectorAll('.admin-view');
+const clientsTab = document.querySelector('#clients-tab');
 
 import { addModalEventListeners } from '../components/modals.js';
 import { logout } from '../components/logout.js';
@@ -18,29 +24,29 @@ import { togglePasswordVisibility } from '../components/password.js';
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
   try {
-    // Fetch all data in parallel
-    const [currentUser] = await Promise.all([
-      fetchAccountData(),
-      fetchAdminData()
-    ]);
-    console.log('All data fetched.');
+    // Fetch account data
+    const currentUser = await fetchAccountData();
+    console.log('Fetched account data.');
     
     // Update UI based on current user role
     if (currentUser.role === 'admin') {
       console.log ('User is admin. Showing admin views...');
-      document.querySelector('#admin').classList.remove('hide');
-      document.querySelectorAll('.admin-view').forEach(el => el.classList.remove('hide'));
-      document.querySelector('#admin-tab').click();
-      // adminTab.click();
-      // adminTab.classList.add('clicked');
+      adminSection.classList.remove('hide');
+      adminViews.forEach(el => el.classList.remove('hide'));
+      adminTab.click();
+      
+      // Trigger stats fetch but don't wait
+      fetchAdminData().then(() => {
+        console.log('Admin data loaded.');
+      });
     } else {
       console.log('User is not admin. Showing user views...');
-      document.querySelector('#clients-tab').click();   
+      clientsTab.click();   
     }
     
     // Update user display info
-    document.querySelector('#acct-name').textContent = currentUser.fullname;
-    document.querySelector('#acct-username').textContent = currentUser.username;
+    acctName.textContent = currentUser.fullname;
+    acctUsername.textContent = currentUser.username;
     
     // Additional setup
     togglePasswordVisibility();
@@ -186,4 +192,3 @@ refreshBtn.addEventListener('click', async (e) => {
     console.error('Error refreshing admin data:', error);
   }
 });
-
