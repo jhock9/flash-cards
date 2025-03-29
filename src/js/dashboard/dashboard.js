@@ -1,6 +1,5 @@
 const dashPanel = document.querySelector('#dash-panel');
 const navOpenBtn = document.querySelector('#nav-open-btn');
-const adminTab = document.querySelector('#admin-tab');
 const navLinks = document.querySelectorAll('#dash-nav-list a');
 const logoutBtn = document.querySelector('#logout-btn');
 const createUserForm = document.querySelector('#user-form');
@@ -20,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   console.log('Dashboard window loaded...');
   try {
     // Fetch all data in parallel
-    const [, currentUser] = await Promise.all([
+    const [currentUser] = await Promise.all([
       fetchAccountData(),
       fetchAdminData()
     ]);
