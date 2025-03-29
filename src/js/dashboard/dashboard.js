@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (currentUser.role === 'admin') {
       console.log ('User is admin. Showing admin views...');
       document.querySelector('#admin').classList.remove('hide');
+      document.querySelectorAll('.admin-view').forEach(el => el.classList.remove('hide'));
       document.querySelector('#admin-tab').click();
       // adminTab.click();
       // adminTab.classList.add('clicked');
