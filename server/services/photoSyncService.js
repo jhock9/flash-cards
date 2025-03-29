@@ -19,12 +19,15 @@ const updatePhotoData = async () => {
   let updatedCount = 0;
   let insertedCount = 0;
   
+  const tempDir = path.join(__dirname, '../utils/temp');
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir, { recursive: true });
+  }
+  
   for (const obj of objects) {
+    const tempFilePath = path.join(tempDir, obj.Key);
     const awsKey = obj.Key;
     awsKeysSet.add(awsKey);
-    
-    // const tempFilePath = path.join(__dirname, 'temp', obj.Key);
-    const tempFilePath = path.join(__dirname, '../utils/temp', obj.Key);
     
     // Download from S3 to temp file
     try {
