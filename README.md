@@ -32,24 +32,28 @@ The Interactive Flashcards App strives to make language learning and communicati
 ## Features
 - **Enhanced User Authentication:** Therapists can sign in or register through a secure internal system, allowing for the creation of detailed user profiles.
 - **Client and Session Management:** Within the therapist dashboard, users can manage client profiles, organize sessions, and tailor therapy sessions to individual client needs.
-- **Admin Exclusive Features:** Admins have the ability to manage user profiles and integrate with Google Photos for a centralized photo repository, ensuring a rich selection of images for therapy sessions.
-- **Intuitive Photo Selection Process:** Therapists can select photos by tags, lock in preferred selections for future sessions, and ensure a varied and engaging experience for clients.
-- **Personalization of Therapy Sessions:** The ability to save specific photos and maintain tag preferences across sessions allows therapists to customize therapy experiences to match client progress and interests.
+- **Admin Exclusive Features:** Admin users can manage therapist accounts control image sourcing via AWS S3 integration.
+- **Photo Tagging and Filtering:** Images can be filtered by tags (keywords), locked for session continuity, and saved for future sessions.
+- **Dynamic Image Display:** Flashcards are presented in randomized order for variety, with support for tag-based filtering and photo locking.
+- **Cron-Driven Photo Syncing:** New photos uploaded to S3 are automatically synced to MongoDB, preserving keywords and metadata.
 
 ## Technology Stack
-This app is built with a robust set of technologies to provide a seamless and responsive user experience:
-
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB
-- **Authentication:** Google's Identity Services, OAuth 2.0
-- **APIs:** Google Photos API
-- **Deployment:** Render (previously Heroku)
+- **Authentication:** Local (Passport.js sessions)
+- **Image Storage:** AWS S3 with EXIF keyword tagging
+- **Deployment:** Render
 
-This stack supports the app’s complex functionalities, from user authentication to dynamic photo management and session customization.
+## Recent Updates
+Full migration from Google Photos to AWS S3 for image storage and management, including removal of Google OAuth integration, EXIF metadata extraction, and schema updates.
 
 ## Future Enhancements
-- **Client and User Account Management:** While the icons are present, the forms for client and user profile editing are not built yet.
+- **Admin-Triggered Photo Sync:** Introduce a user interface button for admins to manually trigger photo synchronization with AWS S3.
+- **Enhanced Tag Filtering:** Improve the visual tag filtering system for better usability and precision.
+- **Profile Management Forms:** Develop and integrate forms for managing client and user profiles.
+- **Drag-and-Drop Photo Upload:** Enable Admin users to upload photos and metadata directly to AWS S3 using a drag-and-drop interface.
+- **Tag Editing Interface:** Develop an interface for Admin users to edit tags/descriptions in app.
 
 ## License
 This project is proprietary and not open for public use or modification. All rights reserved.
@@ -59,4 +63,4 @@ If you have any questions or want to discuss this project further, you can reach
 
 - Email: jon.hocker@gmail.com
 - LinkedIn: [https://www.linkedin.com/in/jonhocker/](https://www.linkedin.com/in/jonhocker/)
-- Website: [www.okwebstudios.com](http://www.okwebstudios.com)
+- Website: [www.jonhocker.com](http://www.jonhocker.com)
