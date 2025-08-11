@@ -58,6 +58,17 @@ router.get('/refresh-clients', async (req, res) => {
   }
 });
 
+router.delete('/delete/:clientId', async (req, res) => {
+  logger.info('Received request for /delete/:clientId...');
+  try {
+    await Client.findByIdAndDelete(req.params.clientId);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    logger.error(`ERROR deleting client: ${error}`);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get('/:userId', async (req, res) => {
   try {
     const clients = await Client.find({ user: req.params.userId });

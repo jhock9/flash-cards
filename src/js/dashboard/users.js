@@ -1,4 +1,10 @@
-import { hideModal, showUserCreatedModal, showUnavailableModal } from '../components/modals.js';
+import { 
+  hideModal, 
+  showUserCreatedModal, 
+  showUserDeletedModal,
+  showDeleteErrorModal, 
+  showUnavailableModal 
+} from '../components/modals.js';
 
 const refreshUsersTable = async () => {
   console.log('refreshUsersTable called...');
@@ -41,12 +47,13 @@ const refreshUsersTable = async () => {
       
       // Action icons
       const actionCell = document.createElement('td');
-      const editUserBtn = createEditUserBtn();
+      // const editUserBtn = createEditUserBtn(); //!! removing until functionality is added
       const viewClientsBtn = createViewClientsBtn(user._id);
+      const deleteUserBtn = createDeleteUserBtn(user._id);
       
       //!! Removing editUserBtn until functionality is added
-      // const iconDiv = appendToNewDiv('icon-div center', [editUserBtn, viewClientsBtn]); 
-      const iconDiv = appendToNewDiv('icon-div center', [viewClientsBtn]);
+      // const iconDiv = appendToNewDiv('icon-div center', [editUserBtn, viewClientsBtn, deleteUserBtn]); 
+      const iconDiv = appendToNewDiv('icon-div center', [viewClientsBtn, deleteUserBtn]);
       
       actionCell.appendChild(iconDiv);
       row.appendChild(actionCell);
@@ -194,6 +201,34 @@ const createUser = async (event) => {
   .catch(error => {
     console.error('There has been a problem with your fetch operation:', error);
   });
+};
+
+const createDeleteUserBtn = (userId) => {
+  const deleteBtn = document.createElement('button');
+  deleteBtn.type = 'button';
+  deleteBtn.classList.add('table-icon');
+  deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+  
+  deleteBtn.addEventListener('click', async () => {
+    const confirmed = confirm('Are you sure you want to delete this user? This will NOT delete any of their client data.');
+    if (confirmed) {
+      try {
+        const response = await fetch(`/users/delete/${userId}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Failed to delete user');
+        
+        showUserDeletedModal();
+        setTimeout(hideModal, 2000);
+        
+        refreshUsersTable();
+      } catch (err) {
+        console.error('Error deleting user:', err);
+        showDeleteErrorModal();
+        setTimeout(hideModal, 2000);
+      }
+    }
+  });
+  
+  return deleteBtn;
 };
 
 // TODO -- add functionality to edit users

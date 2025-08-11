@@ -55,7 +55,10 @@ const flashcardsModal = document.querySelector('#flashcards-modal');
 const currentPasswordIncorrectModal = document.querySelector('#current-password-incorrect-modal');
 const passwordUpdatedModal = document.querySelector('#password-updated-modal');
 const userCreatedModal = document.querySelector('#user-created-modal');
+const userDeletedModal = document.querySelector('#user-deleted-modal');
 const clientCreatedModal = document.querySelector('#client-created-modal');
+const clientDeletedModal = document.querySelector('#client-deleted-modal');
+const deleteErrorModal = document.querySelector('#delete-error-modal');
 const noUsernameModal = document.querySelector('#no-username-modal');
 
 const showPasswordUpdatedModal = () => {
@@ -70,12 +73,24 @@ const showUserCreatedModal = () => {
   userCreatedModal.classList.remove('hide');
 };
 
+const showUserDeletedModal = () => {
+  userDeletedModal.classList.remove('hide');
+};
+
 const showClientCreatedModal = () => {
   clientCreatedModal.classList.remove('hide');
 };
 
+const showClientDeletedModal = () => {
+  clientDeletedModal.classList.remove('hide');
+};
+
 const showNoUsernameModal = () => {
   noUsernameModal.classList.remove('hide');
+};
+
+const showDeleteErrorModal = () => {
+  deleteErrorModal.classList.remove('hide');
 };
 
 const showFlashcardsModal = () => {
@@ -96,6 +111,9 @@ export {
   showPasswordUpdatedModal, // account.js
   showCurrentPasswordIncorrectModal, // account.js
   showUserCreatedModal, // users.js
+  showUserDeletedModal, // users.js
   showClientCreatedModal, // clients.js
+  showClientDeletedModal, // clients.js
+  showDeleteErrorModal, // users.js, clients.js
   showNoUsernameModal, // clients.js
 };

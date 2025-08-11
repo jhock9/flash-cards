@@ -4,6 +4,7 @@ import {
   hideModal,
   showClientCreatedModal,
   showUnavailableModal,
+  showDeleteErrorModal,
   showNoUsernameModal,
 } from '../components/modals.js';
 
@@ -48,10 +49,11 @@ const refreshClientsTable = async (userId) => {
       const actionCell = document.createElement('td');
       // const editClientBtn = createEditClientBtn(); //!! removing until client user functionality is added
       const viewAppointmentsBtn = createViewAppointmentsBtn(client._id);
+      const deleteClientBtn = createDeleteClientBtn(client._id);
       
       //!! Removing editClientBtn until functionality is added
-      // const iconDiv = appendToNewDiv('icon-div center', [editClientBtn, viewAppointmentsBtn]);
-      const iconDiv = appendToNewDiv('icon-div center', [viewAppointmentsBtn]);
+      // const iconDiv = appendToNewDiv('icon-div center', [editClientBtn, viewAppointmentsBtn, deleteClientBtn]);
+      const iconDiv = appendToNewDiv('icon-div center', [viewAppointmentsBtn, deleteClientBtn]);
       
       actionCell.appendChild(iconDiv);
       row.appendChild(actionCell);
@@ -191,6 +193,36 @@ const createClient = async (event) => {
     console.error('There has been a problem with your fetch operation:', error);
   });
 };
+
+const createDeleteClientBtn = (clientId) => {
+  console.log('createDeleteClientBtn called...');
+  const deleteBtn = document.createElement('button');
+  deleteBtn.type = 'button';
+  deleteBtn.classList.add('table-icon');
+  deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+  
+  deleteBtn.addEventListener('click', async () => {
+    const confirmed = confirm('Are you sure you want to delete this client? This cannot be undone.');
+    if (confirmed) {
+      try {
+        const response = await fetch(`/clients/delete/${clientId}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Failed to delete client');
+        
+        showClientDeletedModal();
+        setTimeout(hideModal, 2000);
+        
+        refreshClientsTable();
+      } catch (err) {
+        console.error('Error deleting client:', err);
+        showDeleteErrorModal();
+        setTimeout(hideModal, 2000);
+      }
+    }
+  });
+  
+  return deleteBtn;
+};
+
 
 // Export to dashboard.js
 export {

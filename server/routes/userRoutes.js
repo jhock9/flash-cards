@@ -52,6 +52,17 @@ router.get('/refresh-users', async (req, res) => {
   }
 });
 
+router.delete('/delete/:userId', async (req, res) => {
+  logger.info('Received request for /delete/:userId...');
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    logger.error(`ERROR deleting user: ${error}`);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get('/user-id/:username', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username });
